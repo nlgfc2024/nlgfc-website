@@ -212,7 +212,7 @@
 
 
 
-        <h1>Something Amazing Is Coming Soon</h1>
+        <h1>Re-Development of NLGFC Website</h1>
         <p>We're working hard to bring you an incredible experience. Our website will launch soon with exciting new features. Stay tuned!</p>
 
         <div class="countdown">
