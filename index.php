@@ -207,7 +207,7 @@
 
         <div class="logo" style="display: flex; align-items: center; gap: 6px;">
   <img src="assets/img/nlgfc-logo.png" alt="NLGFC Logo" style="height: 80px;">
-  <span>NLGFC <strong>2025</strong></span>
+  NLGFC<span>2025</span>
 </div>
 
 
