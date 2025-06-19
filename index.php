@@ -268,7 +268,7 @@
     <script>
         // Set the date we're counting down to (2 weeks from now)
         const countDownDate = new Date();
-        countDownDate.setDate(countDownDate.getDate() + 10);
+        countDownDate.setDate(countDownDate.getDate() + 7);
 
         // Update the count down every 1 second
         const countdown = setInterval(function() {
