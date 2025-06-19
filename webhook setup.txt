@@ -1,0 +1,9 @@
+In the Webhooks:
+
+**1** Payload URL -->> https://demo2.gov.mw/nlgfc-website/nlgfc_payload.php
+**2** secret key -->> 8x!A%d?gL9$zP5@m#Q2vT7s@NLGFCwebsiteAutoDeployPayLOAD
+
+**3** SSL verification -->> Disable
+**4** Event to trigger -->> Just the push event.
+**5** Tick Active
+**6** save
