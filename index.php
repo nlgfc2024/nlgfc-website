@@ -202,13 +202,15 @@
 
 <body>
     <div class="container">
-        <div class="logo">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
-            NLGFC<span>2025</span>
-        </div>
+
+
+
+        <div class="logo" style="display: flex; align-items: center; gap: 6px;">
+  <img src="assets/img/nlgfc-logo.png" alt="NLGFC Logo" style="height: 24px;">
+  <span>NLGFC <strong>2025</strong></span>
+</div>
+
+
 
         <h1>Something Amazing Is Coming Soon</h1>
         <p>We're working hard to bring you an incredible experience. Our website will launch soon with exciting new features. Stay tuned!</p>
