@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Coming Soon | Exciting Things Ahead</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,14 +20,15 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--dark);
             color: var(--light);
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh;
+            overflow-x: hidden;
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(109, 89, 231, 0.1) 0%, transparent 20%),
                 radial-gradient(circle at 90% 80%, rgba(253, 121, 168, 0.1) 0%, transparent 20%);
@@ -36,8 +37,8 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
-            height: 100%;
+            padding: 1.5rem;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -46,7 +47,7 @@
         }
         
         .logo {
-            font-size: 2.5rem;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
             font-weight: 700;
             margin-bottom: 1rem;
             color: var(--primary);
@@ -59,70 +60,87 @@
             color: var(--accent);
         }
         
+        .logo svg {
+            width: clamp(24px, 5vw, 32px);
+            height: clamp(24px, 5vw, 32px);
+        }
+        
         h1 {
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 6vw, 3.5rem);
             margin-bottom: 1.5rem;
             background: linear-gradient(45deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             line-height: 1.2;
+            padding: 0 0.5rem;
         }
         
         p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin-bottom: 3rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            max-width: min(700px, 90vw);
+            margin-bottom: clamp(2rem, 5vw, 3rem);
             opacity: 0.9;
             line-height: 1.6;
+            padding: 0 0.5rem;
         }
         
         .countdown {
             display: flex;
-            gap: 1.5rem;
-            margin-bottom: 3rem;
+            gap: clamp(0.8rem, 3vw, 1.5rem);
+            margin-bottom: clamp(2rem, 5vw, 3rem);
+            flex-wrap: wrap;
+            justify-content: center;
         }
         
         .countdown-item {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 12px;
-            padding: 1.5rem;
-            min-width: 120px;
+            padding: clamp(1rem, 3vw, 1.5rem);
+            min-width: clamp(80px, 20vw, 120px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .countdown-number {
-            font-size: 3rem;
+            font-size: clamp(2rem, 6vw, 3rem);
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 0.5rem;
         }
         
         .countdown-label {
-            font-size: 0.9rem;
+            font-size: clamp(0.7rem, 2.5vw, 0.9rem);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             opacity: 0.7;
         }
         
         .notify-form {
             display: flex;
-            max-width: 500px;
+            max-width: min(500px, 90vw);
             width: 100%;
             margin-bottom: 2rem;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        @media (min-width: 768px) {
+            .notify-form {
+                flex-direction: row;
+            }
         }
         
         .notify-input {
             flex: 1;
-            padding: 1rem;
+            padding: clamp(0.8rem, 3vw, 1rem);
             border: none;
-            border-radius: 50px 0 0 50px;
+            border-radius: 50px;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(5px);
             color: white;
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 3vw, 1rem);
             outline: none;
             transition: all 0.3s ease;
         }
@@ -132,14 +150,15 @@
         }
         
         .notify-button {
-            padding: 1rem 2rem;
+            padding: clamp(0.8rem, 3vw, 1rem) clamp(1.5rem, 4vw, 2rem);
             border: none;
-            border-radius: 0 50px 50px 0;
+            border-radius: 50px;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: clamp(0.9rem, 3vw, 1rem);
         }
         
         .notify-button:hover {
@@ -149,20 +168,22 @@
         
         .social-links {
             display: flex;
-            gap: 1.5rem;
+            gap: clamp(1rem, 3vw, 1.5rem);
             margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         
         .social-link {
-            width: 50px;
-            height: 50px;
+            width: clamp(40px, 10vw, 50px);
+            height: clamp(40px, 10vw, 50px);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             background: rgba(255, 255, 255, 0.1);
             color: white;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
             transition: all 0.3s ease;
         }
         
@@ -171,48 +192,20 @@
             transform: translateY(-3px);
         }
         
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            p {
-                font-size: 1rem;
-            }
-            
-            .countdown {
-                gap: 1rem;
-            }
-            
-            .countdown-item {
-                min-width: 80px;
-                padding: 1rem;
-            }
-            
-            .countdown-number {
-                font-size: 2rem;
-            }
-            
-            .notify-form {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .notify-input,
-            .notify-button {
-                border-radius: 50px;
-            }
+        .social-link svg {
+            width: clamp(16px, 4vw, 20px);
+            height: clamp(16px, 4vw, 20px);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="logo">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
             </svg>
-            NLGFC<span>2025!</span>
+            Brand<span>X</span>
         </div>
         
         <h1>Something Amazing Is Coming Soon</h1>
@@ -243,25 +236,25 @@
         </form>
         
         <div class="social-links">
-            <a href="#" class="social-link">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <a href="#" class="social-link" aria-label="Facebook">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
                 </svg>
             </a>
-            <a href="#" class="social-link">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <a href="#" class="social-link" aria-label="Twitter">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
                 </svg>
             </a>
-            <a href="#" class="social-link">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <a href="#" class="social-link" aria-label="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                     <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                 </svg>
             </a>
-            <a href="#" class="social-link">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <a href="#" class="social-link" aria-label="LinkedIn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
                     <rect x="2" y="9" width="4" height="12"></rect>
                     <circle cx="4" cy="4" r="2"></circle>
@@ -308,9 +301,15 @@
         // Form submission handler
         document.querySelector('.notify-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            const email = this.querySelector('input').value;
-            alert(`Thank you! We'll notify you at ${email} when we launch.`);
-            this.querySelector('input').value = '';
+            const emailInput = this.querySelector('input');
+            const email = emailInput.value;
+            
+            if (email && email.includes('@')) {
+                alert(`Thank you! We'll notify you at ${email} when we launch.`);
+                emailInput.value = '';
+            } else {
+                alert('Please enter a valid email address.');
+            }
         });
     </script>
 </body>
