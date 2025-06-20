@@ -1,0 +1,1 @@
+export { default } from "file:///C:/Users/MANYONI/Desktop/nlgfc-website/node_modules/@nuxt/vite-builder/dist/runtime/vite-node.mjs"
