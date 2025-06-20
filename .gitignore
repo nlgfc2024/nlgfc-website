@@ -10,6 +10,7 @@ node_modules/
 .nuxt/
 dist/
 .cache/
+.data/
 output/
 
 # OS files
