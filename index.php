@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Coming Soon | Exciting Things Ahead</title>
+    <title>NLGFC | Website Re-Development</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -15,25 +16,25 @@
             --light: #f5f6fa;
             --accent: #fd79a8;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
-        
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--dark);
             color: var(--light);
             min-height: 100vh;
             overflow-x: hidden;
-            background-image: 
+            background-image:
                 radial-gradient(circle at 10% 20%, rgba(109, 89, 231, 0.1) 0%, transparent 20%),
                 radial-gradient(circle at 90% 80%, rgba(253, 121, 168, 0.1) 0%, transparent 20%);
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -45,7 +46,7 @@
             align-items: center;
             text-align: center;
         }
-        
+
         .logo {
             font-size: clamp(1.8rem, 5vw, 2.5rem);
             font-weight: 700;
@@ -55,16 +56,16 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .logo span {
             color: var(--accent);
         }
-        
+
         .logo svg {
             width: clamp(24px, 5vw, 32px);
             height: clamp(24px, 5vw, 32px);
         }
-        
+
         h1 {
             font-size: clamp(2rem, 6vw, 3.5rem);
             margin-bottom: 1.5rem;
@@ -75,7 +76,7 @@
             line-height: 1.2;
             padding: 0 0.5rem;
         }
-        
+
         p {
             font-size: clamp(1rem, 3vw, 1.2rem);
             max-width: min(700px, 90vw);
@@ -84,7 +85,7 @@
             line-height: 1.6;
             padding: 0 0.5rem;
         }
-        
+
         .countdown {
             display: flex;
             gap: clamp(0.8rem, 3vw, 1.5rem);
@@ -92,7 +93,7 @@
             flex-wrap: wrap;
             justify-content: center;
         }
-        
+
         .countdown-item {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -102,21 +103,21 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .countdown-number {
             font-size: clamp(2rem, 6vw, 3rem);
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 0.5rem;
         }
-        
+
         .countdown-label {
             font-size: clamp(0.7rem, 2.5vw, 0.9rem);
             text-transform: uppercase;
             letter-spacing: 1px;
             opacity: 0.7;
         }
-        
+
         .notify-form {
             display: flex;
             max-width: min(500px, 90vw);
@@ -125,13 +126,13 @@
             flex-direction: column;
             gap: 1rem;
         }
-        
+
         @media (min-width: 768px) {
             .notify-form {
                 flex-direction: row;
             }
         }
-        
+
         .notify-input {
             flex: 1;
             padding: clamp(0.8rem, 3vw, 1rem);
@@ -144,11 +145,11 @@
             outline: none;
             transition: all 0.3s ease;
         }
-        
+
         .notify-input:focus {
             background: rgba(255, 255, 255, 0.2);
         }
-        
+
         .notify-button {
             padding: clamp(0.8rem, 3vw, 1rem) clamp(1.5rem, 4vw, 2rem);
             border: none;
@@ -160,12 +161,12 @@
             transition: all 0.3s ease;
             font-size: clamp(0.9rem, 3vw, 1rem);
         }
-        
+
         .notify-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
         }
-        
+
         .social-links {
             display: flex;
             gap: clamp(1rem, 3vw, 1.5rem);
@@ -173,7 +174,7 @@
             flex-wrap: wrap;
             justify-content: center;
         }
-        
+
         .social-link {
             width: clamp(40px, 10vw, 50px);
             height: clamp(40px, 10vw, 50px);
@@ -186,31 +187,34 @@
             font-size: clamp(1rem, 3vw, 1.2rem);
             transition: all 0.3s ease;
         }
-        
+
         .social-link:hover {
             background: var(--primary);
             transform: translateY(-3px);
         }
-        
+
         .social-link svg {
             width: clamp(16px, 4vw, 20px);
             height: clamp(16px, 4vw, 20px);
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <div class="logo">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
-            Brand<span>X</span>
-        </div>
-        
-        <h1>Something Amazing Is Coming Soon</h1>
+
+
+
+        <div class="logo" style="display: flex; align-items: center; gap: 6px;">
+  <img src="assets/img/nlgfc-logo.png" alt="NLGFC Logo" style="height: 80px;">
+  NLGFC<span>2025</span>
+</div>
+
+
+
+        <h1>Re-Development of NLGFC Website</h1>
         <p>We're working hard to bring you an incredible experience. Our website will launch soon with exciting new features. Stay tuned!</p>
-        
+
         <div class="countdown">
             <div class="countdown-item">
                 <div class="countdown-number" id="days">00</div>
@@ -229,12 +233,12 @@
                 <div class="countdown-label">Seconds</div>
             </div>
         </div>
-        
+
         <form class="notify-form">
             <input type="email" class="notify-input" placeholder="Enter your email for updates..." required>
             <button type="submit" class="notify-button">Notify Me</button>
         </form>
-        
+
         <div class="social-links">
             <a href="#" class="social-link" aria-label="Facebook">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -266,28 +270,28 @@
     <script>
         // Set the date we're counting down to (2 weeks from now)
         const countDownDate = new Date();
-        countDownDate.setDate(countDownDate.getDate() + 14);
-        
+        countDownDate.setDate(countDownDate.getDate() + 8);
+
         // Update the count down every 1 second
         const countdown = setInterval(function() {
             // Get today's date and time
             const now = new Date().getTime();
-            
+
             // Find the distance between now and the count down date
             const distance = countDownDate - now;
-            
+
             // Time calculations for days, hours, minutes and seconds
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
+
             // Display the result
             document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
             document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
             document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
             document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
-            
+
             // If the count down is finished, write some text
             if (distance < 0) {
                 clearInterval(countdown);
@@ -297,13 +301,13 @@
                 document.getElementById("seconds").innerHTML = "00";
             }
         }, 1000);
-        
+
         // Form submission handler
         document.querySelector('.notify-form').addEventListener('submit', function(e) {
             e.preventDefault();
             const emailInput = this.querySelector('input');
             const email = emailInput.value;
-            
+
             if (email && email.includes('@')) {
                 alert(`Thank you! We'll notify you at ${email} when we launch.`);
                 emailInput.value = '';
@@ -313,4 +317,5 @@
         });
     </script>
 </body>
+
 </html>
