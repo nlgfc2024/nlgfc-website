@@ -116,23 +116,33 @@ const onClickOutside = () => {
                 <div>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Organization</h3>
                   <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                      Mission, Vision, Core Values</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                      Powers & Functions</a></li>
+                    <!-- <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                      Mission, Vision, Core Values</a></li> -->
+                    <li>
+                      <NuxtLink to="/aboutUs/visionMissionValues" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mission, Vision, Core Values</NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/aboutUs/powersFunctions" class="text-gray-700 hover:text-blue-700 transition flex items-center">Powers & Functions</NuxtLink>
+                    </li>
                   </ul>
                   
                   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Leadership</h3>
                   <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                     
-                      Board of Directors</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                      
-                      Management</a></li>
-                    <li class="pl-6"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Executive Management</a></li>
-                    <li class="pl-6"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Departments and Sections</a></li>
-                    <li class="pl-6"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Organigram</a></li>
+                    <li>
+                      <NuxtLink to="/aboutUs/boardOfDirectors" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Board of Directors
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/aboutUs/executiveManagement" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Executive Management
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/aboutUs/directoratesDivisions" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Directorates and Divisions
+                      </NuxtLink>
+                    </li>
                   </ul>
                 </div>
                 
@@ -490,9 +500,8 @@ const onClickOutside = () => {
               <ul class="pl-2 space-y-2">
                 <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Board of Directors</a></li>
                 <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Management</a></li>
-                <li class="pl-4"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Executive Management</a></li>
-                <li class="pl-4"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Departments and Sections</a></li>
-                <li class="pl-4"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Organigram</a></li>
+                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Executive Management</a></li>
+                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Departments and Sections</a></li>
               </ul>
               
               <h4 class="font-semibold text-blue-800 mt-3">Our Mandate</h4>
