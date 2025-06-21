@@ -1,5 +1,6 @@
 <script setup>
-// Layout-level logic can go here
+
+
 const route = useRoute()
 const isHomePage = computed(() => route.path === '/')
 </script>
