@@ -123,37 +123,14 @@ useHead({
       <!-- Mission, Mandate and Vision -->
       <section class="py-16 bg-gray-50">
         <div class="container mx-auto px-4">
-          <h2 class="text-4xl font-bold text-center mb-4">Our Guiding Principles</h2>
-          <p class="text-xl text-gray-600 text-center max-w-3xl mx-auto mb-12">
-            The foundation of everything we do is built upon these core pillars that drive our organization forward.
-          </p>
           
           <!-- Mandate Row -->
           <div class="bg-white p-8 rounded-xl shadow-md mb-12 max-w-4xl mx-auto border-t-4 border-blue-600">
             <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">Our Mandate</h3>
             <p class="text-gray-600 text-center mb-6">
-              To empower communities through sustainable development initiatives, education programs, and advocacy for social justice.
+              To facilitate fiscal decentralization, financial management and local development in Local Governments
             </p>
-            <div class="flex flex-wrap justify-center gap-6">
-              <div class="flex items-center">
-                <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="text-gray-700">Promote equitable access to resources</span>
-              </div>
-              <div class="flex items-center">
-                <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="text-gray-700">Advocate for policy changes</span>
-              </div>
-              <div class="flex items-center">
-                <svg class="w-5 h-5 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                </svg>
-                <span class="text-gray-700">Build community resilience</span>
-              </div>
-            </div>
+       
           </div>
           
           <!-- Three Column Row -->
@@ -167,23 +144,9 @@ useHead({
                 </svg>
               </div>
               <h3 class="text-2xl font-bold text-gray-800 mb-4">Our Vision</h3>
-              <p class="text-gray-600 mb-6">
-                A world where every individual has the opportunity to thrive in a just, equitable, and sustainable society.
+              <p class="text-gray-700 mb-6">
+                Delivering effective and responsive financing for Local Governments
               </p>
-              <div class="space-y-3">
-                <div class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-purple-600 rounded-full mt-2 mr-2"></span>
-                  <span class="text-gray-700">Impact 1 million lives through our programs</span>
-                </div>
-                <div class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-purple-600 rounded-full mt-2 mr-2"></span>
-                  <span class="text-gray-700">Establish partnerships in 50 countries</span>
-                </div>
-                <div class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-purple-600 rounded-full mt-2 mr-2"></span>
-                  <span class="text-gray-700">Create sustainable change in 100 communities</span>
-                </div>
-              </div>
             </div>
             
             <!-- Mission Card -->
@@ -194,23 +157,11 @@ useHead({
                 </svg>
               </div>
               <h3 class="text-2xl font-bold text-gray-800 mb-4">Our Mission</h3>
-              <p class="text-gray-600 mb-6">
-                To create lasting change by addressing root causes of inequality through innovative programs, partnerships, and advocacy.
+              <p class="text-gray-700 mb-6">
+                To provide efficient and effective technical, financial and economic management services for mobilization, distribution and utilization of resources 
+                for quality service delivery by Local Governments
               </p>
-              <div class="space-y-3">
-                <div class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-2"></span>
-                  <span class="text-gray-700">Develop sustainable solutions</span>
-                </div>
-                <div class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-2"></span>
-                  <span class="text-gray-700">Empower local leaders</span>
-                </div>
-                <div class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-2"></span>
-                  <span class="text-gray-700">Drive systemic change</span>
-                </div>
-              </div>
+        
             </div>
             
             <!-- Core Values Card -->
@@ -221,25 +172,46 @@ useHead({
                 </svg>
               </div>
               <h3 class="text-2xl font-bold text-gray-800 mb-4">Core Values</h3>
-              <div class="space-y-4">
-                <div>
-                  <h4 class="font-semibold text-gray-800">Integrity</h4>
-                  <p class="text-gray-600 text-sm">We uphold the highest standards of honesty and ethical conduct.</p>
-                </div>
-                <div>
-                  <h4 class="font-semibold text-gray-800">Inclusivity</h4>
-                  <p class="text-gray-600 text-sm">We celebrate diversity and ensure everyone has a voice.</p>
-                </div>
-                <div>
-                  <h4 class="font-semibold text-gray-800">Innovation</h4>
-                  <p class="text-gray-600 text-sm">We embrace creative solutions to complex challenges.</p>
-                </div>
-                <div>
-                  <h4 class="font-semibold text-gray-800">Impact</h4>
-                  <p class="text-gray-600 text-sm">We measure success by the difference we make.</p>
+               <div class="grid grid-cols-2 gap-4">
+                  <div class="flex items-start">
+                    <svg class="w-4 h-4 text-emerald-700 mt-1 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Integrity</span>
+                  </div>
+                  <div class="flex items-start">
+                    <svg class="w-4 h-4 text-emerald-700 mt-1 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Transparency</span>
+                  </div>
+                  <div class="flex items-start">
+                    <svg class="w-4 h-4 text-emerald-700 mt-1 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Accountability</span>
+                  </div>
+                  <div class="flex items-start">
+                    <svg class="w-4 h-4 text-emerald-700 mt-1 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Innovation</span>
+                  </div>
+                  <div class="flex items-start">
+                    <svg class="w-4 h-4 text-emerald-700 mt-1 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Teamwork</span>
+                  </div>
+                  <div class="flex items-start">
+                    <svg class="w-4 h-4 text-emerald-700 mt-1 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-gray-700">Professionalism</span>
+                  </div>
+                 
                 </div>
               </div>
-            </div>
           </div>
         </div>
       </section>

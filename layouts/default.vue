@@ -12,7 +12,8 @@ const isHomePage = computed(() => route.path === '/')
     <main class="flex-grow">
       <slot /> <!-- This renders the page content -->
     </main>
-    
+     <!-- Chat Widget - Always visible -->
+    <ChatWidget />
     <AppFooter />
   </div>
 </template>
