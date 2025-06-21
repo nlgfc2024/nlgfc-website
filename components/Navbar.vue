@@ -335,11 +335,11 @@ const onClickOutside = () => {
                 <div>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Publications</h3>
                   <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Press Releases</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Success Stories</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Newsletters</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">News</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Media</a></li>
+                    <li><a href="resourceCenter" class="text-gray-700 hover:text-blue-700 transition">Press Releases</a></li>
+                    <li><a href="resourceCenter" class="text-gray-700 hover:text-blue-700 transition">Success Stories</a></li>
+                    <li><a href="resourceCenter" class="text-gray-700 hover:text-blue-700 transition">Newsletters</a></li>
+                    <li><a href="resourceCenter" class="text-gray-700 hover:text-blue-700 transition">News</a></li>
+                    <li><a href="resourceCenter" class="text-gray-700 hover:text-blue-700 transition">Media</a></li>
                   </ul>
                 </div>
                 

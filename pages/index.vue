@@ -119,6 +119,7 @@ useHead({
         </div>
       </div>
     </section>
+
     <main class="container mx-auto px-4 py-12">
       <!-- Mission, Mandate and Vision -->
       <section class="py-16 bg-gray-50">
