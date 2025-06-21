@@ -200,30 +200,57 @@ const onClickOutside = () => {
             <div v-show="activeMegaMenu === 'projects'" class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 900px;">
               <div class="grid grid-cols-4 gap-6 p-6">
                 <div>
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Current Projects</h3>
-                  <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                      SSRLP</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">SCTP</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Public Works</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Emergency Cash Transfer</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Livelihoods Support</a></li>
-                    
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center mt-3">
-                      GESD</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Performance Based Grants</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">LAPA</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Adaptive Management</a></li>
-                    
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center mt-3">
-                      RCRP</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Urban Social Registry</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Urban Public Works</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Performance Based Grants</a></li>
-                  </ul>
-                </div>
+  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Current Projects</h3>
+  <ul class="space-y-2">
+
+    <!-- SSRLP -->
+    <li>
+      <strong class="text-gray-700 flex items-center">SSRLP</strong>
+      <ul class="space-y-1 pl-4">
+        <li><NuxtLink to="/projects/currentProjects#SCTP" class="text-gray-600 hover:text-blue-600">SCTP</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Public Works</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#emergency" class="text-gray-600 hover:text-blue-600">Emergency Cash Transfer</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
+      </ul>
+    </li>
+
+    <!-- GESD -->
+    <li class="mt-3">
+      <strong class="text-gray-700 flex items-center">GESD</strong>
+      <ul class="space-y-1 pl-4">
+        <li><NuxtLink to="/projects/currentProjects#pbg" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#lapa" class="text-gray-600 hover:text-blue-600">LAPA</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#adaptive" class="text-gray-600 hover:text-blue-600">Adaptive Management</NuxtLink></li>
+      </ul>
+    </li>
+
+    <!-- RCRP -->
+    <li class="mt-3">
+      <strong class="text-gray-700 flex items-center">RCRP</strong>
+      <ul class="space-y-1 pl-4">
+        <li><NuxtLink to="/projects/currentProjects#usr" class="text-gray-600 hover:text-blue-600">Urban Social Registry</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#upw" class="text-gray-600 hover:text-blue-600">Urban Public Works</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#pbg2" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
+      </ul>
+    </li>
+
+  </ul>
+</div>
+
                 
                 <div>
+                 
+                  
+                  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Past Projects</h3>
+                  <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">MASAF 4</a></li>
+                  </ul>
+                  
+                  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Upcoming Projects</h3>
+                  <ul class="space-y-2 mb-10">
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">GESD 2.0</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">INSPIRE</a></li>
+                  </ul>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
                   <ul class="space-y-2">
                     <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">MSR</a></li>
@@ -234,17 +261,6 @@ const onClickOutside = () => {
                     <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">LAPA MIS</a></li>
                     <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">CIMIS</a></li>
                     <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">PMIS</a></li>
-                  </ul>
-                  
-                  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Past Projects</h3>
-                  <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">MASAF 4</a></li>
-                  </ul>
-                  
-                  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Upcoming Projects</h3>
-                  <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">GESD 2.0</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">INSPIRE</a></li>
                   </ul>
                 </div>
                 
@@ -524,25 +540,79 @@ const onClickOutside = () => {
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </button>
-            <div v-show="activeAccordion === 'mobile-projects'" class="pl-4 space-y-3">
-              <h4 class="font-semibold text-blue-800 mt-2">Current Projects</h4>
-              <ul class="pl-2 space-y-2">
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">SSRLP</a></li>
-                <li class="pl-4"><a href="#" class="text-gray-600 hover:text-blue-600 transition">SCTP</a></li>
-                <li class="pl-4"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Public Works</a></li>
-                
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">GESD</a></li>
-                <li class="pl-4"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Performance Based Grants</a></li>
-                
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">RCRP</a></li>
-              </ul>
-              
-              <h4 class="font-semibold text-blue-800 mt-3">Delivery Systems</h4>
-              <ul class="pl-2 space-y-2">
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">MSR</a></li>
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">E-Payments</a></li>
-              </ul>
-            </div>
+           <!-- Mobile Accordion Menu -->
+<div
+  v-show="activeAccordion === 'mobile-projects'"
+  class="block md:hidden bg-white rounded-md shadow-md mt-2 "
+>
+  <div class="p-4 space-y-6 max-h-[75vh] overflow-y-auto">
+    
+    <!-- Current Projects -->
+    <div>
+      <h3 class="font-semibold text-blue-800  pb-2">Current Projects</h3>
+      <ul class="pl-2 mt-2 space-y-1">
+        <li>
+          <strong class="text-gray-700">SSRLP</strong>
+          <ul class="pl-4 space-y-1">
+            <li><NuxtLink to="/projects/currentProjects#SCTP" class="text-gray-600 hover:text-blue-600">SCTP</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Public Works</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#emergency" class="text-gray-600 hover:text-blue-600">Emergency Cash Transfer</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
+          </ul>
+        </li>
+        <li class="mt-4">
+          <strong class="text-gray-700">GESD</strong>
+          <ul class="pl-4 space-y-1">
+            <li><NuxtLink to="/projects/currentProjects#pbg" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#lapa" class="text-gray-600 hover:text-blue-600">LAPA</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#adaptive" class="text-gray-600 hover:text-blue-600">Adaptive Management</NuxtLink></li>
+          </ul>
+        </li>
+        <li class="mt-4">
+          <strong class="text-gray-700">RCRP</strong>
+          <ul class="pl-4 space-y-1">
+            <li><NuxtLink to="/projects/currentProjects#usr" class="text-gray-600 hover:text-blue-600">Urban Social Registry</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#upw" class="text-gray-600 hover:text-blue-600">Urban Public Works</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#pbg2" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Past Projects -->
+    <div>
+      <h3 class="font-semibold text-blue-800 border-b pb-2">Past Projects</h3>
+      <ul class="pl-2 mt-2 space-y-1">
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">MASAF 4</a></li>
+      </ul>
+    </div>
+
+    <!-- Upcoming Projects -->
+    <div>
+      <h3 class="font-semibold text-blue-800 border-b pb-2">Upcoming Projects</h3>
+      <ul class="pl-2 mt-2 space-y-1">
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">GESD 2.0</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">INSPIRE</a></li>
+      </ul>
+    </div>
+
+    <!-- Delivery Systems -->
+    <div>
+      <h3 class="font-semibold text-blue-800 border-b pb-2">Delivery Systems</h3>
+      <ul class="pl-2 mt-2 space-y-1">
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">MSR</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">E-Payments</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">Public Works MIS</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">GRM</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">SCTP MIS</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">LAPA MIS</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">CIMIS</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">PMIS</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
           </div>
           
           <!-- Local Councils Accordion -->
