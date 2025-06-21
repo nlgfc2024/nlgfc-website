@@ -226,10 +226,31 @@ const onClickOutside = () => {
                 <div>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
                   <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">MSR</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">E-Payments</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Public Works MIS</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">GRM</a></li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/msr" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        MSR
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/e-payments" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        E-Payments
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/publicWorks" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Public Works MIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/grm" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        GRM MIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/msr" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        SCTP MIS
+                      </NuxtLink>
+                    </li>
                     <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">SCTP MIS</a></li>
                     <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">LAPA MIS</a></li>
                     <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">CIMIS</a></li>
