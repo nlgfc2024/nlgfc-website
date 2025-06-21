@@ -281,9 +281,9 @@ const onClickOutside = () => {
                   </button>
                   <div v-show="activeAccordion === 'city'" class="pl-4 space-y-2">
                     <a href="blantyreCouncil" class="block text-gray-700 hover:text-blue-700 transition">Blantyre City Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Lilongwe City Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Mzuzu City Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Zomba City Council</a>
+                    <a href="lilongwecitycouncil" class="block text-gray-700 hover:text-blue-700 transition">Lilongwe City Council</a>
+                    <a href="mzuzucitycouncil" class="block text-gray-700 hover:text-blue-700 transition">Mzuzu City Council</a>
+                    <a href="zombacitycouncil" class="block text-gray-700 hover:text-blue-700 transition">Zomba City Council</a>
                   </div>
                 </div>
                 
@@ -295,11 +295,11 @@ const onClickOutside = () => {
                     </svg>
                   </button>
                   <div v-show="activeAccordion === 'municipal'" class="pl-4 space-y-2">
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Balaka Municipal Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Karonga Municipal Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Kasungu Municipal Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Mangochi Municipal Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">All Municipal Councils →</a>
+                    <a href="balakaMunicipal" class="block text-gray-700 hover:text-blue-700 transition">Balaka Municipal Council</a>
+                    <a href="karongaMunicipal" class="block text-gray-700 hover:text-blue-700 transition">Karonga Municipal Council</a>
+                    <a href="kasunguMunicipal" class="block text-gray-700 hover:text-blue-700 transition">Kasungu Municipal Council</a>
+                    <a href="MangochiMucipal" class="block text-gray-700 hover:text-blue-700 transition">Mangochi Municipal Council</a>
+                    <a href="allcouncils" class="block text-gray-700 hover:text-blue-700 transition">All Municipal Councils →</a>
                   </div>
                 </div>
                 
