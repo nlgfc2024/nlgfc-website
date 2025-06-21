@@ -2,7 +2,6 @@
 definePageMeta({ title: 'Current Projects' })
 
 const route = useRoute()
-const isDrawerOpen = ref(false)
 const activeTab = ref('SCTP')
 
 const projectGroups = [
@@ -32,6 +31,7 @@ const projectGroups = [
     ]
   }
 ]
+const openGroup = ref(projectGroups[0].group) // only the first group is open
 
 // Set from initial hash on load
 onMounted(() => {
@@ -56,111 +56,44 @@ function updateActiveTabFromHash(hash) {
     }
   }
 }
-
-function generateAccordionItems() {
-  return projectGroups.map(group => ({
-    label: group.group,
-    icon: 'i-heroicons-folder-open',
-    defaultOpen: true,
-    content: () => h(
-      'ul',
-      { class: 'space-y-1 mt-2 pl-2' },
-      group.items.map(item =>
-        h(
-          'li',
-          {},
-          h(
-            'a',
-            {
-              href: `#${item.id}`,
-              onClick: (e) => {
-                e.preventDefault()
-                activeTab.value = item.id
-                history.replaceState(null, '', `#${item.id}`)
-                isDrawerOpen.value = false
-              },
-              class: [
-                'block px-3 py-2 rounded text-sm cursor-pointer',
-                item.id === activeTab.value ? 'bg-blue-100 font-medium text-blue-900' : 'hover:bg-gray-100'
-              ]
-            },
-            item.title
-          )
-        )
-      )
-    )
-  }))
-}
 </script>
 
 <template>
+
   <div class="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto px-4 py-8">
+    <!-- Sidebar for Desktop --> 
+    <aside class="w-64 border-r pr-4">
+  <div v-for="group in projectGroups" :key="group.group" class="mb-4 border border-gray-200 rounded">
+    <div>
+      <!-- Group Title -->
+      <button
+  @click="openGroup = openGroup === group.group ? null : group.group"
+  class="w-full text-left px-4 py-2 font-semibold bg-gray-100 hover:bg-gray-200 cursor-pointer"
+>
+  {{ group.group }}
+</button>
 
-
-    <!-- Drawer for Mobile -->
- <!-- Mobile Drawer Toggle Button -->
-<div class="md:hidden">
-  <UButton @click="isDrawerOpen = true" label="☰ Projects" variant="soft" />
-</div>
-
-<!-- Drawer for Mobile -->
-<UDrawer v-model="isDrawerOpen" side="left">
-  <template #content>
-    <div class="p-4 space-y-4">
-      <div v-for="group in projectGroups" :key="group.group">
-        <details open class="border border-gray-200 rounded">
-          <summary class="cursor-pointer px-4 py-2 font-semibold bg-gray-100">
-            {{ group.group }}
-          </summary>
-          <ul class="space-y-1 px-4 py-2">
-            <li v-for="item in group.items" :key="item.id">
-              <a
-                :href="`#${item.id}`"
-                @click.prevent="() => {
-                  activeTab = item.id
-                  history.replaceState(null, '', `#${item.id}`)
-                  isDrawerOpen = false
-                }"
-                :class="[
-                  'block px-3 py-2 rounded text-sm cursor-pointer',
-                  item.id === activeTab ? 'bg-blue-100 font-medium text-blue-900' : 'hover:bg-gray-100'
-                ]"
-              >
-                {{ item.title }}
-              </a>
-            </li>
-          </ul>
-        </details>
+      <!-- Group Items -->
+      <div v-show="openGroup === group.group" class="px-4 py-2 space-y-1">
+        <ul>
+          <li v-for="item in group.items" :key="item.id">
+            <a
+              :href="`#${item.id}`"
+              @click.prevent="() => {
+                activeTab = item.id
+                history.replaceState(null, '', `#${item.id}`)
+              }"
+              :class="[
+                'block px-3 py-2 rounded text-sm cursor-pointer',
+                item.id === activeTab ? 'bg-blue-100 font-medium text-blue-900' : 'hover:bg-gray-100'
+              ]"
+            >
+              {{ item.title }}
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
-  </template>
-</UDrawer>
-
-
-
-    <!-- Sidebar for Desktop -->
-    <!-- Sidebar -->
-<aside class="hidden md:block w-64 border-r pr-4">
-  <div v-for="group in projectGroups" :key="group.group" class="mb-4">
-    <details open class="border border-gray-200 rounded">
-      <summary class="cursor-pointer px-4 py-2 font-semibold bg-gray-100">
-        {{ group.group }}
-      </summary>
-      <ul class="space-y-1 px-4 py-2">
-        <li v-for="item in group.items" :key="item.id">
-          <a
-            :href="`#${item.id}`"
-            @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
-            :class="[
-              'block px-3 py-2 rounded text-sm cursor-pointer',
-              item.id === activeTab ? 'bg-blue-100 font-medium text-blue-900' : 'hover:bg-gray-100'
-            ]"
-          >
-            {{ item.title }}
-          </a>
-        </li>
-      </ul>
-    </details>
   </div>
 </aside>
 
@@ -176,3 +109,6 @@ function generateAccordionItems() {
     </main>
   </div>
 </template>
+
+<style>
+</style>
