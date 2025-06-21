@@ -243,14 +243,16 @@ const onClickOutside = () => {
                   
                   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Past Projects</h3>
                   <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">MASAF 4</a></li>
+                   <li><NuxtLink to="/projects/pastProjects#masaf" class="text-gray-600 hover:text-blue-600">MASAF</NuxtLink></li>
+                    <li><NuxtLink to="/projects/pastProjects#miera" class="text-gray-600 hover:text-blue-600">MIERA</NuxtLink></li>
                   </ul>
                   
                   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Upcoming Projects</h3>
                   <ul class="space-y-2 mb-10">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">GESD 2.0</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">INSPIRE</a></li>
+                    <li><NuxtLink to="/projects/upcomingProjects#gesd2" class="text-gray-600 hover:text-blue-600">GESD 2.0</NuxtLink></li>
+                    <li><NuxtLink to="/projects/upcomingProjects#inspire" class="text-gray-600 hover:text-blue-600">INSPIRE-O</NuxtLink></li>
                   </ul>
+
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
                   <ul class="space-y-2">
                     <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">MSR</a></li>
