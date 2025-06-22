@@ -30,7 +30,7 @@ const openGroup = ref(projectGroups[0].group)
 
 const projectContent = {
   masaf_overview: {
-    title: 'Overview',
+    title: 'Malawi Social Action Fund (MASAF 4)',
     body: `Malawi Social Action Fund (MASAF 4) was implemented under the theme- Strengthening Safety Net systems in Malawi.   MASAF 4   was one of the key instruments of the Government of the Republic of Malawi for improving key safety net programs and supporting the building blocks for a coordinated and systematic approach to safety nets in Malawi. 
 The MASAF IV Project was approved in December 2013 and became effective on 14 September 2014. The original closing date was 30 June 2018. However, with additional financing, implementation continued into late 2019 to accommodate expanded activities including drought response and scaling up of social protection programs.
  
@@ -61,8 +61,17 @@ iii.               Social Cash Transfers. The sub component financed cash transf
     body: `This component would support overall coordination, integration, planning, monitoring and evaluation, financial management, procurement, safeguards, capacity building and knowledge management.`
   },
   miera_overview: {
-    title: 'Overview',
-    body: `Increasing discretionary development funding for LAs - tied to the councils Annual Local Authority Performance Assessment (LAPA) results - through the introduction of a Performance-Based Grant (PBG) (Quick links;  LAPAS, Indicative Planning Figures (IPFs)`
+    title: 'More Income and Employment in Rural Areas (MIERA)',
+    body: `More Income and Employment in Rural Areas (MIERA) project focused on the implementation of economic infrastructure through the National Local Government Finance Committee (NLGFC) to improve the business environment for smallholder farmers and owners of small and medium-sized enterprises in Malawi
+sMIERA project was a financial cooperation programme funded by the German Government through KfW, valued at 10 million Euro.
+The project commenced in January 2017 and was expected to phase out in December 2020. The project was a successor programme to the KfW program.  However, this project involved the construction of markets.
+MIERA was a co-funded project with the Government of Malawi (GoM), expected to commit at least MK200 million towards the construction markets in Malawi.
+The MIERA project is implemented by AHT Consultants. The project builds from previous markets (Sadzi, Lunzu, Goliati, Neno and Nkhata Bay) under the KfW Urban Window Project to augment the existing facilities and these are treated as Fast Track Markets (FTM).  
+Under this project, Dyeratu, Chinkhoma and Embangweni markets will also be constructed.  
+Components of the MIERA Project - The MIERA Project had two components:
+Implementation of Economic Infrastructure via the Local Development Fund. This component has a total budget of 7 million Euros
+Support to Malawi Innovation Challenge Fund (MICF), which had a total cost of 3 Million Euros and was operated and implemented by the United Nations Development Programme (UNDP) under the Private Sector Development Project (PSDP)
+`
   }
  
 }
