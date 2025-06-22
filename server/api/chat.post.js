@@ -9,8 +9,8 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    // Get API key from environment variables
-    const apiKey = useRuntimeConfig().geminiApiKey
+    // Direct API key 
+    const apiKey = "AIzaSyAZCgzAyZ_x3ZkGKkHsIzWxx1JdumFo0iU"
     
     if (!apiKey) {
       throw createError({
