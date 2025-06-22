@@ -102,6 +102,27 @@ const onClickOutside = () => {
 
         <!-- Desktop menu -->
         <nav class="hidden lg:flex items-center space-x-1">
+          <div @mouseenter="toggleMegaMenu('home')" @mouseleave="toggleMegaMenu(null)" class="relative">
+            <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
+              Home
+              <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+              </svg>
+            </button>
+
+            <div v-show="activeMegaMenu === 'home'" class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 400px;">
+              <div class="p-6">
+                <ul class="space-y-3">
+                  <li><NuxtLink to="/"  class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                   
+                    Home 1</NuxtLink></li>
+                  <li><NuxtLink to="/index2" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                   
+                     home 2</NuxtLink></li>
+                </ul>
+              </div>
+            </div>
+          </div>
           <!-- About Us Mega Menu -->
           <div @mouseenter="toggleMegaMenu('about')" @mouseleave="toggleMegaMenu(null)" class="relative">
             <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
