@@ -17,17 +17,19 @@ const projectGroups = [
   {
     group: 'GESD',
     items: [
-      { id: 'pbg', title: 'Performance Based Grants' },
-      { id: 'lapa', title: 'LAPA' },
-      { id: 'adaptive', title: 'Adaptive Management' }
+      { id: 'pbf', title: 'Performance-Based Financing' },
+      { id: 'ias', title: 'Intergovernmental Accountability Systems' },
+      { id: 'lgpi', title: 'Local Government Performance Improvement' },
+      { id: 'adaptive', title: 'Adaptive Management and Innovation' }
     ]
   },
   {
     group: 'RCRP 2',
     items: [
-      { id: 'usr', title: 'Urban Social Registry' },
-      { id: 'upw', title: 'Urban Public Works' },
-      { id: 'pbg2', title: 'Performance Based Grants' }
+      { id: 'drb', title: 'District-Led Resilience Building' },
+      { id: 'usr', title: 'Urban Malawi Social Registry' },
+      { id: 'upw', title: 'Urban Climate Smart Public Works Program' }
+      
     ]
   }
 ]
@@ -47,41 +49,52 @@ To qualify for inclusion in the programme, a household must be ultra-poor and la
   
   },
   publicWorks: {
-    title: 'Public Works',
-    body: `Provides short-term employment to vulnerable households through labor-intensive public works.`
+    title: ' Climate Smart Enhanced Public Works Programme (Mbwezera Chilengedwe)',
+    body: `The objective of CS-EPWP is to create visible, durable, and quality assets within micro catchments that will assist in improving household resilience to shocks, increase impact on household-level incomes and food security and reduce households’ exposure to risks associated with climate change and other disasters. CS-EPWP has reached out to 538,983 ultra-poor households with labour capacity. CS-EPWP is the largest component under the SSRLP, which was designed to rehabilitate degraded micro watersheds/catchments and restore natural resources (soil, water, trees, etc.) by creating visible, durable, and quality assets within selected micro-catchments in all 28 districts.`
   },
   emergency: {
-    title: 'Emergency Cash Transfer',
-    body: 'Rapid cash assistance during emergencies like natural disasters to ensure basic household survival.'
+    title: 'Scalable Social Safety Nets',
+    body: `This component under SSRLP-Tidzidalire enables the government to transfer funds to the most vulnerable households in response to drought to avoid the near-poor slipping into the poverty cycle, and the ultra-poor slipping further down the poverty line. The programme has reached out to 515 households in 10 districts: Blantyre, Thyolo, Ntcheu, Karonga, Nkhotakota, Chiradzulu, Mwanza, Balaka, Chikwawa and Nsanje. Scalable Mechanism provides additional support to SCTP and CS-EPWP beneficiaries in times of drought, floods and other natural disasters, as food consumption support`
   },
   livelihoods: {
     title: 'Livelihoods Support',
-    body: 'Offers skills training, seed capital, and business support to boost income generation.'
+    body: `The Livelihood Support Programme, a key sub-component of the SSRLP, provides an economic inclusion package to selected households benefiting from the Social Cash Transfer Programme (SCTP) and the Climate Smart Enhanced Public Works Programme (CS-EPWP). This specific component is implemented by COMSIP Cooperative Union Limited, and it adopts a “cash-plus” model, complementing cash transfers and wages with basic, enhanced, and graduation livelihood packages. Livelihood support focuses on mindset change, capacity building, and fostering a culture of savings and investment to help households grow their resilience to economic shocks. Through the promotion of sustainable income-generating activities, multi-sectoral investments, and linkages, the programme aims to increase household incomes, build productive assets, enhance human capital, and improve social and financial inclusion. It specifically targets women and youth, empowering them to diversify income sources, improve nutrition and health, and strengthen disaster risk management awareness, ultimately building long-term resilience and economic stability.
+
+Livelihood Support Programme has reached 18,400 households for asset transfers, empowering 259,000 members through enhanced livelihoods, supported 3,500 out-of-school youth with skills training, educating 443 clusters via cooperative training, and linking 25,250 members to Joint Skills Groups and market-oriented initiatives like Legumes/Crop Enterprise Structured Production (LESP) to boost income and resilience.
+`
   },
-  pbg: {
-    title: 'Performance Based Grants',
-    body: 'Provides funds to local councils based on performance metrics to support service delivery.'
+  pbf: {
+    title: 'Performance-Based Financing',
+    body: `Increasing discretionary development funding for LAs - tied to the councils Annual Local Authority Performance Assessment (LAPA) results - through the introduction of a Performance-Based Grant (PBG) (Quick links;  LAPAS, Indicative Planning Figures (IPFs)`
   },
-  lapa: {
-    title: 'Local Authority Performance Assessment (LAPA)',
-    body: 'Monitors and evaluates local councils to ensure accountability and efficiency.'
+  ias: {
+    title: 'Intergovernmental Accountability Systems',
+    body: `Addressing two central government functions that are critical to strengthening intergovernmental accountability relations – revamping the Intergovernmental Fiscal Transfer System and strengthening external audit to bolster the system of accountability for LA public resource management (IGTF Dashboard)`
+  },
+  lgpi: {
+    title: 'Local Government Performance Improvement',
+    body: `Building LA capabilities for improved performance through targeted capacity building, expedited human resource staffing of core LA functions, and enhanced citizen engagement`
   },
   adaptive: {
-    title: 'Adaptive Management',
-    body: 'Allows projects to respond flexibly to changing contexts and emerging evidence.'
+    title: 'Adaptive Management and Innovation',
+    body: `Ensuring response to risks and adaptation to lessons learned during implementation through innovative approaches to project management, monitoring and evaluation and learning.`
+  },
+   drb: {
+    title: 'District-Led Resilience Building',
+    body: `Component 2.2 of RCRP District Led Resilience Building will finance Performance-Based Grants (PBGs) to support district-level infrastructure development, catchment management, and nature-based solution investments across all 28 Local Authorities (LAs). These grants are aligned with the principles of the Governance to Enable Service Delivery (GESD) Project to ensure transparency, accountability, and results-based implementation.
+To determine eligibility, LAs will be assessed using the Local Authority Performance Assessment (LAPA) tool. Those that meet the required standards will receive both the RCRP–PBG and the GESD-PBG.
+The funds are intended to enhance resilience to the adverse effects of climate change, particularly those triggered by floods, cyclones, and other climate-related disasters. Through these investments, districts will implement projects that strengthen community resilience and promote sustainable living in disaster-prone areas, enabling populations to better withstand and adapt to recurring shocks such as floods and droughts.
+`
   },
   usr: {
-    title: 'Urban Social Registry',
-    body: 'A digital platform for identifying and registering urban poor for social protection programs.'
+    title: 'Urban Malawi Social Registry',
+    body: `Component 3.1 of RCRP 2 will expand the Malawi Social Registry, formerly known as the UBR, to urban councils.`
   },
   upw: {
-    title: 'Urban Public Works',
-    body: 'Creates short-term jobs for the urban poor while improving community infrastructure.'
-  },
-  pbg2: {
-    title: 'Performance Based Grants (Urban)',
-    body: 'Supports urban governance and services through targeted performance-linked funding.'
+    title: 'Urban Climate Smart Public Works Program',
+    body: `Component 3.2 of RCRP 2 will pilot a climate public works program in urban councils in Malawi`
   }
+ 
 }
 
 // Set from initial hash on load
