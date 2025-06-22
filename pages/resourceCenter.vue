@@ -5,66 +5,46 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="flex min-h-screen bg-white">
-    <aside class="w-72 bg-gray-100 p-4 border-r overflow-auto">
-      <h2 class="text-xl font-bold mb-4">Publications & Downloads</h2>
-      <div v-for="group in pubGroups" :key="group.name" class="mb-3">
+  <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
+    <!-- Left Sidebar -->
+    <div class="w-64 bg-gray-100 border-r p-4">
+      <div v-for="(tab, tabIndex) in tabs" :key="tabIndex" class="mb-2">
         <button
-          @click="toggleGroup(group.name)"
-          class="w-full text-left font-medium flex justify-between items-center py-1"
+          @click="toggleTab(tabIndex)"
+          class="w-full text-left py-2 px-3 font-semibold rounded border-l-4 border-transparent hover:border-l-gray-500"
+          :class="{ 'bg-gray-400': expandedTab === tabIndex }"
         >
-          {{ group.name }}
-          <span>{{ openGroups.includes(group.name) ? '−' : '+' }}</span>
+          {{ tab.name }}
         </button>
 
-        <div v-if="openGroups.includes(group.name)" class="pl-3 mt-1">
-          <div v-if="group.subcategories">
-            <div v-for="sub in group.subcategories" :key="sub.name" class="mb-1">
-              <button
-                @click="selectDocuments(sub.documents, `${group.name} - ${sub.name}`)"
-                class="w-full text-left hover:underline py-0.5"
-              >
-                {{ sub.name }}
-              </button>
-            </div>
-          </div>
-          <div v-else>
-            <button
-              @click="selectDocuments(group.documents, group.name)"
-              class="text-blue-600 hover:underline text-left w-full py-0.5"
-            >
-              View {{ group.name }}
-            </button>
-          </div>
+        <div v-if="expandedTab === tabIndex" class="ml-4 mt-1">
+          <button
+            v-for="(sub, subIndex) in tab.subcategories"
+            :key="subIndex"
+            @click="selectSub(tabIndex, subIndex)"
+            class="block w-full text-left py-1 px-2 rounded hover:bg-gray-300"
+            :class="{ 'bg-gray-500 text-white': activeTab === tabIndex && activeSub === subIndex }"
+          >
+            {{ sub.name }}
+          </button>
         </div>
       </div>
+    </div>
 
-      <h2 class="text-xl font-bold mt-6 mb-4">Knowledge Management Portal</h2>
-      <div v-for="group in kmpGroups" :key="group.name" class="mb-3">
-        <button
-          @click="selectDocuments(group.documents, group.name)"
-          class="w-full text-left text-blue-600 hover:underline py-0.5"
-        >
-          {{ group.name }}
-        </button>
-      </div>
-    </aside>
-
-    <main class="flex-1 p-6 overflow-auto pl-12"> 
-      <h1 class="text-3xl font-bold mb-6">Resource Centre</h1>
-
+    <!-- Main content -->
+    <div class="flex-1 p-4">
       <section v-if="displayedDocuments.length">
-        <h2 class="text-2xl font-semibold mb-3">{{ currentTitle }}</h2>
+        <h3 class="font-bold text-gray-800 text-lg">{{ currentTitle }}</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div
             v-for="doc in displayedDocuments"
             :key="doc.name"
-            class="relative bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition duration-300 p-4 flex flex-col justify-between group hover:border-blue-500"
+            class="relative bg-white rounded-2xl border-b-4 border-gray-200 shadow-sm hover:border-blue-500 transition duration-300 p-4 flex flex-col justify-between group"
           >
             <a
               :href="doc.link"
               target="_blank"
-              class="absolute top-2 right-2 text-blue-600 hover:text-blue-800"
+              class="absolute bottom-2 right-2 text-blue-600 hover:text-border-gray-600"
               title="Download / View"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
@@ -79,7 +59,7 @@ definePageMeta({
                 v-if="doc.thumbnail"
                 :src="doc.thumbnail"
                 alt="Thumbnail"
-                class="w-12 h-12 rounded-lg object-cover"
+                class="w-12 h-12 rounded-lg object-cover mr-2"
               />
               <div>
                 <h3 class="font-bold text-gray-800 text-lg">{{ doc.name }}</h3>
@@ -92,151 +72,315 @@ definePageMeta({
             <p class="text-sm text-gray-600">
               {{ doc.description || 'No description available.' }}
             </p>
+            <p class="text-sm text-gray-600">
+              {{ doc.date || 'No description available.' }}
+            </p>
           </div>
         </div>
       </section>
-
-      <section v-else>
-        <h2 class="text-xl text-gray-500">Select a category to view documents</h2>
-      </section>
-    </main>
+      <div v-else class="text-gray-600">Select a subcategory to view content.</div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue';
 
-// Publications & Downloads groups
-const pubGroups = [
+const tabs = ref([
   {
-    name: 'Press Releases',
-    documents: [
+    name: 'Publications & Downloads',
+    subcategories: [
       {
-        name: 'Press Release Jan 2025',
-        link: '/downloads/press-jan2025.pdf',
-        type: 'PDF',
-        thumbnail: '/thumbnails/pdf.png',
-        description: 'Summary of January 2025 press release.'
+        name: 'Press Releases',
+        contents: [
+          {
+            name: 'Press Release Jan 2025',
+            link: '/downloads/press-jan2025.pdf',
+            type: 'PDF',
+            description: 'Summary of January 2025 press release.',
+            date: '22 Jan 2025'
+          },
+          {
+            name: 'Press Release Jan 2025',
+            link: '/downloads/press-jan2025.pdf',
+            type: 'PDF',
+            description: 'Summary of January 2025 press release.',
+            date: '22 Jan 2025'
+          },
+          {
+            name: 'Press Release Mar 2025',
+            link: '/downloads/press-mar2025.pdf',
+            type: 'PDF',
+            description: 'Summary of March 2025 press release.',
+            date: '22 Jan 2025'
+          },
+          {
+            name: 'Press Release Mar 2025',
+            link: '/downloads/press-mar2025.pdf',
+            type: 'PDF',
+            description: 'Summary of March 2025 press release.',
+            date: '22 Jan 2025'
+          }
+        ]
       },
       {
-        name: 'Press Release Mar 2025',
-        link: '/downloads/press-mar2025.pdf',
-        type: 'PDF',
-        thumbnail: '/thumbnails/pdf.png',
-        description: 'Summary of March 2025 press release.'
+        name: 'Success Stories',
+        contents: [
+          {
+            name: 'Community Success 1',
+            link: '/downloads/success1.pdf',
+            type: 'PDF',
+            description: 'Summary of community success story 1.',
+            date: '22 Jan 2025'
+          },
+          {
+            name: 'Community Success 2',
+            link: '/downloads/success2.pdf',
+            type: 'PDF',
+            description: 'Summary of community success story 2.',
+            date: '22 Jan 2025'
+          },  
+          {
+            name: 'Community Success 3',
+            link: '/downloads/success3.pdf',
+            type: 'PDF',
+            description: 'Summary of community success story 3.',
+            date: '22 Jan 2025'              
+          } 
+        ]
       },
       {
-        name: 'Press Release Mar 2025',
-        link: '/downloads/press-mar2025.pdf',
-        type: 'PDF',
-        thumbnail: '/thumbnails/pdf.png',
-        description: 'Summary of March 2025 press release.'
-      }
-    ]
-  },
-  {
-    name: 'Success Stories',
-    documents: [
+        name: 'Newsletters & Magazines',
+        contents: [
+          {
+            name: 'Monthly Newsletter - Jan 2025',
+            link: '/downloads/newsletter-jan2025.pdf',
+            type: 'PDF',
+            description: 'Highlights from January 2025 newsletter.'
+          },
+          {
+            name: 'Quarterly Magazine - Q1 2025',
+            link: '/downloads/magazine-q1-2025.pdf',
+            type: 'PDF',
+            description: 'In-depth articles from Q1 2025 magazine.'
+          },
+          {
+            name: 'Annual Report 2024',
+            link: '/downloads/annual-report-2024.pdf',
+            type: 'PDF',
+            description: 'Comprehensive overview of 2024 activities.'
+          }
+        ]
+      },
       {
-        name: 'Community Success 1',
-        link: '/downloads/success1.pdf',
-        type: 'PDF',
-        thumbnail: '/thumbnails/pdf.png',
-        description: 'Story of community success.'
+        name: 'Manuals and Guidelines',
+        contents: []
       }
     ]
   },
   {
     name: 'Project Documents',
     subcategories: [
-      {
-        name: 'SSRLP',
-        documents: [
-          {
-            name: 'SSRLP Report 2025',
-            link: '/downloads/ssrlp-report-2025.pdf',
-            type: 'PDF',
-            thumbnail: '/thumbnails/pdf.png',
-            description: 'SSRLP annual report.'
-          }
-        ]
-      },
-      {
-        name: 'GESD',
-        documents: [
-          {
-            name: 'GESD Plan 2025',
-            link: '/downloads/gesd-plan-2025.pdf',
-            type: 'PDF',
-            thumbnail: '/thumbnails/pdf.png',
-            description: 'GESD strategic plan 2025.'
-          }
-        ]
-      },
-      {
-        name: 'RCRP',
-        documents: [
-          {
-            name: 'RCRP Document 2025',
-            link: '/downloads/rcrp-doc-2025.pdf',
-            type: 'PDF',
-            thumbnail: '/thumbnails/pdf.png',
-            description: 'RCRP 2025 project document.'
-          }
-        ]
-      }
-    ]
-  }
-]
-
-// Knowledge Management Portal groups
-const kmpGroups = [
-  {
-    name: 'Media',
-    documents: [
-      {
-        name: 'Photo 1',
-        link: '/media/photo1.jpg',
-        type: 'JPG',
-        thumbnail: '/thumbnails/photo.png',
-        description: 'Event photo from 2025.'
-      }
+      { name: 'SSRLP', contents: [
+        {
+          name: 'SSRLP Report 2025',
+          link: '/downloads/ssrlp-report-2025.pdf',
+          type: 'PDF',
+          description: 'SSRLP annual report for 2025.'
+        },
+        {
+          name: 'SSRLP Guidelines',
+          link: '/downloads/ssrlp-guidelines.pdf',
+          type: 'PDF',
+          description: 'Guidelines for SSRLP project implementation.'
+        }
+      ] },
+      { name: 'GESD', contents: [
+        {
+          name: 'GESD Plan 2025',
+          link: '/downloads/gesd-plan-2025.pdf',
+          type: 'PDF',
+          description: 'GESD strategic plan for 2025.'
+        }
+      ] },
+      { name: 'RCRP', contents: [
+        {
+          name: 'RCRP Overview',
+          link: '/downloads/rcrp-overview.pdf',
+          type: 'PDF',
+          description: 'Overview of the RCRP project.'
+        },
+        {
+          name: 'RCRP Implementation Guide',
+          link: '/downloads/rcrp-guide.pdf',
+          type: 'PDF',
+          description: 'Implementation guide for RCRP projects.'
+        }
+      ] },
+      { name: 'GESD name', contents: [
+        {
+          name: 'GESD Project Overview',
+          link: '/downloads/gesd-overview.pdf',
+          type: 'PDF',
+          description: 'Overview of the GESD project.'
+        },
+        {
+          name: 'GESD Implementation Guide',
+          link: '/downloads/gesd-guide.pdf',
+          type: 'PDF',
+          description: 'Implementation guide for GESD projects.'
+        }
+      ] },
+      { name: 'RCRP', contents: [
+        {
+          name: 'RCRP Project Overview',
+          link: '/downloads/rcrp-overview.pdf',
+          type: 'PDF',
+          description: 'Overview of the RCRP project.'
+        },
+        {
+          name: 'RCRP Implementation Guide',
+          link: '/downloads/rcrp-guide.pdf',
+          type: 'PDF',
+          description: 'Implementation guide for RCRP projects.'
+        }
+      ] }
     ]
   },
   {
-    name: 'Videos',
-    documents: [
-      {
-        name: 'Intro Video',
-        link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-        type: 'YouTube',
-        thumbnail: 'https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg',
-        description: 'Introductory video about our work.'
-      }
+    name: 'Reports',
+    subcategories: [
+      { name: 'Downloadable Reports', contents: [
+        {
+          name: 'Annual Report 2024',
+          link: '/downloads/annual-report-2024.pdf',
+          type: 'PDF',
+          description: 'Comprehensive overview of 2024 activities.'
+        },
+        {
+          name: 'Monthly Report - Jan 2025',
+          link: '/downloads/monthly-report-jan2025.pdf',
+          type: 'PDF',
+          description: 'Highlights from January 2025 monthly report.'
+        }
+      ] },
+      { name: 'Research Reports', contents: [
+        {
+          name: 'Research Report 2024',
+          link: '/downloads/research-report-2024.pdf',
+          type: 'PDF',
+          description: 'In-depth analysis of research conducted in 2024.'
+        },
+        {
+          name: 'Impact Assessment 2025',
+          link: '/downloads/impact-assessment-2025.pdf',
+          type: 'PDF',
+          description: 'Assessment of project impacts for 2025.'
+        }
+      ] },
+      { name: 'Policies and Strategies', contents: [
+        {
+          name: 'Policy Framework 2025',
+          link: '/downloads/policy-framework-2025.pdf',
+          type: 'PDF',
+          description: 'Framework for policy implementation in 2025.'
+        },
+        {
+          name: 'Strategic Plan 2025',
+          link: '/downloads/strategic-plan-2025.pdf',
+          type: 'PDF',
+          description: 'Strategic plan outlining goals and objectives for 2025.'
+        } 
+      ] }
+    ]
+  },
+  {
+    name: 'Knowledge Management Portal',
+    subcategories: [
+      { name: 'Image Gallery', contents: [
+        {
+          name: 'Community Event Photos',
+          link: '/downloads/gallery-community-event.jpg',
+          type: 'Image',
+          description: 'Photos from community events.'
+        },
+        {
+          name: 'Project Launch Images',
+          link: '/downloads/gallery-project-launch.jpg',
+          type: 'Image',
+          description: 'Images from project launch events.'
+        }
+      ] },
+      { name: 'Audio Clips', contents: [
+        {
+          name: 'Community Voices Podcast Episode 1',
+          link: '/downloads/podcast-episode1.mp3',
+          type: 'Audio',
+          description: 'First episode of the Community Voices podcast.'
+        },
+        {
+          name: 'Project Update Audio Clip',
+          link: '/downloads/project-update-audio.mp3',
+          type: 'Audio',
+          description: 'Audio update on recent project developments.'
+        }
+      ] },
+      { name: 'Video', contents: [
+        {
+          name: 'Community Success Story Video',
+          link: '/downloads/community-success-video.mp4',
+          type: 'Video',
+          description: 'Video showcasing a community success story.'
+        },
+        {
+          name: 'Project Impact Documentary',
+          link: '/downloads/project-impact-documentary.mp4',
+          type: 'Video',
+          description: 'Documentary on the impact of recent projects.'
+        }
+      ] }
     ]
   }
-]
+]);
 
-// State
-const openGroups = ref([])
-const displayedDocuments = ref([])
-const currentTitle = ref('')
+const expandedTab = ref(null);
+const activeTab = ref(null);
+const activeSub = ref(null);
 
-// Functions
-function toggleGroup(name) {
-  if (openGroups.value.includes(name)) {
-    openGroups.value = openGroups.value.filter(g => g !== name)
-  } else {
-    openGroups.value.push(name)
+function toggleTab(index) {
+  expandedTab.value = expandedTab.value === index ? null : index;
+  if (expandedTab.value === null) {
+    activeTab.value = null;
+    activeSub.value = null;
   }
 }
 
-function selectDocuments(docs, title) {
-  displayedDocuments.value = docs
-  currentTitle.value = title
+function selectSub(tabIndex, subIndex) {
+  activeTab.value = tabIndex;
+  activeSub.value = subIndex;
 }
+
+const displayedDocuments = computed(() => {
+  if (activeTab.value !== null && activeSub.value !== null) {
+    return tabs.value[activeTab.value].subcategories[activeSub.value].contents || [];
+  }
+  return [];
+});
+
+const currentTitle = computed(() => {
+  if (activeTab.value !== null && activeSub.value !== null) {
+    return `${tabs.value[activeTab.value].name} - ${tabs.value[activeTab.value].subcategories[activeSub.value].name}`;
+  }
+  return '';
+});
 </script>
 
 <style scoped>
-/* You could further customize hover effects or card layout here if needed */
+/* Only bottom border changes on hover already handled with border-b-4 hover:border-blue-500 */
+/* You can remove other borders if you'd like completely bottom-only look: */
+/* .group { border: none; border-bottom-width: 4px; } */
 </style>
+
+
+
+
