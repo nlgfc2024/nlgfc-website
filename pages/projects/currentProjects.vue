@@ -2,12 +2,13 @@
 definePageMeta({ title: 'Current Projects' })
 
 const route = useRoute()
-const activeTab = ref('SCTP')
+const activeTab = ref('ssrlp_overview')
 
 const projectGroups = [
   {
     group: 'SSRLP',
     items: [
+      { id: 'ssrlp_overview', title: ' Overview' },
       { id: 'SCTP', title: 'SCTP' },
       { id: 'publicWorks', title: 'Public Works' },
       { id: 'emergency', title: 'Emergency Cash Transfer' },
@@ -17,6 +18,7 @@ const projectGroups = [
   {
     group: 'GESD',
     items: [
+    { id: 'gesd_overview', title: ' Overview' },
       { id: 'pbf', title: 'Performance-Based Financing' },
       { id: 'ias', title: 'Intergovernmental Accountability Systems' },
       { id: 'lgpi', title: 'Local Government Performance Improvement' },
@@ -26,6 +28,7 @@ const projectGroups = [
   {
     group: 'RCRP 2',
     items: [
+    { id: 'rcrp_overview', title: ' Overview' },
       { id: 'drb', title: 'District-Led Resilience Building' },
       { id: 'usr', title: 'Urban Malawi Social Registry' },
       { id: 'upw', title: 'Urban Climate Smart Public Works Program' }
@@ -37,6 +40,22 @@ const projectGroups = [
 const openGroup = ref(projectGroups[0].group)
 
 const projectContent = {
+
+  ssrlp_overview: {
+    title: 'Social Support for Resilient Livelihoods Overview',
+    body: `hello world`
+  },
+  gesd_overview: {
+    title: 'Governance to Enable Service Delivery Overview',
+    body: `hello world`
+  },
+
+  rcrp_overview: {
+    title: 'Resilience and Climate Resilience Overview',
+    body: `hello world`
+  },
+
+
   SCTP: {
     title: 'Social Cash Transfer Programme (SCTP)',
     body: `Social Cash Transfer Programme, popularly known as Mtukula Pakhomo, targets ultra-poor and labour-constrained households and has reached 264,358 since 2021. 
@@ -173,7 +192,12 @@ watch(activeTab, () => {
         <h2 class="text-2xl font-bold text-gray-900">
           {{ projectContent[activeTab].title }}
         </h2>
-        <div class="text-gray-700 text-base leading-relaxed" v-html="projectContent[activeTab].body" />
+        <div class="text-gray-700 text-base leading-relaxed space-y-4">
+  <p v-for="(paragraph, index) in projectContent[activeTab].body.split(/\n\s*\n/)" :key="index">
+    {{ paragraph.trim() }}
+  </p>
+</div>
+
       </div>
       <div v-else class="text-gray-500 italic">No content available for this project.</div>
     </main>
