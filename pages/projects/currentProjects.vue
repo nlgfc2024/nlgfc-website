@@ -37,11 +37,18 @@ const openGroup = ref(projectGroups[0].group)
 const projectContent = {
   SCTP: {
     title: 'Social Cash Transfer Programme (SCTP)',
-    body: 'The SCTP supports vulnerable households with regular cash transfers to improve welfare and resilience.'
+    body: `Social Cash Transfer Programme, popularly known as Mtukula Pakhomo, targets ultra-poor and labour-constrained households and has reached 264,358 since 2021. 
+
+SCTP is aimed at alleviating poverty and malnutrition among ultra-poor and labour-constrained households. As part of the Social Support for Resilient Livelihoods Project (SSRLP), the SCTP provides unconditional cash transfers to improve nutrition, health, education, and shelter for the most vulnerable populations in 21 districts with funding from the World Bank and Social Protection Multi-Donor Trust Fund (SP-MDTF).
+
+The primary objectives of the SCTP are to reduce hunger and starvation, increase school enrolment, and enhance the health and nutrition of children in eligible households. 
+
+To qualify for inclusion in the programme, a household must be ultra-poor and labour-constrained, meaning they lack able-bodied members aged 19-64, have members still in school, or have a high dependency ratio.`
+  
   },
   publicWorks: {
     title: 'Public Works',
-    body: 'Provides short-term employment to vulnerable households through labor-intensive public works.'
+    body: `Provides short-term employment to vulnerable households through labor-intensive public works.`
   },
   emergency: {
     title: 'Emergency Cash Transfer',
