@@ -317,8 +317,16 @@ const onClickOutside = () => {
       <div class="mt-10 md:mt-0">
         <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Past Projects</h3>
         <ul class="space-y-2 mb-6">
-          <li><NuxtLink to="/projects/pastProjects#masaf" class="text-gray-600 hover:text-blue-600">MASAF</NuxtLink></li>
-          <li><NuxtLink to="/projects/pastProjects#miera" class="text-gray-600 hover:text-blue-600">MIERA</NuxtLink></li>
+          <strong class="text-gray-700 flex items-center">MASAF</strong>
+        <ul class="space-y-1 pl-4 mb-4">
+          <li><NuxtLink to="/projects/pastProjects#masaf_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
+          <li><NuxtLink to="/projects/pastProjects#psn" class="text-gray-600 hover:text-blue-600">Productive Safety Nets</NuxtLink></li>
+          <li><NuxtLink to="/projects/pastProjects#scb" class="text-gray-600 hover:text-blue-600">Systems and Capacity Building</NuxtLink></li>
+          <li><NuxtLink to="/projects/pastProjects#pm" class="text-gray-600 hover:text-blue-600">Project Management</NuxtLink></li>
+       
+        </ul>
+          
+          <li><NuxtLink to="/projects/pastProjects#miera_overview" class="text-gray-600 hover:text-blue-600">MIERA</NuxtLink></li>
         </ul>
 
         <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Upcoming Projects</h3>
