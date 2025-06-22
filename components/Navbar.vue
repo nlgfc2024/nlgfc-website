@@ -2,6 +2,17 @@
 const isMenuOpen = ref(false);
 const activeMegaMenu = ref(null);
 const activeAccordion = ref(null);
+const showSearch = ref(false);
+const searchQuery = ref('');
+
+// Get the current route
+const route = useRoute();
+
+// Watch for route changes
+watch(() => route.path, () => {
+  // Close all menus when route changes
+  closeAllMenus();
+});
 
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
@@ -26,11 +37,19 @@ const toggleSearch = () => {
 
 const handleSearch = () => {
   if (searchQuery.value.trim()) {
-    // Perform search action
     console.log('Searching for:', searchQuery.value);
-    // You can replace this with actual search functionality
+    closeAllMenus();
   }
 };
+
+// Close all menus function
+const closeAllMenus = () => {
+  isMenuOpen.value = false;
+  activeMegaMenu.value = null;
+  activeAccordion.value = null;
+  showSearch.value = false;
+};
+
 // Close mega menus when clicking outside
 const onClickOutside = () => {
   activeMegaMenu.value = null;
