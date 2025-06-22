@@ -282,7 +282,7 @@ const onClickOutside = () => {
   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Past Projects</h3>
                   <ul class="space-y-2">
                    <li><NuxtLink to="/projects/pastProjects#masaf" class="text-gray-600 hover:text-blue-600">MASAF</NuxtLink></li>
-                    <li><NuxtLink to="/projects/pastProjects#miera" class="text-gray-600 hover:text-blue-600">MIERA</NuxtLink></li>
+                    <li><NuxtLink to="/projects/7ra" class="text-gray-600 hover:text-blue-600">MIERA</NuxtLink></li>
                   </ul>
 </div>     
                 <div>
@@ -370,64 +370,19 @@ const onClickOutside = () => {
             <div v-show="activeMegaMenu === 'councils'" class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 800px;">
               <div class="grid grid-cols-3 gap-6 p-6">
                 <div>
-<<<<<<< HEAD
-                  <button @click="toggleAccordion('city')" class="flex items-center justify-between w-full text-lg font-semibold mb-3 text-blue-800">
-                    City Councils
-                    <svg class="w-5 h-5 transform transition" :class="{ 'rotate-180': activeAccordion === 'city' }" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                    </svg>
-                  </button>
-                  <div v-show="activeAccordion === 'city'" class="pl-4 space-y-2">
-                    <a href="/localAuthorities/lilongwecitycouncil" class="block text-gray-700 hover:text-blue-700 transition">Lilongwe City Council</a>
-                    <a href="/localAuthorities/blantyreCouncil" class="block text-gray-700 hover:text-blue-700 transition">Blantyre City Council</a>
-                     <a href="/localAuthorities/mzuzucitycouncil" class="block text-gray-700 hover:text-blue-700 transition">Mzuzu City Council</a>
-                    <a href="/localAuthorities/zombacitycouncil" class="block text-gray-700 hover:text-blue-700 transition">Zomba City Council</a>
-                  </div>
-                </div>
-                
-                <div>
-                  <button @click="toggleAccordion('municipal')" class="flex items-center justify-between w-full text-lg font-semibold mb-3 text-blue-800">
-                    Municipal/Township Councils
-                    <svg class="w-5 h-5 transform transition" :class="{ 'rotate-180': activeAccordion === 'municipal' }" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                    </svg>
-                  </button>
-                  <div v-show="activeAccordion === 'municipal'" class="pl-4 space-y-2">
-                    <a href="balakaMunicipal" class="block text-gray-700 hover:text-blue-700 transition">Balaka Municipal Council</a>
-                    <a href="karongaMunicipal" class="block text-gray-700 hover:text-blue-700 transition">Karonga Municipal Council</a>
-                    <a href="kasunguMunicipal" class="block text-gray-700 hover:text-blue-700 transition">Kasungu Municipal Council</a>
-                    <a href="MangochiMucipal" class="block text-gray-700 hover:text-blue-700 transition">Mangochi Municipal Council</a>
-                    <a href="allcouncils" class="block text-gray-700 hover:text-blue-700 transition">All Municipal Councils →</a>
-                  </div>
-                </div>
-                
-                <div>
-                  <button @click="toggleAccordion('district')" class="flex items-center justify-between w-full text-lg font-semibold mb-3 text-blue-800">
-                    District Councils
-                    <svg class="w-5 h-5 transform transition" :class="{ 'rotate-180': activeAccordion === 'district' }" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                    </svg>
-                  </button>
-                  <div v-show="activeAccordion === 'district'" class="pl-4 space-y-2">
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Chikwawa District Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Dedza District Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Mulanje District Council</a>
-                    <a href="/localAuthorities/alldistricts" class="block text-gray-700 hover:text-blue-700 transition">All District Councils →</a>
-                  </div>
-=======
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">City Councils</h3>
                   <ul class="space-y-2">
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">Blantyre City Council</NuxtLink>
+                      <NuxtLink to="/localAuthorities/blantyreCouncil" class="text-gray-700 hover:text-blue-700 transition flex items-center">Blantyre City Council</NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">Lilongwe City Council</NuxtLink>
+                      <NuxtLink to="/localAuthorities/lilongwecitycouncil" class="text-gray-700 hover:text-blue-700 transition flex items-center">Lilongwe City Council</NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mzuzu City Council</NuxtLink>
+                      <NuxtLink to="/localAuthorities/mzuzucitycouncil" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mzuzu City Council</NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">Zomba City Council</NuxtLink>
+                      <NuxtLink to="/localAuthorities/zombacitycouncil" class="text-gray-700 hover:text-blue-700 transition flex items-center">Zomba City Council</NuxtLink>
                     </li>
                   </ul>
 
@@ -480,7 +435,7 @@ const onClickOutside = () => {
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/alldistricts" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         All District Councils →
                       </NuxtLink>
                     </li>
@@ -540,7 +495,6 @@ const onClickOutside = () => {
                       </a>
                     </li>
                   </ul>
->>>>>>> dev
                 </div>
               </div>
             </div>
@@ -849,7 +803,7 @@ const onClickOutside = () => {
               </button>
               <div v-show="activeAccordion === 'mobile-city'" class="pl-4 py-2 space-y-1">
                 <NuxtLink to="/councils/blantyre-city" class="block text-gray-600 hover:text-blue-600 py-1">Blantyre City Council</NuxtLink>
-                <NuxtLink to="/councils/lilongwe-city" class="block text-gray-600 hover:text-blue-600 py-1">Lilongwe City Council</NuxtLink>
+                <NuxtLink to="/localAuthorities/lilongwecitycouncil" class="block text-gray-600 hover:text-blue-600 py-1">Lilongwe City Council</NuxtLink>
                 <NuxtLink to="/councils/mzuzu-city" class="block text-gray-600 hover:text-blue-600 py-1">Mzuzu City Council</NuxtLink>
                 <NuxtLink to="/councils/zomba-city" class="block text-gray-600 hover:text-blue-600 py-1">Zomba City Council</NuxtLink>
               </div>
