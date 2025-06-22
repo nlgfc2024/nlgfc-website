@@ -314,7 +314,7 @@ const onClickOutside = () => {
                     <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Chikwawa District Council</a>
                     <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Dedza District Council</a>
                     <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Mulanje District Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">All District Councils →</a>
+                    <a href="/localAuthorities/alldistricts" class="block text-gray-700 hover:text-blue-700 transition">All District Councils →</a>
                   </div>
                 </div>
               </div>
