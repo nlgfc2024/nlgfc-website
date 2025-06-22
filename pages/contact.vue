@@ -1,32 +1,45 @@
 <script setup>
 import { onMounted } from 'vue'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
 
 definePageMeta({
   title: 'Contact Us'
 })
 
+const latitude = -13.954969
+const longitude = 33.781897
+
 onMounted(() => {
-  const map = L.map('contact-map').setView([-13.954969, 33.781897], 13)
+  const interval = setInterval(() => {
+    if (typeof L !== 'undefined') {
+      clearInterval(interval)
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-  }).addTo(map)
+      const map = L.map('contact-map').setView([latitude, longitude], 13)
 
-  L.marker([-13.954969, 33.781897])
-    .addTo(map)
-    .bindPopup('We are here!')
-    .openPopup()
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map)
+
+      L.marker([latitude, longitude]).addTo(map)
+        .bindPopup('We are here!')
+        .openPopup()
+
+      setTimeout(() => {
+        map.invalidateSize()
+      }, 200)
+    }
+  }, 100)
 })
 </script>
 
 <template>
   <div>
-    <!-- Optional: PageHeader -->
+    <!-- Optional PageHeader -->
     <!-- <PageHeader title="Contact Us" /> -->
 
     <div class="contact-page">
+      <!-- Leaflet Map comes first -->
+      <div id="contact-map" class="map-container"></div>
+
       <h1>Please input the required information below:</h1>
 
       <form class="contact-form">
@@ -47,9 +60,6 @@ onMounted(() => {
 
         <button type="submit">Send</button>
       </form>
-
-      <!-- Leaflet Map Section -->
-      <div id="contact-map" class="map-container"></div>
     </div>
   </div>
 </template>
@@ -59,6 +69,15 @@ onMounted(() => {
   max-width: 600px;
   margin: auto;
   padding: 2rem;
+}
+
+/* Leaflet Map Styling */
+.map-container {
+  margin-bottom: 2rem;
+  height: 400px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
 
 .contact-form {
@@ -88,14 +107,5 @@ onMounted(() => {
   color: white;
   cursor: pointer;
   border-radius: 4px;
-}
-
-/* Leaflet Map Styling */
-.map-container {
-  margin-top: 2rem;
-  height: 400px;
-  width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 8px;
 }
 </style>
