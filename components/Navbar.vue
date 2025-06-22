@@ -260,17 +260,14 @@ const onClickOutside = () => {
     </li>
 
   </ul>
-</div>
-
-                
-                <div>
-                 
-                  
-                  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Past Projects</h3>
+  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Past Projects</h3>
                   <ul class="space-y-2">
                    <li><NuxtLink to="/projects/pastProjects#masaf" class="text-gray-600 hover:text-blue-600">MASAF</NuxtLink></li>
                     <li><NuxtLink to="/projects/pastProjects#miera" class="text-gray-600 hover:text-blue-600">MIERA</NuxtLink></li>
                   </ul>
+</div>     
+                <div>
+                 
                   
                   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Upcoming Projects</h3>
                   <ul class="space-y-2 mb-10">
@@ -280,14 +277,52 @@ const onClickOutside = () => {
 
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
                   <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">MSR</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">E-Payments</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Public Works MIS</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">GRM</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">SCTP MIS</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">LAPA MIS</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">CIMIS</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">PMIS</a></li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#msr" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        MSR
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#e-payments" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        E-Payments
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#publicworks" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Public Works MIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#grm" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        GRM MIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#sctmis" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        SCTP MIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#lapas" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        LAPA MIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#cimis" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        CIMIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#pmis" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        PMIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        LAIF MIS
+                      </NuxtLink>
+                    </li>
+                  
                   </ul>
                 </div>
                 
