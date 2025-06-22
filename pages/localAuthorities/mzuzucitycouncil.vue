@@ -1,11 +1,12 @@
 <script setup>
-   definePageMeta({
-    title: 'Mzuzu CIty Council' // This will be available in route.meta.title
-   })
+    definePageMeta({
+        title: 'Mzuzu council' 
+    })
 </script>
+
 <template>
     <div>
-        <!-- <PageHeader title="Contact Us" /> -->
+        
     </div>
        
 </template>

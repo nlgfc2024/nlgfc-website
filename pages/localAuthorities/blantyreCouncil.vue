@@ -199,15 +199,6 @@ onMounted(() => {
       </div>
     </div>
   </div>
+  
 </template>
 
-<style scoped>
-.about-page {
-  min-height: calc(100vh - 120px);
-}
-
-.prose {
-  max-width: 800px;
-  margin: 0 auto;
-}
-</style>

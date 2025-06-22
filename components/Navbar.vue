@@ -280,9 +280,9 @@ const onClickOutside = () => {
                     </svg>
                   </button>
                   <div v-show="activeAccordion === 'city'" class="pl-4 space-y-2">
-                    <a href="/localAuthorities/blantyreCouncil" class="block text-gray-700 hover:text-blue-700 transition">Blantyre City Council</a>
                     <a href="/localAuthorities/lilongwecitycouncil" class="block text-gray-700 hover:text-blue-700 transition">Lilongwe City Council</a>
-                    <a href="/localAuthorities/mzuzucitycouncil" class="block text-gray-700 hover:text-blue-700 transition">Mzuzu City Council</a>
+                    <a href="/localAuthorities/blantyreCouncil" class="block text-gray-700 hover:text-blue-700 transition">Blantyre City Council</a>
+                     <a href="/localAuthorities/mzuzucitycouncil" class="block text-gray-700 hover:text-blue-700 transition">Mzuzu City Council</a>
                     <a href="/localAuthorities/zombacitycouncil" class="block text-gray-700 hover:text-blue-700 transition">Zomba City Council</a>
                   </div>
                 </div>

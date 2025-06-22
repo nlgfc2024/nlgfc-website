@@ -437,6 +437,12 @@ const clearFilters = () => {
                                 >
                                     News
                                 </a>
+                                  <a 
+                                    :href="`/localAuthorities/${selectedDistrictDetails.slug}/news`"
+                                    class="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full hover:bg-red-200 transition-colors"
+                                >
+                                updates
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -462,7 +468,7 @@ const clearFilters = () => {
                     <!-- Map Legend -->
                     <div class="mt-4 text-sm text-gray-600">
                         <div class="flex items-center justify-between">
-                            <span>Interactive Map of Malawi</span>
+                            <span>Map of Malawi</span>
                             <span v-if="selectedDistrict" class="text-blue-600 font-medium">
                                 {{ selectedDistrict }} highlighted
                             </span>
@@ -483,24 +489,6 @@ const clearFilters = () => {
                             <li v-else>Select a district from the dropdown to highlight it</li>
                         </ul>
                     </div>
-            </div>
-        </div>
-
-        <!-- Districts by Region Summary -->
-        <div class="mt-8">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Districts by Region</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div v-for="region in regions" :key="region" class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-                    <h4 class="font-semibold text-gray-800 mb-2">{{ region }} Region</h4>
-                    <ul class="text-sm text-gray-600 space-y-1">
-                        <li v-for="district in districts.filter(d => d.region === region)" :key="district.name">
-                            {{ district.name }}
-                        </li>
-                    </ul>
-                    <p class="text-xs text-gray-500 mt-2">
-                        {{ districts.filter(d => d.region === region).length }} districts
-                    </p>
-                </div>
             </div>
         </div>
     </div>
