@@ -84,7 +84,7 @@ const onClickOutside = () => {
         <!-- First logo -->
         <div class="flex items-start">
           <a href="/" class="flex items-center">
-            <img src="public/NLGFC-Logo.png" alt="Organization Logo" class="h-18 -mt-12">
+            <img src="/images/logo/NLGFC-Logo.png" alt="Organization Logo" class="h-18 -mt-12">
             <!-- Website name -->
             <!-- <span class="text-xl font-bold text-blue-600">National Local Goverment Finance Committee</span> -->
           </a>
@@ -369,52 +369,134 @@ const onClickOutside = () => {
               </svg>
             </button>
 
-            <div v-show="activeMegaMenu === 'councils'" class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 700px;">
+            <div v-show="activeMegaMenu === 'councils'" class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 800px;">
               <div class="grid grid-cols-3 gap-6 p-6">
                 <div>
-                  <button @click="toggleAccordion('city')" class="flex items-center justify-between w-full text-lg font-semibold mb-3 text-blue-800">
-                    City Councils
-                    <svg class="w-5 h-5 transform transition" :class="{ 'rotate-180': activeAccordion === 'city' }" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                    </svg>
-                  </button>
-                  <div v-show="activeAccordion === 'city'" class="pl-4 space-y-2">
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Blantyre City Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Lilongwe City Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Mzuzu City Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Zomba City Council</a>
-                  </div>
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">City Councils</h3>
+                  <ul class="space-y-2">
+                    <li>
+                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">Blantyre City Council</NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">Lilongwe City Council</NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mzuzu City Council</NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">Zomba City Council</NuxtLink>
+                    </li>
+                  </ul>
+
+                  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Municipal Councils</h3>
+                  <ul class="space-y-2">
+                    <li>
+                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Balaka Municipal Council
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Karonga Municipal Council
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Kasungu Municipal Council
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Mangochi Municipal Council
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        All Municipal Councils →
+                      </NuxtLink>
+                    </li>
+                  </ul>
                 </div>
                 
                 <div>
-                  <button @click="toggleAccordion('municipal')" class="flex items-center justify-between w-full text-lg font-semibold mb-3 text-blue-800">
-                    Municipal/Township Councils
-                    <svg class="w-5 h-5 transform transition" :class="{ 'rotate-180': activeAccordion === 'municipal' }" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                    </svg>
-                  </button>
-                  <div v-show="activeAccordion === 'municipal'" class="pl-4 space-y-2">
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Balaka Municipal Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Karonga Municipal Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Kasungu Municipal Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Mangochi Municipal Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">All Municipal Councils →</a>
-                  </div>
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">District Councils</h3>
+                  <ul class="space-y-2">
+                    <li>
+                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                        Chikwawa District Council
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                        Dedza District Council
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                        Mulanje District Council
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                        All District Councils →
+                      </NuxtLink>
+                    </li>
+                  </ul>
+
+                  <!-- <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Council Services</h3>
+                  <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition">Service Delivery</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition">Development Projects</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition">Public Participation</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition">By-laws & Regulations</a></li>
+                  </ul> -->
                 </div>
                 
-                <div>
-                  <button @click="toggleAccordion('district')" class="flex items-center justify-between w-full text-lg font-semibold mb-3 text-blue-800">
-                    District Councils
-                    <svg class="w-5 h-5 transform transition" :class="{ 'rotate-180': activeAccordion === 'district' }" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                    </svg>
-                  </button>
-                  <div v-show="activeAccordion === 'district'" class="pl-4 space-y-2">
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Chikwawa District Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Dedza District Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">Mulanje District Council</a>
-                    <a href="#" class="block text-gray-700 hover:text-blue-700 transition">All District Councils →</a>
-                  </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
+                  <ul class="space-y-3">
+                    <li>
+                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                        Council Directory
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        Performance Reports
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Council Locations
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Budget Allocations
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0h6m-6 0l-2 12a2 2 0 002 2h8a2 2 0 002-2L16 7"></path>
+                        </svg>
+                        Service Applications
+                      </a>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -597,10 +679,16 @@ const onClickOutside = () => {
               
               <h4 class="font-semibold text-blue-800 mt-3">Leadership</h4>
               <ul class="pl-2 space-y-2">
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Board of Directors</a></li>
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Management</a></li>
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Executive Management</a></li>
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Departments and Sections</a></li>
+                <li>
+                  <NuxLink class="text-gray-700 hover:text-blue-700 transition" to="/aboutUs/boardOfDirectors">Board of Directors</NuxLink>
+                </li>
+
+                <li>
+                  <NuxLink class="text-gray-700 hover:text-blue-700 transition" to="/aboutUs/executiveManagement">Executive Management</NuxLink>
+                </li>
+                <li>
+                  <NuxLink class="text-gray-700 hover:text-blue-700 transition" to="/aboutUs/boardOfDirectors">Directorates & Divisions</NuxLink>
+                </li>
               </ul>
               
               <h4 class="font-semibold text-blue-800 mt-3">Our Mandate</h4>
@@ -624,77 +712,77 @@ const onClickOutside = () => {
               </svg>
             </button>
            <!-- Mobile Accordion Menu -->
-<div
-  v-show="activeAccordion === 'mobile-projects'"
-  class="block md:hidden bg-white rounded-md shadow-md mt-2 "
->
-  <div class="p-4 space-y-6 max-h-[75vh] overflow-y-auto">
-    
-    <!-- Current Projects -->
-    <div>
-      <h3 class="font-semibold text-blue-800  pb-2">Current Projects</h3>
-      <ul class="pl-2 mt-2 space-y-1">
-        <li>
-          <strong class="text-gray-700">SSRLP</strong>
-          <ul class="pl-4 space-y-1">
-            <li><NuxtLink to="/projects/currentProjects#SCTP" class="text-gray-600 hover:text-blue-600">SCTP</NuxtLink></li>
-            <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Public Works</NuxtLink></li>
-            <li><NuxtLink to="/projects/currentProjects#emergency" class="text-gray-600 hover:text-blue-600">Emergency Cash Transfer</NuxtLink></li>
-            <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
-          </ul>
-        </li>
-        <li class="mt-4">
-          <strong class="text-gray-700">GESD</strong>
-          <ul class="pl-4 space-y-1">
-            <li><NuxtLink to="/projects/currentProjects#pbg" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
-            <li><NuxtLink to="/projects/currentProjects#lapa" class="text-gray-600 hover:text-blue-600">LAPA</NuxtLink></li>
-            <li><NuxtLink to="/projects/currentProjects#adaptive" class="text-gray-600 hover:text-blue-600">Adaptive Management</NuxtLink></li>
-          </ul>
-        </li>
-        <li class="mt-4">
-          <strong class="text-gray-700">RCRP</strong>
-          <ul class="pl-4 space-y-1">
-            <li><NuxtLink to="/projects/currentProjects#usr" class="text-gray-600 hover:text-blue-600">Urban Social Registry</NuxtLink></li>
-            <li><NuxtLink to="/projects/currentProjects#upw" class="text-gray-600 hover:text-blue-600">Urban Public Works</NuxtLink></li>
-            <li><NuxtLink to="/projects/currentProjects#pbg2" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
+            <div
+              v-show="activeAccordion === 'mobile-projects'"
+              class="block md:hidden bg-white rounded-md shadow-md mt-2 "
+            >
+              <div class="p-4 space-y-6 max-h-[75vh] overflow-y-auto">
+                
+                <!-- Current Projects -->
+                <div>
+                  <h3 class="font-semibold text-blue-800  pb-2">Current Projects</h3>
+                  <ul class="pl-2 mt-2 space-y-1">
+                    <li>
+                      <strong class="text-gray-700">SSRLP</strong>
+                      <ul class="pl-4 space-y-1">
+                        <li><NuxtLink to="/projects/currentProjects#SCTP" class="text-gray-600 hover:text-blue-600">SCTP</NuxtLink></li>
+                        <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Public Works</NuxtLink></li>
+                        <li><NuxtLink to="/projects/currentProjects#emergency" class="text-gray-600 hover:text-blue-600">Emergency Cash Transfer</NuxtLink></li>
+                        <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
+                      </ul>
+                    </li>
+                    <li class="mt-4">
+                      <strong class="text-gray-700">GESD</strong>
+                      <ul class="pl-4 space-y-1">
+                        <li><NuxtLink to="/projects/currentProjects#pbg" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
+                        <li><NuxtLink to="/projects/currentProjects#lapa" class="text-gray-600 hover:text-blue-600">LAPA</NuxtLink></li>
+                        <li><NuxtLink to="/projects/currentProjects#adaptive" class="text-gray-600 hover:text-blue-600">Adaptive Management</NuxtLink></li>
+                      </ul>
+                    </li>
+                    <li class="mt-4">
+                      <strong class="text-gray-700">RCRP</strong>
+                      <ul class="pl-4 space-y-1">
+                        <li><NuxtLink to="/projects/currentProjects#usr" class="text-gray-600 hover:text-blue-600">Urban Social Registry</NuxtLink></li>
+                        <li><NuxtLink to="/projects/currentProjects#upw" class="text-gray-600 hover:text-blue-600">Urban Public Works</NuxtLink></li>
+                        <li><NuxtLink to="/projects/currentProjects#pbg2" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
 
-    <!-- Past Projects -->
-    <div>
-      <h3 class="font-semibold text-blue-800 border-b pb-2">Past Projects</h3>
-      <ul class="pl-2 mt-2 space-y-1">
-        <li><a href="#" class="text-gray-700 hover:text-blue-700">MASAF 4</a></li>
-      </ul>
-    </div>
+                <!-- Past Projects -->
+                <div>
+                  <h3 class="font-semibold text-blue-800 border-b pb-2">Past Projects</h3>
+                  <ul class="pl-2 mt-2 space-y-1">
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700">MASAF 4</a></li>
+                  </ul>
+                </div>
 
-    <!-- Upcoming Projects -->
-    <div>
-      <h3 class="font-semibold text-blue-800 border-b pb-2">Upcoming Projects</h3>
-      <ul class="pl-2 mt-2 space-y-1">
-        <li><a href="#" class="text-gray-700 hover:text-blue-700">GESD 2.0</a></li>
-        <li><a href="#" class="text-gray-700 hover:text-blue-700">INSPIRE</a></li>
-      </ul>
-    </div>
+                <!-- Upcoming Projects -->
+                <div>
+                  <h3 class="font-semibold text-blue-800 border-b pb-2">Upcoming Projects</h3>
+                  <ul class="pl-2 mt-2 space-y-1">
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700">GESD 2.0</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700">INSPIRE</a></li>
+                  </ul>
+                </div>
 
-    <!-- Delivery Systems -->
-    <div>
-      <h3 class="font-semibold text-blue-800 border-b pb-2">Delivery Systems</h3>
-      <ul class="pl-2 mt-2 space-y-1">
-        <li><a href="#" class="text-gray-700 hover:text-blue-700">MSR</a></li>
-        <li><a href="#" class="text-gray-700 hover:text-blue-700">E-Payments</a></li>
-        <li><a href="#" class="text-gray-700 hover:text-blue-700">Public Works MIS</a></li>
-        <li><a href="#" class="text-gray-700 hover:text-blue-700">GRM</a></li>
-        <li><a href="#" class="text-gray-700 hover:text-blue-700">SCTP MIS</a></li>
-        <li><a href="#" class="text-gray-700 hover:text-blue-700">LAPA MIS</a></li>
-        <li><a href="#" class="text-gray-700 hover:text-blue-700">CIMIS</a></li>
-        <li><a href="#" class="text-gray-700 hover:text-blue-700">PMIS</a></li>
-      </ul>
-    </div>
-  </div>
-</div>
+                <!-- Delivery Systems -->
+                <div>
+                  <h3 class="font-semibold text-blue-800 border-b pb-2">Delivery Systems</h3>
+                  <ul class="pl-2 mt-2 space-y-1">
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700">MSR</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700">E-Payments</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700">Public Works MIS</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700">GRM</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700">SCTP MIS</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700">LAPA MIS</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700">CIMIS</a></li>
+                    <li><a href="#" class="text-gray-700 hover:text-blue-700">PMIS</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
 
           </div>
           
@@ -706,27 +794,78 @@ const onClickOutside = () => {
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </button>
+            
             <div v-show="activeAccordion === 'mobile-councils'" class="pl-4 space-y-3">
+              <!-- City Councils Section -->
               <button @click="toggleAccordion('mobile-city')" class="flex items-center justify-between w-full text-gray-700 font-medium">
                 City Councils
                 <svg class="w-4 h-4 transform transition" :class="{ 'rotate-180': activeAccordion === 'mobile-city' }" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                 </svg>
               </button>
-              <div v-show="activeAccordion === 'mobile-city'" class="pl-4 py-2">
-                <a href="#" class="block text-gray-600 hover:text-blue-600 py-1">Blantyre City Council</a>
-                <a href="#" class="block text-gray-600 hover:text-blue-600 py-1">Lilongwe City Council</a>
+              <div v-show="activeAccordion === 'mobile-city'" class="pl-4 py-2 space-y-1">
+                <NuxtLink to="/councils/blantyre-city" class="block text-gray-600 hover:text-blue-600 py-1">Blantyre City Council</NuxtLink>
+                <NuxtLink to="/councils/lilongwe-city" class="block text-gray-600 hover:text-blue-600 py-1">Lilongwe City Council</NuxtLink>
+                <NuxtLink to="/councils/mzuzu-city" class="block text-gray-600 hover:text-blue-600 py-1">Mzuzu City Council</NuxtLink>
+                <NuxtLink to="/councils/zomba-city" class="block text-gray-600 hover:text-blue-600 py-1">Zomba City Council</NuxtLink>
               </div>
-              
+
+              <!-- Municipal Councils Section -->
               <button @click="toggleAccordion('mobile-municipal')" class="flex items-center justify-between w-full text-gray-700 font-medium">
                 Municipal Councils
                 <svg class="w-4 h-4 transform transition" :class="{ 'rotate-180': activeAccordion === 'mobile-municipal' }" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                 </svg>
               </button>
-              <div v-show="activeAccordion === 'mobile-municipal'" class="pl-4 py-2">
-                <a href="#" class="block text-gray-600 hover:text-blue-600 py-1">Balaka Municipal Council</a>
-                <a href="#" class="block text-gray-600 hover:text-blue-600 py-1">Karonga Municipal Council</a>
+              <div v-show="activeAccordion === 'mobile-municipal'" class="pl-4 py-2 space-y-1">
+                <NuxtLink to="/councils/balaka-municipal" class="block text-gray-600 hover:text-blue-600 py-1">Balaka Municipal Council</NuxtLink>
+                <NuxtLink to="/councils/karonga-municipal" class="block text-gray-600 hover:text-blue-600 py-1">Karonga Municipal Council</NuxtLink>
+                <NuxtLink to="/councils/kasungu-municipal" class="block text-gray-600 hover:text-blue-600 py-1">Kasungu Municipal Council</NuxtLink>
+                <NuxtLink to="/councils/mangochi-municipal" class="block text-gray-600 hover:text-blue-600 py-1">Mangochi Municipal Council</NuxtLink>
+                <NuxtLink to="/councils/all-municipal" class="block text-gray-600 hover:text-blue-600 py-1">All Municipal Councils →</NuxtLink>
+              </div>
+
+              <!-- District Councils Section -->
+              <button @click="toggleAccordion('mobile-district')" class="flex items-center justify-between w-full text-gray-700 font-medium">
+                District Councils
+                <svg class="w-4 h-4 transform transition" :class="{ 'rotate-180': activeAccordion === 'mobile-district' }" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+              </button>
+              <div v-show="activeAccordion === 'mobile-district'" class="pl-4 py-2 space-y-1">
+                <NuxtLink to="/councils/chikwawa-district" class="block text-gray-600 hover:text-blue-600 py-1">Chikwawa District Council</NuxtLink>
+                <NuxtLink to="/councils/dedza-district" class="block text-gray-600 hover:text-blue-600 py-1">Dedza District Council</NuxtLink>
+                <NuxtLink to="/councils/mulanje-district" class="block text-gray-600 hover:text-blue-600 py-1">Mulanje District Council</NuxtLink>
+                <NuxtLink to="/councils/all-district" class="block text-gray-600 hover:text-blue-600 py-1">All District Councils →</NuxtLink>
+              </div>
+
+              <!-- Council Services Section -->
+              <button @click="toggleAccordion('mobile-services')" class="flex items-center justify-between w-full text-gray-700 font-medium">
+                Council Services
+                <svg class="w-4 h-4 transform transition" :class="{ 'rotate-180': activeAccordion === 'mobile-services' }" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+              </button>
+              <div v-show="activeAccordion === 'mobile-services'" class="pl-4 py-2 space-y-1">
+                <a href="#" class="block text-gray-600 hover:text-blue-600 py-1">Service Delivery</a>
+                <a href="#" class="block text-gray-600 hover:text-blue-600 py-1">Development Projects</a>
+                <a href="#" class="block text-gray-600 hover:text-blue-600 py-1">Public Participation</a>
+                <a href="#" class="block text-gray-600 hover:text-blue-600 py-1">By-laws & Regulations</a>
+              </div>
+
+              <!-- Quick Links Section -->
+              <button @click="toggleAccordion('mobile-quick-links')" class="flex items-center justify-between w-full text-gray-700 font-medium">
+                Quick Links
+                <svg class="w-4 h-4 transform transition" :class="{ 'rotate-180': activeAccordion === 'mobile-quick-links' }" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+              </button>
+              <div v-show="activeAccordion === 'mobile-quick-links'" class="pl-4 py-2 space-y-1">
+                <a href="#" class="block text-blue-600 hover:text-blue-800 py-1">Council Directory</a>
+                <a href="#" class="block text-blue-600 hover:text-blue-800 py-1">Performance Reports</a>
+                <a href="#" class="block text-blue-600 hover:text-blue-800 py-1">Council Locations</a>
+                <a href="#" class="block text-blue-600 hover:text-blue-800 py-1">Budget Allocations</a>
+                <a href="#" class="block text-blue-600 hover:text-blue-800 py-1">Service Applications</a>
               </div>
             </div>
           </div>

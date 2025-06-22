@@ -82,7 +82,7 @@ const props = defineProps({
   },
   backgroundImage: {
     type: String,
-    default: '/news2.jpg'
+    default: '/images/samples/news2.jpg'
   }
 });
 </script>

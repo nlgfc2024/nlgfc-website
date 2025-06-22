@@ -7,7 +7,7 @@ const board = {
   chairperson: {
     name: "Dr. Ellen M. Mkandawire",
     position: "Board Chairperson",
-    image: "/images/board/chairperson.jpg",
+    image: "/images/samples/profile1.jpg",
     reportsTo: null,
     subordinates: [
       "member1",
@@ -19,25 +19,25 @@ const board = {
   member1: {
     name: "Mr. John B. Mwale",
     position: "Board Member",
-    image: "/images/board/member1.jpg",
+    image: "/images/samples/profile2.jpg",
     reportsTo: "chairperson"
   },
   member2: {
     name: "Mrs. Patricia K. Jere",
     position: "Board Member",
-    image: "/images/board/member2.jpg",
+    image: "/images/samples/profile2.jpg",
     reportsTo: "chairperson"
   },
   member3: {
     name: "Dr. Michael T. Phiri",
     position: "Board Member",
-    image: "/images/board/member3.jpg",
+    image: "/images/samples/profile2.jpg",
     reportsTo: "chairperson"
   },
   member4: {
     name: "Ms. Sarah W. Kumwenda",
     position: "Board Member",
-    image: "/images/board/member4.jpg",
+    image: "/images/samples/profile2.jpg",
     reportsTo: "chairperson"
   }
 }

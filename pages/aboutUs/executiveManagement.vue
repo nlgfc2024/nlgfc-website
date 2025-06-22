@@ -7,7 +7,7 @@ const leadership = {
   executiveDirector: {
     name: "Mr. James M. Phiri",
     position: "Executive Director",
-    image: "/images/executives/director.jpg",
+    image: "/images/samples/profile1.jpg",
     reportsTo: null,
     subordinates: [
       "directorInfrastructure",
@@ -18,19 +18,19 @@ const leadership = {
   directorInfrastructure: {
     name: "Mrs. Angela K. Banda",
     position: "Director of Infrastructure & Economic Development",
-    image: "/images/executives/infrastructure.jpg",
+    image: "/images/samples/profile2.jpg",
     reportsTo: "executiveDirector"
   },
   directorFinance: {
     name: "Mr. David T. Gondwe",
     position: "Director of Finance",
-    image: "/images/executives/finance.jpg",
+    image: "/images/samples/profile2.jpg",
     reportsTo: "executiveDirector"
   },
   directorCorporate: {
     name: "Mrs. Grace M. Nyirenda",
     position: "Director of Corporate Services",
-    image: "/images/executives/corporate.jpg",
+    image: "/images/samples/profile2.jpg",
     reportsTo: "executiveDirector"
   }
 }
