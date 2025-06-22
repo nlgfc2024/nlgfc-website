@@ -43,16 +43,57 @@ const projectContent = {
 
   ssrlp_overview: {
     title: 'Social Support for Resilient Livelihoods Overview',
-    body: `hello world`
+    body: `Social Support for Resilient Livelihoods Project (SSRLP) is a seven-year (2020–2027) project, implemented by the Government of Malawi through the National Local Government Finance Committee (NLGFC) and Local Government Authorities (Councils), with financial support from the World Bank and the Social Protection Multi-Donor Trust Fund (SP-MDTF), with a total cost of $516 million. 
+The Project Development Objective (PDO) is to improve resilience among the poor and vulnerable population and strengthen the national platform for safety nets in the Republic of Malawi by strengthening the national safety net platform and operationalizing the Malawi National Social Support Programme II (MNSSP II) in line with the National Social Support Policy (NSSP). SSRLP focuses on six pillars: Consumption Support, Resilient Livelihoods, Scalable Safety Nets, Linkages, Harmonized Systems, and the Social Cash Transfer Programme (SCTP), which serves as the anchor intervention. 
+The project targets 405,000 ultra-poor households annually with shock-responsive cash transfers, 235,000 beneficiaries under contingency cash transfers, and 520,000 households through the Climate Smart Enhanced Public Works Program (CS-EPWP). Additionally, it aims to support 590,000 households with Livelihood interventions by 2027, prioritizing women and youth. Key outcomes in this project include: improved food security, increased income-generating investments, institutionalisation of a national social registry platform, and establishment of a disaster risk financing mechanism. The project is implemented across 18 districts and 4 city councils, with a strong emphasis on gender inclusion and scalable social protection systems. 
+Since 2020, SSRLP has reached out to ultra-poor and vulnerable households through unconditional and conditional social cash transfers in Malawi through such programmes as the Social Cash Transfer Program (SCTP) (Mtukula Pakhomo) and ClimateSmart Public Works Programme (Mbwezera Chilengedwe), just to focus on key programmes.
+`
   },
   gesd_overview: {
     title: 'Governance to Enable Service Delivery Overview',
-    body: `hello world`
+    body: `1.0 Background
+Governance to Enable Service Delivery (GESD) project development objective is “to strengthen Local Authorities’ institutional performance, responsiveness to citizens and management of resources for service delivery.”
+
+The higher-level goals of the project include improving service delivery in terms of capital investments and facility-level management in rural areas. This is where most of the poor citizens reside and face significant challenges in accessing basic services.
+
+The project is implemented by the Ministry of Finance and Economic Affairs, the Ministry of Local Government, Unity and Culture and the National Local Government Finance Committee (NLGFC) as key lead partners
+
+Other implementing partners include: Accountant General; Central Internal Audit Office; Ministry of Economic Planning and Development and Public Sector Reforms; Ministry of Education; Ministry of Health; National Audit Office and Public Procurement and Disposal of Assets Authority; and Local Authorities
+
+2.0  Project Objectives
+2.1 Strengthened institutional performance – tracking of improvements in Local Authorities (LAs) institutional performance for service delivery. This process measures improvements to basic fiduciary functions regarding the minimum access conditions and triggers that determine eligibility. It also measures improvements in institutional performance in the delivery of quality investments that respond to community priorities; efficient and accountable management of resources, as well as effective management of frontline service delivery staff. The indicators include  (i) Local Authorities that are eligible for the Performance Based Grant (PBG) and (ii) Local Authorities that increase their performance assessment score
+2.2 Strengthened management of resources – tracking of improvements in LAs' management of financial and human resources in terms of their conversion into development assets in accordance with Annual Investment Plans (AIPs). It tracks LAs that complete 80 per cent of the capital investment projects in their AIPs.
+2.3 Strengthened responsiveness to citizens -  tracking of improvements in LAs that are responsive to citizens as measured by citizen feedback on four aspects of the AIP: opportunity for participation; efficiency of implementation; responsiveness to citizen needs; transparency of process. This process is measured by increased citizen satisfaction (disaggregated by sex) with the preparation and implementation of AIPs based on periodic beneficiary feedback surveys.
+3.0 Expected Project Results
+a) 	Increased adequacy, predictability, and transparency of discretionary development resources for LAs
+b) 	Improved management of accountability of resources by central and local authorities
+c) 	Improved core human resource capacity and staffing of core functions in LAs
+d) 	Improved delivery of quality investments by LAs that respond to community priorities
+e) 	Strengthened citizen engagement structures at key areas in the service delivery results chain and
+f)  	Improvement in key front-line service delivery processes.`
   },
 
   rcrp_overview: {
     title: 'Resilience and Climate Resilience Overview',
-    body: `hello world`
+    body: `Regional Climate Resilience Project (RCRP) is a five year (2024-2029) government of Malawi project funded by the  World Bank to the tune of US$ 240 million. 
+2.0 Project Development Objective (PDO)
+RCRP 2 Project Development Objective (PDO) is to improve resilience to water-related climate shocks in Malawi and in the Eastern and Southern Africa region, and in case of an Eligible Crisis or Emergency, to respond promptly and effectively to it.
+3.0 PDO Level Indicators
+People in selected basins with reduced vulnerability to climate shocks
+Land area with increased flood protection and catchment conservation
+People having access to Early Action and social protection systems supported through the project 
+People benefiting from restored infrastructure damaged by Tropical Cyclone Freddy and/or other eligible emergencies   
+Regional collaboration strengthened on water-related climate challenges
+4.0 Project Components and Fund Allocation
+4.1 Component 1: Risk Management and Climate Financing has a total allocation of US$30 million. This includes US$6 million for strategy development for water resources and catchment management, US$18 million for emergency preparedness and response as well as early warning systems, and US$6 million for strengthening monitoring, reporting, and verification (MRV) capacity to facilitate access to climate finance
+4.2 Component 2: Infrastructure Investments and Sustainable Asset Management for Climate Resilience is the largest, with a total budget of US$180 million. Of this, US$100 million is allocated to basin-level infrastructure development, while US$80 million is dedicated to district-led resilience building.
+4.3 Component 3: Adaptive Climate Services for Resilient Communities is allocated US$11.5 million. This includes US$3 million for expanding the social registry in urban areas and US$7 million for designing and piloting urban climate-smart public works.
+4.4 Component 4: Project Management has an allocation of US$15 million to support effective coordination, implementation, and oversight of the entire project.
+4.5 Component 5: Contingent Emergency Response Component is set aside with a budget of US$5 million to enable rapid response to unforeseen climate-related emergencies.
+The total funding across all components sums up to US$240 million
+RCRP Implementation Arrangements
+RCRP 2 will be implemented by various stakeholders: Ministry of Finance and Economic Affairs, Ministry of Transport and Public Works, Road Authority, DoDMA, Ministry of Local Government, Unity and Culture, National Local Government Finance Committee, Ministry of Water and Sanitation etc
+`
   },
 
 
