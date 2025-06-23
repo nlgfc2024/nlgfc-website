@@ -372,12 +372,12 @@ By digitizing payment processes, E-Payments reduces processing time, minimizes m
                 <p class="text-lg text-gray-700 leading-relaxed">
                   The Public Works Management Information System (PWMIS) is a comprehensive digital platform designed to streamline the planning, implementation, monitoring, and evaluation of public infrastructure projects across Malawi. This system enables government agencies, contractors, and stakeholders to efficiently manage public works projects from conception to completion, ensuring transparency, accountability, and quality delivery of infrastructure development.
 
-PWMIS facilitates project lifecycle management including budget allocation, contractor selection, progress tracking, quality assurance, and financial reporting. The system supports real-time monitoring of construction activities, resource utilization, and project milestones, enabling timely decision-making and effective project governance. By centralizing project data and automating key processes, PWMIS enhances coordination between different stakeholders and ensures that public infrastructure projects are delivered on time, within budget, and to the required quality standards.
+                                   PWMIS facilitates project lifecycle management including budget allocation, contractor selection, progress tracking, quality assurance, and financial reporting. The system supports real-time monitoring of construction activities, resource utilization, and project milestones, enabling timely decision-making and effective project governance. By centralizing project data and automating key processes, PWMIS enhances coordination between different stakeholders and ensures that public infrastructure projects are delivered on time, within budget, and to the required quality standards.
                 </p>
               </div>
               
               <iframe
-                src="https://dashboards.malawiubr.org/public/dashboard/0929d069-914b-4d88-9017-1a8b46cdc28f"
+                src="http://"
                 frameborder="0"
                 width="800"
                 height="600"
