@@ -255,106 +255,105 @@ const onClickOutside = () => {
 
           <!-- Projects Mega Menu -->
           <div
-  @mouseenter="toggleMegaMenu('projects')"
-  @mouseleave="toggleMegaMenu(null)"
-  class="relative"
->
-  <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
-    Projects
-    <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-      <path
-        fill-rule="evenodd"
-        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-        clip-rule="evenodd"
-      ></path>
-    </svg>
-  </button>
+            @mouseenter="toggleMegaMenu('projects')"
+            @mouseleave="toggleMegaMenu(null)"
+            class="relative"
+          >
+            <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
+              Projects
+              <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
 
-  <div
-    v-show="activeMegaMenu === 'projects'"
-    class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100"
-    style="min-width: 900px;"
-  >
-    <div class="grid grid-cols-4 gap-6 p-6">
-      <!-- Column 1 -->
-      <div>
-        <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Current Projects</h3>
-        <strong class="text-gray-700 flex items-center">SSRLP</strong>
-        <ul class="space-y-1 pl-4 mb-4">
-          <li><NuxtLink to="/projects/currentProjects#ssrlp_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#SCTP" class="text-gray-600 hover:text-blue-600">SCTP</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Public Works</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#emergency" class="text-gray-600 hover:text-blue-600">Emergency Cash Transfer</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
-        </ul>
-      
-        <strong class="text-gray-700 flex items-center mt-4">RCRP</strong>
-        <ul class="space-y-1 pl-4">
-          <li><NuxtLink to="/projects/currentProjects#rcrp_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#drb" class="text-gray-600 hover:text-blue-600">District Resilience</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#usr" class="text-gray-600 hover:text-blue-600">Urban Malawi Social Registry</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#upw" class="text-gray-600 hover:text-blue-600">Urban Climate Smart Public Works Program</NuxtLink></li>
-        </ul>
-      </div>
+            <div
+              v-show="activeMegaMenu === 'projects'"
+              class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100"
+              style="min-width: 900px;"
+            >
+              <div class="grid grid-cols-4 gap-6 p-6">
+                <!-- Column 1 -->
+                <div>
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Current Projects</h3>
+                  <strong class="text-gray-700 flex items-center">SSRLP</strong>
+                  <ul class="space-y-1 pl-4 mb-4">
+                    <li><NuxtLink to="/projects/currentProjects#ssrlp_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#SCTP" class="text-gray-600 hover:text-blue-600">SCTP</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Public Works</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#emergency" class="text-gray-600 hover:text-blue-600">Emergency Cash Transfer</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
+                  </ul>
+                
+                  <strong class="text-gray-700 flex items-center mt-4">RCRP</strong>
+                  <ul class="space-y-1 pl-4">
+                    <li><NuxtLink to="/projects/currentProjects#rcrp_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#drb" class="text-gray-600 hover:text-blue-600">District Resilience</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#usr" class="text-gray-600 hover:text-blue-600">Urban Malawi Social Registry</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#upw" class="text-gray-600 hover:text-blue-600">Urban Climate Smart Public Works Program</NuxtLink></li>
+                  </ul>
+                </div>
 
-      <!-- Column 2 -->
-      <div class="mt-10 md:mt-0">
-        <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2 pt-7"></h3>
-        <strong class="text-gray-700 flex items-center">GESD</strong>
-        <ul class="space-y-1 pl-4 mb-4">
-          <li><NuxtLink to="/projects/currentProjects#gesd_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#pbf" class="text-gray-600 hover:text-blue-600">Performance-Based Financing</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#ias" class="text-gray-600 hover:text-blue-600">Intergovernmental Accountability</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#lgpi" class="text-gray-600 hover:text-blue-600">Local Government Performance Improvement</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#adaptive" class="text-gray-600 hover:text-blue-600">Adaptive Management and Innovation
-          </NuxtLink></li>
-        </ul>
+                <!-- Column 2 -->
+                <div class="mt-10 md:mt-0">
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2 pt-7"></h3>
+                  <strong class="text-gray-700 flex items-center">GESD</strong>
+                  <ul class="space-y-1 pl-4 mb-4">
+                    <li><NuxtLink to="/projects/currentProjects#gesd_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#pbf" class="text-gray-600 hover:text-blue-600">Performance-Based Financing</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#ias" class="text-gray-600 hover:text-blue-600">Intergovernmental Accountability</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#lgpi" class="text-gray-600 hover:text-blue-600">Local Government Performance Improvement</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#adaptive" class="text-gray-600 hover:text-blue-600">Adaptive Management and Innovation
+                    </NuxtLink></li>
+                  </ul>
 
-        
-      </div>
+                  
+                </div>
 
-      <!-- Column 3 -->
-      <div class="mt-10 md:mt-0">
-        <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Past Projects</h3>
-        <ul class="space-y-2 mb-6">
-          <strong class="text-gray-700 flex items-center">MASAF</strong>
-        <ul class="space-y-1 pl-4 mb-4">
-          <li><NuxtLink to="/projects/pastProjects#masaf_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
-          <li><NuxtLink to="/projects/pastProjects#psn" class="text-gray-600 hover:text-blue-600">Productive Safety Nets</NuxtLink></li>
-          <li><NuxtLink to="/projects/pastProjects#scb" class="text-gray-600 hover:text-blue-600">Systems and Capacity Building</NuxtLink></li>
-          <li><NuxtLink to="/projects/pastProjects#pm" class="text-gray-600 hover:text-blue-600">Project Management</NuxtLink></li>
-       
-        </ul>
-          
-          <li><NuxtLink to="/projects/pastProjects#miera_overview" class="text-gray-600 hover:text-blue-600">MIERA</NuxtLink></li>
-        </ul>
+                <!-- Column 3 -->
+                <div class="mt-10 md:mt-0">
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Past Projects</h3>
+                  <ul class="space-y-2 mb-6">
+                    <strong class="text-gray-700 flex items-center">MASAF</strong>
+                  <ul class="space-y-1 pl-4 mb-4">
+                    <li><NuxtLink to="/projects/pastProjects#masaf_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
+                    <li><NuxtLink to="/projects/pastProjects#psn" class="text-gray-600 hover:text-blue-600">Productive Safety Nets</NuxtLink></li>
+                    <li><NuxtLink to="/projects/pastProjects#scb" class="text-gray-600 hover:text-blue-600">Systems and Capacity Building</NuxtLink></li>
+                    <li><NuxtLink to="/projects/pastProjects#pm" class="text-gray-600 hover:text-blue-600">Project Management</NuxtLink></li>
+                
+                  </ul>
+                    
+                    <li><NuxtLink to="/projects/pastProjects#miera_overview" class="text-gray-600 hover:text-blue-600">MIERA</NuxtLink></li>
+                  </ul>
 
-        <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Upcoming Projects</h3>
-        <ul class="space-y-2">
-          <li><NuxtLink to="/projects/upcomingProjects#gesd2" class="text-gray-600 hover:text-blue-600">GESD 2.0</NuxtLink></li>
-          <li><NuxtLink to="/projects/upcomingProjects#inspire" class="text-gray-600 hover:text-blue-600">INSPIRE-O</NuxtLink></li>
-        </ul>
-      </div>
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Upcoming Projects</h3>
+                  <ul class="space-y-2">
+                    <li><NuxtLink to="/projects/upcomingProjects#gesd2" class="text-gray-600 hover:text-blue-600">GESD 2.0</NuxtLink></li>
+                    <li><NuxtLink to="/projects/upcomingProjects#inspire" class="text-gray-600 hover:text-blue-600">INSPIRE-O</NuxtLink></li>
+                  </ul>
+                </div>
 
-      <!-- Column 4 -->
-      <div class="mt-10 md:mt-0">
-        <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
-        <ul class="space-y-2">
-          <li><NuxtLink to="/deliverySystems/deliverySystems#msr" class="text-gray-600 hover:text-blue-600">MSR</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#e-payments" class="text-gray-600 hover:text-blue-600">E-Payments</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#publicworks" class="text-gray-600 hover:text-blue-600">Public Works MIS</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#grm" class="text-gray-600 hover:text-blue-600">GRM MIS</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#sctmis" class="text-gray-600 hover:text-blue-600">SCTP MIS</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#lapas" class="text-gray-600 hover:text-blue-600">LAPA MIS</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#cimis" class="text-gray-600 hover:text-blue-600">CIMIS</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#pmis" class="text-gray-600 hover:text-blue-600">PMIS</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600">LAIF MIS</NuxtLink></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
+                <!-- Column 4 -->
+                <div class="mt-10 md:mt-0">
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
+                  <ul class="space-y-2">
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#msr" class="text-gray-600 hover:text-blue-600">MSR</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#e-payments" class="text-gray-600 hover:text-blue-600">E-Payments</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#publicworks" class="text-gray-600 hover:text-blue-600">Public Works MIS</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#grm" class="text-gray-600 hover:text-blue-600">GRM MIS</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#sctmis" class="text-gray-600 hover:text-blue-600">SCTP MIS</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#lapas" class="text-gray-600 hover:text-blue-600">LAPA MIS</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#cimis" class="text-gray-600 hover:text-blue-600">CIMIS</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#pmis" class="text-gray-600 hover:text-blue-600">PMIS</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600">LAIF MIS</NuxtLink></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- Local Councils Mega Menu -->
           <div @mouseenter="toggleMegaMenu('councils')" @mouseleave="toggleMegaMenu(null)" class="relative">
@@ -579,7 +578,7 @@ const onClickOutside = () => {
                   </ul>
                 </div>
                 
-                <div class="bg-blue-50 p-4 rounded-lg">
+                <!-- <div class="bg-blue-50 p-4 rounded-lg">
                   <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Contact</h3>
                   <div class="space-y-2">
                     <div class="flex items-start">
@@ -601,7 +600,7 @@ const onClickOutside = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
