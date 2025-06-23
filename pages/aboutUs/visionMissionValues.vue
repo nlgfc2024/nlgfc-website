@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-  title: 'Vision, Mission, and Core Values'
+  title: 'Vision, Mission and Core Values'
 })
 
 const activeTab = ref('mission') // Default active tab
