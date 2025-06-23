@@ -145,24 +145,67 @@ const onClickOutside = () => {
                     </li>
                   </ul>
                 </div>
+
+
+
                 
-                <div>
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Our Mandate</h3>
-                  <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                      Fiscal Decentralization</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                      Financial Management</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                      Local Development Support</a></li>
-                    <li class="pl-6"><a href="#" class="text-gray-600 hover:text-blue-600 transition">CDF</a></li>
-                    <li class="pl-6"><a href="#" class="text-gray-600 hover:text-blue-600 transition">DDF</a></li>
-                    <li class="pl-6"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Water Structures Fund</a></li>
-                    <li class="pl-6"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Health Rehabilitation</a></li>
-                    <li class="pl-6"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Infrastructure Development Fund (IDF)</a></li>
-                    <li class="pl-6"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Road Rehabilitation Fund (RRF)</a></li>
-                  </ul>
-                </div>
+                <!-- Our Mandate Navigation Section -->
+<li class="list-none pl-0"> <!-- Removes bullet and padding -->
+  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Our Mandate</h3>
+  <ul class="space-y-2 pl-5"> <!-- Keeps indentation for nested items -->
+    <li>
+      <NuxtLink to="/mandate/ourMandate#fiscalDecentralization" class="text-gray-600 hover:text-blue-600">
+        Fiscal Decentralization
+      </NuxtLink>
+    </li>
+    <li>
+      <NuxtLink to="/mandate/ourMandate#financialManagement" class="text-gray-600 hover:text-blue-600">
+        Financial Management
+      </NuxtLink>
+    </li>
+    <li>
+      <NuxtLink to="/mandate/ourMandate#localDevelopmentSupport" class="text-gray-600 hover:text-blue-600">
+        Local Development Support
+      </NuxtLink>
+    </li>
+    <li class="pl-4">
+      <NuxtLink to="/mandate/ourMandate#cdf" class="text-gray-600 hover:text-blue-600">
+        CDF
+      </NuxtLink>
+    </li>
+    <li class="pl-4">
+      <NuxtLink to="/mandate/ourMandate#ddf" class="text-gray-600 hover:text-blue-600">
+        DDF
+      </NuxtLink>
+    </li>
+    <li class="pl-4">
+      <NuxtLink to="/mandate/ourMandate#waterStructuresFund" class="text-gray-600 hover:text-blue-600">
+        Water Structures Fund
+      </NuxtLink>
+    </li>
+    <li class="pl-4">
+      <NuxtLink to="/mandate/ourMandate#healthRehabilitation" class="text-gray-600 hover:text-blue-600">
+        Health Rehabilitation
+      </NuxtLink>
+    </li>
+    <li class="pl-4">
+      <NuxtLink to="/mandate/ourMandate#idf" class="text-gray-600 hover:text-blue-600">
+        Infrastructure Development Fund (IDF)
+      </NuxtLink>
+    </li>
+    <li class="pl-4">
+      <NuxtLink to="/mandate/ourMandate#rrf" class="text-gray-600 hover:text-blue-600">
+        Road Rehabilitation Fund (RRF)
+      </NuxtLink>
+    </li>
+  </ul>
+</li>
+
+
+
+
+                
+
                 
                 <div class="bg-blue-50 p-4 rounded-lg">
                   <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
