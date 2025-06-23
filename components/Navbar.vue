@@ -371,16 +371,16 @@ const onClickOutside = () => {
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">City Councils</h3>
                   <ul class="space-y-2">
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">Blantyre City Council</NuxtLink>
+                      <NuxtLink to="/localAuthorities/blantyreCouncil" class="text-gray-700 hover:text-blue-700 transition flex items-center">Blantyre City Council</NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">Lilongwe City Council</NuxtLink>
+                      <NuxtLink to="/localAuthorities/lilongwecitycouncil" class="text-gray-700 hover:text-blue-700 transition flex items-center">Lilongwe City Council</NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mzuzu City Council</NuxtLink>
+                      <NuxtLink to="/localAuthorities/mzuzucitycouncil" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mzuzu City Council</NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">Zomba City Council</NuxtLink>
+                      <NuxtLink to="/localAuthorities/zombacitycouncil" class="text-gray-700 hover:text-blue-700 transition flex items-center">Zomba City Council</NuxtLink>
                     </li>
                   </ul>
 
@@ -433,7 +433,7 @@ const onClickOutside = () => {
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/alldistricts" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         All District Councils →
                       </NuxtLink>
                     </li>
@@ -801,7 +801,7 @@ const onClickOutside = () => {
               </button>
               <div v-show="activeAccordion === 'mobile-city'" class="pl-4 py-2 space-y-1">
                 <NuxtLink to="/councils/blantyre-city" class="block text-gray-600 hover:text-blue-600 py-1">Blantyre City Council</NuxtLink>
-                <NuxtLink to="/councils/lilongwe-city" class="block text-gray-600 hover:text-blue-600 py-1">Lilongwe City Council</NuxtLink>
+                <NuxtLink to="/localAuthorities/lilongwecitycouncil" class="block text-gray-600 hover:text-blue-600 py-1">Lilongwe City Council</NuxtLink>
                 <NuxtLink to="/councils/mzuzu-city" class="block text-gray-600 hover:text-blue-600 py-1">Mzuzu City Council</NuxtLink>
                 <NuxtLink to="/councils/zomba-city" class="block text-gray-600 hover:text-blue-600 py-1">Zomba City Council</NuxtLink>
               </div>
