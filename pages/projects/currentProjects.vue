@@ -295,12 +295,12 @@ watch(activeTab, () => {
 
     <!-- Main Content Area -->
     <main class="flex-1">
-  <div v-if="projectContent[activeTab]">
-  <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b pb-2">
+<div v-if="projectContent[activeTab]" class="bg-white p-6 rounded-lg shadow">
+  <h2 class="text-2xl font-bold text-gray-900 mb-4">
     {{ projectContent[activeTab].title }}
   </h2>
   <div
-    class="text-gray-800 space-y-5 leading-relaxed"
+    class="prose prose-gray dark:prose-invert max-w-none"
     v-html="projectContent[activeTab].body"
   ></div>
 </div>
