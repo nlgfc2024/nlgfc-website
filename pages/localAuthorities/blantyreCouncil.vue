@@ -27,13 +27,13 @@ onMounted(() => {
 const projects = [
   {
     name: 'GESD',
-    fullName: 'Gender Equality and Social Development',
-    description: 'A comprehensive program focused on promoting gender equality and inclusive social development across Blantyre District.',
+    fullName: 'Governance to Enable Service Delivery',
+    description: 'Governance to Enable Service Delivery (GESD) project development objective is “to strengthen Local Authorities’ institutional performance, responsiveness to citizens and management of resources for service delivery.”',
     objectives: [
-      'Promote gender equality in all development programs',
-      'Strengthen social protection systems',
-      'Enhance women and youth participation in governance',
-      'Reduce gender-based violence and discrimination'
+      'Strengthened institutional performance tracking of improvements in Local Authorities (LAs) institutional performance for service delivery',
+      'Strengthened management of resources tracking of improvements in LAs management of financial and human resources in terms of their conversion into development assets in accordance with Annual Investment Plans',
+      'Strengthened management of resources tracking of improvements in LAs management of financial and human resources in terms of their conversion into development assets in accordance with Annual Investment Plans (AIPs',
+     
     ],
     status: 'Active'
   },
@@ -59,7 +59,7 @@ const projects = [
       'Build local capacity for project management',
       'Promote community participation in development'
     ],
-    status: 'Active'
+    status: 'Not Active'
   }
 ]
 
