@@ -7,8 +7,6 @@ const activeTab = ref('profile') // Default active tab
 
 const tabs = [
   { id: 'profile', title: 'Profile' },
-  { id: 'vision', title: 'Mandate & Vision' },
-  { id: 'values', title: 'Strategic Objectives' },
   { id: 'projects', title: 'Projects' },
   { id: 'reports', title: 'Reports' },
   { id: 'news', title: 'News' }
@@ -147,32 +145,79 @@ const news = [
         <div v-show="activeTab === 'profile'" class="prose max-w-none">
           <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Blantyre District Council Profile</h2>
           <div class="space-y-6">
-            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+            <div class="bg-blue-50 p-6 rounded-lg border border-gray-200">
               <h3 class="text-lg font-semibold text-gray-900 mb-3">About Blantyre District Council</h3>
               <p class="text-gray-700 leading-relaxed">
-                Blantyre District Council is a local government authority established under the Local Government Act to promote democratic governance and development at the district level. The council serves as the primary institution for local administration, development coordination, and service delivery in Blantyre District.  Blantyre District is one of the districts in the Southern Region of Malawi that lies between longitudes of 33 to 35 degrees east and latitudes of 9.4 to 17.5 degrees south. The district is bordered by Mwanza and Neno Districts in the North, Zomba in the North East, Chiradzulu in the South East, Thyolo in the South and Chikwawa in the West. It is 366km away from the Capital City, Lilongwe and is located in the Shire Highlands. It covers an area of 1,785 square kilometres, which represents 1.7% of the total land area of Malawi.
-         
+                Blantyre District is one of the districts in the Southern Region of Malawi that lies between longitudes of 33 to 35 degrees east and latitudes of 9.4 to 17.5 degrees south. The district is bordered by Mwanza and Neno Districts in the North, Zomba in the North East, Chiradzulu in the South East, Thyolo in the South and Chikwawa in the West. It is 366km away from the Capital City, Lilongwe and is located in the Shire Highlands. It covers an area of 1,785 square kilometres, which represents 1.7% of the total land area of Malawi. 
               </p>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="bg-blue-50 p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">Establishment</h4>
-                <p class="text-gray-700">Established under the Local Government Act as a decentralized local authority</p>
-              </div>
-              <div class="bg-blue-50 p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">Jurisdiction</h4>
-                <p class="text-gray-700">Covers 1,785 square kilometres in the Southern Region of Malawi</p>
-              </div>
-              <div class="bg-blue-50 p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">Population</h4>
-                <p class="text-gray-700">Serves diverse communities across urban, peri-urban, and rural areas</p>
-              </div>
-              <div class="bg-blue-50 p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">Structure</h4>
-                <p class="text-gray-700">Comprised of elected councillors and appointed technical staff</p>
-              </div>
+         
+
+            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">Mandate</h3>
+              <ul class="space-y-2">
+                <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                  <span>To promote local democratic participation</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                  <span>To promote infrastructural and economic development through District Development Plan</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                  <span>To make bylaws that facilitate its functions</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                  <span>To mobilise resources within and outside the District </span>
+                </li>
+              </ul>
             </div>
+                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                              <h3 class="text-lg font-semibold text-gray-900 mb-3">Vision</h3>
+                             <p class="text-gray-700 leading-relaxed font-medium">A Council that can provide sustainable, quality socio-economic services adequately to its community.</p>
+                  </div>
+                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                              <h3 class="text-lg font-semibold text-gray-900 mb-3">Mission</h3>
+                             <p class="text-gray-700 leading-relaxed font-medium">To provide timely, high-quality quality and equitable social services through the promotion of Local governance and popular participation of the communities for the attainment of sustainable socio-economic development of the District.</p>
+                  </div>
+                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                              <h3 class="text-lg font-semibold text-gray-900 mb-3">Strategic Objectives</h3>
+                             <ul class="space-y-2">
+                <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                  <span>To create a democratic environment for popular participation in governance and development at the local level.</span>
+                </li>
+                  <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                  <span>To provide social-economic services, coordinate and guide development issues in the District</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                  <span>To improve access, quality, and utilisation of social services by communities</span>
+                </li>
+                 <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                  <span>To enhance and improve revenue generation and human resource capacity for optimal operational performance</span>
+                </li>
+                 <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                  <span>To reduce food security through diversification and commercialization of agricultural production.</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                  <span>To improve access of vulnerable children and people living with disability to essential quality services</span>
+                </li>
+                 <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                  <span>To promote public employment services through strengthening the linkage between registered job seekers and potential employers</span>
+                </li>
+                
+             
+              </ul>
+                  </div>
+          
 
             <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
               <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Functions</h3>
@@ -195,108 +240,38 @@ const news = [
                 </li>
               </ul>
             </div>
-          </div>
-        </div>
+            
 
-        <!-- District Profile Content -->
-       
-
-        <!-- Mandate & Vision Content -->
-        <div v-show="activeTab === 'vision'" class="prose max-w-none">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Mandate & Vision</h2>
-          
-          <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mb-8">
-            <h3 class="text-lg font-semibold text-gray-900 mb-3">Mandate</h3>
-            <ul class="space-y-3">
-              <li class="flex items-start">
-                <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                <span>To promote local democratic participation</span>
-              </li>
-              <li class="flex items-start">
-                <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                <span>To promote infrastructural and economic development through District Development Plan</span>
-              </li>
-              <li class="flex items-start">
-                <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                <span>To make bylaws that facilitate its functions</span>
-              </li>
-              <li class="flex items-start">
-                <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                <span>To mobilise resources within and outside the District</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
-            <h3 class="text-lg font-semibold text-gray-900 mb-3">VISION</h3>
-            <p class="text-gray-700 leading-relaxed font-medium">
-              A Council that can provide sustainable, quality socio-economic services adequately to its community
-            </p>
-          </div>
-        </div>
-
-        <!-- Strategic Objectives Content -->
-        <div v-show="activeTab === 'values'" class="prose max-w-none">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Strategic Objectives</h2>
-          <div class="space-y-6">
-            <div class="flex items-start">
-              <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
+               
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-gray-900 mb-2">Major Achievements</h4>
+                <p class="text-gray-700">Improved in LAPA scores for three consecutive years, hence more GESD funds for projects.</p>
+                <p class="text-gray-700">The  District is implementing the Kadidi project, which is one of the flagship projects under GESD funds. Under the project, there will be an OPD, staff house, incinerator, and maternity wing</p>
+              
               </div>
-              <div>
-                <h3 class="font-semibold text-gray-900 mb-1">To create a democratic environment for popular participation in governance and development at the local level.</h3>
+              <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-gray-900 mb-2">Jurisdiction</h4>
+                <p class="text-gray-700">Covers 1,785 square kilometres in the Southern Region of Malawi</p>
               </div>
-            </div>
-            <div class="flex items-start">
-              <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
+              <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-gray-900 mb-2">Population</h4>
+                <p class="text-gray-700">Blantyre District has a total population of 451,220 people, of which 218,464 (48.4 %) are males and 232,756 (51.6 %) are females (Population& Housing Census 2018).</p>
               </div>
-              <div>
-                <h3 class="font-semibold text-gray-900 mb-1">To provide social-economic services, coordinate and guide development issues in the District</h3>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
-              </div>
-              <div>
-                <h3 class="font-semibold text-gray-900 mb-1">To improve access, quality, and utilisation of social services by communities</h3>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
-              </div>
-              <div>
-                <h3 class="font-semibold text-gray-900 mb-1">To enhance and improve revenue generation and human resource capacity for optimal operational performance</h3>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
-              </div>
-              <div>
-                <h3 class="font-semibold text-gray-900 mb-1">To reduce food insecurity through diversification and commercialization of agricultural production</h3>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
-              </div>
-              <div>
-                <h3 class="font-semibold text-gray-900 mb-1">To promote public employment services through strengthening the linkage between registered job seekers and potential employers.</h3>
-              </div>
-            </div>
-            <div class="flex items-start">
-              <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
-              </div>
-              <div>
-                <h3 class="font-semibold text-gray-900 mb-1">To improve access of vulnerable children and people living with disability to essential quality services</h3>
+              <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold text-gray-900 mb-2">Structure</h4>
+                <p class="text-gray-700">Comprised of elected councillors and appointed technical staff</p>
               </div>
             </div>
           </div>
         </div>
+
+
+
+
+
+    
+
 
         <!-- Projects Content -->
         <div v-show="activeTab === 'projects'" class="prose max-w-none">
