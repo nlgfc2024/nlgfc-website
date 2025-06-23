@@ -331,7 +331,7 @@ const onClickOutside = () => {
           <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
         </ul>
       
-        <strong class="text-gray-700 flex items-center mt-4">RCRP</strong>
+        <strong class="text-gray-700 flex items-center mt-4">RCRP 2</strong>
         <ul class="space-y-1 pl-4">
           <li><NuxtLink to="/projects/currentProjects#rcrp_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
           <li><NuxtLink to="/projects/currentProjects#drb" class="text-gray-600 hover:text-blue-600">District Resilience</NuxtLink></li>

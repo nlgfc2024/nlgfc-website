@@ -11,7 +11,7 @@ const projectGroups = [
       { id: 'ssrlp_overview', title: ' Overview' },
       { id: 'SCTP', title: 'SCTP' },
       { id: 'publicWorks', title: 'Public Works' },
-      { id: 'emergency', title: 'Emergency Cash Transfer' },
+      { id: 'emergency', title: 'Scalable Social Safety Nets' },
       { id: 'livelihoods', title: 'Livelihoods Support' }
     ]
   },
@@ -90,7 +90,7 @@ const projectContent = {
   },
 
   rcrp_overview: {
-    title: 'Resilience and Climate Resilience Overview',
+    title: 'Regional and Climate Resilience Overview',
     body: `
       <p><strong>Regional Climate Resilience Project (RCRP)</strong> is a five-year (2024–2029) initiative funded by the World Bank for US$240 million. Its goal is to strengthen resilience against water-related climate shocks in Malawi and the region.</p>
 
