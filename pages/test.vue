@@ -108,7 +108,8 @@ definePageMeta({
         <!-- Image Gallery Iframe Layout -->
         <div
           v-else-if="currentSubcategoryType === 'Image Gallery'"
-          class="w-full">
+          class="w-full"
+        >
           <div
             v-for="(doc, index) in displayedDocuments"
             :key="doc.name"
@@ -132,13 +133,10 @@ definePageMeta({
                 :title="doc.name"
                 allowfullscreen
                 loading="lazy"
-                @load="hideLoadingOverlay"
               ></iframe>
               
               <!-- Loading overlay -->
-              <div 
-                :class="['absolute inset-0 bg-gray-100 flex items-center justify-center transition-opacity duration-500', iframeLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100']"
-              >
+              <div class="absolute inset-0 bg-gray-100 flex items-center justify-center animate-pulse iframe-loading">
                 <div class="text-center">
                   <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
                   <p class="text-gray-600">Loading gallery...</p>
@@ -256,7 +254,7 @@ definePageMeta({
 import { ref, computed } from 'vue';
 
 const tabs = ref([
-{
+  {
     name: 'Publications & Downloads',
     subcategories: [
       {
@@ -550,7 +548,6 @@ const expandedTab = ref(null);
 const activeTab = ref(null);
 const activeSub = ref(null);
 const selectedImage = ref(null);
-const iframeLoaded = ref(false);
 
 function toggleTab(index) {
   expandedTab.value = expandedTab.value === index ? null : index;
@@ -563,12 +560,6 @@ function toggleTab(index) {
 function selectSub(tabIndex, subIndex) {
   activeTab.value = tabIndex;
   activeSub.value = subIndex;
-  // Reset iframe loaded state when switching subcategories
-  iframeLoaded.value = false;
-}
-
-function hideLoadingOverlay() {
-  iframeLoaded.value = true;
 }
 
 function openImageModal(image) {
