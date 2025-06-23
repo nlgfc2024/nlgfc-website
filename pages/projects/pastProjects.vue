@@ -76,6 +76,36 @@ Support to Malawi Innovation Challenge Fund (MICF), which had a total cost of 3 
  
 }
 
+// Parse plain text into paragraph and list blocks
+function parseBodyContent(text) {
+  const lines = text.split('\n').filter(line => line.trim() !== '')
+  const blocks = []
+  let currentList = []
+
+  for (const line of lines) {
+    if (/^[·*-]/.test(line.trim())) {
+      currentList.push(line.replace(/^[-*·]\s*/, '').trim())
+    } else {
+      if (currentList.length) {
+        blocks.push({ type: 'list', items: currentList })
+        currentList = []
+      }
+      blocks.push({ type: 'paragraph', content: line.trim() })
+    }
+  }
+
+  if (currentList.length) {
+    blocks.push({ type: 'list', items: currentList })
+  }
+
+  return blocks
+}
+
+const parsedContent = computed(() =>
+  parseBodyContent(projectContent[activeTab.value]?.body || '')
+)
+
+
 // Set from initial hash on load
 onMounted(() => {
   if (route.hash) {
@@ -135,19 +165,21 @@ function updateActiveTabFromHash(hash) {
 
 
       <!-- Main Content Area -->
-        <main class="flex-1">
-        <div v-if="projectContent[activeTab]" class="space-y-4">
-            <h2 class="text-2xl font-bold text-gray-900">
-            {{ projectContent[activeTab].title }}
-            </h2>
-          <div class="text-gray-700 text-base leading-relaxed space-y-4">
-  <p v-for="(paragraph, index) in projectContent[activeTab].body.split(/\n\s*\n/)" :key="index">
-    {{ paragraph.trim() }}
-  </p>
-</div>
-
+      <main class="flex-1">
+      <div v-if="projectContent[activeTab]">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">
+          {{ projectContent[activeTab].title }}
+        </h2>
+        <div class="text-gray-700 text-base leading-relaxed space-y-4">
+          <template v-for="(block, index) in parsedContent" :key="index">
+            <p v-if="block.type === 'paragraph'">{{ block.content }}</p>
+            <ul v-else-if="block.type === 'list'" class="list-disc list-inside space-y-1">
+              <li v-for="(item, i) in block.items" :key="i">{{ item }}</li>
+            </ul>
+          </template>
         </div>
-        <div v-else class="text-gray-500 italic">No content available for this project.</div>
-        </main>
+      </div>
+      <div v-else class="text-gray-500 italic">No content available for this project.</div>
+    </main>
   </div>
 </template>
