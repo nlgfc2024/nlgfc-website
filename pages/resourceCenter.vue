@@ -7,35 +7,152 @@ definePageMeta({
 <template>
   <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
     <!-- Left Sidebar -->
-    <div class="w-64 bg-gray-100 border-r p-4">
-      <div v-for="(tab, tabIndex) in tabs" :key="tabIndex" class="mb-2">
-        <button
-          @click="toggleTab(tabIndex)"
-          class="w-full text-left py-2 px-3 font-semibold rounded border-l-4 border-transparent hover:border-l-gray-500"
-          :class="{ 'bg-gray-400': expandedTab === tabIndex }"
-        >
-          {{ tab.name }}
-        </button>
+    <div class="w-64 bg-gradient-to-b from-slate-50 to-slate-100 border-r border-slate-200 shadow-sm">
+      <div class="p-6">
+        <h2 class="text-lg font-bold text-slate-800 mb-6">Resource Center</h2>
+        <nav class="space-y-2">
+          <div v-for="(tab, tabIndex) in tabs" :key="tabIndex" class="group">
+            <div
+              @click="toggleTab(tabIndex)"
+              class="flex items-center justify-between w-full text-left py-3 px-4 font-medium text-slate-700 rounded-lg cursor-pointer transition-all duration-300 ease-in-out hover:bg-white hover:shadow-md hover:text-slate-900 hover:border-l-4 hover:border-blue-500"
+              :class="{ 
+                'bg-white shadow-md text-slate-900 border-l-4 border-blue-600': expandedTab === tabIndex,
+                'hover:translate-x-1': expandedTab !== tabIndex
+              }"
+            >
+              <span class="flex items-center">
+                <svg class="w-5 h-5 mr-3 text-slate-500" :class="{ 'text-blue-600': expandedTab === tabIndex }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path v-if="tab.name === 'Publications & Downloads'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  <path v-else-if="tab.name === 'Project Documents'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  <path v-else-if="tab.name === 'Reports'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a4 4 0 01-4-4V5a2 2 0 012-2h6l2 2h6a2 2 0 012 2v6a4 4 0 01-4 4z"></path>
+                  <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+                {{ tab.name }}
+              </span>
+              <svg 
+                class="w-4 h-4 text-slate-400 transition-transform duration-300"
+                :class="{ 'rotate-180 text-blue-600': expandedTab === tabIndex }"
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
 
-        <div v-if="expandedTab === tabIndex" class="ml-4 mt-1">
-          <button
-            v-for="(sub, subIndex) in tab.subcategories"
-            :key="subIndex"
-            @click="selectSub(tabIndex, subIndex)"
-            class="block w-full text-left py-1 px-2 rounded hover:bg-gray-300"
-            :class="{ 'bg-gray-500 text-white': activeTab === tabIndex && activeSub === subIndex }"
-          >
-            {{ sub.name }}
-          </button>
-        </div>
+            <div 
+              v-if="expandedTab === tabIndex" 
+              class="mt-2 ml-4 space-y-1 animate-in slide-in-from-top-2 duration-300"
+            >
+              <a
+                v-for="(sub, subIndex) in tab.subcategories"
+                :key="subIndex"
+                @click="selectSub(tabIndex, subIndex)"
+                class="flex items-center w-full text-left py-2 px-4 text-sm font-medium text-slate-600 rounded-md cursor-pointer transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 hover:translate-x-2 hover:border-l-3 hover:border-blue-400"
+                :class="{ 
+                  'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-l-3 border-blue-500 shadow-sm': activeTab === tabIndex && activeSub === subIndex
+                }"
+              >
+                <div class="w-2 h-2 rounded-full mr-3 transition-colors duration-200"
+                     :class="{ 
+                       'bg-blue-500': activeTab === tabIndex && activeSub === subIndex,
+                       'bg-slate-300': !(activeTab === tabIndex && activeSub === subIndex)
+                     }">
+                </div>
+                {{ sub.name }}
+              </a>
+            </div>
+          </div>
+        </nav>
       </div>
     </div>
 
     <!-- Main content -->
     <div class="flex-1 p-4">
       <section v-if="displayedDocuments.length">
-        <h3 class="font-bold text-gray-800 text-lg">{{ currentTitle }}</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <h3 class="font-bold text-gray-800 text-lg mb-6">{{ currentTitle }}</h3>
+        
+        <!-- Video Grid Layout -->
+        <div v-if="currentSubcategoryType === 'Video'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          <div
+            v-for="doc in displayedDocuments"
+            :key="doc.name"
+            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+          >
+            <div class="aspect-video">
+              <iframe
+                :src="getVideoEmbedUrl(doc.link)"
+                class="w-full h-full"
+                frameborder="0"
+                allowfullscreen
+                :title="doc.name"
+              ></iframe>
+            </div>
+            <div class="p-4">
+              <h4 class="font-semibold text-gray-800 mb-2">{{ doc.name }}</h4>
+              <p class="text-sm text-gray-600 mb-2">{{ doc.description }}</p>
+              <span class="inline-block text-xs bg-red-100 text-red-800 rounded px-2 py-1">
+                {{ doc.type }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image Gallery Grid Layout -->
+        <div v-else-if="currentSubcategoryType === 'Image Gallery'" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div
+            v-for="doc in displayedDocuments"
+            :key="doc.name"
+            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 group cursor-pointer"
+            @click="openImageModal(doc)"
+          >
+            <div class="aspect-square overflow-hidden">
+              <img
+                :src="doc.link"
+                :alt="doc.name"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div class="p-3">
+              <h4 class="font-semibold text-gray-800 text-sm mb-1">{{ doc.name }}</h4>
+              <p class="text-xs text-gray-600">{{ doc.description }}</p>
+              <span class="inline-block text-xs bg-green-100 text-green-800 rounded px-2 py-1 mt-2">
+                {{ doc.type }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audio Clips Grid Layout -->
+        <div v-else-if="currentSubcategoryType === 'Audio Clips'" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div
+            v-for="doc in displayedDocuments"
+            :key="doc.name"
+            class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
+          >
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M9 12h6m-6 0v3a3 3 0 003 3h6a3 3 0 003-3v-3m-6 0V9a3 3 0 00-3-3H9a3 3 0 00-3 3v3z"></path>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-gray-800">{{ doc.name }}</h4>
+                <span class="inline-block text-xs bg-purple-100 text-purple-800 rounded px-2 py-1">
+                  {{ doc.type }}
+                </span>
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-4">{{ doc.description }}</p>
+            <audio controls class="w-full">
+              <source :src="doc.link" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        </div>
+
+        <!-- Default Document Grid Layout -->
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div
             v-for="doc in displayedDocuments"
             :key="doc.name"
@@ -44,10 +161,10 @@ definePageMeta({
             <a
               :href="doc.link"
               target="_blank"
-              class="absolute bottom-2 right-2 text-blue-600 hover:text-border-gray-600"
+              class="absolute bottom-2 right-2 w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md hover:shadow-lg"
               title="Download / View"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none"
                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"
                       d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"/>
@@ -73,12 +190,35 @@ definePageMeta({
               {{ doc.description || 'No description available.' }}
             </p>
             <p class="text-sm text-gray-600">
-              {{ doc.date || 'No description available.' }}
+              {{ doc.date || 'No date available.' }}
             </p>
           </div>
         </div>
       </section>
       <div v-else class="text-gray-600">Select a subcategory to view content.</div>
+    </div>
+
+    <!-- Image Modal -->
+    <div v-if="selectedImage" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" @click="closeImageModal">
+      <div class="relative max-w-4xl max-h-screen p-4">
+        <button
+          @click="closeImageModal"
+          class="absolute top-2 right-2 text-white hover:text-gray-300 z-10"
+        >
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+        <img
+          :src="selectedImage.link"
+          :alt="selectedImage.name"
+          class="max-w-full max-h-full object-contain"
+        />
+        <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
+          <h3 class="font-semibold">{{ selectedImage.name }}</h3>
+          <p class="text-sm">{{ selectedImage.description }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -300,43 +440,67 @@ const tabs = ref([
       { name: 'Image Gallery', contents: [
         {
           name: 'Community Event Photos',
-          link: '/downloads/gallery-community-event.jpg',
+          link: 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800&h=600&fit=crop',
           type: 'Image',
-          description: 'Photos from community events.'
+          description: 'Photos from community events and gatherings.'
         },
         {
           name: 'Project Launch Images',
-          link: '/downloads/gallery-project-launch.jpg',
+          link: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop',
           type: 'Image',
-          description: 'Images from project launch events.'
+          description: 'Images from project launch events and ceremonies.'
+        },
+        {
+          name: 'Team Building Activities',
+          link: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=600&fit=crop',
+          type: 'Image',
+          description: 'Photos from team building and collaborative activities.'
+        },
+        {
+          name: 'Workshop Sessions',
+          link: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800&h=600&fit=crop',
+          type: 'Image',
+          description: 'Images from educational workshops and training sessions.'
         }
       ] },
       { name: 'Audio Clips', contents: [
         {
           name: 'Community Voices Podcast Episode 1',
-          link: '/downloads/podcast-episode1.mp3',
+          link: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3',
           type: 'Audio',
-          description: 'First episode of the Community Voices podcast.'
+          description: 'First episode of the Community Voices podcast featuring local leaders.'
         },
         {
           name: 'Project Update Audio Clip',
-          link: '/downloads/project-update-audio.mp3',
+          link: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3',
           type: 'Audio',
-          description: 'Audio update on recent project developments.'
+          description: 'Audio update on recent project developments and milestones.'
+        },
+        {
+          name: 'Interview with Stakeholders',
+          link: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3',
+          type: 'Audio',
+          description: 'Interviews with key stakeholders discussing project impact.'
         }
       ] },
       { name: 'Video', contents: [
         {
           name: 'Community Success Story Video',
-          link: '/downloads/community-success-video.mp4',
+          link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
           type: 'Video',
-          description: 'Video showcasing a community success story.'
+          description: 'Video showcasing a transformative community success story.'
         },
         {
           name: 'Project Impact Documentary',
-          link: '/downloads/project-impact-documentary.mp4',
+          link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
           type: 'Video',
-          description: 'Documentary on the impact of recent projects.'
+          description: 'Documentary highlighting the lasting impact of recent community projects.'
+        },
+        {
+          name: 'Training Workshop Recording',
+          link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+          type: 'Video',
+          description: 'Recording of an educational workshop on sustainable development practices.'
         }
       ] }
     ]
@@ -346,6 +510,7 @@ const tabs = ref([
 const expandedTab = ref(null);
 const activeTab = ref(null);
 const activeSub = ref(null);
+const selectedImage = ref(null);
 
 function toggleTab(index) {
   expandedTab.value = expandedTab.value === index ? null : index;
@@ -358,6 +523,26 @@ function toggleTab(index) {
 function selectSub(tabIndex, subIndex) {
   activeTab.value = tabIndex;
   activeSub.value = subIndex;
+}
+
+function openImageModal(image) {
+  selectedImage.value = image;
+}
+
+function closeImageModal() {
+  selectedImage.value = null;
+}
+
+function getVideoEmbedUrl(url) {
+  // Convert YouTube URLs to embed format
+  if (url.includes('youtube.com/watch?v=')) {
+    const videoId = url.split('watch?v=')[1].split('&')[0];
+    return `https://www.youtube.com/embed/${videoId}`;
+  } else if (url.includes('youtu.be/')) {
+    const videoId = url.split('youtu.be/')[1].split('?')[0];
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  return url; // Return original URL if not YouTube
 }
 
 const displayedDocuments = computed(() => {
@@ -373,6 +558,13 @@ const currentTitle = computed(() => {
   }
   return '';
 });
+
+const currentSubcategoryType = computed(() => {
+  if (activeTab.value !== null && activeSub.value !== null) {
+    return tabs.value[activeTab.value].subcategories[activeSub.value].name;
+  }
+  return '';
+});
 </script>
 
 <style scoped>
@@ -380,7 +572,3 @@ const currentTitle = computed(() => {
 /* You can remove other borders if you'd like completely bottom-only look: */
 /* .group { border: none; border-bottom-width: 4px; } */
 </style>
-
-
-
-
