@@ -224,6 +224,168 @@ const projectContent = {
     `
   }
 }
+const projectUpdates = {
+  ssrlp_overview: [
+    {
+      date: '2024-06-01',
+      title: 'Districts roll out improved targeting system',
+      tags: ['sctp', 'targeting'],
+      summary: 'Local councils have begun testing a new beneficiary targeting system...',
+      link: '#'
+    },
+    {
+      date: '2024-05-15',
+      title: 'Climate-smart public works expand to 10 new sites',
+      tags: ['publicWorks', 'environment'],
+      summary: 'Environmental restoration works have been launched in 10 districts...',
+      link: '#'
+    }
+  ],
+  gesd_overview: [
+    {
+      date: '2024-04-20',
+      title: 'New LAPA scoring framework released',
+      tags: ['performance', 'governance'],
+      summary: 'The Ministry of Local Government has published an updated scoring method...',
+      link: '#'
+    }
+  ],
+  rcrp_overview: [
+    {
+      date: '2024-03-10',
+      title: 'RCRP kickstarts pilot catchment projects',
+      tags: ['climate', 'catchments'],
+      summary: 'Initial catchment restoration pilots are underway in 4 districts...',
+      link: '#'
+    }
+  ],
+  SCTP: [
+    {
+      date: '2024-05-05',
+      title: 'SCTP expands to new councils',
+      tags: ['sctp', 'expansion'],
+      summary: 'The program now includes 3 additional local councils targeting ultra-poor households...',
+      link: '#'
+    },
+    {
+      date: '2024-03-10',
+      title: 'RCRP kickstarts pilot catchment projects',
+      tags: ['climate', 'catchments'],
+      summary: 'Initial catchment restoration pilots are underway in 4 districts...',
+      link: '#'
+    },
+    {
+      date: '2024-04-20',
+      title: 'New LAPA scoring framework released',
+      tags: ['performance', 'governance'],
+      summary: 'The Ministry of Local Government has published an updated scoring method...',
+      link: '#'
+    }, {
+      date: '2024-06-01',
+      title: 'Districts roll out improved targeting system',
+      tags: ['sctp', 'targeting'],
+      summary: 'Local councils have begun testing a new beneficiary targeting system...',
+      link: '#'
+    },
+    {
+      date: '2024-05-15',
+      title: 'Climate-smart public works expand to 10 new sites',
+      tags: ['publicWorks', 'environment'],
+      summary: 'Environmental restoration works have been launched in 10 districts...',
+      link: '#'
+    }
+  ],
+  publicWorks: [
+    {
+      date: '2024-04-22',
+      title: 'Public works teams trained in new environmental practices',
+      tags: ['training', 'publicWorks'],
+      summary: 'Field staff completed training on climate-resilient techniques for micro catchment projects...',
+      link: '#'
+    }
+  ],
+  emergency: [
+    {
+      date: '2024-03-30',
+      title: 'Emergency cash transfers activated in response to flooding',
+      tags: ['emergency', 'flood'],
+      summary: 'Flood-affected households in Nsanje and Chikwawa received emergency cash support...',
+      link: '#'
+    }
+  ],
+  livelihoods: [
+    {
+      date: '2024-06-12',
+      title: 'COMSIP launches new youth skills program',
+      tags: ['livelihoods', 'youth'],
+      summary: '3,000 youths across 6 districts have begun livelihood training under a new initiative...',
+      link: '#'
+    }
+  ],
+  pbf: [
+    {
+      date: '2024-05-18',
+      title: 'Top performing councils awarded bonus grants',
+      tags: ['pbf', 'funding'],
+      summary: 'Six councils scored above 85% in LAPA and received additional grant allocations...',
+      link: '#'
+    }
+  ],
+  ias: [
+    {
+      date: '2024-04-10',
+      title: 'Audit tool updates shared with finance teams',
+      tags: ['accountability', 'finance'],
+      summary: 'New tools for tracking and reporting intergovernmental transfers were rolled out in workshops...',
+      link: '#'
+    }
+  ],
+  lgpi: [
+    {
+      date: '2024-02-28',
+      title: 'LA staff capacity assessment completed',
+      tags: ['staffing', 'capacity'],
+      summary: 'Baseline capacity data will inform future staffing plans and citizen engagement strategies...',
+      link: '#'
+    }
+  ],
+  adaptive: [
+    {
+      date: '2024-06-05',
+      title: 'Adaptive management pilots launched in 3 districts',
+      tags: ['innovation', 'monitoring'],
+      summary: 'Feedback loops and real-time tracking have been integrated into district plans...',
+      link: '#'
+    }
+  ],
+  drb: [
+    {
+      date: '2024-03-01',
+      title: 'Nature-based infrastructure under construction',
+      tags: ['resilience', 'infrastructure'],
+      summary: 'Districts began works on check dams and terracing in flood-prone areas...',
+      link: '#'
+    }
+  ],
+  usr: [
+    {
+      date: '2024-05-09',
+      title: 'Urban social registry mapping starts',
+      tags: ['registry', 'urban'],
+      summary: 'Enumerators have begun household data collection in Lilongwe and Blantyre...',
+      link: '#'
+    }
+  ],
+  upw: [
+    {
+      date: '2024-04-25',
+      title: 'Urban public works sites launched',
+      tags: ['urban', 'climate'],
+      summary: 'Waste management and tree planting have started in city wards under the pilot phase...',
+      link: '#'
+    }
+  ]
+}
 
 // Set from initial hash on load
 onMounted(() => {
@@ -295,17 +457,53 @@ watch(activeTab, () => {
 
     <!-- Main Content Area -->
     <main class="flex-1">
-<div v-if="projectContent[activeTab]" class="bg-white p-6 rounded-lg shadow">
-  <h2 class="text-2xl font-bold text-gray-900 mb-4">
+  <div v-if="projectContent[activeTab]">
+  <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b pb-2">
     {{ projectContent[activeTab].title }}
   </h2>
   <div
-    class="prose prose-gray dark:prose-invert max-w-none"
+    class="text-gray-800 space-y-5 leading-relaxed"
     v-html="projectContent[activeTab].body"
   ></div>
 </div>
 
   <div v-else class="text-gray-500 italic">No content available for this project.</div>
+  
+    <!-- Latest Updates Section -->
+    <div v-if="projectUpdates[activeTab]" class="mt-10">
+      <h3 class="text-xl font-semibold text-gray-900 mb-4 border-b pb-1">Latest Updates</h3>
+      <ul class="space-y-6">
+        <li
+          v-for="(update, index) in projectUpdates[activeTab]"
+          :key="index"
+          class="bg-white p-4 rounded-md shadow hover:shadow-md transition"
+        >
+          <p class="text-sm text-gray-500 mb-1">
+            Published on {{
+              new Date(update.date).toLocaleDateString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+              })
+            }}
+          </p>
+          <h4 class="text-lg font-semibold text-blue-700 hover:underline">
+            <a :href="update.link">{{ update.title }}</a>
+          </h4>
+          <p class="text-gray-700 text-sm mt-1">{{ update.summary }}</p>
+          <div class="mt-2 flex flex-wrap gap-2">
+            <span
+              v-for="tag in update.tags"
+              :key="tag"
+              class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded"
+            >
+              {{ tag }}
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
 </main>
   </div>
+  
 </template>
