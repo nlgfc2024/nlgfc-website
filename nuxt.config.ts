@@ -11,8 +11,8 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/tailwindcss'
   ],
+
   app: {
-    // pageTransition: { name: 'page', mode: 'out-in' },
     head: {
       title: 'National Local Government Finance Committee',
       charset: 'utf-16',
@@ -22,6 +22,14 @@ export default defineNuxtConfig({
       },
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/NLGFC-Logo.png' },
+      ],
+      // ✅ Add reCAPTCHA v2 script here
+      script: [
+        {
+          src: 'https://www.google.com/recaptcha/api.js',
+          async: true,
+          defer: true
+        }
       ]
     }
   }
