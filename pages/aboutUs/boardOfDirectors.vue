@@ -5,9 +5,9 @@ definePageMeta({
 
 const board = {
   chairperson: {
-    name: "Dr. Ellen M. Mkandawire",
+    name: "Commissioner Richard Chapweteka",
     position: "Board Chairperson",
-    image: "/images/samples/profile1.jpg",
+    image: "/images/board/CommissionerRichardChapwetekaBoardChairperson.png",
     reportsTo: null,
     subordinates: [
       "member1",
@@ -17,27 +17,27 @@ const board = {
     ]
   },
   member1: {
-    name: "Mr. John B. Mwale",
+    name: "Abel Mwambinga",
     position: "Board Member",
-    image: "/images/samples/profile2.jpg",
+    image: "/images/board/Abel MwambingaBoardMember.png",
     reportsTo: "chairperson"
   },
   member2: {
-    name: "Mrs. Patricia K. Jere",
+    name: "Councilor Davie Maunde",
     position: "Board Member",
-    image: "/images/samples/profile2.jpg",
+    image: "/images/board/CouncilorDavieMaundeBoardMember.png",
     reportsTo: "chairperson"
   },
   member3: {
-    name: "Dr. Michael T. Phiri",
+    name: "Mary Mkwanda",
     position: "Board Member",
-    image: "/images/samples/profile2.jpg",
+    image: "/images/board/MrsMaryMkwandaBoardMember.png",
     reportsTo: "chairperson"
   },
   member4: {
-    name: "Ms. Sarah W. Kumwenda",
+    name: "Lilian Khofi",
     position: "Board Member",
-    image: "/images/samples/profile2.jpg",
+    image: "/images/board/Ms.LilianKhofiVice.png",
     reportsTo: "chairperson"
   }
 }

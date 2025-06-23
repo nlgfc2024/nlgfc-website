@@ -5,9 +5,9 @@ definePageMeta({
 
 const leadership = {
   executiveDirector: {
-    name: "Mr. James M. Phiri",
+    name: "Kondwani Santhe (PhD)",
     position: "Executive Director",
-    image: "/images/samples/profile1.jpg",
+    image: "/images/management/kondwani-santhe--ed.png",
     reportsTo: null,
     subordinates: [
       "directorInfrastructure",
@@ -16,21 +16,21 @@ const leadership = {
     ]
   },
   directorInfrastructure: {
-    name: "Mrs. Angela K. Banda",
-    position: "Director of Infrastructure & Economic Development",
-    image: "/images/samples/profile2.jpg",
+    name: "Paul Chipeta",
+    position: "Director of Social & Economic Development Services",
+    image: "/images/management/directorEconomicDevelopment.png",
     reportsTo: "executiveDirector"
   },
   directorFinance: {
-    name: "Mr. David T. Gondwe",
-    position: "Director of Finance",
-    image: "/images/samples/profile2.jpg",
+    name: "Linda Kapanda",
+    position: "Director of Finance & Fiscal Decentralization",
+    image: "/images/management/financeDirector.png",
     reportsTo: "executiveDirector"
   },
   directorCorporate: {
-    name: "Mrs. Grace M. Nyirenda",
-    position: "Director of Corporate Services",
-    image: "/images/samples/profile2.jpg",
+    name: "Stanley Chuthi",
+    position: "Director of Administration & Corporate Services",
+    image: "/images/management/directorCorporateServices.png",
     reportsTo: "executiveDirector"
   }
 }
