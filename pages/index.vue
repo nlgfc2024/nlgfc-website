@@ -21,7 +21,7 @@ useHead({
               <!-- Image on left -->
               <div class="w-1/3 relative overflow-hidden">
                 <img 
-                  src="/public/news1.jpg" 
+                  src="/images/samples/news1.jpg" 
                   alt="Article image"
                   class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
@@ -55,7 +55,7 @@ useHead({
               <!-- Image on left -->
               <div class="w-1/3 relative overflow-hidden">
                 <img 
-                  src="/public/news2.jpg" 
+                  src="/images/samples/news2.jpg" 
                   alt="Article image"
                   class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
@@ -89,7 +89,7 @@ useHead({
               <!-- Image on left -->
               <div class="w-1/3 relative overflow-hidden">
                 <img 
-                  src="/public/news3.jpg" 
+                  src="/images/samples/news3.jpg" 
                   alt="Article image"
                   class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
@@ -232,7 +232,7 @@ useHead({
               <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col items-center text-center border border-gray-100 hover:border-blue-200">
                 <div class="w-28 h-28 mb-6 rounded-full bg-blue-50 flex items-center justify-center p-4 group-hover:bg-blue-100 transition-colors shadow-inner">
                   <!-- Replace with actual SSRP logo -->
-                  <img src="/public/NLGFC-Logo.png" alt="SSRP Logo" class="w-full h-full object-contain" loading="lazy">
+                  <img src="/images/logo/NLGFC-Logo.png" alt="SSRP Logo" class="w-full h-full object-contain" loading="lazy">
                 </div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors">SSRP</h3>
                 <p class="text-gray-600 mb-6">Sustainable Schools Rehabilitation Project</p>
@@ -252,7 +252,7 @@ useHead({
               <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col items-center text-center border border-gray-100 hover:border-green-200">
                 <div class="w-28 h-28 mb-6 rounded-full bg-green-50 flex items-center justify-center p-4 group-hover:bg-green-100 transition-colors shadow-inner">
                   <!-- Replace with actual GESD logo -->
-                  <img src="/public/NLGFC-Logo.png" alt="GESD Logo" class="w-full h-full object-contain" loading="lazy">
+                  <img src="/images/logo/NLGFC-Logo.png" alt="GESD Logo" class="w-full h-full object-contain" loading="lazy">
                 </div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-green-600 transition-colors">GESD</h3>
                 <p class="text-gray-600 mb-6">Green Energy Solutions Deployment</p>
@@ -272,7 +272,7 @@ useHead({
               <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col items-center text-center border border-gray-100 hover:border-amber-200">
                 <div class="w-28 h-28 mb-6 rounded-full bg-amber-50 flex items-center justify-center p-4 group-hover:bg-amber-100 transition-colors shadow-inner">
                   <!-- Replace with actual RCRP2 logo -->
-                  <img src="/public/NLGFC-Logo.png" alt="RCRP2 Logo" class="w-full h-full object-contain" loading="lazy">
+                  <img src="/images/logo/NLGFC-Logo.png" alt="RCRP2 Logo" class="w-full h-full object-contain" loading="lazy">
                 </div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-amber-600 transition-colors">RCRP2</h3>
                 <p class="text-gray-600 mb-6">Rural Communities Resilience Program</p>
@@ -403,32 +403,32 @@ useHead({
                 <div class="flex shrink-0 gap-6">
                   <!-- Partner 1 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/logo/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 2 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/logo/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 3 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/logo/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 4 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/logo/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 5 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/logo/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 6 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/logo/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                 </div>
                 
@@ -436,32 +436,32 @@ useHead({
                 <div class="flex shrink-0 gap-6" aria-hidden="true">
                   <!-- Partner 1 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/logo/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 2 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/logo/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 3 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/logo/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 4 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/logo/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 5 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/logo/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 6 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/logo/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                 </div>
               </div>
