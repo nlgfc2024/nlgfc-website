@@ -6,8 +6,7 @@ definePageMeta({
 const activeTab = ref('profile') // Default active tab
 
 const tabs = [
-  { id: 'profile', title: 'Council Profile' },
-  { id: 'mission', title: 'District Profile' },
+  { id: 'profile', title: 'Profile' },
   { id: 'vision', title: 'Mandate & Vision' },
   { id: 'values', title: 'Strategic Objectives' },
   { id: 'projects', title: 'Projects' },
@@ -146,12 +145,13 @@ const news = [
       <div class="flex-1 min-w-0">
         <!-- Council Profile Content -->
         <div v-show="activeTab === 'profile'" class="prose max-w-none">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Council Profile</h2>
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Blantyre District Council Profile</h2>
           <div class="space-y-6">
             <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
               <h3 class="text-lg font-semibold text-gray-900 mb-3">About Blantyre District Council</h3>
               <p class="text-gray-700 leading-relaxed">
-                Blantyre District Council is a local government authority established under the Local Government Act to promote democratic governance and development at the district level. The council serves as the primary institution for local administration, development coordination, and service delivery in Blantyre District.
+                Blantyre District Council is a local government authority established under the Local Government Act to promote democratic governance and development at the district level. The council serves as the primary institution for local administration, development coordination, and service delivery in Blantyre District.  Blantyre District is one of the districts in the Southern Region of Malawi that lies between longitudes of 33 to 35 degrees east and latitudes of 9.4 to 17.5 degrees south. The district is bordered by Mwanza and Neno Districts in the North, Zomba in the North East, Chiradzulu in the South East, Thyolo in the South and Chikwawa in the West. It is 366km away from the Capital City, Lilongwe and is located in the Shire Highlands. It covers an area of 1,785 square kilometres, which represents 1.7% of the total land area of Malawi.
+         
               </p>
             </div>
             
@@ -199,34 +199,7 @@ const news = [
         </div>
 
         <!-- District Profile Content -->
-        <div v-show="activeTab === 'mission'" class="prose max-w-none">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">District Profile</h2>
-          <p class="text-gray-700 leading-relaxed mb-6">
-            Blantyre District is one of the districts in the Southern Region of Malawi that lies between longitudes of 33 to 35 degrees east and latitudes of 9.4 to 17.5 degrees south. The district is bordered by Mwanza and Neno Districts in the North, Zomba in the North East, Chiradzulu in the South East, Thyolo in the South and Chikwawa in the West. It is 366km away from the Capital City, Lilongwe and is located in the Shire Highlands. It covers an area of 1,785 square kilometres, which represents 1.7% of the total land area of Malawi.
-          </p>
-          
-          <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-            <h3 class="text-lg font-semibold text-gray-900 mb-3">Geographic Information</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <h4 class="font-medium text-gray-900">Location</h4>
-                <p class="text-gray-700">Southern Region of Malawi, Shire Highlands</p>
-              </div>
-              <div>
-                <h4 class="font-medium text-gray-900">Area</h4>
-                <p class="text-gray-700">1,785 square kilometres (1.7% of Malawi)</p>
-              </div>
-              <div>
-                <h4 class="font-medium text-gray-900">Distance to Capital</h4>
-                <p class="text-gray-700">366km from Lilongwe</p>
-              </div>
-              <div>
-                <h4 class="font-medium text-gray-900">Coordinates</h4>
-                <p class="text-gray-700">33-35°E, 9.4-17.5°S</p>
-              </div>
-            </div>
-          </div>
-        </div>
+       
 
         <!-- Mandate & Vision Content -->
         <div v-show="activeTab === 'vision'" class="prose max-w-none">
@@ -268,9 +241,7 @@ const news = [
           <div class="space-y-6">
             <div class="flex items-start">
               <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
               </div>
               <div>
                 <h3 class="font-semibold text-gray-900 mb-1">To create a democratic environment for popular participation in governance and development at the local level.</h3>
@@ -278,9 +249,7 @@ const news = [
             </div>
             <div class="flex items-start">
               <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
               </div>
               <div>
                 <h3 class="font-semibold text-gray-900 mb-1">To provide social-economic services, coordinate and guide development issues in the District</h3>
@@ -288,7 +257,7 @@ const news = [
             </div>
             <div class="flex items-start">
               <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-
+                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
               </div>
               <div>
                 <h3 class="font-semibold text-gray-900 mb-1">To improve access, quality, and utilisation of social services by communities</h3>
@@ -296,9 +265,7 @@ const news = [
             </div>
             <div class="flex items-start">
               <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
               </div>
               <div>
                 <h3 class="font-semibold text-gray-900 mb-1">To enhance and improve revenue generation and human resource capacity for optimal operational performance</h3>
@@ -306,9 +273,7 @@ const news = [
             </div>
             <div class="flex items-start">
               <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                <svg class="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
               </div>
               <div>
                 <h3 class="font-semibold text-gray-900 mb-1">To reduce food insecurity through diversification and commercialization of agricultural production</h3>
@@ -316,7 +281,7 @@ const news = [
             </div>
             <div class="flex items-start">
               <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                
+                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
               </div>
               <div>
                 <h3 class="font-semibold text-gray-900 mb-1">To promote public employment services through strengthening the linkage between registered job seekers and potential employers.</h3>
@@ -324,9 +289,7 @@ const news = [
             </div>
             <div class="flex items-start">
               <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+                <span class="block w-3 h-3 bg-blue-600 rounded-full"></span>
               </div>
               <div>
                 <h3 class="font-semibold text-gray-900 mb-1">To improve access of vulnerable children and people living with disability to essential quality services</h3>
