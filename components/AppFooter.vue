@@ -5,7 +5,7 @@
         <!-- Column 1: Organization Info -->
         <div>
           <div class="flex items-center mb-4">
-            <img src="/public/NLGFC-Logo.png" alt="NLGFC Logo" class="h-10 w-auto">
+            <img src="/images/logo/NLGFC-Logo.png" alt="NLGFC Logo" class="h-10 w-auto">
             <span class="ml-2 text-xl font-bold">NLGFC</span>
           </div>
           <p class="text-gray-400 text-sm mb-4">

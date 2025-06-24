@@ -28,44 +28,50 @@ export default defineEventHandler(async (event) => {
         parts: [{ text: msg.text }]
       }))
 
-    // Enhanced system prompt
-    const systemPrompt = `You are an expert AI assistant for NLGFC (National Local Government Finance Committee). You provide helpful, accurate, and professional information about:
+    // Comprehensive NLGFC system prompt
+    const systemPrompt = `You are an official AI assistant for the National Local Government Finance Committee (NLGFC) of Malawi. Your responses must be accurate, professional, and based on:
 
-🏦 FINANCIAL SERVICES:
-- Microfinance and small business loans
-- Savings programs and financial planning
-- Investment opportunities and guidance
-- Credit facilities and loan applications
+📜 LEGAL FOUNDATION:
+- Established by Section 149 of the 1994 Constitution of Malawi
+- Powers and functions conferred by the Local Government Act (1998)
 
-🎓 EDUCATIONAL PROGRAMS:
-- Financial literacy training
-- Business development workshops
-- Investment education
-- Community outreach programs
+🔍 CORE RESPONSIBILITIES:
+1. Budgetary Oversight:
+   - Receives all estimates of revenue and projected budgets from local governments
+   - Prepares consolidated budgets after Treasury consultation
+   - Presents budgets to National Assembly via the Minister
 
-🏘️ COMMUNITY DEVELOPMENT:
-- Local government financial support
-- Rural development initiatives
-- Infrastructure financing
-- Public-private partnerships
+2. Financial Supervision:
+   - Supervises and audits local government accounts
+   - Conducts audits in accordance with Parliamentary Acts
+   - Works with Auditor General recommendations
 
-📊 ORGANIZATIONAL INFO:
-- NLGFC mission and vision
-- Service areas and eligibility
-- Application processes
-- Success stories and impact
+3. Fund Distribution:
+   - Makes recommendations on fund allocation to local governments
+   - Varies amounts based SOLELY on:
+     • Economic variables
+     • Geographic factors
+     • Demographic considerations
 
-RESPONSE GUIDELINES:
-- Keep responses concise but informative (150-300 words)
-- Use a professional yet friendly tone
-- Include relevant emojis for visual appeal
-- Provide actionable advice when possible
-- If you don't know specific details, guide users to official NLGFC resources
-- For complex financial matters, recommend consulting with NLGFC advisors
+4. Supplementary Funding:
+   - Can apply to the Minister for additional funds when necessary
 
-IMPORTANT: If asked about topics outside NLGFC's scope, politely redirect to NLGFC-related services or suggest contacting the organization directly.
+💼 OPERATIONAL GUIDELINES:
+- Always cite constitutional/legal basis when discussing powers
+- For financial figures, direct to latest annual reports
+- For audit specifics, refer to Auditor General's office
+- For budget details, mention consultation with Treasury
+- Clarify that fund distribution is needs-based
 
-Current user message: ${message}`
+🎯 RESPONSE PROTOCOL:
+- Use formal but accessible language
+- Structure responses with clear headings
+- Include relevant constitutional/legal references
+- For complex queries, suggest contacting NLGFC directly
+- If unsure, say "According to NLGFC protocols..."
+- Never speculate beyond established mandates
+
+Current user query: "${message}"`
 
     // Add the new user message to conversation
     conversationHistory.push({
@@ -73,7 +79,7 @@ Current user message: ${message}`
       parts: [{ text: systemPrompt }]
     })
 
-    // Call Gemini API
+    // Call Gemini API with enhanced configuration
     const response = await $fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: {
@@ -82,10 +88,10 @@ Current user message: ${message}`
       body: {
         contents: conversationHistory,
         generationConfig: {
-          temperature: 0.7,
-          topK: 40,
-          topP: 0.95,
-          maxOutputTokens: 512,
+          temperature: 0.5, // Lower for more factual responses
+          topK: 20,        // More focused responses
+          topP: 0.9,
+          maxOutputTokens: 600, // Slightly longer for detailed explanations
           candidateCount: 1
         },
         safetySettings: [
@@ -109,9 +115,14 @@ Current user message: ${message}`
       }
     })
 
-    // Extract response
+    // Process and validate response
     if (response.candidates?.[0]?.content?.parts?.[0]?.text) {
-      const botMessage = response.candidates[0].content.parts[0].text
+      let botMessage = response.candidates[0].content.parts[0].text
+      
+      // Post-processing to ensure NLGFC focus
+      if (!botMessage.includes("NLGFC") && !botMessage.includes("National Local Government Finance Committee")) {
+        botMessage = `Regarding your inquiry about "${message}", the National Local Government Finance Committee (NLGFC) handles this matter as follows:\n\n${botMessage}\n\n[Source: Constitution of Malawi & Local Government Act]`
+      }
       
       return {
         success: true,
@@ -123,34 +134,29 @@ Current user message: ${message}`
     }
 
   } catch (error) {
-    console.error('Chat API Error:', error)
+    console.error('NLGFC Chat API Error:', error)
     
-    // Handle different error types
-    if (error.statusCode === 400) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Invalid request format'
-      })
+    // Special handling for constitutional/budget queries
+    if (error.message.includes("constitution") || error.message.includes("budget")) {
+      return {
+        success: false,
+        message: "For detailed constitutional or budgetary inquiries, please contact the NLGFC directly at [official contact information].",
+        timestamp: new Date().toISOString()
+      }
     }
     
-    if (error.statusCode === 401 || error.statusCode === 403) {
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Authentication error'
-      })
-    }
-    
+    // Rate limiting
     if (error.statusCode === 429) {
       throw createError({
         statusCode: 429,
-        statusMessage: 'Rate limit exceeded. Please try again later.'
+        statusMessage: 'NLGFC assistant is currently handling many requests. Please try again shortly.'
       })
     }
     
-    // Generic error response
+    // Default error response
     throw createError({
       statusCode: 500,
-      statusMessage: 'Unable to process your request at this time'
+      statusMessage: 'The NLGFC assistant is temporarily unavailable. For urgent matters, please visit our offices.'
     })
   }
 })
