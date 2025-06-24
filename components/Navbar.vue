@@ -9,7 +9,7 @@ const searchQuery = ref('');
 const route = useRoute();
 const router = useRouter();
 
-// Route changes check
+// Watch for route changes
 watch(() => route.path, () => {
   // Close all menus when route changes
   closeAllMenus();
@@ -111,7 +111,7 @@ const navigateToOpportunities = (section) => {
         <div class="flex items-start">
           <a href="/" class="flex items-center">
             <img src="/images/logo/NLGFC-Logo.png" alt="Organization Logo" class="h-18 -mt-12">
-            <!-- Website -->
+            <!-- Website name -->
             <!-- <span class="text-xl font-bold text-blue-600">National Local Goverment Finance Committee</span> -->
           </a>
         </div>
@@ -193,10 +193,13 @@ const navigateToOpportunities = (section) => {
                   </ul>
                 </div>
 
+
+
+
                 <!-- Our Mandate Navigation Section -->
                 <li class="list-none pl-0"> <!-- Removes bullet and padding -->
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Our Mandate</h3>
-                  <ul class="space-y-2 pl-5">
+                  <ul class="space-y-2 pl-5"> <!-- Keeps indentation for nested items -->
                     <li>
                       <NuxtLink to="/mandate/ourMandate#fiscalDecentralization" class="text-gray-600 hover:text-blue-600">
                         Fiscal Decentralization
@@ -245,6 +248,12 @@ const navigateToOpportunities = (section) => {
                   </ul>
                 </li>
 
+
+
+
+
+
+
                 <div class="bg-blue-50 p-4 rounded-lg">
                   <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
                   <ul class="space-y-3">
@@ -282,10 +291,10 @@ const navigateToOpportunities = (section) => {
                     </li>
                     <li>
                       <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                          </svg>
-                          Consolidated LAs Annual Budget
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Consolidated LAs Annual Budget
                       </a>
                     </li>
                   </ul>
@@ -1078,6 +1087,7 @@ const navigateToOpportunities = (section) => {
 </template>
 
 <script>
+// Add the navigation method
 const navigateToOpportunities = (section) => {
   closeAllMenus()
   navigateTo(`/opportunities/opportunities?section=${section}`)
@@ -1086,7 +1096,7 @@ const navigateToOpportunities = (section) => {
 
 <style scoped>
 
-/* Animation dropdown menus */
+/* Animation for dropdown menus */
 .slide-enter-active, .slide-leave-active {
   transition: all 0.3s ease;
 }
