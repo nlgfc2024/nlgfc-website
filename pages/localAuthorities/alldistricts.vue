@@ -3,100 +3,94 @@ definePageMeta({
     title: 'For all local authorities' 
 })
 
+
+
+// Reactive variables
+const selectedDistrict = ref('')
+const selectedRegion = ref('')
+const showRegionFilter = ref(false)
+const activeContent = ref([])
+
+// Computed property to filter districts by region
+const filteredDistricts = computed(() => {
+    if (!selectedRegion.value) return districts
+    return districts.filter(district => district.region === selectedRegion.value)
+})
+
+// Unique regions for the region filter
+const regions = ['Northern', 'Central', 'Southern']
+
+// Computed property to get selected district details
+const selectedDistrictDetails = computed(() => {
+    if (!selectedDistrict.value) return null
+    return districts.find(district => district.name === selectedDistrict.value)
+})
+
+// Method to handle projects click
+const handleProjectsClick = async (e) => {
+    e.preventDefault();
+    
+    try {
+        // Navigate to district page with projects tab active
+        await navigateTo(`/localAuthorities/${selectedDistrictDetails.value.pageSlug}?tab=projects`);
+        
+    } catch (error) {
+        console.error('Error navigating to projects:', error);
+    }
+};
+
+// Method to handle news click
+const handleNewsClick = async (e) => {
+    e.preventDefault();
+    
+    try {
+        // Navigate to district page with news tab active
+        await navigateTo(`/localAuthorities/${selectedDistrictDetails.value.pageSlug}?tab=news`);
+        
+    } catch (error) {
+        console.error('Error navigating to news:', error);
+    }
+};
+
+// Method to generate district URL
+const getDistrictUrl = (pageSlug) => {
+    return `/localAuthorities/${pageSlug}`
+}
+
+// Method to handle district link click
+const handleDistrictLinkClick = (district) => {
+    console.log('Navigating to:', getDistrictUrl(district.pageSlug))
+    // In a real Nuxt app, you would use:
+    // await navigateTo(getDistrictUrl(district.pageSlug))
+}
+
+// Method to clear filters
+const clearFilters = () => {
+    selectedDistrict.value = ''
+    selectedRegion.value = ''
+}
+
+
+
 // All 28 districts in Malawi organized by region with detailed information
 const districts = [
-    // Northern Region
-    { 
-        name: 'Chitipa', 
-        region: 'Northern',
-        capital: 'Chitipa',
-        population: '234,927',
-        area: '4,288 km²',
-        description: 'Chitipa is located in the far north of Malawi, bordering Tanzania and Zambia.',
-        slug: 'chitipa'
-    },
-    { 
-        name: 'Karonga', 
-        region: 'Northern',
-        capital: 'Karonga',
-        population: '365,028',
-        area: '3,355 km²',
-        description: 'Karonga is known for its rich archaeological sites and borders Lake Malawi.',
-        slug: 'karonga'
-    },
-    { 
-        name: 'Likoma', 
-        region: 'Northern',
-        capital: 'Likoma',
-        population: '14,527',
-        area: '18 km²',
-        description: 'Likoma is an island district in Lake Malawi, known for its cathedral and beaches.',
-        slug: 'likoma'
-    },
-    { 
-        name: 'Mzimba', 
-        region: 'Northern',
-        capital: 'Mzuzu',
-        population: '700,806',
-        area: '10,430 km²',
-        description: 'Mzimba is the largest district in the Northern Region and includes Mzuzu city.',
-        slug: 'mzimba'
-    },
-    { 
-        name: 'Nkhata Bay', 
-        region: 'Northern',
-        capital: 'Nkhata Bay',
-        population: '164,761',
-        area: '4,071 km²',
-        description: 'Nkhata Bay is famous for its scenic lakeshore and tourism activities.',
-        slug: 'nkhata-bay'
-    },
-    { 
-        name: 'Rumphi', 
-        region: 'Northern',
-        capital: 'Rumphi',
-        population: '169,112',
-        area: '4,769 km²',
-        description: 'Rumphi is known for its mountainous terrain and the Nyika National Park.',
-        slug: 'rumphi'
-    },
+    
     
     // Central Region
+ 
     { 
-        name: 'Dedza', 
-        region: 'Central',
-        capital: 'Dedza',
-        population: '830,512',
-        area: '3,624 km²',
-        description: 'Dedza is known for pottery and borders Mozambique.',
-        slug: 'dedza'
-    },
-    { 
-        name: 'Dowa', 
-        region: 'Central',
-        capital: 'Dowa',
-        population: '411,387',
-        area: '3,041 km²',
-        description: 'Dowa is an agricultural district known for tobacco farming.',
-        slug: 'dowa'
-    },
-    { 
-        name: 'Kasungu', 
-        region: 'Central',
-        capital: 'Kasungu',
-        population: '842,953',
-        area: '7,878 km²',
-        description: 'Kasungu is home to Kasungu National Park and is an agricultural hub.',
-        slug: 'kasungu'
-    },
-    { 
+        
         name: 'Lilongwe', 
         region: 'Central',
         capital: 'Lilongwe',
         population: '2,395,454',
+        Phone:'0999042289',
+        email:'Nenogmailcom',
+        PrivateBag:'1234890',
         area: '6,159 km²',
         description: 'Lilongwe is the capital city of Malawi and the largest urban center.',
-        slug: 'lilongwe'
+        slug: 'https://lcc.mw/',
+        pageSlug: 'lilongwecitycouncil' // Add separate slug for page navigation
     },
     { 
         name: 'Mchinji', 
@@ -161,7 +155,8 @@ const districts = [
         population: '1,316,250',
         area: '2,012 km²',
         description: 'Blantyre is the commercial capital of Malawi and the second-largest city.',
-        slug: 'blantyre'
+        slug: 'https://blantyredc.gov.mw/',
+        pageSlug: 'blantyreCouncil' // Add separate slug for page navigation
     },
     { 
         name: 'Chikwawa', 
@@ -222,6 +217,9 @@ const districts = [
         region: 'Southern',
         capital: 'Neno',
         population: '138,289',
+        Phone:'0999042221',
+        email:'Nenogmailcom',
+        PrivateBag:'1234890',
         area: '1,535 km²',
         description: 'Neno is one of the newest districts, created in 2003.',
         slug: 'neno'
@@ -231,6 +229,9 @@ const districts = [
         region: 'Southern',
         capital: 'Phalombe',
         population: '431,593',
+        Phone:'0999042221',
+        email:'Phalombegmailcom',
+        PrivateBag:'12349',
         area: '1,394 km²',
         description: 'Phalombe is known for its agricultural activities and tea estates.',
         slug: 'phalombe'
@@ -240,6 +241,9 @@ const districts = [
         region: 'Southern',
         capital: 'Thyolo',
         population: '721,456',
+        Phone:'0999042221',
+        email:'THYOLOgmailcom',
+        PrivateBag:'12349',
         area: '1,715 km²',
         description: 'Thyolo is famous for its tea and coffee plantations.',
         slug: 'thyolo'
@@ -249,49 +253,14 @@ const districts = [
         region: 'Southern',
         capital: 'Zomba',
         population: '745,790',
+        Phone:'0999042221',
+        email:'zombagmailcom',
+        PrivateBag:'12347',
         area: '2,580 km²',
         description: 'Zomba is the former capital of Malawi and home to the University of Malawi.',
         slug: 'zomba'
     }
 ]
-
-// Reactive variables
-const selectedDistrict = ref('')
-const selectedRegion = ref('')
-const showRegionFilter = ref(false)
-
-// Computed property to filter districts by region
-const filteredDistricts = computed(() => {
-    if (!selectedRegion.value) return districts
-    return districts.filter(district => district.region === selectedRegion.value)
-})
-
-// Unique regions for the region filter
-const regions = ['Northern', 'Central', 'Southern']
-
-// Computed property to get selected district details
-const selectedDistrictDetails = computed(() => {
-    if (!selectedDistrict.value) return null
-    return districts.find(district => district.name === selectedDistrict.value)
-})
-
-// Method to generate district URL
-const getDistrictUrl = (slug) => {
-    return `/localAuthorities/${slug}`
-}
-
-// Method to handle district link click
-const handleDistrictLinkClick = (district) => {
-    console.log('Navigating to:', getDistrictUrl(district.slug))
-    // In a real Nuxt app, you would use:
-    // await navigateTo(getDistrictUrl(district.slug))
-}
-
-// Method to clear filters
-const clearFilters = () => {
-    selectedDistrict.value = ''
-    selectedRegion.value = ''
-}
 </script>
 
 <template>
@@ -373,18 +342,13 @@ const clearFilters = () => {
                         <!-- Quick Stats -->
                         <div class="grid grid-cols-2 gap-4">
                             <div class="bg-gray-50 p-3 rounded-md">
-                                <p class="text-xs text-gray-500 uppercase tracking-wide">Capital</p>
+                                <p class="text-xs text-gray-500 uppercase tracking-wide">Name</p>
                                 <p class="text-sm font-semibold text-gray-800">{{ selectedDistrictDetails.capital }}</p>
                             </div>
                             <div class="bg-gray-50 p-3 rounded-md">
                                 <p class="text-xs text-gray-500 uppercase tracking-wide">Population</p>
                                 <p class="text-sm font-semibold text-gray-800">{{ selectedDistrictDetails.population }}</p>
                             </div>
-                        </div>
-                        
-                        <div class="bg-gray-50 p-3 rounded-md">
-                            <p class="text-xs text-gray-500 uppercase tracking-wide">Area</p>
-                            <p class="text-sm font-semibold text-gray-800">{{ selectedDistrictDetails.area }}</p>
                         </div>
                         
                         <!-- Description -->
@@ -402,7 +366,7 @@ const clearFilters = () => {
                                 View {{ selectedDistrictDetails.name }} Details
                             </button>
                             <a 
-                                :href="getDistrictUrl(selectedDistrictDetails.slug)"
+                                :href="selectedDistrictDetails.slug"
                                 class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm font-medium text-center"
                             >
                                 Visit District Page
@@ -413,38 +377,32 @@ const clearFilters = () => {
                         <div class="pt-2">
                             <p class="text-xs text-gray-500 uppercase tracking-wide mb-2">Quick Links</p>
                             <div class="flex flex-wrap gap-2">
-                                <a 
-                                    :href="`/localAuthorities/${selectedDistrictDetails.slug}/services`"
-                                    class="inline-flex items-center px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full hover:bg-green-200 transition-colors"
+                                                                  <a
+                                    :href="`/localAuthorities/${selectedDistrictDetails.pageSlug}?tab=projects`"
+                                    @click="handleProjectsClick"
+                                    class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full hover:bg-purple-200 transition-colors"
                                 >
-                                    Services
+                                   District Profile
                                 </a>
-                                <a 
-                                    :href="`/localAuthorities/${selectedDistrictDetails.slug}/contacts`"
-                                    class="inline-flex items-center px-3 py-1 bg-yellow-100 text-yellow-700 text-xs font-medium rounded-full hover:bg-yellow-200 transition-colors"
-                                >
-                                    Contacts
-                                </a>
-                                <a 
-                                    :href="`/localAuthorities/${selectedDistrictDetails.slug}/projects`"
+                                <a
+                                    :href="`/localAuthorities/${selectedDistrictDetails.pageSlug}?tab=projects`"
+                                    @click="handleProjectsClick"
                                     class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full hover:bg-purple-200 transition-colors"
                                 >
                                     Projects
                                 </a>
                                 <a 
-                                    :href="`/localAuthorities/${selectedDistrictDetails.slug}/news`"
+                                    :href="`/localAuthorities/${selectedDistrictDetails.pageSlug}?tab=news`"
+                                    @click="handleNewsClick"
                                     class="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full hover:bg-red-200 transition-colors"
                                 >
                                     News
                                 </a>
-                                  <a 
-                                    :href="`/localAuthorities/${selectedDistrictDetails.slug}/news`"
-                                    class="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full hover:bg-red-200 transition-colors"
-                                >
-                                updates
-                                </a>
                             </div>
                         </div>
+
+                        <!-- Projects Content Display -->
+                        <!-- Remove this section since we're navigating to a separate page -->
                     </div>
                 </div>
             </div>
@@ -476,19 +434,18 @@ const clearFilters = () => {
                     </div>
                 </div>
                 
-                    <!-- Map Info -->
-                    <div class="text-sm text-gray-600 bg-blue-50 border border-blue-200 rounded-md p-3">
-                        <strong>Map Features:</strong>
-                        <ul class="mt-2 ml-4 list-disc space-y-1">
-                            <li>Shows all 28 districts of Malawi</li>
-                            <li>Organized by Northern, Central, and Southern regions</li>
-                            <li v-if="selectedDistrictDetails">
-                                Currently viewing: <strong>{{ selectedDistrictDetails.name }}</strong>
-                                <br><span class="text-xs text-gray-500">Population: {{ selectedDistrictDetails.population }} | Area: {{ selectedDistrictDetails.area }}</span>
-                            </li>
-                            <li v-else>Select a district from the dropdown to highlight it</li>
-                        </ul>
-                    </div>
+                <!-- Map Info -->
+                <div class="text-sm text-gray-600 bg-blue-50 border border-blue-200 rounded-md p-3">
+                    <ul class="mt-2 ml-4 list-disc space-y-1">
+                        <div v-if="selectedDistrictDetails">
+                            <strong>Currently viewing Details for {{ selectedDistrictDetails.name }}</strong>
+                            <li class="text-xs text-gray-500">Phone: {{ selectedDistrictDetails.Phone }}</li>
+                            <li class="text-xs text-gray-500">Email: {{ selectedDistrictDetails.email }}</li>
+                            <li class="text-xs text-gray-500">Private Bag: {{ selectedDistrictDetails.PrivateBag }}</li>
+                        </div>
+                        <li v-else>Select a district from the dropdown to highlight it and see all details</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

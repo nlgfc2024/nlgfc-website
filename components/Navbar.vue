@@ -405,8 +405,7 @@ const navigateToOpportunities = (section) => {
           <!-- Local Councils Mega Menu -->
           <div @mouseenter="toggleMegaMenu('councils')" @mouseleave="toggleMegaMenu(null)" class="relative">
             <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
-              Local Councils
-              <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+              District local Authorities           <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </button>
@@ -430,11 +429,11 @@ const navigateToOpportunities = (section) => {
                     </li>
                   </ul>
 
-                  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Municipal Councils</h3>
+                  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Municipal/Town Councils</h3>
                   <ul class="space-y-2">
                     <li>
                       <NuxtLink to="/localAuthorities/balakamanucipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">
-                        Balaka Municipal Council
+                        Lunchenza Municipal Council
                       </NuxtLink>
                     </li>
                     <li>
@@ -453,9 +452,7 @@ const navigateToOpportunities = (section) => {
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="/localAuthorities/AllMunicipalCouncils" class="text-gray-600 hover:text-blue-600 transition flex items-center">
-                        All Municipal Councils →
-                      </NuxtLink>
+                     
                     </li>
                   </ul>
                 </div>
@@ -936,13 +933,13 @@ const navigateToOpportunities = (section) => {
 
               <!-- Municipal Councils Section -->
               <button @click="toggleAccordion('mobile-municipal')" class="flex items-center justify-between w-full text-gray-700 font-medium">
-                Municipal Councils
+                Municipal/Town Councils
                 <svg class="w-4 h-4 transform transition" :class="{ 'rotate-180': activeAccordion === 'mobile-municipal' }" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                 </svg>
               </button>
               <div v-show="activeAccordion === 'mobile-municipal'" class="pl-4 py-2 space-y-1">
-                <NuxtLink to="#" class="block text-gray-600 hover:text-blue-600 py-1">Balaka Municipal Council</NuxtLink>
+                <NuxtLink to="#" class="block text-gray-600 hover:text-blue-600 py-1">Luncheza Municipal Council</NuxtLink>
                 <NuxtLink to="#" class="block text-gray-600 hover:text-blue-600 py-1">Karonga Municipal Council</NuxtLink>
                 <NuxtLink to="#" class="block text-gray-600 hover:text-blue-600 py-1">Kasungu Municipal Council</NuxtLink>
                 <NuxtLink to="#" class="block text-gray-600 hover:text-blue-600 py-1">Mangochi Municipal Council</NuxtLink>
