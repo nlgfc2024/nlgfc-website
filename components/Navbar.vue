@@ -193,9 +193,6 @@ const navigateToOpportunities = (section) => {
                   </ul>
                 </div>
 
-
-
-
                 <!-- Our Mandate Navigation Section -->
                 <li class="list-none pl-0"> <!-- Removes bullet and padding -->
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Our Mandate</h3>
@@ -247,12 +244,6 @@ const navigateToOpportunities = (section) => {
                     </li>
                   </ul>
                 </li>
-
-
-
-
-
-
 
                 <div class="bg-blue-50 p-4 rounded-lg">
                   <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
