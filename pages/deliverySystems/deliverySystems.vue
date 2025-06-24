@@ -20,29 +20,57 @@ const projectGroups = [
     ]
   }
 ]
+const partnerLogos = [
+  { src: "/images/deliverySystems/Airtel _money.png", alt: "Airtel Money" },
+  { src: "/images/deliverySystems/mpamba_logo.png", alt: "TNM Mpamba Logo" },
+  { src: "/images/deliverySystems/fdh_bank.png", alt: "FDH Logo" },
+  { src: "/images/deliverySystems/nbs_bank.png", alt: "FBS Bank Logo" },
+  { src: "/images/deliverySystems/Standard_bank.png", alt: "Standard Bank" },
+  { src: "/images/deliverySystems/kaku_pay.jpeg", alt: "Kaku Pay" }
+]
 
+const props = defineProps({
+  partnerLogos: {
+    type: Array,
+    required: true,
+    validator: (logos) => logos.every(logo => logo.src && logo.alt)
+  },
+  scrollDuration: {
+    type: Number,
+    default: 20
+  }
+})
 // Sample story data for LAIFMIS
 const laifmisStories = [
   {
     id: 1,
     title: "Transforming Local Government Finance",
     image: "/images/deliverySystems/tlgf.jpeg",
-    excerpt: "Discover how LAIFMIS revolutionized financial management across local authorities, bringing transparency and efficiency to public finance administration.",
-    readTime: "5 min read"
+    excerpt: "Discover how LAIFMIS revolutionized financial management across local authorities, bringing transparency and efficiency to public finance administration."
   },
   {
     id: 2,
     title: "Digital Innovation in Public Service",
-    image: "/images/edward/image2.jpg?w=400&h=250&fit=crop",
-    excerpt: "Learn about the digital transformation journey that modernized how local governments track budgets, manage resources, and serve their communities.",
-    readTime: "4 min read"
+    image: "/images/deliverySystems/tlgf.jpeg",
+    excerpt: "Learn about the digital transformation journey that modernized how local governments track budgets, manage resources, and serve their communities."
   },
   {
     id: 3,
     title: "Empowering Local Communities",
-    image: "/images/edward/image3.jpg?w=400&h=250&fit=crop",
-    excerpt: "Explore real stories of how improved financial management systems have directly impacted community development and service delivery.",
-    readTime: "6 min read"
+    image: "/images/deliverySystems/tlgf.jpeg",
+    excerpt: "Explore real stories of how improved financial management systems have directly impacted community development and service delivery."
+  },
+  {
+    id: 4,
+    title: "Budget Transparency Initiative",
+    image: "/images/deliverySystems/tlgf.jpeg",
+    excerpt: "How LAIFMIS brought unprecedented transparency to local government budgeting processes across Malawi."
+  },
+  {
+    id: 5,
+    title: "Community-Driven Development",
+    image: "/images/deliverySystems/tlgf.jpeg",
+    excerpt: "Stories of communities taking charge of their development through better financial management tools."
   }
 ]
 
@@ -50,24 +78,39 @@ const laifmisStories = [
 const ePaymentsStories = [
   {
     id: 1,
-    title: "Transforming Local Government Finance",
-    image: "/images/edward/image1.jpg?w=400&h=250&fit=crop",
-    excerpt: "Discover how LAIFMIS revolutionized financial management across local authorities, bringing transparency and efficiency to public finance administration.",
-    readTime: "5 min read"
+    title: "Airtel Money",
+    image: "/images/samples/airtel_money.png",
+    excerpt: "Airtel Money is actively involved in social programs in Malawi, particularly through its role in distributing social cash transfers and promoting financial inclusion. The company collaborates with various organizations and the government to facilitate digital payments for social welfare programs, ensuring timely and efficient delivery of aid to beneficiaries"
   },
   {
     id: 2,
-    title: "Digital Innovation in Public Service",
-    image: "/images/edward/image2.jpg?w=400&h=250&fit=crop",
-    excerpt: "Learn about the digital transformation journey that modernized how local governments track budgets, manage resources, and serve their communities.",
-    readTime: "4 min read"
+    title: "TNM Mpamba",
+    image: "/images/deliverySystems/tlgf.jpeg",
+    excerpt: "Learn about the digital transformation journey that modernized how local governments track budgets, manage resources, and serve their communities."
   },
   {
     id: 3,
-    title: "Empowering Local Communities",
-    image: "/images/edward/image3.jpg?w=400&h=250&fit=crop",
-    excerpt: "Explore real stories of how improved financial management systems have directly impacted community development and service delivery.",
-    readTime: "6 min read"
+    title: "FDH",
+    image: "/images/samples/fdh_bank.png",
+    excerpt: "Explore real stories of how improved financial management systems have directly impacted community development and service delivery."
+  },
+  {
+    id: 4,
+    title: "NBS Bank",
+    image: "/images/samples/nbs_bank.png",
+    excerpt: "Explore real stories of how improved financial management systems have directly impacted community development and service delivery."
+  },
+  {
+    id: 5,
+    title: "STD Bank",
+    image: "/images/samples/Standard_bank.png",
+    excerpt: "Explore real stories of how improved financial management systems have directly impacted community development and service delivery."
+  },
+  {
+    id: 6,
+    title: "Kakupay",
+    image: "/images/samples/kaku_pay.jpeg",
+    excerpt: "Explore real stories of how improved financial management systems have directly impacted community development and service delivery."
   }
 ]
 
@@ -93,6 +136,8 @@ function updateActiveTabFromHash(hash) {
     }
   }
 }
+
+
 </script>
 
 <template>
@@ -157,52 +202,12 @@ function updateActiveTabFromHash(hash) {
                 <!-- Main Description -->
                 <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-8">
                   <p class="text-lg text-gray-700 leading-relaxed">
-                    Government of Malawi procured an Integrated Financial Management Information System (IFMIS) in 2008. IFMIS is an Enterprise Resource Planning (ERP) tool ‘dubbed Serenic Navigator’, to be used in the Councils for Financial Management and Reporting under the policy guidance of the Accountant General (AG). IFMIS was implemented in phases, starting with five local authorities in M’mbelwa, Mchinji, Lilongwe District, Blantyre City, and Thyolo in the first phase. Being the first IFMIS implementation in Malawi, the aim of delivering a pilot was to ensure that people learn from the process and improve as the implementation goes to other Local Authorities. Use of IFMIS for Financial Management and Reporting was emphasized to ensure that all Local Authorities have a standardized Financial Management System that would help Local Authorities produce standardized reports for onward transmission to the central Government and other relevant stakeholders. By the close of 2013 calendar year, all Local Authorities had IFMIS installed and all relevant personnel trained in its usage. Now IFMIS is being used in all the 35 LAs in Malawi
+                    The Local Authority Integrated Finance Management Information System (LAIFMIS) is a comprehensive digital platform designed to streamline financial management processes across local government authorities in Malawi. This system enhances transparency, accountability, and efficiency in public financial management at the local level.
                   </p>
                 </div>
 
-                <!-- Story Cards Grid -->
-                <div class="mb-8">
-                  <h3 class="text-xl font-semibold text-gray-900 mb-6">Featured Projects Under LAIFMIS</h3>
-                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div 
-                      v-for="story in laifmisStories" 
-                      :key="story.id"
-                      class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200"
-                    >
-                      <!-- Image Container -->
-                      <div class="relative h-48 overflow-hidden">
-                        <img 
-                          :src="story.image" 
-                          :alt="story.title"
-                          class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                        <div class="absolute top-3 right-3 bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-medium">
-                          {{ story.readTime }}
-                        </div>
-                      </div>
-                      
-                      <!-- Content Container -->
-                      <div class="p-4">
-                        <h4 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-                          {{ story.title }}
-                        </h4>
-                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
-                          {{ story.excerpt }}
-                        </p>
-                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center">
-                          Read More 
-                          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 <!-- Key Features Section -->
-                <div class="bg-gray-50 rounded-lg p-6">
+                <div class="bg-gray-50 rounded-lg p-6 mb-8">
                   <h3 class="text-xl font-semibold text-gray-900 mb-4">Key Features</h3>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="flex items-start">
@@ -251,6 +256,78 @@ function updateActiveTabFromHash(hash) {
                     </div>
                   </div>
                 </div>
+
+                <!-- Sliding Story Cards -->
+                <div class="mb-8">
+                  <h3 class="text-xl font-semibold text-gray-900 mb-6">Featured Projects Under LAIFMIS</h3>
+                  <div class="overflow-hidden">
+                    <div class="flex gap-6 animate-scroll hover:pause">
+                      <!-- First set of cards -->
+                      <div
+                        v-for="story in laifmisStories"
+                        :key="story.id"
+                        class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 flex-shrink-0 w-80"
+                      >
+                        <!-- Image Container -->
+                        <div class="relative h-48 overflow-hidden">
+                          <img
+                            :src="story.image"
+                            :alt="story.title"
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                        
+                        <!-- Content Container -->
+                        <div class="p-4">
+                          <h4 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                            {{ story.title }}
+                          </h4>
+                          <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            {{ story.excerpt }}
+                          </p>
+                          <button class="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center">
+                            Read More
+
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <!-- Duplicate set for seamless loop -->
+                      <div
+                        v-for="story in laifmisStories"
+                        :key="`dup-${story.id}`"
+                        class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 flex-shrink-0 w-80"
+                      >
+                        <!-- Image Container -->
+                        <div class="relative h-48 overflow-hidden">
+                          <img
+                            :src="story.image"
+                            :alt="story.title"
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                        
+                        <!-- Content Container -->
+                        <div class="p-4">
+                          <h4 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                            {{ story.title }}
+                          </h4>
+                          <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+                            {{ story.excerpt }}
+                          </p>
+                          <button class="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center">
+                            Read More
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             
@@ -262,56 +339,15 @@ function updateActiveTabFromHash(hash) {
                 <!-- Main Description -->
                 <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-8">
                   <p class="text-lg text-gray-700 leading-relaxed">
-                    The Electronic Payment Systems (E-Payments) platform is a comprehensive digital solution designed to modernize government financial transactions and improve service delivery efficiency. This integrated system enables secure, fast, and transparent processing of payments across various government departments and agencies.
-
-E-Payments facilitates seamless transactions between citizens, businesses, and government entities, supporting multiple payment channels including mobile money, bank transfers, and online payment gateways. The system ensures compliance with financial regulations, provides real-time transaction monitoring, and maintains detailed audit trails for accountability and transparency.
-
-By digitizing payment processes, E-Payments reduces processing time, minimizes manual errors, enhances security, and provides citizens with convenient access to government services anytime, anywhere.
+                    Electronic Payment Systems provide secure, efficient, 
+                    and convenient digital payment solutions for citizens and businesses. 
+                    These systems enable seamless transactions 
+                    and provide social protection benefiaries with convenient access to social benefits anytime, anywhere.
                   </p>
                 </div>
-
-                <!-- Story Cards Grid -->
-                <div class="mb-8">
-                  <h3 class="text-xl font-semibold text-gray-900 mb-6">Featured E-Payment Solutions</h3>
-                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div 
-                      v-for="story in ePaymentsStories" 
-                      :key="story.id"
-                      class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200"
-                    >
-                      <!-- Image Container -->
-                      <div class="relative h-48 overflow-hidden">
-                        <img 
-                          :src="story.image" 
-                          :alt="story.title"
-                          class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                        <div class="absolute top-3 right-3 bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-medium">
-                          {{ story.readTime }}
-                        </div>
-                      </div>
-                      
-                      <!-- Content Container -->
-                      <div class="p-4">
-                        <h4 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-                          {{ story.title }}
-                        </h4>
-                        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
-                          {{ story.excerpt }}
-                        </p>
-                        <button class="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center">
-                          Read More 
-                          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
+                
                 <!-- Key Features Section -->
-                <div class="bg-gray-50 rounded-lg p-6">
+                <div class="bg-gray-50 rounded-lg p-6 mb-8">
                   <h3 class="text-xl font-semibold text-gray-900 mb-4">Key Features</h3>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="flex items-start">
@@ -360,6 +396,48 @@ By digitizing payment processes, E-Payments reduces processing time, minimizes m
                     </div>
                   </div>
                 </div>
+                
+                <!-- E-Payment Service Providers Section -->
+                <div class="mb-8">
+                  <h3 class="text-xl font-semibold text-gray-900 mb-6 text-center">E-Payment Service Providers</h3>
+                  
+                  <!-- Slider Container -->
+                  <div class="relative overflow-hidden bg-white rounded-lg shadow-sm" aria-label="Partner logos carousel">
+                    <!-- Gradient Overlays -->
+                    <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+                    <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+
+                    <!-- Slider Track -->
+                    <div class="overflow-hidden py-6 px-4">
+                      <div 
+                        class="flex gap-6 animate-scroll hover:pause"
+                        :style="`--scroll-duration: ${scrollDuration}s`"
+                      >
+                        <!-- Two copies for seamless scrolling -->
+                        <template v-for="repeat in 2" :key="repeat">
+                          <div 
+                            v-for="(logo, index) in partnerLogos" 
+                            :key="`${repeat}-${index}`"
+                            class="flex-shrink-0"
+                          >
+                            <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-center h-24 w-40 sm:h-32 sm:w-48 transition-all hover:scale-105 hover:shadow-xl border border-gray-100">
+                              <img
+                                :src="logo.src"
+                                :alt="logo.alt"
+                                loading="lazy"
+                                decoding="async"
+                                width="192"
+                                height="128"
+                                class="max-h-20 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity drop-shadow-md"
+                              />
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
 
@@ -370,9 +448,7 @@ By digitizing payment processes, E-Payments reduces processing time, minimizes m
               <!-- Main Description with Blue Background -->
               <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-8">
                 <p class="text-lg text-gray-700 leading-relaxed">
-                  The Public Works Management Information System (PWMIS) is a comprehensive digital platform designed to streamline the planning, implementation, monitoring, and evaluation of public infrastructure projects across Malawi. This system enables government agencies, contractors, and stakeholders to efficiently manage public works projects from conception to completion, ensuring transparency, accountability, and quality delivery of infrastructure development.
-
-                                   PWMIS facilitates project lifecycle management including budget allocation, contractor selection, progress tracking, quality assurance, and financial reporting. The system supports real-time monitoring of construction activities, resource utilization, and project milestones, enabling timely decision-making and effective project governance. By centralizing project data and automating key processes, PWMIS enhances coordination between different stakeholders and ensures that public infrastructure projects are delivered on time, within budget, and to the required quality standards.
+                  The Public Works Management Information System streamlines the planning, execution, and monitoring of public infrastructure projects to ensure projects are delivered on time, within budget, and to the required quality standards.
                 </p>
               </div>
               
@@ -385,34 +461,33 @@ By digitizing payment processes, E-Payments reduces processing time, minimizes m
               ></iframe>
             </div>
 
-           <!-- GRM MIS -->
-<div v-else-if="item.id === 'grm'">
-  <h2 class="text-3xl font-bold text-gray-900 mb-6">Grievance Redress Mechanism (GRM)</h2>
-
-  <!-- Main Description with Blue Background -->
-  <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-8">
-    <p class="text-lg text-gray-700 leading-relaxed">
-      Digital Grievance Redress Mechanism (Digital GRM) is a technology-enabled platform designed to enhance citizen engagement, accountability, and transparency
-       in project implementation. It allows community members to report issues,
-        ask questions, and provide feedback on development projects through multiple user-friendly channels.
-    </p>
-  </div>
-
-  <iframe
-    
-  ></iframe>
-</div>
-
+            <!-- GRM MIS -->
+            <div v-else-if="item.id === 'grm'">
+              <h2 class="text-3xl font-bold text-gray-900 mb-6">Grievance Redress Mechanism (GRM)</h2>
+              <!-- Main Description with Blue Background -->
+              <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 mb-8">
+                <p class="text-lg text-gray-700 leading-relaxed">
+                  Digital Grievance Redress Mechanism (Digital GRM) provides citizens with accessible channels to report concerns, complaints, and feedback about public services and projects through multiple user-friendly channels.
+                </p>
+              </div>
+              <iframe
+                src=""
+                frameborder="0"
+                width="800"
+                height="600"
+                allowtransparency
+              ></iframe>
+            </div>
 
             <!-- SCT MIS -->
             <div v-else-if="item.id === 'sctmis'">
               <h2 class="text-2xl font-bold text-gray-900 mb-6">Social Cash Transfer Program (SCTP) MIS</h2>
-              <p class="text-gray-700">Manages identification, enrollment, and payments for social cash transfer beneficiaries.</p>
+              <p class="text-gray-700">Manages identification, enrollment, and payment processes for social cash transfer beneficiaries.</p>
             </div>
 
             <!-- LAPAS -->
             <div v-else-if="item.id === 'lapas'">
-              <h2 class="text-2xl font-bold text-gray-900 mb-6">Local Authority Performance Assessment (LAPA)</h2>
+              <h2 class="text-2xl font-bold text-gray-900 mb-6">Local Authority Performance Assessment (LAPAS)</h2>
               <iframe
                 src="http://lapa.nlgfc.gov.mw/data"
                 frameborder="0"
@@ -425,7 +500,7 @@ By digitizing payment processes, E-Payments reduces processing time, minimizes m
             <!-- CIMIS -->
             <div v-else-if="item.id === 'cimis'">
               <h2 class="text-2xl font-bold text-gray-900 mb-6">Comsip Integrated MIS (CIMIS)</h2>
-              <p class="text-gray-700"> <!-- Add content as needed --> </p>
+              <p class="text-gray-700">Comprehensive management information system for integrated program coordination.</p>
             </div>
 
             <!-- PMIS -->
@@ -439,7 +514,6 @@ By digitizing payment processes, E-Payments reduces processing time, minimizes m
                 allowtransparency
               ></iframe>
             </div>
-
           </div>
         </div>
       </main>
@@ -448,22 +522,43 @@ By digitizing payment processes, E-Payments reduces processing time, minimizes m
 </template>
 
 <style scoped>
-.prose {
-  max-width: 800px;
-  margin: 0 auto;
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.animate-scroll {
+  animation: scroll var(--scroll-duration, 20s) linear infinite;
+  display: flex;
+  min-width: fit-content; /* Better for dynamic content */
+  will-change: transform; /* Optimize for animation */
 }
 
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.hover\:pause:hover,
+.animate-scroll:focus-within,
+.animate-scroll:active {
+  animation-play-state: paused;
 }
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .animate-scroll {
+    animation: none;
+    justify-content: center;
+    min-width: auto;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .animate-scroll::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+}
+
+
 </style>
