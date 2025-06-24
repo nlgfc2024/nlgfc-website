@@ -551,23 +551,47 @@ const onClickOutside = () => {
             </button>
 
             <div v-show="activeMegaMenu === 'resource'" class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 500px;">
-              <div class="grid grid-cols-2 gap-6 p-6">
+              <div class="grid grid-cols-3 gap-6 p-6">
                 <div>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Publications</h3>
                   <ul class="space-y-2">
-                    <li><a href="resourceCenter" class="text-gray-700 hover:text-blue-700 transition">Press Releases</a></li>
-                    <li><a href="resourceCenter" class="text-gray-700 hover:text-blue-700 transition">Success Stories</a></li>
-                    <li><a href="resourceCenter" class="text-gray-700 hover:text-blue-700 transition">Newsletters</a></li>
-                    <li><a href="resourceCenter" class="text-gray-700 hover:text-blue-700 transition">News</a></li>
-                    <li><a href="resourceCenter" class="text-gray-700 hover:text-blue-700 transition">Media</a></li>
+                    <li><a href="resourceCenterCopy?tab=0&sub=0" class="text-gray-700 hover:text-blue-700 transition">Press Releases</a></li>
+                    <li><a href="resourceCenterCopy?tab=0&sub=1" class="text-gray-700 hover:text-blue-700 transition">Success Stories</a></li>
+                    <li><a href="resourceCenterCopy?tab=0&sub=2" class="text-gray-700 hover:text-blue-700 transition">Speaches</a></li>
+                    <li><a href="resourceCenterCopy?tab=0&sub=3" class="text-gray-700 hover:text-blue-700 transition">Research & Discussions</a></li>
+                    <li><a href="resourceCenterCopy?tab=0&sub=4" class="text-gray-700 hover:text-blue-700 transition">Budget Documents</a></li>
+                    <li><a href="resourceCenterCopy?tab=0&sub=5" class="text-gray-700 hover:text-blue-700 transition">Disburments</a></li>
+                    <li><a href="resourceCenterCopy?tab=0&sub=6" class="text-gray-700 hover:text-blue-700 transition">Newslatter</a></li>
+                    <li><a href="resourceCenterCopy?tab=0&sub=7" class="text-gray-700 hover:text-blue-700 transition">Manuals & Guidelines</a></li>
+                    <li><a href="resourceCenterCopy?tab=0&sub=8" class="text-gray-700 hover:text-blue-700 transition">Policies & Strategies</a></li>
                   </ul>
                 </div>
                 
+                  <div>
+                    <div>
+                      <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Knowledge Management</h3>
+                      <ul class="space-y-2">
+                        <li><a href="resourceCenterCopy?tab=3&sub=0" class="text-gray-700 hover:text-blue-700 transition">Image Gallery</a></li>
+                        <li><a href="resourceCenterCopy?tab=3&sub=1" class="text-gray-700 hover:text-blue-700 transition">Video Library</a></li>
+                      </ul>
+                    </div>
+                    <br />
+                    <div>
+                      <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Project Documents</h3>
+                      <ul class="space-y-2">
+                        <li><a href="resourceCenterCopy?tab=1&sub=0" class="text-gray-700 hover:text-blue-700 transition">SSRLP</a></li>
+                        <li><a href="resourceCenterCopy?tab=1&sub=1" class="text-gray-700 hover:text-blue-700 transition">GESD</a></li>
+                        <li><a href="resourceCenterCopy?tab=1&sub=2" class="text-gray-700 hover:text-blue-700 transition">RCRP 2</a></li>
+                      </ul>
+                    </div>
+                  </div>
                 <div>
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Knowledge Management</h3>
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Reports</h3>
                   <ul class="space-y-2">
-                    <li><a href="resourceCenter" class="text-gray-700 hover:text-blue-700 transition">Gallery</a></li>
-                    <li><a href="resourceCenter" class="text-gray-700 hover:text-blue-700 transition">Video Library</a></li>
+                    <li><a href="resourceCenterCopy?tab=2&sub=0" class="text-gray-700 hover:text-blue-700 transition">Audit Reports</a></li>
+                    <li><a href="resourceCenterCopy?tab=2&sub=1" class="text-gray-700 hover:text-blue-700 transition">Financial Reports</a></li>
+                    <li><a href="resourceCenterCopy?tab=2&sub=2" class="text-gray-700 hover:text-blue-700 transition">Financial Statements</a></li>
+                    <li><a href="resourceCenterCopy?tab=2&sub=3" class="text-gray-700 hover:text-blue-700 transition">LAPA Synthesis</a></li>
                   </ul>
                 </div>
               </div>

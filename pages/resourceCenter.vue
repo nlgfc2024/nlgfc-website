@@ -105,38 +105,64 @@ definePageMeta({
           </div>
         </transition-group>
 
-        <!-- Image Gallery Grid Layout -->
-        <transition-group
+        <!-- Image Gallery Iframe Layout -->
+        <div
           v-else-if="currentSubcategoryType === 'Image Gallery'"
-          name="grid-item"
-          tag="div"
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-          appear
-        >
+          class="w-full">
           <div
             v-for="(doc, index) in displayedDocuments"
             :key="doc.name"
-            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer hover:scale-105"
-            :style="{ animationDelay: `${index * 100}ms` }"
-            @click="openImageModal(doc)"
+            class="bg-white rounded-lg shadow-lg overflow-hidden mb-6 transition-all duration-300 hover:shadow-xl"
           >
-            <div class="aspect-square overflow-hidden">
-              <img
-                :src="doc.link"
-                :alt="doc.name"
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-                
-            </div>
-            <div class="p-3">
-              <h4 class="font-semibold text-gray-800 text-sm mb-1">{{ doc.name }}</h4>
-              <p class="text-xs text-gray-600">{{ doc.description }}</p>
-              <span class="inline-block text-xs bg-green-100 text-green-800 rounded px-2 py-1 mt-2">
+            <!-- Header with gallery info -->
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4">
+              <h4 class="font-semibold text-lg mb-1">{{ doc.name }}</h4>
+              <p class="text-blue-100 text-sm">{{ doc.description }}</p>
+              <span class="inline-block text-xs bg-white bg-opacity-20 text-white rounded px-2 py-1 mt-2">
                 {{ doc.type }}
               </span>
             </div>
+            
+            <!-- Iframe container -->
+            <div class="relative w-full" style="height: 600px;">
+              <iframe
+                :src="doc.link"
+                class="w-full h-full border-0"
+                frameborder="0"
+                :title="doc.name"
+                allowfullscreen
+                loading="lazy"
+                @load="hideLoadingOverlay"
+              ></iframe>
+              
+              <!-- Loading overlay -->
+              <div 
+                :class="['absolute inset-0 bg-gray-100 flex items-center justify-center transition-opacity duration-500', iframeLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100']"
+              >
+                <div class="text-center">
+                  <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                  <p class="text-gray-600">Loading gallery...</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Footer with external link -->
+            <div class="bg-gray-50 p-3 flex justify-between items-center">
+              <span class="text-sm text-gray-600">External Gallery Content</span>
+              <a
+                :href="doc.link"
+                target="_blank"
+                class="inline-flex items-center px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200"
+                title="Open in new tab"
+              >
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+                Open Gallery
+              </a>
+            </div>
           </div>
-        </transition-group>
+        </div>
 
         <!-- Default Document Grid Layout -->
         <transition-group
@@ -199,7 +225,7 @@ definePageMeta({
       </transition>
     </div>
 
-    <!-- Image Modal -->
+    <!-- Image Modal (removed since we're using iframe now) -->
     <transition name="modal">
       <div v-if="selectedImage" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" @click="closeImageModal">
         <div class="relative max-w-4xl max-h-screen p-4">
@@ -228,9 +254,13 @@ definePageMeta({
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+const route = useRoute();
+const router = useRouter();
 
 const tabs = ref([
-  {
+{
     name: 'Publications & Downloads',
     subcategories: [
       {
@@ -242,79 +272,6 @@ const tabs = ref([
             type: 'PDF',
             description: 'ECT - Uthenga Wapadera Wa Covid 19 - Lilongwe - Immediate Release',
             date: '19 April 2020'
-          },
-          {
-            name: 'Press Release on Covid-19',
-            link: '/downloads/press-jan2025.pdf',
-            type: 'PDF',
-            description: 'Revised after Governors meetings with MNOS MAMN and MUSCCO',
-            date: '22  Jan 2025'
-          },
-          {
-            name: 'Councils Funding Figures',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Council funding figures for publications',
-            date: 'April, 2020'
-          },
-          {
-            name: 'Councils accumulative Funding Figures',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Council accumulative funding figures for publications',
-            date: 'April, 2020'
-          },
-          {
-            name: 'Uthenga Wapedera - Special Announcemnts on GoM COVID 19 Responce',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Special announcement on Government of Malawi COVID-19 response',
-            
-          },
-          {
-            name: 'Special Communication on Covid 19 Emergency Cash Transfers',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Special Communication',
-          },
-          {
-            name: 'Governance to Enable Service Delivery',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Governance to Enable Service Delivery (GESD) Project approval',
-          }, 
-          {
-            name: 'STOPCOVID-19 NLGFC',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Details on the STOPCOVID-19 NLGFC initiative',
-          },
-          {
-            name: 'SSRL_Effectiveness declaration',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'SSRL Effectiveness declaration notification',
-            date: 'June 1 2020'
-          },
-          {
-            name: 'Second Disbursment OF Covid -19 Urban Cash Payments',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Immediate release on second disbursement of COVID-19 urban cash payments',
-          },  
-          {
-            name: 'Local Authorities (LAs) Funding Advice',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'RCRP Expression of Interest for project implementation',
-            date: 'December 2021'
-          },
-          {
-            name: 'Press Release Appointment of ED',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Appointment of Dr. Kondwani Santhe As Exective Director  For NLGFC',
-            date: 'August 2022'
           }
         ]
       },
@@ -327,69 +284,54 @@ const tabs = ref([
             type: 'PDF',
             description: 'NLGFC PWP Success Stories for Booklet-MASAF IV.',
             date: 'December 2024' 
-          },
+          }
+        ]
+      },
+      {
+        name: 'Speaches',
+        contents: [
           {
-            name: 'CS-EPWP Balaka Newsletters',
-            link: '/downloads/success2.pdf',
+            name: 'NLGFC [PWP] Success Stories MASAF IV',
+            link: '/downloads/success1.pdf',
             type: 'PDF',
-            description: 'Climate Smart Newslatter for Balaka District.',
+            description: 'NLGFC PWP Success Stories for Booklet-MASAF IV.',
             date: 'December 2024' 
-          },  
+          }
+        ]
+      },
+      {
+        name: 'Research & Discussions',
+        contents: [
           {
-            name: 'Lilongwe CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Lilongwe CS-EPWP success story',
-            date: 'December 2024'              
-          },
+            name: 'Research on Local Governance',
+            link: 'https://example.com/gallery',
+            type: 'pdf',
+            description: 'Gallery showcasing project highlights.',
+            date: 'January 2025'
+          }
+        ]
+      },
+      {
+        name: 'Budget Documents',
+        contents: [
           {
-            name: 'Likoma CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
+            name: 'Budget Document 2025',
+            link: '/downloads/budget-2025.pdf',
             type: 'PDF',
-            description: 'Summary of Likoma CS-EPWP success story', 
-            date: 'December 2024' 
-          },
+            description: 'Budget document for the year 2025.',
+            date: 'January 2025'
+          }
+        ]
+      },
+      {
+        name: 'Disburments',
+        contents: [
           {
-            name: 'Machinga CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Machinga CS-EPWP success story', 
-            date: 'December 2024' 
-          },
-          {
-            name: 'Mwanza CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Mwanza CS-EPWP success story',
-            date: 'December 2024' 
-          },
-          {
-            name: 'Nsanje CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Nsanje CS-EPWP success story',
-            date: 'December 2024'
-          },
-          {
-            name: 'Ntcheu CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Ntcheu CS-EPWP success story',
-            date: 'December 2024'
-          },
-          {
-            name: 'Salima CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Salima CS-EPWP success story',
-            date: 'December 2024'
-          },
-          {
-            name: 'Zomba CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Zomba CS-EPWP success story',
-            date: 'December 2024'
+            name: 'Disbursement Report Q1 2025',
+            link: '/downloads/disbursement-q1-2025.pdf',
+            type: 'Excel',
+            description: 'Disbursement report for the first quarter of 2025.',
+            date: 'January 2025'
           }
         ]
       },
@@ -402,41 +344,6 @@ const tabs = ref([
             type: 'PDF',
             description: 'Highlights from January 2025 newsletter.',
             date: 'January 2025'
-          },
-          {
-            name: 'February Newsletter',
-            link: '/downloads/newsletter-feb2025.pdf',
-            type: 'PDF',
-            description: 'Highlights from February 2025 newsletter.',
-            date: 'February 2025'
-          },
-          {
-            name: 'March Newsletter',
-            link: '/downloads/newsletter-jan2025.pdf',
-            type: 'PDF',
-            description: 'Highlights from March 2025 newsletter.',
-            date: 'March 2025'
-          },  
-          {
-            name: 'April Newsletter',
-            link: '/downloads/newsletter-jan2025.pdf',
-            type: 'PDF',
-            description: 'Highlights from April 2025 newsletter.',
-            date: 'April 2025'
-          },
-          {
-            name: 'May Newsletter',
-            link: '/downloads/newsletter-jan2025.pdf',
-            type: 'PDF',
-            description: 'Highlights from May 2025 newsletter.',
-            date: 'May 2025'
-          },
-          {
-            name: 'June Newsletter',
-            link: '/downloads/newsletter-jan2025.pdf',
-            type: 'PDF',
-            description: 'Highlights from June 2025 newsletter.',
-            date: 'June 2025'
           }
         ]
       },
@@ -518,7 +425,7 @@ const tabs = ref([
   {
     name: 'Reports',
     subcategories: [
-      { name: 'Downloadable Reports', contents: [
+      { name: 'Audit Reports', contents: [
         {
           name: 'Annual Report 2024',
           link: '/downloads/annual-report-2024.pdf',
@@ -532,6 +439,8 @@ const tabs = ref([
           description: 'Highlights from January 2025 monthly report.'
         }
       ] },
+
+      
       { name: 'Research Reports', contents: [
         {
           name: 'Research Report 2024',
@@ -559,7 +468,50 @@ const tabs = ref([
           type: 'PDF',
           description: 'Strategic plan outlining goals and objectives for 2025.'
         } 
+      ] },
+      { name: 'Financial Reports', contents: [
+        {
+          name: 'Financial Report Q1 2025',
+          link: '/downloads/financial-report-q1-2025.pdf',
+          type: 'PDF',
+          description: 'Financial overview for the first quarter of 2025.'
+        },
+        {
+          name: 'Budget Report 2025',
+          link: '/downloads/budget-report-2025.pdf',
+          type: 'PDF',
+          description: 'Detailed budget report for the year 2025.'
+        }
+      ] },
+      { name: 'Financial statements', contents: [
+        {
+          name: 'Project Evaluation 2024',
+          link: '/downloads/project-evaluation-2024.pdf',
+          type: 'PDF',
+          description: 'Evaluation of projects completed in 2024.'
+        },
+        {
+          name: 'Mid-Year Evaluation 2025',
+          link: '/downloads/mid-year-evaluation-2025.pdf',
+          type: 'PDF',
+          description: 'Mid-year evaluation report for 2025.'
+        }
+      ] },
+      { name: 'LAPA Synthesis', contents: [
+        {
+          name: 'Project Evaluation Report 2024',
+          link: '/downloads/project-evaluation-2024.pdf',
+          type: 'PDF',
+          description: 'Evaluation report for projects completed in 2024.'
+        },
+        {
+          name: 'Mid-Year Evaluation Report 2025',
+          link: '/downloads/mid-year-evaluation-2025.pdf',
+          type: 'PDF',
+          description: 'Mid-year evaluation report for 2025.'
+        }
       ] }
+        
     ]
   },
   {
@@ -568,59 +520,11 @@ const tabs = ref([
       { name: 'Image Gallery', contents: [
         {
           name: 'Community Event Photos',
-          link: '/photo/img1.jpg',
-          type: 'Image',
+          link: 'https://demo2.gov.mw/nlgfc-portal/public/?page=1',
+          type: 'Gallery',
           description: 'Photos from community events and gatherings.'
-        },
-        {
-          name: 'Water canal',
-          link: '/photo/kayekele_long_water_canal.jpg',
-          type: 'Image',
-          description: 'Images from kayekele_long_water_canal'
-        },
-        {
-          name: 'GESD- Jenda Market',
-          link: '/photo/jenda-market.jpg',
-          type: 'Image',
-          description: 'Photos from GESD Jenda Market project.'
-        },
-        {
-          name: 'GESD School Project',
-          link: '/photo/machinga-secondary-school.jpg',
-          type: 'Image',
-          description: 'Images from GESD School project.'
-        },
-        {
-          name: 'GESD Market Project',
-          link: '/photo/mbulumbuzi-new-market-under-construction-in-chiradzulo.jpg',
-          type: 'Image',
-          description: 'Photos from GESD Market under construction.'
-        },
-        {
-          name: 'GESD - Bus Depot',
-          link: '/photo/nkhotakota-bus-depot.jpg',
-          type: 'Image',
-          description: 'Images from GESD Nkhotakota bus depot project.'
-        },
-        {
-          name: 'SSLP - Training Participants',
-          link: '/photo/some-of-the-participants-to-the-training.jpg',
-          type: 'Image',
-          description: 'Photos from SSRLP training participants.'
-        },
-        {
-          name: 'SSLP Nursery Garden',
-          link: '/photo/karonga-dado-rapheal-mkisi-supervising-a-nursery-garden.jpg',
-          type: 'Image',
-          description: 'Images from SSLP nursery garden project.'
         }
-        ,
-        {
-          name: 'SSLP - Watershed Exploration',
-          link: '/photo/exploration-of-watershed-through-transect-walk-at-wiliro-catchment-in-karonga.jpg',
-          type: 'Image',
-          description: 'exploration of watershed through transect walk at wiliro catchment in karonga'
-        }
+
       ] },
       { name: 'Video', contents: [
         {
@@ -650,6 +554,28 @@ const expandedTab = ref(null);
 const activeTab = ref(null);
 const activeSub = ref(null);
 const selectedImage = ref(null);
+const iframeLoaded = ref(false);
+
+// Function to handle query parameters and open specific tab/subcategory
+function handleQueryParams() {
+  const tabParam = route.query.tab;
+  const subParam = route.query.sub;
+  
+  if (tabParam !== undefined && subParam !== undefined) {
+    const tabIndex = parseInt(tabParam);
+    const subIndex = parseInt(subParam);
+    
+    // Validate indices
+    if (tabIndex >= 0 && tabIndex < tabs.value.length && 
+        subIndex >= 0 && subIndex < tabs.value[tabIndex].subcategories.length) {
+      
+      // Set the active tab and subcategory
+      expandedTab.value = tabIndex;
+      activeTab.value = tabIndex;
+      activeSub.value = subIndex;
+    }
+  }
+}
 
 function toggleTab(index) {
   expandedTab.value = expandedTab.value === index ? null : index;
@@ -662,6 +588,12 @@ function toggleTab(index) {
 function selectSub(tabIndex, subIndex) {
   activeTab.value = tabIndex;
   activeSub.value = subIndex;
+  // Reset iframe loaded state when switching subcategories
+  iframeLoaded.value = false;
+}
+
+function hideLoadingOverlay() {
+  iframeLoaded.value = true;
 }
 
 function openImageModal(image) {
@@ -831,6 +763,16 @@ const currentSubcategoryType = computed(() => {
 
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Iframe loading animation */
+.iframe-loading {
+  pointer-events: none;
+}
+
+/* Hide loading overlay after iframe loads */
+iframe {
+  background: white;
 }
 
 </style>
