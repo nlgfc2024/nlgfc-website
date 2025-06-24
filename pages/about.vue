@@ -1325,8 +1325,8 @@ onBeforeUnmount(() => {
         </div>
         </div>
         </div>>
-        <!-- Header Section with Description -->
-        <div v-show="activeTab === 'structure'" class="prose max-w-none">
+        <!-- Structure Content -->
+        <div v-show="activeTab === 'structure' || activeTab === 'directorates'" class="prose max-w-none">
             <div class="mb-10">
                 <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
                 Directorates and Divisions
@@ -1419,6 +1419,9 @@ onBeforeUnmount(() => {
                 </div>
             </div>
         </div>
+
+
+
 
       </main>
     </div>

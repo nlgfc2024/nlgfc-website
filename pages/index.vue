@@ -233,7 +233,7 @@ useHead({
               <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col items-center text-center border border-gray-100 hover:border-blue-200">
                 <div class="w-28 h-28 mb-6 rounded-full bg-blue-50 flex items-center justify-center p-4 group-hover:bg-blue-100 transition-colors shadow-inner">
                   <!-- Replace with actual SSRP logo -->
-                  <img src="/images/logo/NLGFC-Logo.png" alt="SSRP Logo" class="w-full h-full object-contain" loading="lazy">
+                  <img src="/public/images/samples/SSRLP logo(1).jpg" alt="SSRP Logo" class="w-full h-full object-contain" loading="lazy">
                 </div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors">SSRP</h3>
                 <p class="text-gray-600 mb-6">Sustainable Schools Rehabilitation Project</p>
@@ -273,7 +273,7 @@ useHead({
               <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col items-center text-center border border-gray-100 hover:border-amber-200">
                 <div class="w-28 h-28 mb-6 rounded-full bg-amber-50 flex items-center justify-center p-4 group-hover:bg-amber-100 transition-colors shadow-inner">
                   <!-- Replace with actual RCRP2 logo -->
-                  <img src="/images/logo/NLGFC-Logo.png" alt="RCRP2 Logo" class="w-full h-full object-contain" loading="lazy">
+                  <img src="/images/samples/RCRP LOGO- Final.png" alt="RCRP2 Logo" class="w-full h-full object-contain" loading="lazy">
                 </div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-amber-600 transition-colors">RCRP2</h3>
                 <p class="text-gray-600 mb-6">Rural Communities Resilience Program</p>
@@ -291,7 +291,7 @@ useHead({
 
           <div class="text-center mt-12">
             <a href="/projects" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-300 shadow-sm hover:shadow-md">
-              Explore All Initiatives
+              Explore All Projects
               <svg class="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>

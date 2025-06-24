@@ -430,27 +430,27 @@ const onClickOutside = () => {
                   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Municipal Councils</h3>
                   <ul class="space-y-2">
                     <li>
-                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/balakamanucipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Balaka Municipal Council
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/Karongamunicipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Karonga Municipal Council
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/Kasungumunicipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Kasungu Municipal Council
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/Mangochimunicipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Mangochi Municipal Council
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/AllMunicipalCouncils" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         All Municipal Councils →
                       </NuxtLink>
                     </li>
@@ -461,12 +461,12 @@ const onClickOutside = () => {
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">District Councils</h3>
                   <ul class="space-y-2">
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/chikwawa-district" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         Chikwawa District Council
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                      <NuxtLink to="" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         Dedza District Council
                       </NuxtLink>
                     </li>
