@@ -1,170 +1,162 @@
 <script setup>
-definePageMeta({
-  title: 'About NLGFC'
-})
+    definePageMeta({
+    title: 'About NLGFC'
+    })
 
-const activeTab = ref('mvc')
-const openSubMenu = ref(null)
-const imageError = ref(false)
+    const route = useRoute()
+    const activeTab = ref('mvc')
+    const openSubMenu = ref(null)
+    const imageError = ref(false)
 
-const handleImageError = () => {
-  imageError.value = true;
-  console.error("Organogram image failed to load");
-};
+    const handleImageError = () => {
+    imageError.value = true;
+    console.error("Organogram image failed to load");
+    };
 
-const isActive = (item) => {
-  return activeTab.value === item.id || 
-         (item.subItems && item.subItems.some(sub => sub.id === activeTab.value))
-}
-
-const toggleItem = (item) => {
-  if (item.subItems) {
-    openSubMenu.value = openSubMenu.value === item.id ? null : item.id
-    if (!item.subItems.some(sub => sub.id === activeTab.value)) {
-      activeTab.value = item.subItems[0].id
-    }
-  } else {
-    activeTab.value = item.id
-    openSubMenu.value = null
-  }
-}
-// Board of Directors
-const board = {
-  chairperson: {
-    name: "Commissioner Richard Chapweteka",
-    position: "Board Chairperson",
-    image: "/images/board/CommissionerRichardChapwetekaBoardChairperson.png",
-    reportsTo: null,
-    subordinates: [
-      "member1",
-      "member2",
-      "member3",
-      "member4"
-    ]
-  },
-  member1: {
-    name: "Abel Mwambinga",
-    position: "Board Member",
-    image: "/images/board/Abel MwambingaBoardMember.png",
-    reportsTo: "chairperson"
-  },
-  member2: {
-    name: "Councilor Davie Maunde",
-    position: "Board Member",
-    image: "/images/board/CouncilorDavieMaundeBoardMember.png",
-    reportsTo: "chairperson"
-  },
-  member3: {
-    name: "Mary Mkwanda",
-    position: "Board Member",
-    image: "/images/board/MrsMaryMkwandaBoardMember.png",
-    reportsTo: "chairperson"
-  },
-  member4: {
-    name: "Lilian Khofi",
-    position: "Board Member",
-    image: "/images/board/Ms.LilianKhofiVice.png",
-    reportsTo: "chairperson"
-  }
-}
-
-// Executive Management
-const leadership = {
-  executiveDirector: {
-    name: "Kondwani Santhe (PhD)",
-    position: "Executive Director",
-    image: "/images/management/kondwani-santhe--ed.png",
-    reportsTo: null,
-    subordinates: [
-      "directorInfrastructure",
-      "directorFinance",
-      "directorCorporate"
-    ]
-  },
-  directorInfrastructure: {
-    name: "Paul Chipeta",
-    position: "Director of Social & Economic Development Services",
-    image: "/images/management/directorEconomicDevelopment.png",
-    reportsTo: "executiveDirector"
-  },
-  directorFinance: {
-    name: "Linda Kapanda",
-    position: "Director of Finance & Fiscal Decentralization",
-    image: "/images/management/financeDirector.png",
-    reportsTo: "executiveDirector"
-  },
-  directorCorporate: {
-    name: "Stanley Chuthi",
-    position: "Director of Administration & Corporate Services",
-    image: "/images/management/directorCorporateServices.png",
-    reportsTo: "executiveDirector"
-  }
-}
-
-const menuItems = [
-  { 
-    items: [
-      { id: 'mvc', title: 'Mission, Vision and Core Values' },
-      { id: 'powers', title: 'Powers and Functions' },
-      { id: 'board', title: 'Board of Directors' },
-      { id: 'management', title: 'Executive Management' },
-      { id: 'structure', title: 'Organogram' },
-    ]
-  },
-  { 
-    items: [
-      { 
-        id: 'directorates', 
-        title: 'Directorates and Divisions',
-        subItems: [
-          { id: 'finance', title: 'Finance & Fiscal Decentralization' },
-          { id: 'corporate', title: 'Corporate & Strategic Services' },
-          { id: 'social', title: 'Social & Economic Development Services' },
-          { id: 'planning', title: 'Planning, M&E' },
-          { id: 'procurement', title: 'Procurement' },
-          { id: 'audit', title: 'Internal Audit' }
+    // Board of Directors
+    const board = {
+    chairperson: {
+        name: "Commissioner Richard Chapweteka",
+        position: "Board Chairperson",
+        image: "/images/board/CommissionerRichardChapwetekaBoardChairperson.png",
+        reportsTo: null,
+        subordinates: [
+        "member1",
+        "member2",
+        "member3",
+        "member4"
         ]
-      }
-    ]
-  }
-]
+    },
+    member1: {
+        name: "Abel Mwambinga",
+        position: "Board Member",
+        image: "/images/board/Abel MwambingaBoardMember.png",
+        reportsTo: "chairperson"
+    },
+    member2: {
+        name: "Councilor Davie Maunde",
+        position: "Board Member",
+        image: "/images/board/CouncilorDavieMaundeBoardMember.png",
+        reportsTo: "chairperson"
+    },
+    member3: {
+        name: "Mary Mkwanda",
+        position: "Board Member",
+        image: "/images/board/MrsMaryMkwandaBoardMember.png",
+        reportsTo: "chairperson"
+    },
+    member4: {
+        name: "Lilian Khofi",
+        position: "Board Member",
+        image: "/images/board/Ms.LilianKhofiVice.png",
+        reportsTo: "chairperson"
+    }
+    }
 
-// Improved navigation handling
-onMounted(() => {
-  const handleHashChange = () => {
-    if (window.location.hash) {
-      const hash = window.location.hash.replace('#', '')
-      // Check both main items and subitems
-      const exists = menuItems.some(group => 
-        group.items.some(item => 
-          item.id === hash || 
-          (item.subItems && item.subItems.some(sub => sub.id === hash))
-        )
-      )
-      if (exists) {
-        activeTab.value = hash
-        // Open submenu if it's a subitem
-        const parentItem = menuItems
-          .flatMap(group => group.items)
-          .find(item => item.subItems?.some(sub => sub.id === hash))
-        if (parentItem) {
-          openSubMenu.value = parentItem.id
+    // Executive Management
+    const leadership = {
+    executiveDirector: {
+        name: "Kondwani Santhe (PhD)",
+        position: "Executive Director",
+        image: "/images/management/kondwani-santhe--ed.png",
+        reportsTo: null,
+        subordinates: [
+        "directorInfrastructure",
+        "directorFinance",
+        "directorCorporate"
+        ]
+    },
+    directorInfrastructure: {
+        name: "Paul Chipeta",
+        position: "Director of Social & Economic Development Services",
+        image: "/images/management/directorEconomicDevelopment.png",
+        reportsTo: "executiveDirector"
+    },
+    directorFinance: {
+        name: "Linda Kapanda",
+        position: "Director of Finance & Fiscal Decentralization",
+        image: "/images/management/financeDirector.png",
+        reportsTo: "executiveDirector"
+    },
+    directorCorporate: {
+        name: "Stanley Chuthi",
+        position: "Director of Administration & Corporate Services",
+        image: "/images/management/directorCorporateServices.png",
+        reportsTo: "executiveDirector"
+    }
+    }
+
+    const menuItems = [
+    { 
+        items: [
+        { id: 'mvc', title: 'Mission, Vision and Core Values' },
+        { id: 'powers', title: 'Powers and Functions' },
+        { id: 'board', title: 'Board of Directors' },
+        { id: 'management', title: 'Executive Management' },
+        { id: 'structure', title: 'Organogram' },
+        ]
+    },
+    { 
+        items: [
+        { 
+            id: 'directorates', 
+            title: 'Directorates and Divisions',
+            subItems: [
+            { id: 'finance', title: 'Finance & Fiscal Decentralization' },
+            { id: 'corporate', title: 'Corporate & Strategic Services' },
+            { id: 'social', title: 'Social & Economic Development Services' },
+            { id: 'planning', title: 'Planning, M&E' },
+            { id: 'procurement', title: 'Procurement' },
+            { id: 'audit', title: 'Internal Audit' }
+            ]
+        }
+        ]
+    }
+    ]
+
+    const isActive = (tabId) => {
+    return activeTab.value === tabId
+    }
+    onMounted(() => {
+    if (route.hash) {
+        updateActiveTabFromHash(route.hash.replace('#', ''))
+    } else {
+        // Set default tab if no hash is present
+        activeTab.value = 'mvc'
+    }
+    })
+
+    watch(() => route.hash, (hash) => {
+    if (hash) {
+        updateActiveTabFromHash(hash.replace('#', ''))
+    }
+    })
+
+function updateActiveTabFromHash(hash) {
+  for (const group of menuItems) {
+    for (const item of group.items) {
+      if (item.id === hash) {
+        if (!item.subItems) {
+          activeTab.value = item.id;
+        } else {
+          // For parent items, just open the menu but don't change tab
+          openSubMenu.value = item.id;
+        }
+        return;
+      }
+      if (item.subItems) {
+        const match = item.subItems.find(sub => sub.id === hash);
+        if (match) {
+          activeTab.value = match.id;
+          openSubMenu.value = item.id; // Open the parent menu
+          return;
         }
       }
     }
   }
+}
 
-  // Initial check
-  handleHashChange()
 
-  // Listen for hash changes
-  window.addEventListener('hashchange', handleHashChange)
-})
-
-// Clean up event listener
-onBeforeUnmount(() => {
-  window.removeEventListener('hashchange', handleHashChange)
-})
 </script>
 
 <template>
