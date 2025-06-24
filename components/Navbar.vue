@@ -166,27 +166,27 @@ const navigateToOpportunities = (section) => {
                     <!-- <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                       Mission, Vision, Core Values</a></li> -->
                     <li>
-                      <NuxtLink to="/aboutUs/visionMissionValues" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mission, Vision, Core Values</NuxtLink>
+                      <NuxtLink to="/about#mvc" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mission, Vision, Core Values</NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="/aboutUs/powersFunctions" class="text-gray-700 hover:text-blue-700 transition flex items-center">Powers & Functions</NuxtLink>
+                      <NuxtLink to="/about#powers" class="text-gray-700 hover:text-blue-700 transition flex items-center">Powers & Functions</NuxtLink>
                     </li>
                   </ul>
 
                   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Leadership</h3>
                   <ul class="space-y-2">
                     <li>
-                      <NuxtLink to="/aboutUs/boardOfDirectors" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/about#board" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Board of Directors
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="/aboutUs/executiveManagement" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/about#management" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Executive Management
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="/aboutUs/directoratesDivisions" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/about#structure" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Directorates and Divisions
                       </NuxtLink>
                     </li>
