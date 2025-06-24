@@ -8,7 +8,7 @@
       aria-label="Open NLGFC Assistant"
     >
       <div class="relative">
-        <Icon name="heroicons:building-library" class="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+        <Icon name="heroicons:envelope" class="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
         <span 
           v-if="hasNewMessage"
           class="absolute -top-1 -right-1 bg-rose-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-ping"
