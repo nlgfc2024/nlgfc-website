@@ -70,7 +70,7 @@ definePageMeta({
     <!-- Main content -->
     <div class="flex-1 p-4">
       <section v-if="displayedDocuments.length">
-        <h3 class="font-bold text-gray-800 text-lg mb-6">{{ currentTitle }}</h3>
+        <h3 class="font-bold text-gray-600 text-lg mb-6">{{ currentTitle }}</h3>
         
         <!-- Video Grid Layout -->
         <transition-group
@@ -115,10 +115,10 @@ definePageMeta({
             class="bg-white rounded-lg shadow-lg overflow-hidden mb-6 transition-all duration-300 hover:shadow-xl"
           >
             <!-- Header with gallery info -->
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4">
+            <div class="bg-gradient-to-r from-gray-900 to-indigo-600 text-white p-4">
               <h4 class="font-semibold text-lg mb-1">{{ doc.name }}</h4>
               <p class="text-blue-100 text-sm">{{ doc.description }}</p>
-              <span class="inline-block text-xs bg-white bg-opacity-20 text-white rounded px-2 py-1 mt-2">
+              <span class="inline-block text-xs bg-white bg-opacity-20 text-blue-500 rounded px-2 py-1 mt-2">
                 {{ doc.type }}
               </span>
             </div>
@@ -175,7 +175,7 @@ definePageMeta({
           <div
             v-for="(doc, index) in displayedDocuments"
             :key="doc.name"
-            class="relative bg-white rounded-2xl border-b-4 border-gray-200 shadow-sm hover:border-blue-500 transition-all duration-300 p-4 flex flex-col justify-between group hover:scale-105 hover:shadow-lg"
+            class="relative bg-white rounded-2xl border-b-2 border-gray-400 shadow-sm hover:border-b-blue-500 transition-all duration-300 p-4 flex flex-col justify-between group hover:scale-105 hover:shadow-sm"
             :style="{ animationDelay: `${index * 100}ms` }"
           >
             <a
@@ -209,7 +209,7 @@ definePageMeta({
             <p class="text-sm text-gray-600">
               {{ doc.description || 'No description available.' }}
             </p>
-            <p class="text-sm text-gray-600">
+            <p class="text-[12px] font-semibold text-blue-600">
               {{ doc.date || 'No date available.' }}
             </p>
           </div>
@@ -272,6 +272,79 @@ const tabs = ref([
             type: 'PDF',
             description: 'ECT - Uthenga Wapadera Wa Covid 19 - Lilongwe - Immediate Release',
             date: '19 April 2020'
+          },
+          {
+            name: 'Press Release on Covid-19',
+            link: '/downloads/press-jan2025.pdf',
+            type: 'PDF',
+            description: 'Revised after Governors meetings with MNOS MAMN and MUSCCO',
+            date: '22  Jan 2025'
+          },
+          {
+            name: 'Councils Funding Figures',
+            link: '/downloads/press-mar2025.pdf',
+            type: 'PDF',
+            description: 'Council funding figures for publications',
+            date: 'April, 2020'
+          },
+          {
+            name: 'Councils accumulative Funding Figures',
+            link: '/downloads/press-mar2025.pdf',
+            type: 'PDF',
+            description: 'Council accumulative funding figures for publications',
+            date: 'April, 2020'
+          },
+          {
+            name: 'Uthenga Wapedera - Special Announcemnts on GoM COVID 19 Responce',
+            link: '/downloads/press-mar2025.pdf',
+            type: 'PDF',
+            description: 'Special announcement on Government of Malawi COVID-19 response',
+            
+          },
+          {
+            name: 'Special Communication on Covid 19 Emergency Cash Transfers',
+            link: '/downloads/press-mar2025.pdf',
+            type: 'PDF',
+            description: 'Special Communication',
+          },
+          {
+            name: 'Governance to Enable Service Delivery',
+            link: '/downloads/press-mar2025.pdf',
+            type: 'PDF',
+            description: 'Governance to Enable Service Delivery (GESD) Project approval',
+          }, 
+          {
+            name: 'STOPCOVID-19 NLGFC',
+            link: '/downloads/press-mar2025.pdf',
+            type: 'PDF',
+            description: 'Details on the STOPCOVID-19 NLGFC initiative',
+          },
+          {
+            name: 'SSRL_Effectiveness declaration',
+            link: '/downloads/press-mar2025.pdf',
+            type: 'PDF',
+            description: 'SSRL Effectiveness declaration notification',
+            date: 'June 1 2020'
+          },
+          {
+            name: 'Second Disbursment OF Covid -19 Urban Cash Payments',
+            link: '/downloads/press-mar2025.pdf',
+            type: 'PDF',
+            description: 'Immediate release on second disbursement of COVID-19 urban cash payments',
+          },  
+          {
+            name: 'Local Authorities (LAs) Funding Advice',
+            link: '/downloads/press-mar2025.pdf',
+            type: 'PDF',
+            description: 'RCRP Expression of Interest for project implementation',
+            date: 'December 2021'
+          },
+          {
+            name: 'Press Release Appointment of ED',
+            link: '/downloads/press-mar2025.pdf',
+            type: 'PDF',
+            description: 'Appointment of Dr. Kondwani Santhe As Exective Director  For NLGFC',
+            date: 'August 2022'
           }
         ]
       },
@@ -284,6 +357,69 @@ const tabs = ref([
             type: 'PDF',
             description: 'NLGFC PWP Success Stories for Booklet-MASAF IV.',
             date: 'December 2024' 
+          },
+          {
+            name: 'CS-EPWP Balaka Newsletters',
+            link: '/downloads/success2.pdf',
+            type: 'PDF',
+            description: 'Climate Smart Newslatter for Balaka District.',
+            date: 'December 2024' 
+          },  
+          {
+            name: 'Lilongwe CS-EPWP Succcess Stories',
+            link: '/downloads/success3.pdf',
+            type: 'PDF',
+            description: 'Summary of Lilongwe CS-EPWP success story',
+            date: 'December 2024'              
+          },
+          {
+            name: 'Likoma CS-EPWP Succcess Stories',
+            link: '/downloads/success3.pdf',
+            type: 'PDF',
+            description: 'Summary of Likoma CS-EPWP success story', 
+            date: 'December 2024' 
+          },
+          {
+            name: 'Machinga CS-EPWP Succcess Stories',
+            link: '/downloads/success3.pdf',
+            type: 'PDF',
+            description: 'Summary of Machinga CS-EPWP success story', 
+            date: 'December 2024' 
+          },
+          {
+            name: 'Mwanza CS-EPWP Succcess Stories',
+            link: '/downloads/success3.pdf',
+            type: 'PDF',
+            description: 'Summary of Mwanza CS-EPWP success story',
+            date: 'December 2024' 
+          },
+          {
+            name: 'Nsanje CS-EPWP Succcess Stories',
+            link: '/downloads/success3.pdf',
+            type: 'PDF',
+            description: 'Summary of Nsanje CS-EPWP success story',
+            date: 'December 2024'
+          },
+          {
+            name: 'Ntcheu CS-EPWP Succcess Stories',
+            link: '/downloads/success3.pdf',
+            type: 'PDF',
+            description: 'Summary of Ntcheu CS-EPWP success story',
+            date: 'December 2024'
+          },
+          {
+            name: 'Salima CS-EPWP Succcess Stories',
+            link: '/downloads/success3.pdf',
+            type: 'PDF',
+            description: 'Summary of Salima CS-EPWP success story',
+            date: 'December 2024'
+          },
+          {
+            name: 'Zomba CS-EPWP Succcess Stories',
+            link: '/downloads/success3.pdf',
+            type: 'PDF',
+            description: 'Summary of Zomba CS-EPWP success story',
+            date: 'December 2024'
           }
         ]
       },
@@ -344,13 +480,62 @@ const tabs = ref([
             type: 'PDF',
             description: 'Highlights from January 2025 newsletter.',
             date: 'January 2025'
+          },
+          {
+            name: 'February Newsletter',
+            link: '/downloads/newsletter-feb2025.pdf',
+            type: 'PDF',
+            description: 'Highlights from February 2025 newsletter.',
+            date: 'February 2025'
+          },
+          {
+            name: 'March Newsletter',
+            link: '/downloads/newsletter-jan2025.pdf',
+            type: 'PDF',
+            description: 'Highlights from March 2025 newsletter.',
+            date: 'March 2025'
+          },  
+          {
+            name: 'April Newsletter',
+            link: '/downloads/newsletter-jan2025.pdf',
+            type: 'PDF',
+            description: 'Highlights from April 2025 newsletter.',
+            date: 'April 2025'
+          },
+          {
+            name: 'May Newsletter',
+            link: '/downloads/newsletter-jan2025.pdf',
+            type: 'PDF',
+            description: 'Highlights from May 2025 newsletter.',
+            date: 'May 2025'
+          },
+          {
+            name: 'June Newsletter',
+            link: '/downloads/newsletter-jan2025.pdf',
+            type: 'PDF',
+            description: 'Highlights from June 2025 newsletter.',
+            date: 'June 2025'
           }
         ]
       },
       {
         name: 'Manuals and Guidelines',
         contents: []
-      }
+      },
+      { name: 'Policies and Strategies', contents: [
+        {
+          name: 'Policy Framework 2025',
+          link: '/downloads/policy-framework-2025.pdf',
+          type: 'PDF',
+          description: 'Framework for policy implementation in 2025.'
+        },
+        {
+          name: 'Strategic Plan 2025',
+          link: '/downloads/strategic-plan-2025.pdf',
+          type: 'PDF',
+          description: 'Strategic plan outlining goals and objectives for 2025.'
+        } 
+      ] }
     ]
   },
   {
@@ -378,37 +563,9 @@ const tabs = ref([
           description: 'GESD strategic plan for 2025.'
         }
       ] },
-      { name: 'RCRP', contents: [
+      { name: 'RCRP 2', contents: [
         {
           name: 'RCRP Overview',
-          link: '/downloads/rcrp-overview.pdf',
-          type: 'PDF',
-          description: 'Overview of the RCRP project.'
-        },
-        {
-          name: 'RCRP Implementation Guide',
-          link: '/downloads/rcrp-guide.pdf',
-          type: 'PDF',
-          description: 'Implementation guide for RCRP projects.'
-        }
-      ] },
-      { name: 'GESD', contents: [
-        {
-          name: 'GESD Project Overview',
-          link: '/downloads/gesd-overview.pdf',
-          type: 'PDF',
-          description: 'Overview of the GESD project.'
-        },
-        {
-          name: 'GESD Implementation Guide',
-          link: '/downloads/gesd-guide.pdf',
-          type: 'PDF',
-          description: 'Implementation guide for GESD projects.'
-        }
-      ] },
-      { name: 'RCRP', contents: [
-        {
-          name: 'RCRP Project Overview',
           link: '/downloads/rcrp-overview.pdf',
           type: 'PDF',
           description: 'Overview of the RCRP project.'
@@ -438,36 +595,6 @@ const tabs = ref([
           type: 'PDF',
           description: 'Highlights from January 2025 monthly report.'
         }
-      ] },
-
-      
-      { name: 'Research Reports', contents: [
-        {
-          name: 'Research Report 2024',
-          link: '/downloads/research-report-2024.pdf',
-          type: 'PDF',
-          description: 'In-depth analysis of research conducted in 2024.'
-        },
-        {
-          name: 'Impact Assessment 2025',
-          link: '/downloads/impact-assessment-2025.pdf',
-          type: 'PDF',
-          description: 'Assessment of project impacts for 2025.'
-        }
-      ] },
-      { name: 'Policies and Strategies', contents: [
-        {
-          name: 'Policy Framework 2025',
-          link: '/downloads/policy-framework-2025.pdf',
-          type: 'PDF',
-          description: 'Framework for policy implementation in 2025.'
-        },
-        {
-          name: 'Strategic Plan 2025',
-          link: '/downloads/strategic-plan-2025.pdf',
-          type: 'PDF',
-          description: 'Strategic plan outlining goals and objectives for 2025.'
-        } 
       ] },
       { name: 'Financial Reports', contents: [
         {
@@ -522,28 +649,40 @@ const tabs = ref([
           name: 'Community Event Photos',
           link: 'https://demo2.gov.mw/nlgfc-portal/public/?page=1',
           type: 'Gallery',
-          description: 'Photos from community events and gatherings.'
+          description: 'Gallery showcasing community events, activities and projects.'
         }
 
       ] },
       { name: 'Video', contents: [
         {
-          name: 'SSRP - ',
-          link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+          name: 'Phalombe District Council',
+          link: 'https://www.youtube.com/watch?v=xfMlyumpENU',
           type: 'Video',
-          description: 'Video showcasing a transformative community success story.'
+          description: 'GESD project overview in Phalombe District Council.'
         },
         {
-          name: 'Project Impact Documentary',
-          link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+          name: 'Nkhotakota District Council',
+          link: 'https://www.youtube.com/watch?v=YTbn2duu4og',
           type: 'Video',
-          description: 'Documentary highlighting the lasting impact of recent community projects.'
+          description: 'GESD project overview in Nkhotakota District council.'
         },
         {
-          name: 'Training Workshop Recording',
-          link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+          name: 'Mmbelwa District Council',
+          link: 'https://www.youtube.com/watch?v=YTbn2duu4og',
           type: 'Video',
-          description: 'Recording of an educational workshop on sustainable development practices.'
+          description: 'GESD project Impact in Mmbelwa District Council.'
+        },  
+        {
+          name: 'Scalable Safety Nets',
+          link: 'https://www.youtube.com/watch?v=JY_A56sfnlU',
+          type: 'Video',
+          description: 'Scalable Safety Nets under SSRLP Tidzidalire project overview.'
+        },
+        {
+          name: 'Ntchisi District Council',
+          link: 'https://www.youtube.com/watch?v=MCQCw74_V-0',
+          type: 'Video',
+          description: 'GESD project Impact'
         }
       ] }
     ]
@@ -577,11 +716,23 @@ function handleQueryParams() {
   }
 }
 
+// Watch for route changes to handle navigation
+watch(() => route.query, (newQuery) => {
+  handleQueryParams();
+}, { immediate: true });
+
+// Call on component mount
+onMounted(() => {
+  handleQueryParams();
+});
+
 function toggleTab(index) {
   expandedTab.value = expandedTab.value === index ? null : index;
   if (expandedTab.value === null) {
     activeTab.value = null;
     activeSub.value = null;
+    // Clear query parameters when collapsing
+    router.push({ query: {} });
   }
 }
 
@@ -590,6 +741,13 @@ function selectSub(tabIndex, subIndex) {
   activeSub.value = subIndex;
   // Reset iframe loaded state when switching subcategories
   iframeLoaded.value = false;
+  // Update the URL with query parameters
+  router.push({
+    query: {
+      tab: tabIndex,
+      sub: subIndex
+    }
+  });
 }
 
 function hideLoadingOverlay() {

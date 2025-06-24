@@ -98,6 +98,9 @@ definePageMeta({
             <div class="p-4">
               <h4 class="font-semibold text-gray-800 mb-2">{{ doc.name }}</h4>
               <p class="text-sm text-gray-600 mb-2">{{ doc.description }}</p>
+              <a href="https://www.youtube.com/@nlgfcmalawi2455">
+                <p class="text-[12px] font-semibold text-gray-600 mb-2">Watch More on NLGFC YouTube Channel</p>
+              </a>
               <span class="inline-block text-xs bg-red-100 text-red-800 rounded px-2 py-1">
                 {{ doc.type }}
               </span>
@@ -209,7 +212,7 @@ definePageMeta({
             <p class="text-sm text-gray-600">
               {{ doc.description || 'No description available.' }}
             </p>
-            <p class="text-[12px] text-blue-600">
+            <p class="text-[12px] font-semibold text-blue-600">
               {{ doc.date || 'No date available.' }}
             </p>
           </div>
@@ -268,29 +271,29 @@ const tabs = ref([
         contents: [
           {
             name: 'Uthenga Wapadera Wa Covid 19 Emergency Cash Transfers',
-            link: '/downloads/press-jan2025.pdf',
+            link: '/downloads/ECT_UTHENGA_WAPADERA_WA_COVID_19_LILONGWE_IMMEDIATE_RELEASE_APRIL_19_2020_1.pdf',
             type: 'PDF',
             description: 'ECT - Uthenga Wapadera Wa Covid 19 - Lilongwe - Immediate Release',
             date: '19 April 2020'
           },
           {
             name: 'Press Release on Covid-19',
-            link: '/downloads/press-jan2025.pdf',
-            type: 'PDF',
+            link: '/downloads/Councils_Cumulative_funding_figures_for_Publication_April_2020.xlsx',
+            type: 'Excel',
             description: 'Revised after Governors meetings with MNOS MAMN and MUSCCO',
             date: '22  Jan 2025'
           },
           {
             name: 'Councils Funding Figures',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
+            link: '/downloads/Councils_funding_figures_for_publication_April_2020 _Word_Version.docx',
+            type: 'Word',
             description: 'Council funding figures for publications',
             date: 'April, 2020'
           },
           {
             name: 'Councils accumulative Funding Figures',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
+            link: '/downloads/Councils_funding_figures_for_publication_April_2020 _Word_Version.docx',
+            type: 'Word',
             description: 'Council accumulative funding figures for publications',
             date: 'April, 2020'
           },
