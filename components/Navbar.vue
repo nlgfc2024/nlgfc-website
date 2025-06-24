@@ -1082,13 +1082,6 @@ const navigateToOpportunities = (section) => {
 
 </template>
 
-<script>
-const navigateToOpportunities = (section) => {
-  closeAllMenus()
-  navigateTo(`/opportunities/opportunities?section=${section}`)
-}
-</script>
-
 <style scoped>
 
 /* Animation dropdown menus */
