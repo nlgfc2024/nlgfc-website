@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-  title: 'Mzuzu District Council'
+  title: 'Chikwawa District Council'
 })
 
 const activeTab = ref('profile') // Default active tab
@@ -143,67 +143,53 @@ const news = [
       <div class="flex-1 min-w-0">
         <!-- Council Profile Content -->
         <div v-show="activeTab === 'profile'" class="prose max-w-none">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Mzuzu District Council Profile</h2>
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Chikwakwa District Council Profile</h2>
           <div class="space-y-6">
             <div class="bg-blue-50 p-6 rounded-lg border border-gray-200">
-              <h3 class="text-lg font-semibold text-gray-900 mb-3">About Mzuzu District Council</h3>
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">About ChikwawaDistrict Council</h3>
               <p class="text-gray-700 leading-relaxed">
-               Zomba District covers an area of 2,580 km², representing about 3% of the total land area of Malawi. It is located on latitude 15.3860S and longitude 35.3188E south-east of Malawi, about 70km from Blantyre City to the south, and 49.4kms from Liwonde Town to the east. It is also located some 333.2kms south-south east ofLilongwe, the capital city. The District shares boundaries with Machinga District to the north, Balaka District to the north west, Mulanje and Phalombe Districts to the south, Chiradzulu and Blantyre Districts to the south west and the Republic of Mozambique to the east.  
-            </p>
+                Chikwawa is one of the 28 Districts in Malawi located in the Southern Region of Malawi. It is one of the border districts sharing the country's international boundary with Mozambique to the West and district boundaries with Mwanza to the North, Thyolo to the East, Blantyre to North East and Nsanje to the South. 
+              </p>
             </div>
          
 
             <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-              <h3 class="text-lg font-semibold text-gray-900 mb-3">Mandate</h3>
+              <h3 class="text-lg font-semibold text-gray-900 mb-3">Council Vision</h3>
               <ul class="space-y-2">
                 <li class="flex items-start">
                   <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To promote local democratic participation</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To promote infrastructural and economic development through District Development Plan</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To make bylaws that facilitate its functions</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To mobilise resources within and outside the District </span>
+                  <span>To become a self-sustaining council providing reliable and quality social economic services.</span>
                 </li>
               </ul>
             </div>
-                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                              <h3 class="text-lg font-semibold text-gray-900 mb-3">Vision</h3>
-                             <p class="text-gray-700 leading-relaxed font-medium">A Council that can provide sustainable, quality socio-economic services adequately to its community.</p>
-                  </div>
-                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                              <h3 class="text-lg font-semibold text-gray-900 mb-3">Mission</h3>
-                             <p class="text-gray-700 leading-relaxed font-medium">To provide timely, high-quality quality and equitable social services through the promotion of Local governance and popular participation of the communities for the attainment of sustainable socio-economic development of the District.</p>
+                  <div class="bg-blue-5 p-6 rounded-lg border border-blue-200">
+                              <h3 class="text-lg font-semibold text-gray-900 mb-3">Council Mission</h3>
+                             <p class="text-gray-700 leading-relaxed font-medium">To facilitate effective and efficient governance for sustainable socioeconomic development by promoting community participation in development activities, improving food security and economic growth, reducing literacy levels, practicing good environmental management, reducing the disease burden while promoting peace and tranquility for all people in the district.</p>
+                        </div>
+                         <div>
                   </div>
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
                               <h3 class="text-lg font-semibold text-gray-900 mb-3">Strategic Objectives</h3>
                              <ul class="space-y-2">
                 <li class="flex items-start">
                   <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To create a democratic environment for popular participation in governance and development at the local level.</span>
+                  <span>To provide relevant and quality education that is accessible to all school going children.</span>
                 </li>
                   <li class="flex items-start">
                   <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To provide social-economic services, coordinate and guide development issues in the District</span>
+                  <span>To reduce disease burden through integrated preventive health services and promotion of family health approach</span>
                 </li>
                 <li class="flex items-start">
                   <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To improve access, quality, and utilisation of social services by communities</span>
+                  <span>To promote Agricultural activities and sustainable management of land resources to achieve food security, increased agro based income and ensure sustainable social economic growth and development.</span>
                 </li>
                  <li class="flex items-start">
                   <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To enhance and improve revenue generation and human resource capacity for optimal operational performance</span>
+                  <span>To improve access to safe water and improve hygiene and sanitation at household level</span>
                 </li>
                  <li class="flex items-start">
                   <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To reduce food security through diversification and commercialization of agricultural production.</span>
+                  <span>To minimize environment degradation and improve sustained use and management of natural resources.</span>
                 </li>
                 <li class="flex items-start">
                   <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
