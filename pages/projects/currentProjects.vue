@@ -225,40 +225,7 @@ const projectContent = {
   }
 }
 const projectUpdates = {
-  ssrlp_overview: [
-    {
-      date: '2024-06-01',
-      title: 'Districts roll out improved targeting system',
-      tags: ['sctp', 'targeting'],
-      summary: 'Local councils have begun testing a new beneficiary targeting system...',
-      link: '#'
-    },
-    {
-      date: '2024-05-15',
-      title: 'Climate-smart public works expand to 10 new sites',
-      tags: ['publicWorks', 'environment'],
-      summary: 'Environmental restoration works have been launched in 10 districts...',
-      link: '#'
-    }
-  ],
-  gesd_overview: [
-    {
-      date: '2024-04-20',
-      title: 'New LAPA scoring framework released',
-      tags: ['performance', 'governance'],
-      summary: 'The Ministry of Local Government has published an updated scoring method...',
-      link: '#'
-    }
-  ],
-  rcrp_overview: [
-    {
-      date: '2024-03-10',
-      title: 'RCRP kickstarts pilot catchment projects',
-      tags: ['climate', 'catchments'],
-      summary: 'Initial catchment restoration pilots are underway in 4 districts...',
-      link: '#'
-    }
-  ],
+ 
   SCTP: [
     {
       date: '2024-05-05',
@@ -418,6 +385,32 @@ function updateActiveTabFromHash(hash) {
 watch(activeTab, () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 })
+const updatesPerPage = 3
+const currentPage = ref(1)
+
+const paginatedUpdates = computed(() => {
+  const updates = projectUpdates[activeTab.value] || []
+  const start = (currentPage.value - 1) * updatesPerPage
+  return updates.slice(start, start + updatesPerPage)
+})
+
+const totalPages = computed(() => {
+  const updates = projectUpdates[activeTab.value] || []
+  return Math.ceil(updates.length / updatesPerPage) || 1
+})
+
+function goToPage(page) {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+  }
+}
+
+// Reset to first page when switching tabs
+watch(activeTab, () => {
+  currentPage.value = 1
+})
+
+
 </script>
 
 <template>
@@ -470,39 +463,71 @@ watch(activeTab, () => {
   <div v-else class="text-gray-500 italic">No content available for this project.</div>
   
     <!-- Latest Updates Section -->
-    <div v-if="projectUpdates[activeTab]" class="mt-10">
-      <h3 class="text-xl font-semibold text-gray-900 mb-4 border-b pb-1">Latest Updates</h3>
-      <ul class="space-y-6">
-        <li
-          v-for="(update, index) in projectUpdates[activeTab]"
-          :key="index"
-          class="bg-white p-4 rounded-md shadow hover:shadow-md transition"
+<div v-if="projectUpdates[activeTab]" class="mt-10">
+  <h3 class="text-xl font-semibold text-gray-900 mb-4 border-b pb-1">Latest Updates from Councils</h3>
+  
+  <ul class="space-y-6">
+    <li
+      v-for="(update, index) in paginatedUpdates"
+      :key="index"
+      class="bg-white p-4 rounded-md shadow hover:shadow-md transition"
+    >
+      <p class="text-sm text-gray-500 mb-1">
+        Published on {{
+          new Date(update.date).toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+          })
+        }}
+      </p>
+      <h4 class="text-lg font-semibold text-blue-700 hover:underline">
+        <a :href="update.link">{{ update.title }}</a>
+      </h4>
+      <p class="text-gray-700 text-sm mt-1">{{ update.summary }}</p>
+      <div class="mt-2 flex flex-wrap gap-2">
+        <span
+          v-for="tag in update.tags"
+          :key="tag"
+          class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded"
         >
-          <p class="text-sm text-gray-500 mb-1">
-            Published on {{
-              new Date(update.date).toLocaleDateString('en-US', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric'
-              })
-            }}
-          </p>
-          <h4 class="text-lg font-semibold text-blue-700 hover:underline">
-            <a :href="update.link">{{ update.title }}</a>
-          </h4>
-          <p class="text-gray-700 text-sm mt-1">{{ update.summary }}</p>
-          <div class="mt-2 flex flex-wrap gap-2">
-            <span
-              v-for="tag in update.tags"
-              :key="tag"
-              class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded"
-            >
-              {{ tag }}
-            </span>
-          </div>
-        </li>
-      </ul>
-    </div>
+          {{ tag }}
+        </span>
+      </div>
+    </li>
+  </ul>
+
+  <!-- Pagination -->
+  <div class="mt-6 flex items-center justify-center space-x-2">
+    <button
+      @click="goToPage(currentPage - 1)"
+      :disabled="currentPage === 1"
+      class="px-3 py-1 text-sm bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
+    >
+      Prev
+    </button>
+
+    <button
+      v-for="page in totalPages"
+      :key="page"
+      @click="goToPage(page)"
+      :class="[
+        'px-3 py-1 text-sm rounded',
+        page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'
+      ]"
+    >
+      {{ page }}
+    </button>
+
+    <button
+      @click="goToPage(currentPage + 1)"
+      :disabled="currentPage === totalPages"
+      class="px-3 py-1 text-sm bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
+    >
+      Next
+    </button>
+  </div>
+</div>
 </main>
   </div>
   
