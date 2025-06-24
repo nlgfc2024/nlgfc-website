@@ -626,6 +626,12 @@ const onClickOutside = () => {
           </div>
 
           <!-- Contact Us -->
+<div>
+  <a href="/contact#address" class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
+    Contact Us
+  </a>
+</div>
+         
           <div @mouseenter="toggleMegaMenu('contact')" @mouseleave="toggleMegaMenu(null)" class="relative">
             <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
               Contact Us
