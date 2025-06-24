@@ -1,7 +1,7 @@
 <script>
 definePageMeta({
-    title: 'Resource Center' // This will be available in route.meta.title
-   })
+  title: 'Resource Center' // This will be available in route.meta.title
+})
 </script>
 
 <template>
@@ -13,9 +13,9 @@ definePageMeta({
         <nav class="space-y-2">
           <div v-for="(tab, tabIndex) in tabs" :key="tabIndex" class="group">
             <div
-              @click="toggleTab(tabIndex)"
-              class="flex items-center justify-between w-full text-left py-3 px-4 font-medium text-slate-700 rounded-lg cursor-pointer transition-all duration-300 ease-in-out hover:bg-white hover:shadow-md hover:text-slate-900 hover:border-l-4 hover:border-blue-500"
-              :class="{ 
+                @click="toggleTab(tabIndex)"
+                class="flex items-center justify-between w-full text-left py-3 px-4 font-medium text-slate-700 rounded-lg cursor-pointer transition-all duration-300 ease-in-out hover:bg-white hover:shadow-md hover:text-slate-900 hover:border-l-4 hover:border-blue-500"
+                :class="{
                 'bg-white shadow-md text-slate-900 border-l-4 border-blue-600': expandedTab === tabIndex,
                 'hover:translate-x-1': expandedTab !== tabIndex
               }"
@@ -29,32 +29,32 @@ definePageMeta({
                 </svg>
                 {{ tab.name }}
               </span>
-              <svg 
-                class="w-4 h-4 text-slate-400 transition-transform duration-300"
-                :class="{ 'rotate-180 text-blue-600': expandedTab === tabIndex }"
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
+              <svg
+                  class="w-4 h-4 text-slate-400 transition-transform duration-300"
+                  :class="{ 'rotate-180 text-blue-600': expandedTab === tabIndex }"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
               >
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
               </svg>
             </div>
 
-            <div 
-              v-if="expandedTab === tabIndex" 
-              class="mt-2 ml-4 space-y-1 animate-in slide-in-from-top-2 duration-300"
+            <div
+                v-if="expandedTab === tabIndex"
+                class="mt-2 ml-4 space-y-1 animate-in slide-in-from-top-2 duration-300"
             >
               <a
-                v-for="(sub, subIndex) in tab.subcategories"
-                :key="subIndex"
-                @click="selectSub(tabIndex, subIndex)"
-                class="flex items-center w-full text-left py-2 px-4 text-sm font-medium text-slate-600 rounded-md cursor-pointer transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 hover:translate-x-2 hover:border-l-3 hover:border-blue-400"
-                :class="{ 
+                  v-for="(sub, subIndex) in tab.subcategories"
+                  :key="subIndex"
+                  @click="selectSub(tabIndex, subIndex)"
+                  class="flex items-center w-full text-left py-2 px-4 text-sm font-medium text-slate-600 rounded-md cursor-pointer transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 hover:translate-x-2 hover:border-l-3 hover:border-blue-400"
+                  :class="{
                   'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-l-3 border-blue-500 shadow-sm': activeTab === tabIndex && activeSub === subIndex
                 }"
               >
                 <div class="w-2 h-2 rounded-full mr-3 transition-colors duration-200"
-                     :class="{ 
+                     :class="{
                        'bg-blue-500': activeTab === tabIndex && activeSub === subIndex,
                        'bg-slate-300': !(activeTab === tabIndex && activeSub === subIndex)
                      }">
@@ -71,33 +71,36 @@ definePageMeta({
     <div class="flex-1 p-4">
       <section v-if="displayedDocuments.length">
         <h3 class="font-bold text-gray-600 text-lg mb-6">{{ currentTitle }}</h3>
-        
+
         <!-- Video Grid Layout -->
         <transition-group
-          v-if="currentSubcategoryType === 'Video'"
-          name="grid-item"
-          tag="div"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6"
-          appear
+            v-if="currentSubcategoryType === 'Video'"
+            name="grid-item"
+            tag="div"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6"
+            appear
         >
           <div
-            v-for="(doc, index) in displayedDocuments"
-            :key="doc.name"
-            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105"
-            :style="{ animationDelay: `${index * 100}ms` }"
+              v-for="(doc, index) in displayedDocuments"
+              :key="doc.name"
+              class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105"
+              :style="{ animationDelay: `${index * 100}ms` }"
           >
             <div class="aspect-video">
               <iframe
-                :src="getVideoEmbedUrl(doc.link)"
-                class="w-full h-full"
-                frameborder="0"
-                allowfullscreen
-                :title="doc.name"
+                  :src="getVideoEmbedUrl(doc.link)"
+                  class="w-full h-full"
+                  frameborder="0"
+                  allowfullscreen
+                  :title="doc.name"
               ></iframe>
             </div>
             <div class="p-4">
               <h4 class="font-semibold text-gray-800 mb-2">{{ doc.name }}</h4>
               <p class="text-sm text-gray-600 mb-2">{{ doc.description }}</p>
+              <a href="https://www.youtube.com/@nlgfcmalawi2455">
+                <p class="text-[12px] font-semibold text-gray-600 mb-2">Watch More on NLGFC YouTube Channel</p>
+              </a>
               <span class="inline-block text-xs bg-red-100 text-red-800 rounded px-2 py-1">
                 {{ doc.type }}
               </span>
@@ -107,12 +110,12 @@ definePageMeta({
 
         <!-- Image Gallery Iframe Layout -->
         <div
-          v-else-if="currentSubcategoryType === 'Image Gallery'"
-          class="w-full">
+            v-else-if="currentSubcategoryType === 'Image Gallery'"
+            class="w-full">
           <div
-            v-for="(doc, index) in displayedDocuments"
-            :key="doc.name"
-            class="bg-white rounded-lg shadow-lg overflow-hidden mb-6 transition-all duration-300 hover:shadow-xl"
+              v-for="(doc, index) in displayedDocuments"
+              :key="doc.name"
+              class="bg-white rounded-lg shadow-lg overflow-hidden mb-6 transition-all duration-300 hover:shadow-xl"
           >
             <!-- Header with gallery info -->
             <div class="bg-gradient-to-r from-gray-900 to-indigo-600 text-white p-4">
@@ -122,22 +125,22 @@ definePageMeta({
                 {{ doc.type }}
               </span>
             </div>
-            
+
             <!-- Iframe container -->
             <div class="relative w-full" style="height: 600px;">
               <iframe
-                :src="doc.link"
-                class="w-full h-full border-0"
-                frameborder="0"
-                :title="doc.name"
-                allowfullscreen
-                loading="lazy"
-                @load="hideLoadingOverlay"
+                  :src="doc.link"
+                  class="w-full h-full border-0"
+                  frameborder="0"
+                  :title="doc.name"
+                  allowfullscreen
+                  loading="lazy"
+                  @load="hideLoadingOverlay"
               ></iframe>
-              
+
               <!-- Loading overlay -->
-              <div 
-                :class="['absolute inset-0 bg-gray-100 flex items-center justify-center transition-opacity duration-500', iframeLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100']"
+              <div
+                  :class="['absolute inset-0 bg-gray-100 flex items-center justify-center transition-opacity duration-500', iframeLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100']"
               >
                 <div class="text-center">
                   <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
@@ -145,15 +148,15 @@ definePageMeta({
                 </div>
               </div>
             </div>
-            
+
             <!-- Footer with external link -->
             <div class="bg-gray-50 p-3 flex justify-between items-center">
               <span class="text-sm text-gray-600">External Gallery Content</span>
               <a
-                :href="doc.link"
-                target="_blank"
-                class="inline-flex items-center px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200"
-                title="Open in new tab"
+                  :href="doc.link"
+                  target="_blank"
+                  class="inline-flex items-center px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200"
+                  title="Open in new tab"
               >
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
@@ -166,23 +169,23 @@ definePageMeta({
 
         <!-- Default Document Grid Layout -->
         <transition-group
-          v-else
-          name="grid-item"
-          tag="div"
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-          appear
+            v-else
+            name="grid-item"
+            tag="div"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            appear
         >
           <div
-            v-for="(doc, index) in displayedDocuments"
-            :key="doc.name"
-            class="relative bg-white rounded-2xl border-b-2 border-gray-400 shadow-sm hover:border-b-blue-500 transition-all duration-300 p-4 flex flex-col justify-between group hover:scale-105 hover:shadow-sm"
-            :style="{ animationDelay: `${index * 100}ms` }"
+              v-for="(doc, index) in displayedDocuments"
+              :key="doc.name"
+              class="relative bg-white rounded-2xl border-b-2 border-gray-400 shadow-sm hover:border-b-blue-500 transition-all duration-300 p-4 flex flex-col justify-between group hover:scale-105 hover:shadow-sm"
+              :style="{ animationDelay: `${index * 100}ms` }"
           >
             <a
-              :href="doc.link"
-              target="_blank"
-              class="absolute bottom-2 right-2 w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md hover:shadow-lg"
-              title="Download / View"
+                :href="doc.link"
+                target="_blank"
+                class="absolute bottom-2 right-2 w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md hover:shadow-lg"
+                title="Download / View"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none"
                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -193,10 +196,10 @@ definePageMeta({
 
             <div class="flex items-center mb-3">
               <img
-                v-if="doc.thumbnail"
-                :src="doc.thumbnail"
-                alt="Thumbnail"
-                class="w-12 h-12 rounded-lg object-cover mr-2"
+                  v-if="doc.thumbnail"
+                  :src="doc.thumbnail"
+                  alt="Thumbnail"
+                  class="w-12 h-12 rounded-lg object-cover mr-2"
               />
               <div>
                 <h3 class="font-semibold text-gray-800 text-base">{{ doc.name }}</h3>
@@ -215,7 +218,7 @@ definePageMeta({
           </div>
         </transition-group>
       </section>
-      
+
       <!-- Loading State -->
       <transition name="fade" mode="out-in">
         <div v-if="!displayedDocuments.length" class="flex flex-col items-center justify-center py-16">
@@ -230,17 +233,17 @@ definePageMeta({
       <div v-if="selectedImage" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" @click="closeImageModal">
         <div class="relative max-w-4xl max-h-screen p-4">
           <button
-            @click="closeImageModal"
-            class="absolute top-2 right-2 text-white hover:text-gray-300 z-10 transition-colors duration-200"
+              @click="closeImageModal"
+              class="absolute top-2 right-2 text-white hover:text-gray-300 z-10 transition-colors duration-200"
           >
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
           <img
-            :src="selectedImage.link"
-            :alt="selectedImage.name"
-            class="max-w-full max-h-full object-contain"
+              :src="selectedImage.link"
+              :alt="selectedImage.name"
+              class="max-w-full max-h-full object-contain"
           />
           <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
             <h3 class="font-semibold">{{ selectedImage.name }}</h3>
@@ -260,7 +263,7 @@ const route = useRoute();
 const router = useRouter();
 
 const tabs = ref([
-{
+  {
     name: 'Publications & Downloads',
     subcategories: [
       {
@@ -268,29 +271,29 @@ const tabs = ref([
         contents: [
           {
             name: 'Uthenga Wapadera Wa Covid 19 Emergency Cash Transfers',
-            link: '/downloads/press-jan2025.pdf',
+            link: '/documents/ECT_UTHENGA_WAPADERA_WA_COVID_19_LILONGWE_IMMEDIATE_RELEASE_APRIL_19_2020_1.pdf',
             type: 'PDF',
             description: 'ECT - Uthenga Wapadera Wa Covid 19 - Lilongwe - Immediate Release',
             date: '19 April 2020'
           },
           {
             name: 'Press Release on Covid-19',
-            link: '/downloads/press-jan2025.pdf',
-            type: 'PDF',
+            link: '/documents/Councils_Cumulative_funding_figures_for_Publication_April_2020.xlsx',
+            type: 'Excel',
             description: 'Revised after Governors meetings with MNOS MAMN and MUSCCO',
             date: '22  Jan 2025'
           },
           {
             name: 'Councils Funding Figures',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
+            link: '/documents/Councils_funding_figures_for_publication_April_2020 _Word_Version.docx',
+            type: 'Word',
             description: 'Council funding figures for publications',
             date: 'April, 2020'
           },
           {
             name: 'Councils accumulative Funding Figures',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
+            link: '/downloads/Councils_funding_figures_for_publication_April_2020 _Word_Version.docx',
+            type: 'Word',
             description: 'Council accumulative funding figures for publications',
             date: 'April, 2020'
           },
@@ -299,7 +302,7 @@ const tabs = ref([
             link: '/downloads/press-mar2025.pdf',
             type: 'PDF',
             description: 'Special announcement on Government of Malawi COVID-19 response',
-            
+
           },
           {
             name: 'Special Communication on Covid 19 Emergency Cash Transfers',
@@ -312,7 +315,7 @@ const tabs = ref([
             link: '/downloads/press-mar2025.pdf',
             type: 'PDF',
             description: 'Governance to Enable Service Delivery (GESD) Project approval',
-          }, 
+          },
           {
             name: 'STOPCOVID-19 NLGFC',
             link: '/downloads/press-mar2025.pdf',
@@ -331,7 +334,7 @@ const tabs = ref([
             link: '/downloads/press-mar2025.pdf',
             type: 'PDF',
             description: 'Immediate release on second disbursement of COVID-19 urban cash payments',
-          },  
+          },
           {
             name: 'Local Authorities (LAs) Funding Advice',
             link: '/downloads/press-mar2025.pdf',
@@ -356,42 +359,42 @@ const tabs = ref([
             link: '/downloads/success1.pdf',
             type: 'PDF',
             description: 'NLGFC PWP Success Stories for Booklet-MASAF IV.',
-            date: 'December 2024' 
+            date: 'December 2024'
           },
           {
             name: 'CS-EPWP Balaka Newsletters',
             link: '/downloads/success2.pdf',
             type: 'PDF',
             description: 'Climate Smart Newslatter for Balaka District.',
-            date: 'December 2024' 
-          },  
+            date: 'December 2024'
+          },
           {
             name: 'Lilongwe CS-EPWP Succcess Stories',
             link: '/downloads/success3.pdf',
             type: 'PDF',
             description: 'Summary of Lilongwe CS-EPWP success story',
-            date: 'December 2024'              
+            date: 'December 2024'
           },
           {
             name: 'Likoma CS-EPWP Succcess Stories',
             link: '/downloads/success3.pdf',
             type: 'PDF',
-            description: 'Summary of Likoma CS-EPWP success story', 
-            date: 'December 2024' 
+            description: 'Summary of Likoma CS-EPWP success story',
+            date: 'December 2024'
           },
           {
             name: 'Machinga CS-EPWP Succcess Stories',
             link: '/downloads/success3.pdf',
             type: 'PDF',
-            description: 'Summary of Machinga CS-EPWP success story', 
-            date: 'December 2024' 
+            description: 'Summary of Machinga CS-EPWP success story',
+            date: 'December 2024'
           },
           {
             name: 'Mwanza CS-EPWP Succcess Stories',
             link: '/downloads/success3.pdf',
             type: 'PDF',
             description: 'Summary of Mwanza CS-EPWP success story',
-            date: 'December 2024' 
+            date: 'December 2024'
           },
           {
             name: 'Nsanje CS-EPWP Succcess Stories',
@@ -431,7 +434,7 @@ const tabs = ref([
             link: '/downloads/success1.pdf',
             type: 'PDF',
             description: 'NLGFC PWP Success Stories for Booklet-MASAF IV.',
-            date: 'December 2024' 
+            date: 'December 2024'
           }
         ]
       },
@@ -494,7 +497,7 @@ const tabs = ref([
             type: 'PDF',
             description: 'Highlights from March 2025 newsletter.',
             date: 'March 2025'
-          },  
+          },
           {
             name: 'April Newsletter',
             link: '/downloads/newsletter-jan2025.pdf',
@@ -523,168 +526,168 @@ const tabs = ref([
         contents: []
       },
       { name: 'Policies and Strategies', contents: [
-        {
-          name: 'Policy Framework 2025',
-          link: '/downloads/policy-framework-2025.pdf',
-          type: 'PDF',
-          description: 'Framework for policy implementation in 2025.'
-        },
-        {
-          name: 'Strategic Plan 2025',
-          link: '/downloads/strategic-plan-2025.pdf',
-          type: 'PDF',
-          description: 'Strategic plan outlining goals and objectives for 2025.'
-        } 
-      ] }
+          {
+            name: 'Policy Framework 2025',
+            link: '/downloads/policy-framework-2025.pdf',
+            type: 'PDF',
+            description: 'Framework for policy implementation in 2025.'
+          },
+          {
+            name: 'Strategic Plan 2025',
+            link: '/downloads/strategic-plan-2025.pdf',
+            type: 'PDF',
+            description: 'Strategic plan outlining goals and objectives for 2025.'
+          }
+        ] }
     ]
   },
   {
     name: 'Project Documents',
     subcategories: [
       { name: 'SSRLP', contents: [
-        {
-          name: 'SSRLP Report 2025',
-          link: '/downloads/ssrlp-report-2025.pdf',
-          type: 'PDF',
-          description: 'SSRLP annual report for 2025.'
-        },
-        {
-          name: 'SSRLP Guidelines',
-          link: '/downloads/ssrlp-guidelines.pdf',
-          type: 'PDF',
-          description: 'Guidelines for SSRLP project implementation.'
-        }
-      ] },
+          {
+            name: 'SSRLP Report 2025',
+            link: '/downloads/ssrlp-report-2025.pdf',
+            type: 'PDF',
+            description: 'SSRLP annual report for 2025.'
+          },
+          {
+            name: 'SSRLP Guidelines',
+            link: '/downloads/ssrlp-guidelines.pdf',
+            type: 'PDF',
+            description: 'Guidelines for SSRLP project implementation.'
+          }
+        ] },
       { name: 'GESD', contents: [
-        {
-          name: 'GESD Plan 2025',
-          link: '/downloads/gesd-plan-2025.pdf',
-          type: 'PDF',
-          description: 'GESD strategic plan for 2025.'
-        }
-      ] },
+          {
+            name: 'GESD Plan 2025',
+            link: '/downloads/gesd-plan-2025.pdf',
+            type: 'PDF',
+            description: 'GESD strategic plan for 2025.'
+          }
+        ] },
       { name: 'RCRP 2', contents: [
-        {
-          name: 'RCRP Overview',
-          link: '/downloads/rcrp-overview.pdf',
-          type: 'PDF',
-          description: 'Overview of the RCRP project.'
-        },
-        {
-          name: 'RCRP Implementation Guide',
-          link: '/downloads/rcrp-guide.pdf',
-          type: 'PDF',
-          description: 'Implementation guide for RCRP projects.'
-        }
-      ] }
+          {
+            name: 'RCRP Overview',
+            link: '/downloads/rcrp-overview.pdf',
+            type: 'PDF',
+            description: 'Overview of the RCRP project.'
+          },
+          {
+            name: 'RCRP Implementation Guide',
+            link: '/downloads/rcrp-guide.pdf',
+            type: 'PDF',
+            description: 'Implementation guide for RCRP projects.'
+          }
+        ] }
     ]
   },
   {
     name: 'Reports',
     subcategories: [
       { name: 'Audit Reports', contents: [
-        {
-          name: 'Annual Report 2024',
-          link: '/downloads/annual-report-2024.pdf',
-          type: 'PDF',
-          description: 'Comprehensive overview of 2024 activities.'
-        },
-        {
-          name: 'Monthly Report - Jan 2025',
-          link: '/downloads/monthly-report-jan2025.pdf',
-          type: 'PDF',
-          description: 'Highlights from January 2025 monthly report.'
-        }
-      ] },
+          {
+            name: 'Annual Report 2024',
+            link: '/downloads/annual-report-2024.pdf',
+            type: 'PDF',
+            description: 'Comprehensive overview of 2024 activities.'
+          },
+          {
+            name: 'Monthly Report - Jan 2025',
+            link: '/downloads/monthly-report-jan2025.pdf',
+            type: 'PDF',
+            description: 'Highlights from January 2025 monthly report.'
+          }
+        ] },
       { name: 'Financial Reports', contents: [
-        {
-          name: 'Financial Report Q1 2025',
-          link: '/downloads/financial-report-q1-2025.pdf',
-          type: 'PDF',
-          description: 'Financial overview for the first quarter of 2025.'
-        },
-        {
-          name: 'Budget Report 2025',
-          link: '/downloads/budget-report-2025.pdf',
-          type: 'PDF',
-          description: 'Detailed budget report for the year 2025.'
-        }
-      ] },
+          {
+            name: 'Financial Report Q1 2025',
+            link: '/downloads/financial-report-q1-2025.pdf',
+            type: 'PDF',
+            description: 'Financial overview for the first quarter of 2025.'
+          },
+          {
+            name: 'Budget Report 2025',
+            link: '/downloads/budget-report-2025.pdf',
+            type: 'PDF',
+            description: 'Detailed budget report for the year 2025.'
+          }
+        ] },
       { name: 'Financial statements', contents: [
-        {
-          name: 'Project Evaluation 2024',
-          link: '/downloads/project-evaluation-2024.pdf',
-          type: 'PDF',
-          description: 'Evaluation of projects completed in 2024.'
-        },
-        {
-          name: 'Mid-Year Evaluation 2025',
-          link: '/downloads/mid-year-evaluation-2025.pdf',
-          type: 'PDF',
-          description: 'Mid-year evaluation report for 2025.'
-        }
-      ] },
+          {
+            name: 'Project Evaluation 2024',
+            link: '/downloads/project-evaluation-2024.pdf',
+            type: 'PDF',
+            description: 'Evaluation of projects completed in 2024.'
+          },
+          {
+            name: 'Mid-Year Evaluation 2025',
+            link: '/downloads/mid-year-evaluation-2025.pdf',
+            type: 'PDF',
+            description: 'Mid-year evaluation report for 2025.'
+          }
+        ] },
       { name: 'LAPA Synthesis', contents: [
-        {
-          name: 'Project Evaluation Report 2024',
-          link: '/downloads/project-evaluation-2024.pdf',
-          type: 'PDF',
-          description: 'Evaluation report for projects completed in 2024.'
-        },
-        {
-          name: 'Mid-Year Evaluation Report 2025',
-          link: '/downloads/mid-year-evaluation-2025.pdf',
-          type: 'PDF',
-          description: 'Mid-year evaluation report for 2025.'
-        }
-      ] }
-        
+          {
+            name: 'Project Evaluation Report 2024',
+            link: '/downloads/project-evaluation-2024.pdf',
+            type: 'PDF',
+            description: 'Evaluation report for projects completed in 2024.'
+          },
+          {
+            name: 'Mid-Year Evaluation Report 2025',
+            link: '/downloads/mid-year-evaluation-2025.pdf',
+            type: 'PDF',
+            description: 'Mid-year evaluation report for 2025.'
+          }
+        ] }
+
     ]
   },
   {
     name: 'Knowledge Management Portal',
     subcategories: [
       { name: 'Image Gallery', contents: [
-        {
-          name: 'Community Event Photos',
-          link: 'https://demo2.gov.mw/nlgfc-portal/public/?page=1',
-          type: 'Gallery',
-          description: 'Gallery showcasing community events, activities and projects.'
-        }
+          {
+            name: 'Community Event Photos',
+            link: 'https://demo2.gov.mw/nlgfc-portal/public/?page=1',
+            type: 'Gallery',
+            description: 'Gallery showcasing community events, activities and projects.'
+          }
 
-      ] },
+        ] },
       { name: 'Video', contents: [
-        {
-          name: 'Phalombe District Council',
-          link: 'https://www.youtube.com/watch?v=xfMlyumpENU',
-          type: 'Video',
-          description: 'GESD project overview in Phalombe District Council.'
-        },
-        {
-          name: 'Nkhotakota District Council',
-          link: 'https://www.youtube.com/watch?v=YTbn2duu4og',
-          type: 'Video',
-          description: 'GESD project overview in Nkhotakota District council.'
-        },
-        {
-          name: 'Mmbelwa District Council',
-          link: 'https://www.youtube.com/watch?v=YTbn2duu4og',
-          type: 'Video',
-          description: 'GESD project Impact in Mmbelwa District Council.'
-        },  
-        {
-          name: 'Scalable Safety Nets',
-          link: 'https://www.youtube.com/watch?v=JY_A56sfnlU',
-          type: 'Video',
-          description: 'Scalable Safety Nets under SSRLP Tidzidalire project overview.'
-        },
-        {
-          name: 'Ntchisi District Council',
-          link: 'https://www.youtube.com/watch?v=MCQCw74_V-0',
-          type: 'Video',
-          description: 'GESD project Impact'
-        }
-      ] }
+          {
+            name: 'Phalombe District Council',
+            link: 'https://www.youtube.com/watch?v=xfMlyumpENU',
+            type: 'Video',
+            description: 'GESD project overview in Phalombe District Council.'
+          },
+          {
+            name: 'Nkhotakota District Council',
+            link: 'https://www.youtube.com/watch?v=YTbn2duu4og',
+            type: 'Video',
+            description: 'GESD project overview in Nkhotakota District council.'
+          },
+          {
+            name: 'Mmbelwa District Council',
+            link: 'https://www.youtube.com/watch?v=YTbn2duu4og',
+            type: 'Video',
+            description: 'GESD project Impact in Mmbelwa District Council.'
+          },
+          {
+            name: 'Scalable Safety Nets',
+            link: 'https://www.youtube.com/watch?v=JY_A56sfnlU',
+            type: 'Video',
+            description: 'Scalable Safety Nets under SSRLP Tidzidalire project overview.'
+          },
+          {
+            name: 'Ntchisi District Council',
+            link: 'https://www.youtube.com/watch?v=MCQCw74_V-0',
+            type: 'Video',
+            description: 'GESD project Impact'
+          }
+        ] }
     ]
   }
 ]);
@@ -699,15 +702,15 @@ const iframeLoaded = ref(false);
 function handleQueryParams() {
   const tabParam = route.query.tab;
   const subParam = route.query.sub;
-  
+
   if (tabParam !== undefined && subParam !== undefined) {
     const tabIndex = parseInt(tabParam);
     const subIndex = parseInt(subParam);
-    
+
     // Validate indices
-    if (tabIndex >= 0 && tabIndex < tabs.value.length && 
+    if (tabIndex >= 0 && tabIndex < tabs.value.length &&
         subIndex >= 0 && subIndex < tabs.value[tabIndex].subcategories.length) {
-      
+
       // Set the active tab and subcategory
       expandedTab.value = tabIndex;
       activeTab.value = tabIndex;

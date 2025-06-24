@@ -566,25 +566,25 @@ const onClickOutside = () => {
                     <li><a href="resourceCenter?tab=0&sub=8" class="text-gray-700 hover:text-blue-700 transition">Policies & Strategies</a></li>
                   </ul>
                 </div>
-                
+
+                <div>
                   <div>
-                    <div>
-                      <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Knowledge Management</h3>
-                      <ul class="space-y-2">
-                        <li><a href="resourceCenter?tab=3&sub=0" class="text-gray-700 hover:text-blue-700 transition">Image Gallery</a></li>
-                        <li><a href="resourceCenter?tab=3&sub=1" class="text-gray-700 hover:text-blue-700 transition">Video Library</a></li>
-                      </ul>
-                    </div>
-                    <br />
-                    <div>
-                      <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Project Documents</h3>
-                      <ul class="space-y-2">
-                        <li><a href="resourceCenter?tab=1&sub=0" class="text-gray-700 hover:text-blue-700 transition">SSRLP</a></li>
-                        <li><a href="resourceCenter?tab=1&sub=1" class="text-gray-700 hover:text-blue-700 transition">GESD</a></li>
-                        <li><a href="resourceCenter?tab=1&sub=2" class="text-gray-700 hover:text-blue-700 transition">RCRP 2</a></li>
-                      </ul>
-                    </div>
+                    <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Knowledge Management</h3>
+                    <ul class="space-y-2">
+                      <li><a href="resourceCenter?tab=3&sub=0" class="text-gray-700 hover:text-blue-700 transition">Image Gallery</a></li>
+                      <li><a href="resourceCenter?tab=3&sub=1" class="text-gray-700 hover:text-blue-700 transition">Video Library</a></li>
+                    </ul>
                   </div>
+                  <br />
+                  <div>
+                    <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Project Documents</h3>
+                    <ul class="space-y-2">
+                      <li><a href="resourceCenter?tab=1&sub=0" class="text-gray-700 hover:text-blue-700 transition">SSRLP</a></li>
+                      <li><a href="resourceCenter?tab=1&sub=1" class="text-gray-700 hover:text-blue-700 transition">GESD</a></li>
+                      <li><a href="resourceCenter?tab=1&sub=2" class="text-gray-700 hover:text-blue-700 transition">RCRP 2</a></li>
+                    </ul>
+                  </div>
+                </div>
                 <div>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Reports</h3>
                   <ul class="space-y-2">
