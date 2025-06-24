@@ -159,27 +159,32 @@ const onClickOutside = () => {
                     <!-- <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                       Mission, Vision, Core Values</a></li> -->
                     <li>
-                      <NuxtLink to="/aboutUs/visionMissionValues" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mission, Vision, Core Values</NuxtLink>
+                      <NuxtLink to="/about#mvc" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mission, Vision, Core Values</NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="/aboutUs/powersFunctions" class="text-gray-700 hover:text-blue-700 transition flex items-center">Powers & Functions</NuxtLink>
+                      <NuxtLink to="/about#powers" class="text-gray-700 hover:text-blue-700 transition flex items-center">Powers & Functions</NuxtLink>
                     </li>
                   </ul>
                   
                   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Leadership</h3>
                   <ul class="space-y-2">
                     <li>
-                      <NuxtLink to="/aboutUs/boardOfDirectors" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/about#board" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Board of Directors
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="/aboutUs/executiveManagement" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/about#management" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Executive Management
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="/aboutUs/directoratesDivisions" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/about#structure" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Organogram
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/about#directorates" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Directorates and Divisions
                       </NuxtLink>
                     </li>
@@ -190,107 +195,101 @@ const onClickOutside = () => {
 
                 
                 <!-- Our Mandate Navigation Section -->
-<li class="list-none pl-0"> <!-- Removes bullet and padding -->
-  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Our Mandate</h3>
-  <ul class="space-y-2 pl-5"> <!-- Keeps indentation for nested items -->
-    <li>
-      <NuxtLink to="/mandate/ourMandate#fiscalDecentralization" class="text-gray-600 hover:text-blue-600">
-        Fiscal Decentralization
-      </NuxtLink>
-    </li>
-    <li>
-      <NuxtLink to="/mandate/ourMandate#financialManagement" class="text-gray-600 hover:text-blue-600">
-        Financial Management
-      </NuxtLink>
-    </li>
-    <li>
-      <NuxtLink to="/mandate/ourMandate#localDevelopmentSupport" class="text-gray-600 hover:text-blue-600">
-        Local Development Support
-      </NuxtLink>
-    </li>
-    <li class="pl-4">
-      <NuxtLink to="/mandate/ourMandate#cdf" class="text-gray-600 hover:text-blue-600">
-        CDF
-      </NuxtLink>
-    </li>
-    <li class="pl-4">
-      <NuxtLink to="/mandate/ourMandate#ddf" class="text-gray-600 hover:text-blue-600">
-        DDF
-      </NuxtLink>
-    </li>
-    <li class="pl-4">
-      <NuxtLink to="/mandate/ourMandate#waterStructuresFund" class="text-gray-600 hover:text-blue-600">
-        Water Structures Fund
-      </NuxtLink>
-    </li>
-    <li class="pl-4">
-      <NuxtLink to="/mandate/ourMandate#healthRehabilitation" class="text-gray-600 hover:text-blue-600">
-        Health Rehabilitation
-      </NuxtLink>
-    </li>
-    <li class="pl-4">
-      <NuxtLink to="/mandate/ourMandate#idf" class="text-gray-600 hover:text-blue-600">
-        Infrastructure Development Fund (IDF)
-      </NuxtLink>
-    </li>
-    <li class="pl-4">
-      <NuxtLink to="/mandate/ourMandate#rrf" class="text-gray-600 hover:text-blue-600">
-        Road Rehabilitation Fund (RRF)
-      </NuxtLink>
-    </li>
-  </ul>
-</li>
-
-
-
-
-                
-
+                <li class="list-none pl-0"> <!-- Removes bullet and padding -->
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Our Mandate</h3>
+                  <ul class="space-y-2 pl-5"> <!-- Keeps indentation for nested items -->
+                    <li>
+                      <NuxtLink to="/mandate/ourMandate#fiscalDecentralization" class="text-gray-600 hover:text-blue-600">
+                        Fiscal Decentralization
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/mandate/ourMandate#financialManagement" class="text-gray-600 hover:text-blue-600">
+                        Financial Management
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/mandate/ourMandate#localDevelopmentSupport" class="text-gray-600 hover:text-blue-600">
+                        Local Development Support
+                      </NuxtLink>
+                    </li>
+                    <li class="pl-4">
+                      <NuxtLink to="/mandate/ourMandate#cdf" class="text-gray-600 hover:text-blue-600">
+                        CDF
+                      </NuxtLink>
+                    </li>
+                    <li class="pl-4">
+                      <NuxtLink to="/mandate/ourMandate#ddf" class="text-gray-600 hover:text-blue-600">
+                        DDF
+                      </NuxtLink>
+                    </li>
+                    <li class="pl-4">
+                      <NuxtLink to="/mandate/ourMandate#waterStructuresFund" class="text-gray-600 hover:text-blue-600">
+                        Water Structures Fund
+                      </NuxtLink>
+                    </li>
+                    <li class="pl-4">
+                      <NuxtLink to="/mandate/ourMandate#healthRehabilitation" class="text-gray-600 hover:text-blue-600">
+                        Health Rehabilitation
+                      </NuxtLink>
+                    </li>
+                    <li class="pl-4">
+                      <NuxtLink to="/mandate/ourMandate#idf" class="text-gray-600 hover:text-blue-600">
+                        Infrastructure Development Fund (IDF)
+                      </NuxtLink>
+                    </li>
+                    <li class="pl-4">
+                      <NuxtLink to="/mandate/ourMandate#rrf" class="text-gray-600 hover:text-blue-600">
+                        Road Rehabilitation Fund (RRF)
+                      </NuxtLink>
+                    </li>
+                  </ul>
+                </li>
                 
                 <div class="bg-blue-50 p-4 rounded-lg">
                   <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
-              <ul class="space-y-3">
-  <li>
-    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-      </svg>
-      Annual Report
-    </a>
-  </li>
-  <li>
-    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-      </svg>
-      Financial Statements
-    </a>
-  </li>
-  <li>
-    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-      </svg>
-      Strategic Plan
-    </a>
-  </li>
-  <li>
-    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-      </svg>
-      Audit Reports
-    </a>
-  </li>
-  <li>
-    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-      </svg>
-      Consolidated LAs Annual Budget
-    </a>
-  </li>
-</ul>
+                    <ul class="space-y-3">
+                      <li>
+                        <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          </svg>
+                          Annual Report
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                          </svg>
+                          Financial Statements
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                          </svg>
+                          Strategic Plan
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                          </svg>
+                          Audit Reports
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          </svg>
+                          Consolidated LAs Annual Budget
+                        </a>
+                      </li>
+                    </ul>
                 </div>
               </div>
             </div>
@@ -394,6 +393,33 @@ const onClickOutside = () => {
                     <li><NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600">LAIF MIS</NuxtLink></li>
                   </ul>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Opportunities -->
+          <div @mouseenter="toggleMegaMenu('opportunities')" @mouseleave="toggleMegaMenu(null)" class="relative">
+            <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
+              Delivery Systems
+              <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+              </svg>
+            </button>
+
+            <div v-show="activeMegaMenu === 'opportunities'" class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 400px;">
+              <div class="p-6">
+                <ul class="space-y-3">
+                  <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                    <!-- <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg> -->
+                    Procurement Portal</a></li>
+                  <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                    <!-- <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg> -->
+                    Job Opportunities Portal</a></li>
+                </ul>
               </div>
             </div>
           </div>

@@ -104,188 +104,569 @@ function updateActiveTabFromHash(hash) {
     <!-- Main Content Area -->
     <main class="flex-1 min-w-0 space-y-6">
       <!-- Fiscal Decentralization -->
-      <div v-show="activeTab === 'fiscalDecentralization'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-4">Fiscal Decentralisation</h2>
-          <div class="prose max-w-none text-gray-700 space-y-4">
-            <p class="text-gray-700 leading-relaxed">
-              NLGFC is constitutionally mandated to facilitate fiscal decentralisation and is central in managing fiscal transfers to Local Authorities (LAs) in Malawi using the Intergovernmental Fiscal Transfer Formula (IGTF).
-            </p>
-            <p class="text-gray-700 leading-relaxed">
-              IGTF is used by the central government to allocate financial resources to Local Government Authorities (LGAs) to support decentralised service delivery. The system is designed to promote equity, transparency, accountability, and efficiency in the allocation and utilisation of public resources.
-            </p>
-            
-            <div class="mt-6">
-              <h3 class="text-xl font-semibold text-gray-800 mb-4">Key Features of the IGFT Formula</h3>
-              
-              <div class="space-y-6">
-                <!-- Section A: Types of Transfers -->
-                <div class="bg-blue-50 p-5 rounded-lg">
-                  <h4 class="font-semibold text-gray-800 mb-3">A. Types of Transfers:</h4>
-                  <ol class="list-decimal pl-6 space-y-2">
-                    <li class="pl-2">
-                      <span class="font-medium">Sector-specific funds</span> (Health 38% of ORT, 34% Education, 5% Agriculture, Other sectors; each receives less than 1%).
-                    </li>
-                    <li class="pl-2">
-                      <span class="font-medium">General Resource Fund (GRF)</span> for administrative functions (9.6% of Other Recurrent Transactions (ORT))
-                    </li>
-                    <li class="pl-2">
-                      <span class="font-medium">Development transfers</span> (DDF, IDF, CDF, Health Rehabilitation, Water Structures funds, city and municipal road funds)
-                    </li>
-                    <li class="pl-2">
-                      <span class="font-medium">Development grants</span> such as the Governance to Enable Service Delivery (GESD) grants, which are performance-based.
-                    </li>
-                  </ol>
-                </div>
-                
-                <!-- Section B: Formula Components -->
-                <div class="bg-blue-50 p-5 rounded-lg">
-                  <h4 class="font-semibold text-gray-800 mb-3">B. Formula Components:</h4>
-                  <p class="mb-3">The formula generally includes the following criteria:</p>
-                  <ol class="list-decimal pl-6 space-y-3">
-                    <li class="pl-2">
-                      <span class="font-medium">Population size</span> – larger districts receive more funds.
-                    </li>
-                    <li class="pl-2">
-                      <span class="font-medium">Poverty levels</span> – districts with higher poverty rates may receive more to address inequality.
-                    </li>
-                    <li class="pl-2">
-                      <span class="font-medium">Geographical size and remoteness</span> – to compensate for higher costs of service delivery in remote or larger areas.
-                    </li>
-                    <li class="pl-2">
-                      <span class="font-medium">Performance indicators</span> – increasingly used, especially under GESD, to reward good governance, planning, and financial management.
-                    </li>
-                  </ol>
-                </div>
-                
-                <!-- Section C: IGTFC Dashboard -->
-                <div class="bg-blue-50 p-5 rounded-lg">
-                  <h4 class="font-semibold text-gray-800 mb-3">C. IGTFC Dashboard</h4>
-                  <div class="mt-4 rounded-lg overflow-hidden">
-                    <!-- Replace with your actual iframe embed code -->
-                    <iframe 
-                      src="YOUR_DASHBOARD_IFRAME_LINK" 
-                      class="w-full h-96 border-0"
-                      frameborder="0"
-                      allowfullscreen>
-                    </iframe>
+      <div v-show="activeTab === 'fiscalDecentralization'" class="prose max-w-none">
+        <!-- Header Section -->
+        <div class="mb-10">
+          <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-indigo-100">
+            Fiscal Decentralization Framework
+          </h2>
+          <p class="text-lg text-gray-600">
+            Managing intergovernmental fiscal transfers to empower local service delivery
+          </p>
+        </div>
+
+        <!-- Overview Section -->
+        <div class="bg-gradient-to-br from-indigo-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
+          <div class="flex items-start">
+            <div class="bg-indigo-100 p-3 rounded-lg mr-5">
+              <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold text-gray-800 mb-3">Constitutional Mandate</h3>
+              <p class="text-gray-700 leading-relaxed">
+                NLGFC is constitutionally mandated to facilitate fiscal decentralization and serves as the central mechanism for managing fiscal transfers to Local Authorities through the Intergovernmental Fiscal Transfer Formula (IGTF), promoting equitable resource allocation across Malawi.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- IGTF Explanation -->
+        <div class="mb-10 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <h3 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
+            <svg class="w-6 h-6 text-indigo-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            Intergovernmental Fiscal Transfer Formula (IGTF)
+          </h3>
+          <p class="text-gray-700 mb-4">
+            The IGTF system enables the central government to allocate financial resources to Local Government Authorities (LGAs) to support decentralized service delivery, designed to promote:
+          </p>
+          <div class="grid md:grid-cols-2 gap-4 mt-4">
+            <div class="flex items-center">
+              <div class="bg-indigo-100 p-1 rounded-full mr-3">
+                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span class="text-gray-700">Equity in resource distribution</span>
+            </div>
+            <div class="flex items-center">
+              <div class="bg-indigo-100 p-1 rounded-full mr-3">
+                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span class="text-gray-700">Transparency in allocations</span>
+            </div>
+            <div class="flex items-center">
+              <div class="bg-indigo-100 p-1 rounded-full mr-3">
+                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span class="text-gray-700">Accountability mechanisms</span>
+            </div>
+            <div class="flex items-center">
+              <div class="bg-indigo-100 p-1 rounded-full mr-3">
+                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span class="text-gray-700">Efficient utilization</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Key Features Sections -->
+        <div class="space-y-8">
+          <!-- Types of Transfers -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-700 px-6 py-4">
+              <h3 class="text-lg font-semibold text-white">A. Types of Fiscal Transfers</h3>
+            </div>
+            <div class="p-6">
+              <ol class="list-decimal space-y-4 pl-5">
+                <li class="pl-2">
+                  <span class="font-medium text-gray-800">Sector-specific funds:</span>
+                  <ul class="list-disc pl-5 mt-2 space-y-1 text-gray-700">
+                    <li>Health: 38% of ORT</li>
+                    <li>Education: 34%</li>
+                    <li>Agriculture: 5%</li>
+                    <li>Other sectors: each receives less than 1%</li>
+                  </ul>
+                </li>
+                <li class="pl-2">
+                  <span class="font-medium text-gray-800">General Resource Fund (GRF):</span>
+                  <span class="text-gray-700"> For administrative functions (9.6% of Other Recurrent Transactions)</span>
+                </li>
+                <li class="pl-2">
+                  <span class="font-medium text-gray-800">Development transfers:</span>
+                  <span class="text-gray-700"> DDF, IDF, CDF, Health Rehabilitation, Water Structures funds, city and municipal road funds</span>
+                </li>
+                <li class="pl-2">
+                  <span class="font-medium text-gray-800">Performance-based grants:</span>
+                  <span class="text-gray-700"> Including Governance to Enable Service Delivery (GESD) grants</span>
+                </li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Formula Components -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-700 px-6 py-4">
+              <h3 class="text-lg font-semibold text-white">B. Formula Allocation Criteria</h3>
+            </div>
+            <div class="p-6">
+              <ol class="list-decimal space-y-4 pl-5">
+                <li class="pl-2">
+                  <span class="font-medium text-gray-800">Population size:</span>
+                  <span class="text-gray-700"> Larger districts receive proportionally more funds</span>
+                </li>
+                <li class="pl-2">
+                  <span class="font-medium text-gray-800">Poverty levels:</span>
+                  <span class="text-gray-700"> Higher allocations to districts with greater poverty to address inequality</span>
+                </li>
+                <li class="pl-2">
+                  <span class="font-medium text-gray-800">Geographical factors:</span>
+                  <span class="text-gray-700"> Compensation for higher service delivery costs in remote/larger areas</span>
+                </li>
+                <li class="pl-2">
+                  <span class="font-medium text-gray-800">Performance indicators:</span>
+                  <span class="text-gray-700"> Rewards for good governance, planning, and financial management (especially under GESD)</span>
+                </li>
+              </ol>
+            </div>
+          </div>
+
+          <!-- Dashboard Section -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-700 px-6 py-4">
+              <h3 class="text-lg font-semibold text-white">C. IGTF Monitoring Dashboard</h3>
+            </div>
+            <div class="p-6">
+              <div class="aspect-w-16 aspect-h-9 bg-gray-100 rounded-lg overflow-hidden">
+                <!-- Replace with your actual dashboard embed -->
+                <iframe 
+                  src="YOUR_DASHBOARD_IFRAME_LINK" 
+                  class="w-full h-96 border-0"
+                  frameborder="0"
+                  allowfullscreen>
+                </iframe>
+              </div>
+              <p class="mt-4 text-sm text-gray-600 italic">
+                Note: The IGTF is currently under review to better reflect contemporary financing needs across Local Councils.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Legal Framework -->
+        <div class="mt-12 bg-gray-50 p-6 rounded-xl border border-gray-200">
+          <h4 class="text-lg font-medium text-gray-800 mb-3 flex items-center">
+            <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Governing Framework
+          </h4>
+          <ul class="space-y-2 text-sm text-gray-700">
+            <li class="flex items-start">
+              <svg class="flex-shrink-0 w-4 h-4 text-indigo-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Constitution of Malawi (1994), Section 149</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="flex-shrink-0 w-4 h-4 text-indigo-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Local Government Act (1998)</span>
+            </li>
+            <li class="flex items-start">
+              <svg class="flex-shrink-0 w-4 h-4 text-indigo-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span>Public Finance Management Act (2022)</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div v-show="activeTab === 'financialManagement'" class="prose max-w-none">
+        <!-- Header Section -->
+        <div class="mb-10">
+          <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
+            Financial Management Framework
+          </h2>
+          <p class="text-lg text-gray-600">
+            Comprehensive oversight of the public financial management cycle for local governance
+          </p>
+        </div>
+
+        <!-- Overview Section -->
+        <div class="bg-gradient-to-br from-blue-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
+          <div class="flex items-start">
+            <div class="bg-blue-100 p-3 rounded-lg mr-5">
+              <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold text-gray-800 mb-3">PFM Cycle Management</h3>
+              <p class="text-gray-700 leading-relaxed">
+                NLGFC oversees the entire public financial management cycle, from resource mobilization and allocation to utilization, reporting, and accountability. Our mandate promotes sound fiscal governance, transparency, and efficient service delivery across all local authorities in Malawi.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Core Functions Section -->
+        <div class="space-y-8">
+          <!-- Resource Mobilization -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-700 px-6 py-4">
+              <h3 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                1. Resource Mobilization
+              </h3>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                NLGFC mobilizes financial resources from multiple sources to ensure adequate funding for local service delivery:
+              </p>
+              <div class="grid md:grid-cols-2 gap-4 mt-4">
+                <div class="flex items-start">
+                  <div class="bg-blue-100 p-1 rounded-full mr-3 flex-shrink-0">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
                   </div>
-                  <p class="mt-3 text-sm text-gray-600">
-                    IGTF is under review to reflect current financing needs in the Local Councils.
-                  </p>
+                  <div>
+                    <p class="text-gray-700">Government Treasury allocations</p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <div class="bg-blue-100 p-1 rounded-full mr-3 flex-shrink-0">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="text-gray-700">Development partner support</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Financial Management -->
-      <div v-show="activeTab === 'financialManagement'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Financial Management</h2>
-          <div class="prose max-w-none text-gray-700 space-y-6">
-            <p>The financial management function of NLGFC spans the entire public financial management (PFM) cycle, from resource mobilisation and allocation to utilisation, reporting, and accountability. The objective is to promote sound fiscal governance, transparency, and efficient service delivery at the local level.</p>
-            
-            <div class="space-y-6">
-              <!-- Resource Mobilisation -->
-              <div class="bg-gray-50 p-5 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">1. Resource Mobilisation</h3>
-                <p>NLGFC is responsible for mobilising financial resources from various sources, including: Government Treasury (through annual budget allocations) and development partners support to the government of Malawi. This ensures that adequate funds are available to support service delivery and development interventions at the local level.</p>
-              </div>
+          <!-- Intergovernmental Fiscal Transfers -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-600 px-6 py-4">
+              <h3 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                </svg>
+                2. Intergovernmental Fiscal Transfers
+              </h3>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                NLGFC manages the planning, coordination, and disbursement of fiscal transfers to Local Authorities:
+              </p>
+              <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Application of the Intergovernmental Fiscal Transfer Formula</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Disbursement of various grants (GRF, Sector Conditional, Performance-Based)</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Ensuring timely and predictable transfers</span>
+                </li>
+              </ul>
+            </div>
+          </div>
 
-              <!-- Intergovernmental Fiscal Transfers -->
-              <div class="bg-gray-50 p-5 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">2. Intergovernmental Fiscal Transfers</h3>
-                <p>NLGFC manages the planning, coordination, and disbursement of fiscal transfers from the central government to LAs. This includes:</p>
-                <ul class="list-disc pl-6 space-y-2 mt-3">
-                  <li class="pl-2">Applying the Intergovernmental Fiscal Transfer Formula</li>
-                  <li class="pl-2">Disbursing various grants (General Resource Fund, Sector Conditional Grants, Performance-Based Grants, etc.)</li>
-                  <li class="pl-2">Ensuring timely and predictable transfers</li>
-                  <li class="pl-2">Monitoring equity and performance-based disbursements</li>
+          <!-- Continue with all other sections following the same pattern -->
+          <!-- Budgeting and Consolidation -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-700 px-6 py-4">
+              <h3 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+                3. Budgeting and Consolidation
+              </h3>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                NLGFC supports Local Authorities in preparing credible budgets aligned with national priorities:
+              </p>
+              <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Issuing program-based budgeting guidelines with Ministry of Finance</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Reviewing and consolidating council budgets</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Integrating donor and government funding into local plans</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Financial Monitoring and Reporting -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-700 px-6 py-4">
+              <h3 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                4. Financial Monitoring and Reporting
+              </h3>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                Oversight mechanisms to ensure transparency and accountability in local government finances:
+              </p>
+              <div class="grid md:grid-cols-2 gap-4">
+                <ul class="space-y-3 text-gray-700">
+                  <li class="flex items-start">
+                    <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Quarterly financial report reviews</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Budget execution analysis</span>
+                  </li>
+                </ul>
+                <ul class="space-y-3 text-gray-700">
+                  <li class="flex items-start">
+                    <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Real-time performance dashboards</span>
+                  </li>
+                  <li class="flex items-start">
+                    <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Budget variance follow-up</span>
+                  </li>
                 </ul>
               </div>
+            </div>
+          </div>
 
-              <!-- Continue with all other sections following the same pattern -->
-              <!-- Budgeting and Consolidation -->
-              <div class="bg-gray-50 p-5 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">3. Budgeting and Consolidation</h3>
-                <p>NLGFC supports Local Authorities in preparing credible and realistic budgets. Functions include:</p>
-                <ul class="list-disc pl-6 space-y-2 mt-3">
-                  <li class="pl-2">Issuing budget guidelines (program-based budgeting) in collaboration with the Ministry of Finance</li>
-                  <li class="pl-2">Reviewing and consolidating council budgets</li>
-                  <li class="pl-2">Ensuring alignment of local budgets with national priorities</li>
-                  <li class="pl-2">Integrating donor and central government funding into local plans</li>
-                </ul>
-              </div>
+          <!-- Continue with remaining sections (5-9) following same structure -->
+          <!-- Audit Oversight -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-600 px-6 py-4">
+              <h3 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                5. Audit Oversight and Assurance
+              </h3>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                NLGFC facilitates the audit process and ensures implementation of recommendations:
+              </p>
+              <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Coordinating National Audit Office schedules</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Supporting council audit preparations</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Monitoring recommendation implementation</span>
+                </li>
+              </ul>
+            </div>
+          </div>
 
-              <!-- Financial Monitoring and Reporting -->
-              <div class="bg-gray-50 p-5 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">4. Financial Monitoring and Reporting</h3>
-                <p>NLGFC plays an oversight role to monitor the financial performance of LAs to ensure transparency and accountability through:</p>
-                <ul class="list-disc pl-6 space-y-2 mt-3">
-                  <li class="pl-2">Reviewing quarterly financial reports submitted by Local Authorities</li>
-                  <li class="pl-2">Conducting budget execution analysis</li>
-                  <li class="pl-2">Operating performance dashboards for real-time monitoring</li>
-                  <li class="pl-2">Following up on budget variances and underperformance</li>
-                </ul>
-              </div>
+          <!-- Capacity Building -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-700 px-6 py-4">
+              <h3 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                6. Capacity Building in Financial Management
+              </h3>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                Strengthening financial management capabilities across local authorities:
+              </p>
+              <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>PFM Act 2022 training programs</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>LAIFMIS deployment support</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Technical assistance in procurement and asset management</span>
+                </li>
+              </ul>
+            </div>
+          </div>
 
-              <!-- Audit Oversight and Assurance -->
-              <div class="bg-gray-50 p-5 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">5. Audit Oversight and Assurance</h3>
-                <p>Although audits are conducted by the National Audit Office (NAO), NLGFC plays a key supervisory and facilitative role by:</p>
-                <ul class="list-disc pl-6 space-y-2 mt-3">
-                  <li class="pl-2">Coordinating audit schedules with NAO</li>
-                  <li class="pl-2">Supporting councils to prepare for audits</li>
-                  <li class="pl-2">Following up on the implementation of audit recommendations</li>
-                  <li class="pl-2">Reporting unresolved audit issues to relevant authorities</li>
-                </ul>
-              </div>
+          <!-- LGR Improvement -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-700 px-6 py-4">
+              <h3 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                7. Locally Generated Revenue (LGR) Improvement
+              </h3>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                Enhancing councils' own-source revenue generation capabilities:
+              </p>
+              <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Local Revenue Enhancement Plans</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Digital LGR collection systems</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Performance monitoring and technical support</span>
+                </li>
+              </ul>
+            </div>
+          </div>
 
-              <!-- Capacity Building -->
-              <div class="bg-gray-50 p-5 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">6. Capacity Building in Financial Management</h3>
-                <p>NLGFC builds capacity in LAs to strengthen financial management systems through:</p>
-                <ul class="list-disc pl-6 space-y-2 mt-3">
-                  <li class="pl-2">Training finance and accounting personnel in PFM Act of 2022 principles</li>
-                  <li class="pl-2">Supporting the deployment and use of LAIFMIS (Local Authorities Integrated Financial Management Information System)</li>
-                  <li class="pl-2">Providing technical support in areas such as procurement, asset management, and revenue collection</li>
-                </ul>
-              </div>
+          <!-- Financial Systems -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-700 px-6 py-4">
+              <h3 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                </svg>
+                8. Financial Systems and Automation
+              </h3>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                Digital transformation of local government financial systems:
+              </p>
+              <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>LAIFMIS rollout to all district councils</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Payment and reporting system integration</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Interoperability with national PFM systems</span>
+                </li>
+              </ul>
+            </div>
+          </div>
 
-              <!-- LGR Improvement -->
-              <div class="bg-gray-50 p-5 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">7. Support for Locally Generated Revenue (LGR) Improvement</h3>
-                <p>NLGFC assists councils in enhancing their own-source revenues by:</p>
-                <ul class="list-disc pl-6 space-y-2 mt-3">
-                  <li class="pl-2">Supporting the development and implementation of Local Revenue Enhancement Plans</li>
-                  <li class="pl-2">Introducing digital systems for LGR collection</li>
-                  <li class="pl-2">Monitoring trends in LGR and offering technical support to improve performance</li>
-                </ul>
-              </div>
-
-              <!-- Financial Systems -->
-              <div class="bg-gray-50 p-5 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">8. Financial Systems and Automation</h3>
-                <p>NLGFC leads efforts to improve automation and digitalisation of financial systems in local governments by:</p>
-                <ul class="list-disc pl-6 space-y-2 mt-3">
-                  <li class="pl-2">Rolling out LAIFMIS to all district councils</li>
-                  <li class="pl-2">Integrating payment and reporting systems</li>
-                  <li class="pl-2">Ensuring system interoperability with national PFM systems</li>
-                </ul>
-              </div>
-
-              <!-- Policy Compliance -->
-              <div class="bg-gray-50 p-5 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-800 mb-3">9. Policy and Regulatory Compliance</h3>
-                <p>NLGFC ensures that LAs comply with national financial laws, policies, and guidelines, including:</p>
-                <ul class="list-disc pl-6 space-y-2 mt-3">
-                  <li class="pl-2">The Public Finance Management Act (2022)</li>
-                  <li class="pl-2">The Decentralisation Policy</li>
-                  <li class="pl-2">Government circulars and audit requirements</li>
-                </ul>
-              </div>
+          <!-- Policy Compliance -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gray-700 px-6 py-4">
+              <h3 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                9. Policy and Regulatory Compliance
+              </h3>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                Ensuring adherence to national financial regulations and policies:
+              </p>
+              <ul class="space-y-3 text-gray-700">
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Public Finance Management Act (2022)</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Decentralisation Policy implementation</span>
+                </li>
+                <li class="flex items-start">
+                  <svg class="flex-shrink-0 w-4 h-4 text-blue-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Government circulars compliance</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -293,12 +674,12 @@ function updateActiveTabFromHash(hash) {
 
       <!-- Local Development Support -->
       <div v-show="activeTab === 'localDevelopmentSupport'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Local Development Support</h2>
-          <div class="prose max-w-none text-gray-700">
-            <p>NLGFC provides local development project support to LAs through supervision and monitoring of both GoM and donor-funded projects in local governments. Malawi administers several funding mechanisms to support local development projects. These funds are designed to empower districts and constituencies to address key socio-economic challenges, improve infrastructure, and enhance service delivery at the grassroots level.</p>
+          <div class="p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Local Development Support</h2>
+              <div class="prose max-w-none text-gray-700">
+                <p>NLGFC provides local development project support to LAs through supervision and monitoring of both GoM and donor-funded projects in local governments. Malawi administers several funding mechanisms to support local development projects. These funds are designed to empower districts and constituencies to address key socio-economic challenges, improve infrastructure, and enhance service delivery at the grassroots level.</p>
+              </div>
           </div>
-        </div>
       </div>
 
       <!-- DDF -->
