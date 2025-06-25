@@ -108,7 +108,7 @@ function updateActiveTabFromHash(hash) {
         <!-- Header Section -->
         <div class="mb-10">
           <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-indigo-100">
-            Fiscal Decentralization Framework
+            Fiscal Decentralization
           </h2>
           <p class="text-lg text-gray-600">
             Managing intergovernmental fiscal transfers to empower local service delivery
@@ -183,7 +183,7 @@ function updateActiveTabFromHash(hash) {
         <div class="space-y-8">
           <!-- Types of Transfers -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-600 px-6 py-4">
               <h3 class="text-lg font-semibold text-white">A. Types of Fiscal Transfers</h3>
             </div>
             <div class="p-6">
@@ -215,7 +215,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- Formula Components -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-600 px-6 py-4">
               <h3 class="text-lg font-semibold text-white">B. Formula Allocation Criteria</h3>
             </div>
             <div class="p-6">
@@ -242,7 +242,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- Dashboard Section -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-600 px-6 py-4">
               <h3 class="text-lg font-semibold text-white">C. IGTF Monitoring Dashboard</h3>
             </div>
             <div class="p-6">
@@ -297,7 +297,7 @@ function updateActiveTabFromHash(hash) {
         <!-- Header Section -->
         <div class="mb-10">
           <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
-            Financial Management Framework
+            Financial Management
           </h2>
           <p class="text-lg text-gray-600">
             Comprehensive oversight of the public financial management cycle for local governance
@@ -325,7 +325,7 @@ function updateActiveTabFromHash(hash) {
         <div class="space-y-8">
           <!-- Resource Mobilization -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-600 px-6 py-4">
               <h3 class="text-lg font-semibold text-white flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />

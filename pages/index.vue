@@ -235,7 +235,7 @@ useHead({
                   <!-- Replace with actual SSRP logo -->
                   <img src="/public/images/samples/SSRLP logo(1).jpg" alt="SSRP Logo" class="w-full h-full object-contain" loading="lazy">
                 </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors">SSRP</h3>
+                <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors">SSRLP</h3>
                 <p class="text-gray-600 mb-6">Social Support for Resilient Project</p>
                 <div class="mt-auto pt-4 border-t border-gray-100 w-full">
                   <span class="text-blue-600 font-medium flex items-center justify-center">
