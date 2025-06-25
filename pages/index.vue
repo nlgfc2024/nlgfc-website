@@ -256,7 +256,7 @@ useHead({
                   <img src="/images/samples/PBG logo.png" alt="GESD Logo" class="w-full h-full object-contain" loading="lazy">
                 </div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-green-600 transition-colors">GESD</h3>
-                <p class="text-gray-600 mb-6">Governance to Enable Service Deliver Project</p>
+                <p class="text-gray-600 mb-6">Governance to Enable Service Delivery Project</p>
                 <div class="mt-auto pt-4 border-t border-gray-100 w-full">
                   <span class="text-green-600 font-medium flex items-center justify-center">
                     View project
