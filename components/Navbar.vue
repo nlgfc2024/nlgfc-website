@@ -377,7 +377,7 @@ const navigateToOpportunities = (section) => {
                 <!-- Column 3 -->
                 <div class="mt-10 md:mt-0">
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Past Projects</h3>
-                  <ul class="space-y-2 mb-6">
+                <ul class="space-y-2 mb-6">
                     <strong class="text-gray-700 flex items-center">MASAF</strong>
                   <ul class="space-y-1 pl-4 mb-4">
                     <li><NuxtLink to="/projects/pastProjects#masaf_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
@@ -386,8 +386,11 @@ const navigateToOpportunities = (section) => {
                     <li><NuxtLink to="/projects/pastProjects#pm" class="text-gray-600 hover:text-blue-600">Project Management</NuxtLink></li>
                 
                   </ul>
-                    
-                    <li><NuxtLink to="/projects/pastProjects#miera_overview" class="text-gray-600 hover:text-blue-600">MIERA</NuxtLink></li>
+                  <strong class="text-gray-700 flex items-center">MIERA</strong>
+                  <ul class="space-y-1 pl-4 mb-4">
+                    <li><NuxtLink to="/projects/pastProjects#miera_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
+                  </ul>
+          
                   </ul>
 
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Upcoming Projects</h3>
