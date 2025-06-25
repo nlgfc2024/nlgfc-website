@@ -477,7 +477,7 @@ const navigateToOpportunities = (section) => {
                     </li>
 
                     <li>
-                      <NuxtLink to="/localAuthorities/mulanje-district" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/Dedza-district" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         Mulanje District Council
                       </NuxtLink>
                     </li>
