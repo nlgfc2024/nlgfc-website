@@ -54,6 +54,12 @@ const closeAllMenus = () => {
 const onClickOutside = () => {
   activeMegaMenu.value = null;
 };
+
+// Handle opportunities navigation
+const navigateToOpportunities = (section) => {
+  closeAllMenus();
+  router.push(`/opportunities?section=${section}`);
+};
 </script>
 
 <template>
@@ -159,27 +165,32 @@ const onClickOutside = () => {
                     <!-- <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                       Mission, Vision, Core Values</a></li> -->
                     <li>
-                      <NuxtLink to="/aboutUs/visionMissionValues" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mission, Vision, Core Values</NuxtLink>
+                      <NuxtLink to="/about#mvc" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mission, Vision, Core Values</NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="/aboutUs/powersFunctions" class="text-gray-700 hover:text-blue-700 transition flex items-center">Powers & Functions</NuxtLink>
+                      <NuxtLink to="/about#powers" class="text-gray-700 hover:text-blue-700 transition flex items-center">Powers & Functions</NuxtLink>
                     </li>
                   </ul>
                   
                   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Leadership</h3>
                   <ul class="space-y-2">
                     <li>
-                      <NuxtLink to="/aboutUs/boardOfDirectors" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/about#board" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Board of Directors
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="/aboutUs/executiveManagement" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/about#management" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Executive Management
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="/aboutUs/directoratesDivisions" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/about#structure" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Organogram
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/about#directorates" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Directorates and Divisions
                       </NuxtLink>
                     </li>
@@ -298,106 +309,105 @@ const onClickOutside = () => {
 
           <!-- Projects Mega Menu -->
           <div
-  @mouseenter="toggleMegaMenu('projects')"
-  @mouseleave="toggleMegaMenu(null)"
-  class="relative"
->
-  <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
-    Projects
-    <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-      <path
-        fill-rule="evenodd"
-        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-        clip-rule="evenodd"
-      ></path>
-    </svg>
-  </button>
+            @mouseenter="toggleMegaMenu('projects')"
+            @mouseleave="toggleMegaMenu(null)"
+            class="relative"
+          >
+            <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
+              Projects
+              <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
 
-  <div
-    v-show="activeMegaMenu === 'projects'"
-    class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100"
-    style="min-width: 900px;"
-  >
-    <div class="grid grid-cols-4 gap-6 p-6">
-      <!-- Column 1 -->
-      <div>
-        <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Current Projects</h3>
-        <strong class="text-gray-700 flex items-center">SSRLP</strong>
-        <ul class="space-y-1 pl-4 mb-4">
-          <li><NuxtLink to="/projects/currentProjects#ssrlp_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#SCTP" class="text-gray-600 hover:text-blue-600">SCTP</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Public Works</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#emergency" class="text-gray-600 hover:text-blue-600">Emergency Cash Transfer</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
-        </ul>
-      
-        <strong class="text-gray-700 flex items-center mt-4">RCRP</strong>
-        <ul class="space-y-1 pl-4">
-          <li><NuxtLink to="/projects/currentProjects#rcrp_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#drb" class="text-gray-600 hover:text-blue-600">District Resilience</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#usr" class="text-gray-600 hover:text-blue-600">Urban Malawi Social Registry</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#upw" class="text-gray-600 hover:text-blue-600">Urban Climate Smart Public Works Program</NuxtLink></li>
-        </ul>
-      </div>
+            <div
+              v-show="activeMegaMenu === 'projects'"
+              class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100"
+              style="min-width: 900px;"
+            >
+              <div class="grid grid-cols-4 gap-6 p-6">
+                <!-- Column 1 -->
+                <div>
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Current Projects</h3>
+                  <strong class="text-gray-700 flex items-center">SSRLP</strong>
+                  <ul class="space-y-1 pl-4 mb-4">
+                    <li><NuxtLink to="/projects/currentProjects#ssrlp_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#SCTP" class="text-gray-600 hover:text-blue-600">SCTP</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Public Works</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#emergency" class="text-gray-600 hover:text-blue-600">Emergency Cash Transfer</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
+                  </ul>
+                
+                  <strong class="text-gray-700 flex items-center mt-4">RCRP</strong>
+                  <ul class="space-y-1 pl-4">
+                    <li><NuxtLink to="/projects/currentProjects#rcrp_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#drb" class="text-gray-600 hover:text-blue-600">District Resilience</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#usr" class="text-gray-600 hover:text-blue-600">Urban Malawi Social Registry</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#upw" class="text-gray-600 hover:text-blue-600">Urban Climate Smart Public Works Program</NuxtLink></li>
+                  </ul>
+                </div>
 
-      <!-- Column 2 -->
-      <div class="mt-10 md:mt-0">
-        <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2 pt-7"></h3>
-        <strong class="text-gray-700 flex items-center">GESD</strong>
-        <ul class="space-y-1 pl-4 mb-4">
-          <li><NuxtLink to="/projects/currentProjects#gesd_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#pbf" class="text-gray-600 hover:text-blue-600">Performance-Based Financing</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#ias" class="text-gray-600 hover:text-blue-600">Intergovernmental Accountability</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#lgpi" class="text-gray-600 hover:text-blue-600">Local Government Performance Improvement</NuxtLink></li>
-          <li><NuxtLink to="/projects/currentProjects#adaptive" class="text-gray-600 hover:text-blue-600">Adaptive Management and Innovation
-          </NuxtLink></li>
-        </ul>
+                <!-- Column 2 -->
+                <div class="mt-10 md:mt-0">
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2 pt-7"></h3>
+                  <strong class="text-gray-700 flex items-center">GESD</strong>
+                  <ul class="space-y-1 pl-4 mb-4">
+                    <li><NuxtLink to="/projects/currentProjects#gesd_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#pbf" class="text-gray-600 hover:text-blue-600">Performance-Based Financing</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#ias" class="text-gray-600 hover:text-blue-600">Intergovernmental Accountability</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#lgpi" class="text-gray-600 hover:text-blue-600">Local Government Performance Improvement</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#adaptive" class="text-gray-600 hover:text-blue-600">Adaptive Management and Innovation
+                    </NuxtLink></li>
+                  </ul>
 
-        
-      </div>
+                  
+                </div>
 
-      <!-- Column 3 -->
-      <div class="mt-10 md:mt-0">
-        <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Past Projects</h3>
-        <ul class="space-y-2 mb-6">
-          <strong class="text-gray-700 flex items-center">MASAF</strong>
-        <ul class="space-y-1 pl-4 mb-4">
-          <li><NuxtLink to="/projects/pastProjects#masaf_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
-          <li><NuxtLink to="/projects/pastProjects#psn" class="text-gray-600 hover:text-blue-600">Productive Safety Nets</NuxtLink></li>
-          <li><NuxtLink to="/projects/pastProjects#scb" class="text-gray-600 hover:text-blue-600">Systems and Capacity Building</NuxtLink></li>
-          <li><NuxtLink to="/projects/pastProjects#pm" class="text-gray-600 hover:text-blue-600">Project Management</NuxtLink></li>
-       
-        </ul>
-          
-          <li><NuxtLink to="/projects/pastProjects#miera_overview" class="text-gray-600 hover:text-blue-600">MIERA</NuxtLink></li>
-        </ul>
+                <!-- Column 3 -->
+                <div class="mt-10 md:mt-0">
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Past Projects</h3>
+                  <ul class="space-y-2 mb-6">
+                    <strong class="text-gray-700 flex items-center">MASAF</strong>
+                  <ul class="space-y-1 pl-4 mb-4">
+                    <li><NuxtLink to="/projects/pastProjects#masaf_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
+                    <li><NuxtLink to="/projects/pastProjects#psn" class="text-gray-600 hover:text-blue-600">Productive Safety Nets</NuxtLink></li>
+                    <li><NuxtLink to="/projects/pastProjects#scb" class="text-gray-600 hover:text-blue-600">Systems and Capacity Building</NuxtLink></li>
+                    <li><NuxtLink to="/projects/pastProjects#pm" class="text-gray-600 hover:text-blue-600">Project Management</NuxtLink></li>
+                
+                  </ul>
+                    
+                    <li><NuxtLink to="/projects/pastProjects#miera_overview" class="text-gray-600 hover:text-blue-600">MIERA</NuxtLink></li>
+                  </ul>
 
-        <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Upcoming Projects</h3>
-        <ul class="space-y-2">
-          <li><NuxtLink to="/projects/upcomingProjects#gesd2" class="text-gray-600 hover:text-blue-600">GESD 2.0</NuxtLink></li>
-          <li><NuxtLink to="/projects/upcomingProjects#inspire" class="text-gray-600 hover:text-blue-600">INSPIRE-O</NuxtLink></li>
-        </ul>
-      </div>
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Upcoming Projects</h3>
+                  <ul class="space-y-2">
+                    <li><NuxtLink to="/projects/upcomingProjects#gesd2" class="text-gray-600 hover:text-blue-600">GESD 2.0</NuxtLink></li>
+                    <li><NuxtLink to="/projects/upcomingProjects#inspire" class="text-gray-600 hover:text-blue-600">INSPIRE-O</NuxtLink></li>
+                  </ul>
+                </div>
 
-      <!-- Column 4 -->
-      <div class="mt-10 md:mt-0">
-        <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
-        <ul class="space-y-2">
-          <li><NuxtLink to="/deliverySystems/deliverySystems#msr" class="text-gray-600 hover:text-blue-600">MSR</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#e-payments" class="text-gray-600 hover:text-blue-600">E-Payments</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#publicworks" class="text-gray-600 hover:text-blue-600">Public Works MIS</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#grm" class="text-gray-600 hover:text-blue-600">GRM MIS</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#sctmis" class="text-gray-600 hover:text-blue-600">SCTP MIS</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#lapas" class="text-gray-600 hover:text-blue-600">LAPA MIS</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#cimis" class="text-gray-600 hover:text-blue-600">CIMIS</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#pmis" class="text-gray-600 hover:text-blue-600">PMIS</NuxtLink></li>
-          <li><NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600">LAIF MIS</NuxtLink></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
+                <!-- Column 4 -->
+                <div class="mt-10 md:mt-0">
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
+                  <ul class="space-y-2">
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#msr" class="text-gray-600 hover:text-blue-600">MSR</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#e-payments" class="text-gray-600 hover:text-blue-600">E-Payments</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#publicworks" class="text-gray-600 hover:text-blue-600">Public Works MIS</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#grm" class="text-gray-600 hover:text-blue-600">GRM MIS</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#sctmis" class="text-gray-600 hover:text-blue-600">SCTP MIS</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#lapas" class="text-gray-600 hover:text-blue-600">LAPA MIS</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#cimis" class="text-gray-600 hover:text-blue-600">CIMIS</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#pmis" class="text-gray-600 hover:text-blue-600">PMIS</NuxtLink></li>
+                    <li><NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600">LAIF MIS</NuxtLink></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- Local Councils Mega Menu -->
           <div @mouseenter="toggleMegaMenu('councils')" @mouseleave="toggleMegaMenu(null)" class="relative">
@@ -430,27 +440,27 @@ const onClickOutside = () => {
                   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Municipal Councils</h3>
                   <ul class="space-y-2">
                     <li>
-                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/balakamanucipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Balaka Municipal Council
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/Karongamunicipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Karonga Municipal Council
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/Kasungumunicipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Kasungu Municipal Council
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/Mangochimunicipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Mangochi Municipal Council
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/AllMunicipalCouncils" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         All Municipal Councils →
                       </NuxtLink>
                     </li>
@@ -461,12 +471,12 @@ const onClickOutside = () => {
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">District Councils</h3>
                   <ul class="space-y-2">
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/chikwawa-district" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         Chikwawa District Council
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                      <NuxtLink to="" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         Dedza District Council
                       </NuxtLink>
                     </li>
@@ -541,7 +551,7 @@ const onClickOutside = () => {
             </div>
           </div>
 
-          <!-- Resource Center -->
+          <!-- Resource Center Updated -->
           <div @mouseenter="toggleMegaMenu('resource')" @mouseleave="toggleMegaMenu(null)" class="relative">
             <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
               Resource Center
@@ -566,25 +576,25 @@ const onClickOutside = () => {
                     <li><a href="resourceCenter?tab=0&sub=8" class="text-gray-700 hover:text-blue-700 transition">Policies & Strategies</a></li>
                   </ul>
                 </div>
-                
+
+                <div>
                   <div>
-                    <div>
-                      <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Knowledge Management</h3>
-                      <ul class="space-y-2">
-                        <li><a href="resourceCenter?tab=3&sub=0" class="text-gray-700 hover:text-blue-700 transition">Image Gallery</a></li>
-                        <li><a href="resourceCenter?tab=3&sub=1" class="text-gray-700 hover:text-blue-700 transition">Video Library</a></li>
-                      </ul>
-                    </div>
-                    <br />
-                    <div>
-                      <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Project Documents</h3>
-                      <ul class="space-y-2">
-                        <li><a href="resourceCenter?tab=1&sub=0" class="text-gray-700 hover:text-blue-700 transition">SSRLP</a></li>
-                        <li><a href="resourceCenter?tab=1&sub=1" class="text-gray-700 hover:text-blue-700 transition">GESD</a></li>
-                        <li><a href="resourceCenter?tab=1&sub=2" class="text-gray-700 hover:text-blue-700 transition">RCRP 2</a></li>
-                      </ul>
-                    </div>
+                    <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Knowledge Management</h3>
+                    <ul class="space-y-2">
+                      <li><a href="resourceCenter?tab=3&sub=0" class="text-gray-700 hover:text-blue-700 transition">Image Gallery</a></li>
+                      <li><a href="resourceCenter?tab=3&sub=1" class="text-gray-700 hover:text-blue-700 transition">Video Library</a></li>
+                    </ul>
                   </div>
+                  <br />
+                  <div>
+                    <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Project Documents</h3>
+                    <ul class="space-y-2">
+                      <li><a href="resourceCenter?tab=1&sub=0" class="text-gray-700 hover:text-blue-700 transition">SSRLP</a></li>
+                      <li><a href="resourceCenter?tab=1&sub=1" class="text-gray-700 hover:text-blue-700 transition">GESD</a></li>
+                      <li><a href="resourceCenter?tab=1&sub=2" class="text-gray-700 hover:text-blue-700 transition">RCRP 2</a></li>
+                    </ul>
+                  </div>
+                </div>
                 <div>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Reports</h3>
                   <ul class="space-y-2">
@@ -599,6 +609,7 @@ const onClickOutside = () => {
           </div>
 
           <!-- Opportunities -->
+          <!-- Opportunities -->
           <div @mouseenter="toggleMegaMenu('opportunities')" @mouseleave="toggleMegaMenu(null)" class="relative">
             <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
               Opportunities
@@ -607,70 +618,80 @@ const onClickOutside = () => {
               </svg>
             </button>
 
-            <div v-show="activeMegaMenu === 'opportunities'" class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 400px;">
-              <div class="p-6">
-                <ul class="space-y-3">
-                  <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                    <!-- <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                    </svg> -->
-                    Procurement Portal</a></li>
-                  <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                    <!-- <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                    </svg> -->
-                    Job Opportunities Portal</a></li>
-                </ul>
+            <div v-show="activeMegaMenu === 'opportunities'" class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 500px;">
+              <div class="grid grid-cols-2 gap-6 p-6">
+                <div>
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Career Opportunities</h3>
+                  <ul class="space-y-3">
+                    <li>
+                      <button
+                          @click="navigateToOpportunities('jobs')"
+                          class="w-full text-left flex items-center text-gray-700 hover:text-blue-700 transition group"
+                      >
+                        <svg class="w-5 h-5 mr-2 text-blue-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                        Jobs Portal
+                      </button>
+                    </li>
+                    <li>
+                      <a href="/opportunities" class="flex items-center text-gray-700 hover:text-blue-700 transition group">
+                        <svg class="w-5 h-5 mr-2 text-indigo-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        Applicant Registration
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Business Opportunities</h3>
+                  <ul class="space-y-3">
+                    <li>
+                      <button
+                          @click="navigateToOpportunities('procurement')"
+                          class="w-full text-left flex items-center text-gray-700 hover:text-blue-700 transition group"
+                      >
+                        <svg class="w-5 h-5 mr-2 text-orange-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                        </svg>
+                        Procurement Portal
+                      </button>
+                    </li>
+                    <li>
+                      <a href="#" class="flex items-center text-gray-700 hover:text-blue-700 transition group">
+                        <svg class="w-5 h-5 mr-2 text-indigo-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        Supplier Registration
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Quick Stats Section -->
+              <div class="border-t border-gray-200 p-4 bg-gray-50">
+                <div class="grid grid-cols-2 gap-4 text-center">
+                  <div class="bg-white rounded-lg p-3 shadow-sm">
+                    <div class="text-2xl font-bold text-green-600">2</div>
+                    <div class="text-xs text-gray-600">Active Jobs</div>
+                  </div>
+                  <div class="bg-white rounded-lg p-3 shadow-sm">
+                    <div class="text-2xl font-bold text-blue-600">3</div>
+                    <div class="text-xs text-gray-600">Open Tenders</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- Contact Us -->
-          <div @mouseenter="toggleMegaMenu('contact')" @mouseleave="toggleMegaMenu(null)" class="relative">
-            <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
+          <div>
+            <a href="/contact#address" class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
               Contact Us
-              <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-              </svg>
-            </button>
-
-            <div v-show="activeMegaMenu === 'contact'" class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 500px;">
-              <div class="grid grid-cols-2 gap-6 p-6">
-                <div>
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Contact Information</h3>
-                  <ul class="space-y-3">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Contact Form</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Access to Information</a></li>
-                    <!-- <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Compliance Officers</a></li> -->
-                    <!-- <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Terms & Conditions</a></li> -->
-                  </ul>
-                </div>
-                
-                <div class="bg-blue-50 p-4 rounded-lg">
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Contact</h3>
-                  <div class="space-y-2">
-                    <div class="flex items-start">
-                      <svg class="w-5 h-5 mt-1 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                      </svg>
-                      <div>
-                        <p class="font-medium">General Inquiries</p>
-                        <p class="text-gray-600">+265 123 456 789</p>
-                      </div>
-                    </div>
-                    <div class="flex items-start">
-                      <svg class="w-5 h-5 mt-1 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                      </svg>
-                      <div>
-                        <p class="font-medium">Email</p>
-                        <p class="text-gray-600">info@organization.org</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </a>
           </div>
          
         </nav>
@@ -711,13 +732,6 @@ const onClickOutside = () => {
         </div> 
     
         
-        <!-- Second logo -->
-        <!-- <div class="hidden lg:flex items-center">
-          <a href="/" class="flex items-center">
-            <img src="/arms1.png" alt="Partner Logo" class="h-12">
-          </a>
-        </div> -->
-       
       </div>
     </div>
 
