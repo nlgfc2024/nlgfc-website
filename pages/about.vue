@@ -1,6 +1,6 @@
 <script setup>
     definePageMeta({
-    title: 'About NLGFC'
+    title: 'About Us'
     })
 
     const route = useRoute()
@@ -165,55 +165,55 @@ function updateActiveTabFromHash(hash) {
       <!-- Sidebar Navigation -->
       <nav class="w-full md:w-64 flex-shrink-0 border-r border-gray-200 pr-4">
         <h2 class="text-lg font-semibold text-gray-900 mb-4 pl-2 border-l-4 border-gray-600">About NLGFC</h2>
-        
+
         <div class="space-y-6">
-          <div v-for="(group, groupIndex) in menuItems" :key="groupIndex">
+            <div v-for="(group, groupIndex) in menuItems" :key="groupIndex">
             <ul class="space-y-1">
-              <li v-for="item in group.items" :key="item.id">
+                <li v-for="item in group.items" :key="item.id">
                 <NuxtLink
-                  :to="`#${item.id}`"
-                  @click="toggleItem(item)"
-                  class="flex items-center justify-between px-4 py-3 rounded transition-colors text-gray-700 hover:bg-blue-50 hover:text-gray-800"
-                  :class="{
-                    'bg-blue-50 text-gray-800 font-medium border-l-4 border-blue-500': isActive(item)
-                  }"
+                    :to="`#${item.id}`"
+                    @click="activeTab = item.id"
+                    class="flex items-center justify-between px-4 py-3 rounded transition-colors text-gray-700 hover:bg-blue-50 hover:text-gray-800"
+                    :class="{
+                    'bg-blue-50 text-gray-800 font-medium border-l-4 border-blue-500': activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab))
+                    }"
                 >
-                  <span>{{ item.title }}</span>
-                  <svg 
+                    <span>{{ item.title }}</span>
+                    <svg 
                     v-if="item.subItems" 
                     class="w-4 h-4 ml-2 transition-transform duration-200"
                     :class="{ 'rotate-90': openSubMenu === item.id }"
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"
-                  >
+                    >
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                  </svg>
+                    </svg>
                 </NuxtLink>
 
                 <ul 
-                  v-if="item.subItems && openSubMenu === item.id"
-                  class="pl-6 mt-1 space-y-1"
+                    v-if="item.subItems"
+                    class="ml-4 pl-4 border-l border-gray-300 space-y-1 mt-1"
+                    :class="{ 'hidden': openSubMenu !== item.id }"
                 >
-                  <li v-for="subItem in item.subItems" :key="subItem.id">
+                    <li v-for="subItem in item.subItems" :key="subItem.id">
                     <NuxtLink
-                      :to="`#${subItem.id}`"
-                      @click="activeTab = subItem.id"
-                      class="block px-4 py-2 text-sm rounded transition-colors text-gray-600 hover:bg-blue-50 hover:text-gray-800"
-                      :class="{
-                        'bg-blue-100 text-blue-800 font-medium': activeTab === subItem.id
-                      }"
+                        :to="`#${subItem.id}`"
+                        @click="activeTab = subItem.id"
+                        class="block px-3 py-2 rounded text-gray-600 hover:bg-blue-50 hover:text-gray-800 text-sm"
+                        :class="{
+                        'bg-blue-100 text-blue-800 font-medium border-l-2 border-blue-500': activeTab === subItem.id
+                        }"
                     >
-                      {{ subItem.title }}
+                        {{ subItem.title }}
                     </NuxtLink>
-                  </li>
+                    </li>
                 </ul>
-              </li>
+                </li>
             </ul>
-          </div>
+            </div>
         </div>
       </nav>
-
       <!-- Main Content -->
       <main class="flex-1 min-w-0">
         <!-- Mission, Vision, Core Values -->
@@ -1316,8 +1316,8 @@ function updateActiveTabFromHash(hash) {
             </div>
         </div>
         </div>
-        </div>>
-        <!-- Structure Content -->
+        </div>
+        <!-- Organogram Section -->
         <div v-show="activeTab === 'structure' || activeTab === 'directorates'" class="prose max-w-none">
             <div class="mb-10">
                 <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
