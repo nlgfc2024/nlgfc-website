@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-  title: 'Balaka District Council',
+  title: 'Dedza District Council',
  
 })
 </script>

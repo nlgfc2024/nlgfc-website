@@ -432,7 +432,7 @@ const navigateToOpportunities = (section) => {
                   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Municipal/Town Councils</h3>
                   <ul class="space-y-2">
                     <li>
-                      <NuxtLink to="/localAuthorities/balakamanucipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/Lunchezamanucipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Lunchenza Municipal Council
                       </NuxtLink>
                     </li>
@@ -466,15 +466,22 @@ const navigateToOpportunities = (section) => {
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/Dedza-district" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         Dedza District Council
                       </NuxtLink>
                     </li>
-                    <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                  <li>
+                      <NuxtLink to="/localAuthorities/Dedza-district" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         Mulanje District Council
                       </NuxtLink>
                     </li>
+
+                    <li>
+                      <NuxtLink to="/localAuthorities/mulanje-district" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                        Mulanje District Council
+                      </NuxtLink>
+                    </li>
+    
                     <li>
                       <NuxtLink to="/localAuthorities/alldistricts" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         All District Councils →
