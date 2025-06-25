@@ -1,170 +1,162 @@
 <script setup>
-definePageMeta({
-  title: 'About NLGFC'
-})
+    definePageMeta({
+    title: 'About Us'
+    })
 
-const activeTab = ref('mvc')
-const openSubMenu = ref(null)
-const imageError = ref(false)
+    const route = useRoute()
+    const activeTab = ref('mvc')
+    const openSubMenu = ref(null)
+    const imageError = ref(false)
 
-const handleImageError = () => {
-  imageError.value = true;
-  console.error("Organogram image failed to load");
-};
+    const handleImageError = () => {
+    imageError.value = true;
+    console.error("Organogram image failed to load");
+    };
 
-const isActive = (item) => {
-  return activeTab.value === item.id || 
-         (item.subItems && item.subItems.some(sub => sub.id === activeTab.value))
-}
-
-const toggleItem = (item) => {
-  if (item.subItems) {
-    openSubMenu.value = openSubMenu.value === item.id ? null : item.id
-    if (!item.subItems.some(sub => sub.id === activeTab.value)) {
-      activeTab.value = item.subItems[0].id
-    }
-  } else {
-    activeTab.value = item.id
-    openSubMenu.value = null
-  }
-}
-// Board of Directors
-const board = {
-  chairperson: {
-    name: "Commissioner Richard Chapweteka",
-    position: "Board Chairperson",
-    image: "/images/board/CommissionerRichardChapwetekaBoardChairperson.png",
-    reportsTo: null,
-    subordinates: [
-      "member1",
-      "member2",
-      "member3",
-      "member4"
-    ]
-  },
-  member1: {
-    name: "Abel Mwambinga",
-    position: "Board Member",
-    image: "/images/board/Abel MwambingaBoardMember.png",
-    reportsTo: "chairperson"
-  },
-  member2: {
-    name: "Councilor Davie Maunde",
-    position: "Board Member",
-    image: "/images/board/CouncilorDavieMaundeBoardMember.png",
-    reportsTo: "chairperson"
-  },
-  member3: {
-    name: "Mary Mkwanda",
-    position: "Board Member",
-    image: "/images/board/MrsMaryMkwandaBoardMember.png",
-    reportsTo: "chairperson"
-  },
-  member4: {
-    name: "Lilian Khofi",
-    position: "Board Member",
-    image: "/images/board/Ms.LilianKhofiVice.png",
-    reportsTo: "chairperson"
-  }
-}
-
-// Executive Management
-const leadership = {
-  executiveDirector: {
-    name: "Kondwani Santhe (PhD)",
-    position: "Executive Director",
-    image: "/images/management/kondwani-santhe--ed.png",
-    reportsTo: null,
-    subordinates: [
-      "directorInfrastructure",
-      "directorFinance",
-      "directorCorporate"
-    ]
-  },
-  directorInfrastructure: {
-    name: "Paul Chipeta",
-    position: "Director of Social & Economic Development Services",
-    image: "/images/management/directorEconomicDevelopment.png",
-    reportsTo: "executiveDirector"
-  },
-  directorFinance: {
-    name: "Linda Kapanda",
-    position: "Director of Finance & Fiscal Decentralization",
-    image: "/images/management/financeDirector.png",
-    reportsTo: "executiveDirector"
-  },
-  directorCorporate: {
-    name: "Stanley Chuthi",
-    position: "Director of Administration & Corporate Services",
-    image: "/images/management/directorCorporateServices.png",
-    reportsTo: "executiveDirector"
-  }
-}
-
-const menuItems = [
-  { 
-    items: [
-      { id: 'mvc', title: 'Mission, Vision and Core Values' },
-      { id: 'powers', title: 'Powers and Functions' },
-      { id: 'board', title: 'Board of Directors' },
-      { id: 'management', title: 'Executive Management' },
-      { id: 'structure', title: 'Organogram' },
-    ]
-  },
-  { 
-    items: [
-      { 
-        id: 'directorates', 
-        title: 'Directorates and Divisions',
-        subItems: [
-          { id: 'finance', title: 'Finance & Fiscal Decentralization' },
-          { id: 'corporate', title: 'Corporate & Strategic Services' },
-          { id: 'social', title: 'Social & Economic Development Services' },
-          { id: 'planning', title: 'Planning, M&E' },
-          { id: 'procurement', title: 'Procurement' },
-          { id: 'audit', title: 'Internal Audit' }
+    // Board of Directors
+    const board = {
+    chairperson: {
+        name: "Commissioner Richard Chapweteka",
+        position: "Board Chairperson",
+        image: "/images/board/CommissionerRichardChapwetekaBoardChairperson.png",
+        reportsTo: null,
+        subordinates: [
+        "member1",
+        "member2",
+        "member3",
+        "member4"
         ]
-      }
-    ]
-  }
-]
+    },
+    member1: {
+        name: "Abel Mwambinga",
+        position: "Board Member",
+        image: "/images/board/Abel MwambingaBoardMember.png",
+        reportsTo: "chairperson"
+    },
+    member2: {
+        name: "Councilor Davie Maunde",
+        position: "Board Member",
+        image: "/images/board/CouncilorDavieMaundeBoardMember.png",
+        reportsTo: "chairperson"
+    },
+    member3: {
+        name: "Mary Mkwanda",
+        position: "Board Member",
+        image: "/images/board/MrsMaryMkwandaBoardMember.png",
+        reportsTo: "chairperson"
+    },
+    member4: {
+        name: "Lilian Khofi",
+        position: "Board Member",
+        image: "/images/board/Ms.LilianKhofiVice.png",
+        reportsTo: "chairperson"
+    }
+    }
 
-// Improved navigation handling
-onMounted(() => {
-  const handleHashChange = () => {
-    if (window.location.hash) {
-      const hash = window.location.hash.replace('#', '')
-      // Check both main items and subitems
-      const exists = menuItems.some(group => 
-        group.items.some(item => 
-          item.id === hash || 
-          (item.subItems && item.subItems.some(sub => sub.id === hash))
-        )
-      )
-      if (exists) {
-        activeTab.value = hash
-        // Open submenu if it's a subitem
-        const parentItem = menuItems
-          .flatMap(group => group.items)
-          .find(item => item.subItems?.some(sub => sub.id === hash))
-        if (parentItem) {
-          openSubMenu.value = parentItem.id
+    // Executive Management
+    const leadership = {
+    executiveDirector: {
+        name: "Kondwani Santhe (PhD)",
+        position: "Executive Director",
+        image: "/images/management/kondwani-santhe--ed.png",
+        reportsTo: null,
+        subordinates: [
+        "directorInfrastructure",
+        "directorFinance",
+        "directorCorporate"
+        ]
+    },
+    directorInfrastructure: {
+        name: "Paul Chipeta",
+        position: "Director of Social & Economic Development Services",
+        image: "/images/management/directorEconomicDevelopment.png",
+        reportsTo: "executiveDirector"
+    },
+    directorFinance: {
+        name: "Linda Kapanda",
+        position: "Director of Finance & Fiscal Decentralization",
+        image: "/images/management/financeDirector.png",
+        reportsTo: "executiveDirector"
+    },
+    directorCorporate: {
+        name: "Stanley Chuthi",
+        position: "Director of Administration & Corporate Services",
+        image: "/images/management/directorCorporateServices.png",
+        reportsTo: "executiveDirector"
+    }
+    }
+
+    const menuItems = [
+    { 
+        items: [
+        { id: 'mvc', title: 'Mission, Vision and Core Values' },
+        { id: 'powers', title: 'Powers and Functions' },
+        { id: 'board', title: 'Board of Directors' },
+        { id: 'management', title: 'Executive Management' },
+        { id: 'structure', title: 'Organogram' },
+        ]
+    },
+    { 
+        items: [
+        { 
+            id: 'directorates', 
+            title: 'Directorates and Divisions',
+            subItems: [
+            { id: 'finance', title: 'Finance & Fiscal Decentralization' },
+            { id: 'corporate', title: 'Corporate & Strategic Services' },
+            { id: 'social', title: 'Social & Economic Development Services' },
+            { id: 'planning', title: 'Planning, M&E' },
+            { id: 'procurement', title: 'Procurement' },
+            { id: 'audit', title: 'Internal Audit' }
+            ]
+        }
+        ]
+    }
+    ]
+
+    const isActive = (tabId) => {
+    return activeTab.value === tabId
+    }
+    onMounted(() => {
+    if (route.hash) {
+        updateActiveTabFromHash(route.hash.replace('#', ''))
+    } else {
+        // Set default tab if no hash is present
+        activeTab.value = 'mvc'
+    }
+    })
+
+    watch(() => route.hash, (hash) => {
+    if (hash) {
+        updateActiveTabFromHash(hash.replace('#', ''))
+    }
+    })
+
+function updateActiveTabFromHash(hash) {
+  for (const group of menuItems) {
+    for (const item of group.items) {
+      if (item.id === hash) {
+        if (!item.subItems) {
+          activeTab.value = item.id;
+        } else {
+          // For parent items, just open the menu but don't change tab
+          openSubMenu.value = item.id;
+        }
+        return;
+      }
+      if (item.subItems) {
+        const match = item.subItems.find(sub => sub.id === hash);
+        if (match) {
+          activeTab.value = match.id;
+          openSubMenu.value = item.id; // Open the parent menu
+          return;
         }
       }
     }
   }
+}
 
-  // Initial check
-  handleHashChange()
 
-  // Listen for hash changes
-  window.addEventListener('hashchange', handleHashChange)
-})
-
-// Clean up event listener
-onBeforeUnmount(() => {
-  window.removeEventListener('hashchange', handleHashChange)
-})
 </script>
 
 <template>
@@ -173,55 +165,55 @@ onBeforeUnmount(() => {
       <!-- Sidebar Navigation -->
       <nav class="w-full md:w-64 flex-shrink-0 border-r border-gray-200 pr-4">
         <h2 class="text-lg font-semibold text-gray-900 mb-4 pl-2 border-l-4 border-gray-600">About NLGFC</h2>
-        
+
         <div class="space-y-6">
-          <div v-for="(group, groupIndex) in menuItems" :key="groupIndex">
+            <div v-for="(group, groupIndex) in menuItems" :key="groupIndex">
             <ul class="space-y-1">
-              <li v-for="item in group.items" :key="item.id">
+                <li v-for="item in group.items" :key="item.id">
                 <NuxtLink
-                  :to="`#${item.id}`"
-                  @click="toggleItem(item)"
-                  class="flex items-center justify-between px-4 py-3 rounded transition-colors text-gray-700 hover:bg-blue-50 hover:text-gray-800"
-                  :class="{
-                    'bg-blue-50 text-gray-800 font-medium border-l-4 border-blue-500': isActive(item)
-                  }"
+                    :to="`#${item.id}`"
+                    @click="activeTab = item.id"
+                    class="flex items-center justify-between px-4 py-3 rounded transition-colors text-gray-700 hover:bg-blue-50 hover:text-gray-800"
+                    :class="{
+                    'bg-blue-50 text-gray-800 font-medium border-l-4 border-blue-500': activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab))
+                    }"
                 >
-                  <span>{{ item.title }}</span>
-                  <svg 
+                    <span>{{ item.title }}</span>
+                    <svg 
                     v-if="item.subItems" 
                     class="w-4 h-4 ml-2 transition-transform duration-200"
                     :class="{ 'rotate-90': openSubMenu === item.id }"
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"
-                  >
+                    >
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                  </svg>
+                    </svg>
                 </NuxtLink>
 
                 <ul 
-                  v-if="item.subItems && openSubMenu === item.id"
-                  class="pl-6 mt-1 space-y-1"
+                    v-if="item.subItems"
+                    class="ml-4 pl-4 border-l border-gray-300 space-y-1 mt-1"
+                    :class="{ 'hidden': openSubMenu !== item.id }"
                 >
-                  <li v-for="subItem in item.subItems" :key="subItem.id">
+                    <li v-for="subItem in item.subItems" :key="subItem.id">
                     <NuxtLink
-                      :to="`#${subItem.id}`"
-                      @click="activeTab = subItem.id"
-                      class="block px-4 py-2 text-sm rounded transition-colors text-gray-600 hover:bg-blue-50 hover:text-gray-800"
-                      :class="{
-                        'bg-blue-100 text-blue-800 font-medium': activeTab === subItem.id
-                      }"
+                        :to="`#${subItem.id}`"
+                        @click="activeTab = subItem.id"
+                        class="block px-3 py-2 rounded text-gray-600 hover:bg-blue-50 hover:text-gray-800 text-sm"
+                        :class="{
+                        'bg-blue-100 text-blue-800 font-medium border-l-2 border-blue-500': activeTab === subItem.id
+                        }"
                     >
-                      {{ subItem.title }}
+                        {{ subItem.title }}
                     </NuxtLink>
-                  </li>
+                    </li>
                 </ul>
-              </li>
+                </li>
             </ul>
-          </div>
+            </div>
         </div>
       </nav>
-
       <!-- Main Content -->
       <main class="flex-1 min-w-0">
         <!-- Mission, Vision, Core Values -->
@@ -1324,8 +1316,8 @@ onBeforeUnmount(() => {
             </div>
         </div>
         </div>
-        </div>>
-        <!-- Structure Content -->
+        </div>
+        <!-- Organogram Section -->
         <div v-show="activeTab === 'structure' || activeTab === 'directorates'" class="prose max-w-none">
             <div class="mb-10">
                 <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
