@@ -93,7 +93,7 @@
         { id: 'powers', title: 'Powers and Functions' },
         { id: 'board', title: 'Board of Directors' },
         { id: 'management', title: 'Executive Management' },
-        { id: 'structure', title: 'Organogram' },
+        // { id: 'structure', title: 'Organogram' },
         ]
     },
     { 
@@ -155,7 +155,26 @@ function updateActiveTabFromHash(hash) {
     }
   }
 }
+// Organogram image zoom and download
+const zoom = ref(100);
+const imageLoaded = ref(false);
 
+const zoomIn = () => {
+  if (zoom.value < 200) zoom.value += 25;
+};
+
+const zoomOut = () => {
+  if (zoom.value > 50) zoom.value -= 25;
+};
+
+const downloadImage = () => {
+  const link = document.createElement('a');
+  link.href = '/images/samples/organo.png';
+  link.download = 'organogram.png';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
 </script>
 
@@ -1329,87 +1348,66 @@ function updateActiveTabFromHash(hash) {
             </div>
 
             <!-- Organogram Container with Enhanced Features -->
-            <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
-                <!-- Interactive Controls -->
-                <div class="bg-gray-50 px-4 py-3 border-b border-gray-200 flex justify-between items-center">
-                    <div class="flex items-center space-x-2">
-                        <button class="p-2 rounded-md hover:bg-gray-200 text-gray-700">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        </button>
-                        <span class="text-sm text-gray-500">Organizational Chart</span>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button class="p-2 rounded-md hover:bg-gray-200 text-gray-700">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                        </svg>
-                        </button>
-                        <button class="p-2 rounded-md hover:bg-gray-200 text-gray-700">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Organogram Image with Enhanced Display -->
-                <div class="p-4 md:p-8">
-                    <div class="relative overflow-auto border border-gray-200 rounded-lg bg-gray-50">
-                        <img 
-                        src="/images/samples/organo.png" 
-                        alt="NLGFC Organizational Structure" 
-                        class="w-full h-auto max-w-4xl mx-auto shadow-sm"
-                        @error="handleImageError"
-                        >
-                        <!-- Fallback if image fails to load -->
-                        <div v-if="imageError" class="absolute inset-0 flex items-center justify-center p-8 text-center">
-                        <div>
-                            <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <h3 class="mt-2 text-lg font-medium text-gray-900">Organogram not available</h3>
-                            <p class="mt-1 text-gray-500">The organizational chart could not be loaded.</p>
-                            <button class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                            Request Organogram
-                            </button>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Key Directorate Quick Links -->
-                <div class="px-4 pb-6 md:px-8">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Explore Directorates:</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <button 
-                    @click="activeTab = 'finance'"
-                    class="px-3 py-2 bg-blue-50 text-blue-700 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors"
-                    >
-                    Finance
-                    </button>
-                    <button 
-                    @click="activeTab = 'corporate'"
-                    class="px-3 py-2 bg-blue-50 text-blue-700 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors"
-                    >
-                    Corporate
-                    </button>
-                    <button 
-                    @click="activeTab = 'planning'"
-                    class="px-3 py-2 bg-blue-50 text-blue-700 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors"
-                    >
-                    Planning
-                    </button>
-                    <button 
-                    @click="activeTab = 'audit'"
-                    class="px-3 py-2 bg-blue-50 text-blue-700 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors"
-                    >
-                    Audit
-                    </button>
-                </div>
-                </div>
-            </div>
+             <div class="bg-white rounded-lg shadow border border-gray-200">
+    <!-- Controls -->
+    <div class="flex justify-between items-center p-3 border-b border-gray-200">
+      <div class="flex space-x-2">
+        <!-- Zoom Controls -->
+        <div class="flex items-center space-x-1 bg-gray-100 rounded-md px-2">
+          <button 
+            @click="zoomOut" 
+            :disabled="zoom <= 50"
+            class="p-1 text-gray-700 disabled:opacity-50"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+            </svg>
+          </button>
+          <span class="text-sm">{{ zoom }}%</span>
+          <button 
+            @click="zoomIn" 
+            :disabled="zoom >= 200"
+            class="p-1 text-gray-700 disabled:opacity-50"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Download Button -->
+      <button 
+        @click="downloadImage"
+        class="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        <span class="text-sm">Download</span>
+      </button>
+    </div>
+    
+    <!-- Image Container -->
+    <div class="relative overflow-hidden h-96">
+      <div 
+        class="absolute inset-0 flex items-center justify-center transition-transform duration-200"
+        :style="{ transform: `scale(${zoom/100})`, transformOrigin: 'center' }"
+      >
+        <img 
+          src="/images/samples/organo.png" 
+          alt="Organogram"
+          class="max-w-full max-h-full object-contain"
+          @load="imageLoaded = true"
+        >
+      </div>
+      
+      <!-- Loading State -->
+      <div v-if="!imageLoaded" class="absolute inset-0 flex items-center justify-center">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    </div>
+  </div>
         </div>
 
 
