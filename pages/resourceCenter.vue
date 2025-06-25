@@ -427,7 +427,7 @@ const tabs = ref([
         ]
       },
       {
-        name: 'Speaches',
+        name: 'Speeches',
         contents: [
           {
             name: 'NLGFC [PWP] Success Stories MASAF IV',
@@ -463,7 +463,7 @@ const tabs = ref([
         ]
       },
       {
-        name: 'Disburments',
+        name: 'Disbursements',
         contents: [
           {
             name: 'Disbursement Report Q1 2025',

@@ -567,11 +567,11 @@ const navigateToOpportunities = (section) => {
                   <ul class="space-y-2">
                     <li><a href="resourceCenter?tab=0&sub=0" class="text-gray-700 hover:text-blue-700 transition">Press Releases</a></li>
                     <li><a href="resourceCenter?tab=0&sub=1" class="text-gray-700 hover:text-blue-700 transition">Success Stories</a></li>
-                    <li><a href="resourceCenter?tab=0&sub=2" class="text-gray-700 hover:text-blue-700 transition">Speaches</a></li>
+                    <li><a href="resourceCenter?tab=0&sub=2" class="text-gray-700 hover:text-blue-700 transition">Speeches</a></li>
                     <li><a href="resourceCenter?tab=0&sub=3" class="text-gray-700 hover:text-blue-700 transition">Research & Discussions</a></li>
                     <li><a href="resourceCenter?tab=0&sub=4" class="text-gray-700 hover:text-blue-700 transition">Budget Documents</a></li>
-                    <li><a href="resourceCenter?tab=0&sub=5" class="text-gray-700 hover:text-blue-700 transition">Disburments</a></li>
-                    <li><a href="resourceCenter?tab=0&sub=6" class="text-gray-700 hover:text-blue-700 transition">Newslatter</a></li>
+                    <li><a href="resourceCenter?tab=0&sub=5" class="text-gray-700 hover:text-blue-700 transition">Disbursements</a></li>
+                    <li><a href="resourceCenter?tab=0&sub=6" class="text-gray-700 hover:text-blue-700 transition">Newsletter</a></li>
                     <li><a href="resourceCenter?tab=0&sub=7" class="text-gray-700 hover:text-blue-700 transition">Manuals & Guidelines</a></li>
                     <li><a href="resourceCenter?tab=0&sub=8" class="text-gray-700 hover:text-blue-700 transition">Policies & Strategies</a></li>
                   </ul>
