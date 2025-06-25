@@ -93,7 +93,7 @@
         { id: 'powers', title: 'Powers and Functions' },
         { id: 'board', title: 'Board of Directors' },
         { id: 'management', title: 'Executive Management' },
-        { id: 'structure', title: 'Organogram' },
+        // { id: 'structure', title: 'Organogram' },
         ]
     },
     { 

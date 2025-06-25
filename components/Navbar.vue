@@ -191,11 +191,11 @@ const navigateToOpportunities = (section) => {
                         Executive Management
                       </NuxtLink>
                     </li>
-                    <li>
+                    <!-- <li>
                       <NuxtLink to="/about#structure" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Organogram
                       </NuxtLink>
-                    </li>
+                    </li> -->
                     <li>
                       <NuxtLink to="/about#directorates" class="text-gray-600 hover:text-blue-600 transition flex items-center">
                         Directorates and Divisions
