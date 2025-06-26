@@ -293,6 +293,7 @@ function updateActiveTabFromHash(hash) {
         </div>
       </div>
 
+      <!-- Financial Management -->
       <div v-show="activeTab === 'financialManagement'" class="prose max-w-none">
         <!-- Header Section -->
         <div class="mb-10">
@@ -305,16 +306,13 @@ function updateActiveTabFromHash(hash) {
         </div>
 
         <!-- Overview Section -->
-       <div class="bg-gradient-to-br from-blue-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
+        <div class="bg-gradient-to-br from-blue-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
           <div class="flex items-start">
-            <!-- Icon Container - Adjusted for better alignment -->
             <div class="bg-blue-100 p-3 rounded-lg mr-5 flex-shrink-0 mt-1">
               <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            
-            <!-- Content - Adjusted for perfect alignment -->
             <div class="flex flex-col justify-center">
               <h3 class="text-xl font-semibold text-gray-800 mb-3">PFM Cycle Management</h3>
               <p class="text-gray-700 leading-relaxed">
@@ -402,7 +400,6 @@ function updateActiveTabFromHash(hash) {
             </div>
           </div>
 
-          <!-- Continue with all other sections following the same pattern -->
           <!-- Budgeting and Consolidation -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div class="bg-gray-700 px-6 py-4">
@@ -487,7 +484,6 @@ function updateActiveTabFromHash(hash) {
             </div>
           </div>
 
-          <!-- Continue with remaining sections (5-9) following same structure -->
           <!-- Audit Oversight -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div class="bg-gray-600 px-6 py-4">
@@ -677,12 +673,12 @@ function updateActiveTabFromHash(hash) {
 
       <!-- Local Development Support -->
       <div v-show="activeTab === 'localDevelopmentSupport'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div class="p-6">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Local Development Support</h2>
-              <div class="prose max-w-none text-gray-700">
-                <p>NLGFC provides local development project support to LAs through supervision and monitoring of both GoM and donor-funded projects in local governments. Malawi administers several funding mechanisms to support local development projects. These funds are designed to empower districts and constituencies to address key socio-economic challenges, improve infrastructure, and enhance service delivery at the grassroots level.</p>
-              </div>
+        <div class="p-6">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6">Local Development Support</h2>
+          <div class="prose max-w-none text-gray-700">
+            <p>NLGFC provides local development project support to LAs through supervision and monitoring of both GoM and donor-funded projects in local governments. Malawi administers several funding mechanisms to support local development projects. These funds are designed to empower districts and constituencies to address key socio-economic challenges, improve infrastructure, and enhance service delivery at the grassroots level.</p>
           </div>
+        </div>
       </div>
 
       <!-- DDF -->

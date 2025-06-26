@@ -241,7 +241,7 @@ const downloadImage = () => {
             <div class="bg-white rounded-xl shadow-sm p-8 mb-10 border border-gray-100">
                 <div class="flex items-start mb-6">
                     <div class="bg-blue-100 p-3 rounded-lg mr-6">
-                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
@@ -259,7 +259,7 @@ const downloadImage = () => {
             <div class="bg-white rounded-xl shadow-sm p-8 mb-10 border border-gray-100">
                 <div class="flex items-start">
                     <div class="bg-purple-100 p-3 rounded-lg mr-6">
-                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                         </svg>
                     </div>
@@ -276,7 +276,7 @@ const downloadImage = () => {
             <div class="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
                 <div class="flex items-start mb-6">
                     <div class="bg-green-100 p-3 rounded-lg mr-6">
-                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
@@ -1438,7 +1438,7 @@ nav h3 {
   margin-bottom: 0.5rem;
 }
 
-/*Board of DIRECTOS */
+/* Board of Directors */
 .board-page {
   max-width: 1200px;
   margin: 2rem auto;
@@ -1446,131 +1446,86 @@ nav h3 {
   text-align: center;
 }
 
-h1 {
+.board-page h1 {
   color: #2c3e50;
   margin-bottom: 2.5rem;
   font-size: 2rem;
 }
 
-.org-level {
+.board-page .org-level {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
   flex-wrap: wrap;
 }
 
-.top-level {
+.board-page .top-level {
   margin-bottom: 1rem;
 }
 
-.middle-level {
+.board-page .middle-level {
   margin-top: 1rem;
 }
 
-.board-card {
+.board-page .board-card {
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 1.5rem;
   width: 200px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  min-height: 300px; /* Added for consistent height */
 }
 
-.top-level .board-card {
+.board-page .top-level .board-card {
   background: #f8f9fa;
   border-top: 4px solid #2c3e50;
   width: 220px;
 }
 
-.position {
+.board-page .position {
   color: #666;
   font-style: italic;
   margin-top: 0.5rem;
   font-size: 0.9rem;
 }
 
-.board-image {
+.board-page .board-image {
   width: 100px;
   height: 100px;
   border-radius: 50%;
   overflow: hidden;
   margin: 0 auto 1rem;
   border: 3px solid #f1f1f1;
+  background: #f8f8f8; /* Fallback background */
 }
 
-.top-level .board-image {
+.board-page .top-level .board-image {
   width: 110px;
   height: 110px;
 }
 
-.board-image img {
+.board-page .board-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block; /* Remove extra space under image */
 }
 
-.connector-container {
+.board-page .connector-container {
   display: flex;
   justify-content: center;
   margin: 0.5rem 0;
 }
 
-.connector-line {
+.board-page .connector-line {
   height: 30px;
   width: 80%;
   max-width: 800px;
   border-bottom: 2px solid #ddd;
 }
 
-@media (max-width: 768px) {
-  .org-level {
-    gap: 1rem;
-  }
-  
-  .board-card {
-    width: 160px;
-    padding: 1rem;
-  }
-  
-  .top-level .board-card {
-    width: 180px;
-  }
-  
-  .board-image {
-    width: 80px;
-    height: 80px;
-  }
-  
-  .top-level .board-image {
-    width: 90px;
-    height: 90px;
-  }
-  
-  .connector-line {
-    width: 60%;
-  }
-}
-
-@media (max-width: 480px) {
-  .org-level {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .board-card {
-    width: 100%;
-    max-width: 250px;
-  }
-  
-  .connector-line {
-    height: 20px;
-    width: 2px;
-    border-bottom: none;
-    border-left: 2px solid #ddd;
-  }
-}
-
-/* Executive Management Styles */
+/* Executive Management */
 .executive-page {
   max-width: 1000px;
   margin: 2rem auto;
@@ -1578,83 +1533,130 @@ h1 {
   text-align: center;
 }
 
-h1 {
+.executive-page h1 {
   color: #2c3e50;
   margin-bottom: 2rem;
 }
 
-.org-level {
+.executive-page .org-level {
   display: flex;
   justify-content: center;
   gap: 2rem;
+  flex-wrap: wrap; /* Added for better responsiveness */
 }
 
-.top-level {
+.executive-page .top-level {
   margin-bottom: 1rem;
 }
 
-.middle-level {
+.executive-page .middle-level {
   margin-top: 1rem;
 }
 
-.executive-card {
+.executive-page .executive-card {
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 1.5rem;
   min-width: 250px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  min-height: 320px; /* Added for consistent height */
 }
 
-.top-level .executive-card {
+.executive-page .top-level .executive-card {
   background: #f8f9fa;
   border-top: 4px solid #e74c3c;
 }
 
-.position {
+.executive-page .position {
   color: #666;
   font-style: italic;
   margin-top: 0.5rem;
 }
 
-.connector {
+.executive-page .connector {
   height: 40px;
   width: 2px;
   background: #ddd;
   margin: 0 auto;
 }
 
-.executive-image {
+.executive-page .executive-image {
   width: 120px;
   height: 120px;
   border-radius: 50%;
   overflow: hidden;
   margin: 0 auto 1rem;
   border: 3px solid #f1f1f1;
+  background: #f8f8f8; /* Fallback background */
 }
 
-.executive-image img {
+.executive-page .executive-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block; /* Remove extra space under image */
 }
 
+/* Responsive Styles */
 @media (max-width: 768px) {
-  .org-level {
-    flex-direction: column;
-    align-items: center;
+  .board-page .org-level,
+  .executive-page .org-level {
     gap: 1rem;
   }
   
-  .connector {
-    height: 20px;
+  .board-page .board-card {
+    width: 160px;
+    padding: 1rem;
+    min-height: 280px;
   }
   
-  .executive-card {
-    width: 100%;
-    max-width: 300px;
+  .board-page .top-level .board-card {
+    width: 180px;
+  }
+  
+  .board-page .board-image {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .board-page .top-level .board-image {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .board-page .connector-line {
+    width: 60%;
+  }
+
+  .executive-page .executive-card {
+    min-height: 300px;
+    min-width: 200px;
   }
 }
 
-
+@media (max-width: 480px) {
+  .board-page .org-level,
+  .executive-page .org-level {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .board-page .board-card,
+  .executive-page .executive-card {
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .board-page .connector-line {
+    height: 20px;
+    width: 2px;
+    border-bottom: none;
+    border-left: 2px solid #ddd;
+  }
+  
+  .executive-page .connector {
+    height: 20px;
+  }
+}
 </style>
