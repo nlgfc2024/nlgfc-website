@@ -336,7 +336,7 @@ const navigateToOpportunities = (section) => {
               class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100"
               style="min-width: 900px;"
             >
-              <div class="grid grid-cols-4 gap-6 p-6">
+              <div class="grid grid-cols-3 gap-6 p-6">
                 <!-- Column 1 -->
                 <div>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Current Projects</h3>
@@ -399,22 +399,6 @@ const navigateToOpportunities = (section) => {
                     <li><NuxtLink to="/projects/upcomingProjects#inspire" class="text-gray-600 hover:text-blue-600">INSPIRE-O</NuxtLink></li>
                   </ul>
                 </div>
-
-                <!-- Column 4 -->
-                <div class="mt-10 md:mt-0">
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
-                  <ul class="space-y-2">
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#msr" class="text-gray-600 hover:text-blue-600">MSR</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#e-payments" class="text-gray-600 hover:text-blue-600">E-Payments</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#publicworks" class="text-gray-600 hover:text-blue-600">Public Works MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#grm" class="text-gray-600 hover:text-blue-600">GRM MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#sctmis" class="text-gray-600 hover:text-blue-600">SCTP MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#lapas" class="text-gray-600 hover:text-blue-600">LAPA MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#cimis" class="text-gray-600 hover:text-blue-600">CIMIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#pmis" class="text-gray-600 hover:text-blue-600">PMIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600">LAIF MIS</NuxtLink></li>
-                  </ul>
-                </div>
               </div>
             </div>
           </div>
@@ -455,7 +439,7 @@ const navigateToOpportunities = (section) => {
           <!-- Local Councils Mega Menu -->
           <div @mouseenter="toggleMegaMenu('councils')" @mouseleave="toggleMegaMenu(null)" class="relative">
             <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
-              District local Authorities           <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+              Local Authorities           <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </button>
