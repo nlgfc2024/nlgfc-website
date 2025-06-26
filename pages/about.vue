@@ -1410,9 +1410,6 @@ const downloadImage = () => {
   </div>
         </div>
 
-
-
-
       </main>
     </div>
   </div>
