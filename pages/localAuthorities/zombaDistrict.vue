@@ -167,39 +167,17 @@ const news = [
                   <div class="bg-blue-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
                     <h3 class="text-lg font-semibold text-gray-900 mb-3">About Zomba District Council</h3>
                     <p class="text-gray-700 leading-relaxed">
-                       </p>
-                  </div>
-
-                  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mandate</h3>
-                    <ul class="space-y-2">
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>   //</span>  <!-- this is kovahiwa and ken we left these spaces so that we can the data for district in the spans elements-->
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////// </span>
-                      </li>
-                    </ul>
+                      total land area of Malawi. It is located on latitude 15.3860S and longitude 35.3188E south-east of Malawi, about 70km from Blantyre City to the south, and 49.4kms from Liwonde Town to the east. It is also located some 333.2kms south-south east ofLilongwe, the capital city. The District shares boundaries with Machinga District to the north, Balaka District to the north west, Mulanje and Phalombe Districts to the south, Chiradzulu and Blantyre Districts to the south west and the Republic of Mozambique to the east.  </p>
                   </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
                     <h3 class="text-lg font-semibold text-gray-900 mb-3">Vision</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">..//.</p>
+                    <p class="text-gray-700 leading-relaxed font-medium">...</p>
                   </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
                     <h3 class="text-lg font-semibold text-gray-900 mb-3">Mission</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">///</p>
+                    <p class="text-gray-700 leading-relaxed font-medium">...</p>
                   </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
@@ -207,31 +185,31 @@ const news = [
                     <ul class="space-y-2">
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
+                        <span>.......</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
+                        <span>....</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
+                        <span>....</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
+                        <span>.....</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
+                        <span>....</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///////</span>
+                        <span>......</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
+                        <span>......</span>
                       </li>
                     </ul>
                   </div>
@@ -241,7 +219,7 @@ const news = [
                     <ul class="space-y-2">
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
+                        <span>......</span>
                       </li>
                       
                     </ul>
@@ -254,15 +232,15 @@ const news = [
                       <</div>
                     <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
                       <h4 class="font-semibold text-gray-900 mb-2">Jurisdiction</h4>
-                      <p class="text-gray-700">/////</p>
+                      <p class="text-gray-700">.....</p>
                     </div>
                     <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
                       <h4 class="font-semibold text-gray-900 mb-2">Population</h4>
-                      <p class="text-gray-700">///////</p>
+                      <p class="text-gray-700">.....</p>
                     </div>
                     <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
                       <h4 class="font-semibold text-gray-900 mb-2">Structure</h4>
-                      <p class="text-gray-700">////</p>
+                      <p class="text-gray-700">....</p>
                     </div>
                   </div>
                 </div>
