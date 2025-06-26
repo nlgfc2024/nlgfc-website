@@ -1,170 +1,181 @@
 <script setup>
-definePageMeta({
-  title: 'About NLGFC'
-})
+    definePageMeta({
+    title: 'About Us'
+    })
 
-const activeTab = ref('mvc')
-const openSubMenu = ref(null)
-const imageError = ref(false)
+    const route = useRoute()
+    const activeTab = ref('mvc')
+    const openSubMenu = ref(null)
+    const imageError = ref(false)
 
-const handleImageError = () => {
-  imageError.value = true;
-  console.error("Organogram image failed to load");
-};
+    const handleImageError = () => {
+    imageError.value = true;
+    console.error("Organogram image failed to load");
+    };
 
-const isActive = (item) => {
-  return activeTab.value === item.id || 
-         (item.subItems && item.subItems.some(sub => sub.id === activeTab.value))
-}
-
-const toggleItem = (item) => {
-  if (item.subItems) {
-    openSubMenu.value = openSubMenu.value === item.id ? null : item.id
-    if (!item.subItems.some(sub => sub.id === activeTab.value)) {
-      activeTab.value = item.subItems[0].id
-    }
-  } else {
-    activeTab.value = item.id
-    openSubMenu.value = null
-  }
-}
-// Board of Directors
-const board = {
-  chairperson: {
-    name: "Commissioner Richard Chapweteka",
-    position: "Board Chairperson",
-    image: "/images/board/CommissionerRichardChapwetekaBoardChairperson.png",
-    reportsTo: null,
-    subordinates: [
-      "member1",
-      "member2",
-      "member3",
-      "member4"
-    ]
-  },
-  member1: {
-    name: "Abel Mwambinga",
-    position: "Board Member",
-    image: "/images/board/Abel MwambingaBoardMember.png",
-    reportsTo: "chairperson"
-  },
-  member2: {
-    name: "Councilor Davie Maunde",
-    position: "Board Member",
-    image: "/images/board/CouncilorDavieMaundeBoardMember.png",
-    reportsTo: "chairperson"
-  },
-  member3: {
-    name: "Mary Mkwanda",
-    position: "Board Member",
-    image: "/images/board/MrsMaryMkwandaBoardMember.png",
-    reportsTo: "chairperson"
-  },
-  member4: {
-    name: "Lilian Khofi",
-    position: "Board Member",
-    image: "/images/board/Ms.LilianKhofiVice.png",
-    reportsTo: "chairperson"
-  }
-}
-
-// Executive Management
-const leadership = {
-  executiveDirector: {
-    name: "Kondwani Santhe (PhD)",
-    position: "Executive Director",
-    image: "/images/management/kondwani-santhe--ed.png",
-    reportsTo: null,
-    subordinates: [
-      "directorInfrastructure",
-      "directorFinance",
-      "directorCorporate"
-    ]
-  },
-  directorInfrastructure: {
-    name: "Paul Chipeta",
-    position: "Director of Social & Economic Development Services",
-    image: "/images/management/directorEconomicDevelopment.png",
-    reportsTo: "executiveDirector"
-  },
-  directorFinance: {
-    name: "Linda Kapanda",
-    position: "Director of Finance & Fiscal Decentralization",
-    image: "/images/management/financeDirector.png",
-    reportsTo: "executiveDirector"
-  },
-  directorCorporate: {
-    name: "Stanley Chuthi",
-    position: "Director of Administration & Corporate Services",
-    image: "/images/management/directorCorporateServices.png",
-    reportsTo: "executiveDirector"
-  }
-}
-
-const menuItems = [
-  { 
-    items: [
-      { id: 'mvc', title: 'Mission, Vision and Core Values' },
-      { id: 'powers', title: 'Powers and Functions' },
-      { id: 'board', title: 'Board of Directors' },
-      { id: 'management', title: 'Executive Management' },
-      { id: 'structure', title: 'Organogram' },
-    ]
-  },
-  { 
-    items: [
-      { 
-        id: 'directorates', 
-        title: 'Directorates and Divisions',
-        subItems: [
-          { id: 'finance', title: 'Finance & Fiscal Decentralization' },
-          { id: 'corporate', title: 'Corporate & Strategic Services' },
-          { id: 'social', title: 'Social & Economic Development Services' },
-          { id: 'planning', title: 'Planning, M&E' },
-          { id: 'procurement', title: 'Procurement' },
-          { id: 'audit', title: 'Internal Audit' }
+    // Board of Directors
+    const board = {
+    chairperson: {
+        name: "Commissioner Richard Chapweteka",
+        position: "Board Chairperson",
+        image: "/images/board/CommissionerRichardChapwetekaBoardChairperson.png",
+        reportsTo: null,
+        subordinates: [
+        "member1",
+        "member2",
+        "member3",
+        "member4"
         ]
-      }
-    ]
-  }
-]
+    },
+    member1: {
+        name: "Abel Mwambinga",
+        position: "Board Member",
+        image: "/images/board/Abel MwambingaBoardMember.png",
+        reportsTo: "chairperson"
+    },
+    member2: {
+        name: "Councilor Davie Maunde",
+        position: "Board Member",
+        image: "/images/board/CouncilorDavieMaundeBoardMember.png",
+        reportsTo: "chairperson"
+    },
+    member3: {
+        name: "Mary Mkwanda",
+        position: "Board Member",
+        image: "/images/board/MrsMaryMkwandaBoardMember.png",
+        reportsTo: "chairperson"
+    },
+    member4: {
+        name: "Lilian Khofi",
+        position: "Board Member",
+        image: "/images/board/Ms.LilianKhofiVice.png",
+        reportsTo: "chairperson"
+    }
+    }
 
-// Improved navigation handling
-onMounted(() => {
-  const handleHashChange = () => {
-    if (window.location.hash) {
-      const hash = window.location.hash.replace('#', '')
-      // Check both main items and subitems
-      const exists = menuItems.some(group => 
-        group.items.some(item => 
-          item.id === hash || 
-          (item.subItems && item.subItems.some(sub => sub.id === hash))
-        )
-      )
-      if (exists) {
-        activeTab.value = hash
-        // Open submenu if it's a subitem
-        const parentItem = menuItems
-          .flatMap(group => group.items)
-          .find(item => item.subItems?.some(sub => sub.id === hash))
-        if (parentItem) {
-          openSubMenu.value = parentItem.id
+    // Executive Management
+    const leadership = {
+    executiveDirector: {
+        name: "Kondwani Santhe (PhD)",
+        position: "Executive Director",
+        image: "/images/management/kondwani-santhe--ed.png",
+        reportsTo: null,
+        subordinates: [
+        "directorInfrastructure",
+        "directorFinance",
+        "directorCorporate"
+        ]
+    },
+    directorInfrastructure: {
+        name: "Paul Chipeta",
+        position: "Director of Social & Economic Development Services",
+        image: "/images/management/directorEconomicDevelopment.png",
+        reportsTo: "executiveDirector"
+    },
+    directorFinance: {
+        name: "Linda Kapanda",
+        position: "Director of Finance & Fiscal Decentralization",
+        image: "/images/management/financeDirector.png",
+        reportsTo: "executiveDirector"
+    },
+    directorCorporate: {
+        name: "Stanley Chuthi",
+        position: "Director of Administration & Corporate Services",
+        image: "/images/management/directorCorporateServices.png",
+        reportsTo: "executiveDirector"
+    }
+    }
+
+    const menuItems = [
+    { 
+        items: [
+        { id: 'mvc', title: 'Mission, Vision and Core Values' },
+        { id: 'powers', title: 'Powers and Functions' },
+        { id: 'board', title: 'Board of Directors' },
+        { id: 'management', title: 'Executive Management' },
+        // { id: 'structure', title: 'Organogram' },
+        ]
+    },
+    { 
+        items: [
+        { 
+            id: 'directorates', 
+            title: 'Directorates and Divisions',
+            subItems: [
+            { id: 'finance', title: 'Finance & Fiscal Decentralization' },
+            { id: 'corporate', title: 'Corporate & Strategic Services' },
+            { id: 'social', title: 'Social & Economic Development Services' },
+            { id: 'planning', title: 'Planning, M&E' },
+            { id: 'procurement', title: 'Procurement' },
+            { id: 'audit', title: 'Internal Audit' }
+            ]
+        }
+        ]
+    }
+    ]
+
+    const isActive = (tabId) => {
+    return activeTab.value === tabId
+    }
+    onMounted(() => {
+    if (route.hash) {
+        updateActiveTabFromHash(route.hash.replace('#', ''))
+    } else {
+        // Set default tab if no hash is present
+        activeTab.value = 'mvc'
+    }
+    })
+
+    watch(() => route.hash, (hash) => {
+    if (hash) {
+        updateActiveTabFromHash(hash.replace('#', ''))
+    }
+    })
+
+function updateActiveTabFromHash(hash) {
+  for (const group of menuItems) {
+    for (const item of group.items) {
+      if (item.id === hash) {
+        if (!item.subItems) {
+          activeTab.value = item.id;
+        } else {
+          // For parent items, just open the menu but don't change tab
+          openSubMenu.value = item.id;
+        }
+        return;
+      }
+      if (item.subItems) {
+        const match = item.subItems.find(sub => sub.id === hash);
+        if (match) {
+          activeTab.value = match.id;
+          openSubMenu.value = item.id; // Open the parent menu
+          return;
         }
       }
     }
   }
+}
+// Organogram image zoom and download
+const zoom = ref(100);
+const imageLoaded = ref(false);
 
-  // Initial check
-  handleHashChange()
+const zoomIn = () => {
+  if (zoom.value < 200) zoom.value += 25;
+};
 
-  // Listen for hash changes
-  window.addEventListener('hashchange', handleHashChange)
-})
+const zoomOut = () => {
+  if (zoom.value > 50) zoom.value -= 25;
+};
 
-// Clean up event listener
-onBeforeUnmount(() => {
-  window.removeEventListener('hashchange', handleHashChange)
-})
+const downloadImage = () => {
+  const link = document.createElement('a');
+  link.href = '/images/samples/organo.png';
+  link.download = 'organogram.png';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
 </script>
 
 <template>
@@ -173,55 +184,55 @@ onBeforeUnmount(() => {
       <!-- Sidebar Navigation -->
       <nav class="w-full md:w-64 flex-shrink-0 border-r border-gray-200 pr-4">
         <h2 class="text-lg font-semibold text-gray-900 mb-4 pl-2 border-l-4 border-gray-600">About NLGFC</h2>
-        
+
         <div class="space-y-6">
-          <div v-for="(group, groupIndex) in menuItems" :key="groupIndex">
+            <div v-for="(group, groupIndex) in menuItems" :key="groupIndex">
             <ul class="space-y-1">
-              <li v-for="item in group.items" :key="item.id">
+                <li v-for="item in group.items" :key="item.id">
                 <NuxtLink
-                  :to="`#${item.id}`"
-                  @click="toggleItem(item)"
-                  class="flex items-center justify-between px-4 py-3 rounded transition-colors text-gray-700 hover:bg-blue-50 hover:text-gray-800"
-                  :class="{
-                    'bg-blue-50 text-gray-800 font-medium border-l-4 border-blue-500': isActive(item)
-                  }"
+                    :to="`#${item.id}`"
+                    @click="activeTab = item.id"
+                    class="flex items-center justify-between px-4 py-3 rounded transition-colors text-gray-700 hover:bg-blue-50 hover:text-gray-800"
+                    :class="{
+                    'bg-blue-50 text-gray-800 font-medium border-l-4 border-blue-500': activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab))
+                    }"
                 >
-                  <span>{{ item.title }}</span>
-                  <svg 
+                    <span>{{ item.title }}</span>
+                    <svg 
                     v-if="item.subItems" 
                     class="w-4 h-4 ml-2 transition-transform duration-200"
                     :class="{ 'rotate-90': openSubMenu === item.id }"
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"
-                  >
+                    >
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                  </svg>
+                    </svg>
                 </NuxtLink>
 
                 <ul 
-                  v-if="item.subItems && openSubMenu === item.id"
-                  class="pl-6 mt-1 space-y-1"
+                    v-if="item.subItems"
+                    class="ml-4 pl-4 border-l border-gray-300 space-y-1 mt-1"
+                    :class="{ 'hidden': openSubMenu !== item.id }"
                 >
-                  <li v-for="subItem in item.subItems" :key="subItem.id">
+                    <li v-for="subItem in item.subItems" :key="subItem.id">
                     <NuxtLink
-                      :to="`#${subItem.id}`"
-                      @click="activeTab = subItem.id"
-                      class="block px-4 py-2 text-sm rounded transition-colors text-gray-600 hover:bg-blue-50 hover:text-gray-800"
-                      :class="{
-                        'bg-blue-100 text-blue-800 font-medium': activeTab === subItem.id
-                      }"
+                        :to="`#${subItem.id}`"
+                        @click="activeTab = subItem.id"
+                        class="block px-3 py-2 rounded text-gray-600 hover:bg-blue-50 hover:text-gray-800 text-sm"
+                        :class="{
+                        'bg-blue-100 text-blue-800 font-medium border-l-2 border-blue-500': activeTab === subItem.id
+                        }"
                     >
-                      {{ subItem.title }}
+                        {{ subItem.title }}
                     </NuxtLink>
-                  </li>
+                    </li>
                 </ul>
-              </li>
+                </li>
             </ul>
-          </div>
+            </div>
         </div>
       </nav>
-
       <!-- Main Content -->
       <main class="flex-1 min-w-0">
         <!-- Mission, Vision, Core Values -->
@@ -230,7 +241,7 @@ onBeforeUnmount(() => {
             <div class="bg-white rounded-xl shadow-sm p-8 mb-10 border border-gray-100">
                 <div class="flex items-start mb-6">
                     <div class="bg-blue-100 p-3 rounded-lg mr-6">
-                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
@@ -248,7 +259,7 @@ onBeforeUnmount(() => {
             <div class="bg-white rounded-xl shadow-sm p-8 mb-10 border border-gray-100">
                 <div class="flex items-start">
                     <div class="bg-purple-100 p-3 rounded-lg mr-6">
-                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                         </svg>
                     </div>
@@ -265,7 +276,7 @@ onBeforeUnmount(() => {
             <div class="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
                 <div class="flex items-start mb-6">
                     <div class="bg-green-100 p-3 rounded-lg mr-6">
-                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
@@ -1324,8 +1335,8 @@ onBeforeUnmount(() => {
             </div>
         </div>
         </div>
-        </div>>
-        <!-- Structure Content -->
+        </div>
+        <!-- Organogram Section -->
         <div v-show="activeTab === 'structure' || activeTab === 'directorates'" class="prose max-w-none">
             <div class="mb-10">
                 <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
@@ -1337,91 +1348,67 @@ onBeforeUnmount(() => {
             </div>
 
             <!-- Organogram Container with Enhanced Features -->
-            <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
-                <!-- Interactive Controls -->
-                <div class="bg-gray-50 px-4 py-3 border-b border-gray-200 flex justify-between items-center">
-                    <div class="flex items-center space-x-2">
-                        <button class="p-2 rounded-md hover:bg-gray-200 text-gray-700">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                        </svg>
-                        </button>
-                        <span class="text-sm text-gray-500">Organizational Chart</span>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button class="p-2 rounded-md hover:bg-gray-200 text-gray-700">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                        </svg>
-                        </button>
-                        <button class="p-2 rounded-md hover:bg-gray-200 text-gray-700">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                        </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Organogram Image with Enhanced Display -->
-                <div class="p-4 md:p-8">
-                    <div class="relative overflow-auto border border-gray-200 rounded-lg bg-gray-50">
-                        <img 
-                        src="/images/samples/organo.png" 
-                        alt="NLGFC Organizational Structure" 
-                        class="w-full h-auto max-w-4xl mx-auto shadow-sm"
-                        @error="handleImageError"
-                        >
-                        <!-- Fallback if image fails to load -->
-                        <div v-if="imageError" class="absolute inset-0 flex items-center justify-center p-8 text-center">
-                        <div>
-                            <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <h3 class="mt-2 text-lg font-medium text-gray-900">Organogram not available</h3>
-                            <p class="mt-1 text-gray-500">The organizational chart could not be loaded.</p>
-                            <button class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                            Request Organogram
-                            </button>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Key Directorate Quick Links -->
-                <div class="px-4 pb-6 md:px-8">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Explore Directorates:</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <button 
-                    @click="activeTab = 'finance'"
-                    class="px-3 py-2 bg-blue-50 text-blue-700 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors"
-                    >
-                    Finance
-                    </button>
-                    <button 
-                    @click="activeTab = 'corporate'"
-                    class="px-3 py-2 bg-blue-50 text-blue-700 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors"
-                    >
-                    Corporate
-                    </button>
-                    <button 
-                    @click="activeTab = 'planning'"
-                    class="px-3 py-2 bg-blue-50 text-blue-700 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors"
-                    >
-                    Planning
-                    </button>
-                    <button 
-                    @click="activeTab = 'audit'"
-                    class="px-3 py-2 bg-blue-50 text-blue-700 rounded-md text-sm font-medium hover:bg-blue-100 transition-colors"
-                    >
-                    Audit
-                    </button>
-                </div>
-                </div>
-            </div>
+             <div class="bg-white rounded-lg shadow border border-gray-200">
+    <!-- Controls -->
+    <div class="flex justify-between items-center p-3 border-b border-gray-200">
+      <div class="flex space-x-2">
+        <!-- Zoom Controls -->
+        <div class="flex items-center space-x-1 bg-gray-100 rounded-md px-2">
+          <button 
+            @click="zoomOut" 
+            :disabled="zoom <= 50"
+            class="p-1 text-gray-700 disabled:opacity-50"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+            </svg>
+          </button>
+          <span class="text-sm">{{ zoom }}%</span>
+          <button 
+            @click="zoomIn" 
+            :disabled="zoom >= 200"
+            class="p-1 text-gray-700 disabled:opacity-50"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
         </div>
-
-
-
+      </div>
+      
+      <!-- Download Button -->
+      <button 
+        @click="downloadImage"
+        class="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        <span class="text-sm">Download</span>
+      </button>
+    </div>
+    
+    <!-- Image Container -->
+    <div class="relative overflow-hidden h-96">
+      <div 
+        class="absolute inset-0 flex items-center justify-center transition-transform duration-200"
+        :style="{ transform: `scale(${zoom/100})`, transformOrigin: 'center' }"
+      >
+        <img 
+          src="/images/samples/organo.png" 
+          alt="Organogram"
+          class="max-w-full max-h-full object-contain"
+          @load="imageLoaded = true"
+        >
+      </div>
+      
+      <!-- Loading State -->
+      <div v-if="!imageLoaded" class="absolute inset-0 flex items-center justify-center">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    </div>
+  </div>
+        </div>
 
       </main>
     </div>
@@ -1448,7 +1435,7 @@ nav h3 {
   margin-bottom: 0.5rem;
 }
 
-/*Board of DIRECTOS */
+/* Board of Directors */
 .board-page {
   max-width: 1200px;
   margin: 2rem auto;
@@ -1456,131 +1443,86 @@ nav h3 {
   text-align: center;
 }
 
-h1 {
+.board-page h1 {
   color: #2c3e50;
   margin-bottom: 2.5rem;
   font-size: 2rem;
 }
 
-.org-level {
+.board-page .org-level {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
   flex-wrap: wrap;
 }
 
-.top-level {
+.board-page .top-level {
   margin-bottom: 1rem;
 }
 
-.middle-level {
+.board-page .middle-level {
   margin-top: 1rem;
 }
 
-.board-card {
+.board-page .board-card {
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 1.5rem;
   width: 200px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  min-height: 300px; /* Added for consistent height */
 }
 
-.top-level .board-card {
+.board-page .top-level .board-card {
   background: #f8f9fa;
   border-top: 4px solid #2c3e50;
   width: 220px;
 }
 
-.position {
+.board-page .position {
   color: #666;
   font-style: italic;
   margin-top: 0.5rem;
   font-size: 0.9rem;
 }
 
-.board-image {
+.board-page .board-image {
   width: 100px;
   height: 100px;
   border-radius: 50%;
   overflow: hidden;
   margin: 0 auto 1rem;
   border: 3px solid #f1f1f1;
+  background: #f8f8f8; /* Fallback background */
 }
 
-.top-level .board-image {
+.board-page .top-level .board-image {
   width: 110px;
   height: 110px;
 }
 
-.board-image img {
+.board-page .board-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block; /* Remove extra space under image */
 }
 
-.connector-container {
+.board-page .connector-container {
   display: flex;
   justify-content: center;
   margin: 0.5rem 0;
 }
 
-.connector-line {
+.board-page .connector-line {
   height: 30px;
   width: 80%;
   max-width: 800px;
   border-bottom: 2px solid #ddd;
 }
 
-@media (max-width: 768px) {
-  .org-level {
-    gap: 1rem;
-  }
-  
-  .board-card {
-    width: 160px;
-    padding: 1rem;
-  }
-  
-  .top-level .board-card {
-    width: 180px;
-  }
-  
-  .board-image {
-    width: 80px;
-    height: 80px;
-  }
-  
-  .top-level .board-image {
-    width: 90px;
-    height: 90px;
-  }
-  
-  .connector-line {
-    width: 60%;
-  }
-}
-
-@media (max-width: 480px) {
-  .org-level {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .board-card {
-    width: 100%;
-    max-width: 250px;
-  }
-  
-  .connector-line {
-    height: 20px;
-    width: 2px;
-    border-bottom: none;
-    border-left: 2px solid #ddd;
-  }
-}
-
-/* Executive Management Styles */
+/* Executive Management */
 .executive-page {
   max-width: 1000px;
   margin: 2rem auto;
@@ -1588,83 +1530,130 @@ h1 {
   text-align: center;
 }
 
-h1 {
+.executive-page h1 {
   color: #2c3e50;
   margin-bottom: 2rem;
 }
 
-.org-level {
+.executive-page .org-level {
   display: flex;
   justify-content: center;
   gap: 2rem;
+  flex-wrap: wrap; /* Added for better responsiveness */
 }
 
-.top-level {
+.executive-page .top-level {
   margin-bottom: 1rem;
 }
 
-.middle-level {
+.executive-page .middle-level {
   margin-top: 1rem;
 }
 
-.executive-card {
+.executive-page .executive-card {
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 1.5rem;
   min-width: 250px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  min-height: 320px; /* Added for consistent height */
 }
 
-.top-level .executive-card {
+.executive-page .top-level .executive-card {
   background: #f8f9fa;
   border-top: 4px solid #e74c3c;
 }
 
-.position {
+.executive-page .position {
   color: #666;
   font-style: italic;
   margin-top: 0.5rem;
 }
 
-.connector {
+.executive-page .connector {
   height: 40px;
   width: 2px;
   background: #ddd;
   margin: 0 auto;
 }
 
-.executive-image {
+.executive-page .executive-image {
   width: 120px;
   height: 120px;
   border-radius: 50%;
   overflow: hidden;
   margin: 0 auto 1rem;
   border: 3px solid #f1f1f1;
+  background: #f8f8f8; /* Fallback background */
 }
 
-.executive-image img {
+.executive-page .executive-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block; /* Remove extra space under image */
 }
 
+/* Responsive Styles */
 @media (max-width: 768px) {
-  .org-level {
-    flex-direction: column;
-    align-items: center;
+  .board-page .org-level,
+  .executive-page .org-level {
     gap: 1rem;
   }
   
-  .connector {
-    height: 20px;
+  .board-page .board-card {
+    width: 160px;
+    padding: 1rem;
+    min-height: 280px;
   }
   
-  .executive-card {
-    width: 100%;
-    max-width: 300px;
+  .board-page .top-level .board-card {
+    width: 180px;
+  }
+  
+  .board-page .board-image {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .board-page .top-level .board-image {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .board-page .connector-line {
+    width: 60%;
+  }
+
+  .executive-page .executive-card {
+    min-height: 300px;
+    min-width: 200px;
   }
 }
 
-
+@media (max-width: 480px) {
+  .board-page .org-level,
+  .executive-page .org-level {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .board-page .board-card,
+  .executive-page .executive-card {
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .board-page .connector-line {
+    height: 20px;
+    width: 2px;
+    border-bottom: none;
+    border-left: 2px solid #ddd;
+  }
+  
+  .executive-page .connector {
+    height: 20px;
+  }
+}
 </style>

@@ -413,122 +413,227 @@ watch(activeTab, () => {
 
 </script>
 
+
+
 <template>
-  <div class="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto px-4 py-8">
+  <div class="flex flex-col md:flex-row gap-8 max-w-7xl mx-auto px-4 py-8">
     <!-- Sidebar -->
-    <aside class="w-full md:w-64 border-r pr-4">
+    <aside class="w-full md:w-72 flex-shrink-0">
       <div
         v-for="group in projectGroups"
         :key="group.group"
-        class="mb-4 border border-gray-200 rounded"
+        class="mb-4 rounded-lg overflow-hidden shadow-sm"
       >
         <button
           @click="openGroup = openGroup === group.group ? null : group.group"
-          class="w-full text-left px-4 py-2 font-semibold bg-gray-100 hover:bg-gray-200 cursor-pointer"
+          class="w-full text-left px-5 py-3 font-semibold bg-gradient-to-r from-blue-900 to-blue-200 text-white hover:from-blue-400 hover:to-blue-300 transition-all duration-200 flex justify-between items-center"
         >
-          {{ group.group }}
+          <span>{{ group.group }}</span>
+          <svg
+            class="w-4 h-4 transform transition-transform duration-200"
+            :class="{ 'rotate-180': openGroup === group.group }"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
         </button>
 
-        <div v-show="openGroup === group.group" class="px-4 py-2 space-y-1">
-           <ul>
-              <li v-for="item in group.items" :key="item.id">
-                <a
-                    :href="`#${item.id}`"
-                    @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
-                    :class="[
-                    'block px-3 py-2 rounded text-sm cursor-pointer',
-                    item.id === activeTab ? 'bg-blue-100 font-medium text-blue-900' : 'hover:bg-gray-100'
-                    ]"
-                >
-                    {{ item.title }}
-                </a>
-                </li>  
-            </ul>
+        <div
+          v-show="openGroup === group.group"
+          class="bg-white border border-gray-200 border-t-0 rounded-b-lg"
+        >
+          <ul class="py-2">
+            <li v-for="item in group.items" :key="item.id">
+              <a
+                :href="`#${item.id}`"
+                @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
+                :class="[
+                  'block px-5 py-2.5 text-sm transition-colors duration-150',
+                  item.id === activeTab
+                    ? 'bg-blue-50 text-blue-700 font-medium border-l-4 border-blue-600'
+                    : 'hover:bg-gray-50 text-gray-700'
+                ]"
+              >
+                {{ item.title }}
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
     </aside>
 
     <!-- Main Content Area -->
-    <main class="flex-1">
-  <div v-if="projectContent[activeTab]">
-  <h2 class="text-2xl font-bold text-gray-900 mb-6 border-b pb-2">
-    {{ projectContent[activeTab].title }}
-  </h2>
-  <div
-    class="text-gray-800 space-y-5 leading-relaxed"
-    v-html="projectContent[activeTab].body"
-  ></div>
-</div>
+    <main class="flex-1 min-w-0">
+      <div v-if="projectContent[activeTab]" class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <!-- Project Header -->
+        <div class="bg-gradient-to-r from-blue-50 to-blue-100 px-6 py-5 border-b border-blue-200">
+          <h2 class="text-3xl font-bold text-gray-900 mb-1">
+            {{ projectContent[activeTab].title }}
+          </h2>
+          <div class="flex items-center text-sm text-blue-600">
+            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+            </svg>
+            {{ activeTab.split('_')[0].toUpperCase() }} Project
+          </div>
+        </div>
 
-  <div v-else class="text-gray-500 italic">No content available for this project.</div>
-  
-    <!-- Latest Updates Section -->
-<div v-if="projectUpdates[activeTab]" class="mt-10">
-  <h3 class="text-xl font-semibold text-gray-900 mb-4 border-b pb-1">Latest Updates from Councils</h3>
-  
-  <ul class="space-y-6">
-    <li
-      v-for="(update, index) in paginatedUpdates"
-      :key="index"
-      class="bg-white p-4 rounded-md shadow hover:shadow-md transition"
-    >
-      <p class="text-sm text-gray-500 mb-1">
-        Published on {{
-          new Date(update.date).toLocaleDateString('en-US', {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric'
-          })
-        }}
-      </p>
-      <h4 class="text-lg font-semibold text-blue-700 hover:underline">
-        <a :href="update.link">{{ update.title }}</a>
-      </h4>
-      <p class="text-gray-700 text-sm mt-1">{{ update.summary }}</p>
-      <div class="mt-2 flex flex-wrap gap-2">
-        <span
-          v-for="tag in update.tags"
-          :key="tag"
-          class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded"
-        >
-          {{ tag }}
-        </span>
+        <!-- Project Content -->
+        <div class="p-6 prose prose-blue max-w-none">
+          <div v-html="projectContent[activeTab].body"></div>
+        </div>
       </div>
-    </li>
-  </ul>
 
-  <!-- Pagination -->
-  <div class="mt-6 flex items-center justify-center space-x-2">
-    <button
-      @click="goToPage(currentPage - 1)"
-      :disabled="currentPage === 1"
-      class="px-3 py-1 text-sm bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
-    >
-      Prev
-    </button>
+      <div v-else class="bg-white rounded-lg shadow p-6 text-center">
+        <div class="text-gray-400 mb-4">
+          <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <p class="text-gray-500 italic">No content available for this project.</p>
+      </div>
+      
+      <!-- Latest Updates Section -->
+      <div v-if="projectUpdates[activeTab]" class="mt-10">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-2xl font-bold text-gray-900">
+            <span class="inline-block border-b-2 border-blue-500 pb-1">Latest Updates</span>
+          </h3>
+          <div class="text-sm text-gray-500">
+            Showing {{ paginatedUpdates.length }} of {{ projectUpdates[activeTab].length }} updates
+          </div>
+        </div>
+        
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div
+            v-for="(update, index) in paginatedUpdates"
+            :key="index"
+            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-100"
+          >
+            <div class="p-5">
+              <div class="flex justify-between items-start mb-2">
+                <span class="text-xs font-semibold px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
+                  {{ update.tags[0] }}
+                </span>
+                <span class="text-xs text-gray-500">
+                  {{ new Date(update.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }}
+                </span>
+              </div>
+              <h4 class="text-lg font-semibold mb-2 text-gray-900 hover:text-blue-600 transition-colors">
+                <a :href="update.link" class="hover:underline">{{ update.title }}</a>
+              </h4>
+              <p class="text-gray-600 text-sm mb-3">{{ update.summary }}</p>
+              <a
+                :href="update.link"
+                class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800"
+              >
+                Read more
+                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
 
-    <button
-      v-for="page in totalPages"
-      :key="page"
-      @click="goToPage(page)"
-      :class="[
-        'px-3 py-1 text-sm rounded',
-        page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'
-      ]"
-    >
-      {{ page }}
-    </button>
-
-    <button
-      @click="goToPage(currentPage + 1)"
-      :disabled="currentPage === totalPages"
-      class="px-3 py-1 text-sm bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
-    >
-      Next
-    </button>
+        <!-- Pagination -->
+        <div class="mt-8 flex items-center justify-between">
+          <button
+            @click="goToPage(currentPage - 1)"
+            :disabled="currentPage === 1"
+            class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            Previous
+          </button>
+          
+          <div class="hidden sm:flex sm:space-x-2">
+            <button
+              v-for="page in totalPages"
+              :key="page"
+              @click="goToPage(page)"
+              :class="[
+                'px-4 py-2 text-sm font-medium rounded-lg',
+                page === currentPage
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+              ]"
+            >
+              {{ page }}
+            </button>
+          </div>
+          
+          <button
+            @click="goToPage(currentPage + 1)"
+            :disabled="currentPage === totalPages"
+            class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next
+            <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </main>
   </div>
-</div>
-</main>
-  </div>
-  
 </template>
+
+<style>
+/* Add custom prose styles for the content */
+.prose {
+  color: #374151;
+}
+
+.prose h2,
+.prose h3 {
+  color: #111827;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+}
+
+.prose h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5em;
+}
+
+.prose h3 {
+  font-size: 1.25em;
+}
+
+.prose p {
+  margin-bottom: 1em;
+  line-height: 1.7;
+}
+
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.prose li {
+  margin-bottom: 0.5em;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: #1e40af;
+}
+
+.prose a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  color: #1e40af;
+}
+</style>
