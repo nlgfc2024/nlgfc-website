@@ -418,119 +418,171 @@ function updateActiveTabFromHash(hash) {
   </div>
 </div>
 
-            <!-- LAIFMIS -->
-           <div v-else-if="item.id === 'laifmis'" class="prose max-w-none">
+           <!-- LAIFMIS -->
+<div v-else-if="item.id === 'laifmis'" class="prose max-w-none">
   <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
-    Local Authority Integrated Financial Management Information System
+    Integrated Financial Management Information System (IFMIS)
   </h2>
   
   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 mb-6">
     <p class="text-gray-700 leading-relaxed">
-      The Local Authority Integrated Financial Management Information System (LAIFMIS) 
-      is a digital platform developed to enhance financial management within Malawi’s Local
-       Authorities. It enables District, Town, Municipal, and City
-       Councils to efficiently plan, budget, record, and report on their financial
-        activities in a transparent and accountable manner
+Government of Malawi procured an Integrated Financial Management Information System (IFMIS) in 2008. 
+IFMIS is an Enterprise Resource Planning (ERP) tool ‘dubbed Serenic Navigator’, to be used in the Councils 
+for Financial Management and Reporting under the policy guidance of the Accountant General (AG). IFMIS was 
+implemented in phases, starting with five local authorities in M’mbelwa, Mchinji, Lilongwe District, Blantyre City, 
+and Thyolo in the first phase. Being the first IFMIS implementation in Malawi, the aim of delivering a pilot was to 
+ensure that people learn from the process and improve as the implementation goes to other Local Authorities. Use of 
+IFMIS for Financial Management and Reporting was emphasized to ensure that all Local Authorities have a standardized
+ Financial Management System that would help Local Authorities produce standardized reports for onward transmission 
+ to the central Government and other relevant stakeholders. By the close of 2013 calendar year, all Local Authorities
+  had IFMIS installed and all relevant personnel trained in its usage. Now IFMIS is being used in all the 35 LAs in Malawi
     </p>
   </div>
   
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-3">System Overview</h3>
-    <div class="bg-white rounded border border-gray-300 p-6">
-      <div class="text-center mb-6">
-        <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-4">
-          <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.196-2.196M17 20v-2a3 3 0 00-5.196-2.196m0 0L9 11m0 0V4a3 3 0 015.196-2.196M9 11l2.25 2.25M15 4v7l-2.25-2.25"></path>
-          </svg>
-        </div>
-        <h4 class="text-xl font-semibold text-gray-900 mb-2">Comprehensive Beneficiary Management</h4>
-        <p class="text-gray-600 max-w-2xl mx-auto">
-          The SCTP MIS streamlines the entire beneficiary lifecycle from initial assessment and registration through to payment disbursement and monitoring, ensuring that social cash transfers reach the most vulnerable households efficiently and transparently.
-        </p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-        <div class="text-center p-4 border border-gray-200 rounded-lg">
-          <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-3">
-            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-            </svg>
-          </div>
-          <h5 class="font-semibold text-gray-900 mb-2">Registration</h5>
-          <p class="text-sm text-gray-600">Systematic household assessment and beneficiary enrollment</p>
-        </div>
-        
-        <div class="text-center p-4 border border-gray-200 rounded-lg">
-          <div class="inline-flex items-center justify-center w-12 h-12 bg-purple-100 rounded-full mb-3">
-            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-            </svg>
-          </div>
-          <h5 class="font-semibold text-gray-900 mb-2">Payment Processing</h5>
-          <p class="text-sm text-gray-600">Automated payment calculations and disbursement tracking</p>
-        </div>
-        
-        <div class="text-center p-4 border border-gray-200 rounded-lg">
-          <div class="inline-flex items-center justify-center w-12 h-12 bg-orange-100 rounded-full mb-3">
-            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-          </div>
-          <h5 class="font-semibold text-gray-900 mb-2">Monitoring & Reporting</h5>
-          <p class="text-sm text-gray-600">Real-time analytics and comprehensive program reporting</p>
-        </div>
+  <!-- IFMIS PICTURE-->
+  <div class="mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">IFMIS</h3>
+    <div class="flex justify-center">
+      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
+        <img 
+          src="/images/deliverySystems/Digital_GRM.png" 
+          alt="Digital_GRM" 
+          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+        />
       </div>
     </div>
   </div>
   
-  <!-- Additional Information Section -->
-  <div class="mt-8 space-y-6">
-    <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
-      <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Features</h3>
-      <div class="text-gray-700 space-y-2 mb-4">
-        <p>• Comprehensive beneficiary database management</p>
-        <p>• Automated eligibility assessment and verification</p>
-        <p>• Integrated payment processing and tracking</p>
-        <p>• Real-time monitoring and compliance reporting</p>
-        <p>• Mobile data collection and field management tools</p>
-        <p>• Advanced analytics and program impact assessment</p>
-      </div>
-    </div>
+  <!-- Key Feature Section -->
+  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-        <h4 class="text-md font-semibold text-gray-900 mb-2">For Program Administrators</h4>
-        <p class="text-gray-700 text-sm">
-          Access comprehensive program data, manage beneficiary records, process payments, and generate detailed reports for program monitoring and evaluation.
-        </p>
+    <!-- Components Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      <!-- Toll-Free Line -->
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+        <div class="flex items-start mb-4">
+          <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-900 text-lg">Toll-Free Line (3056)</h4>
+          </div>
+        </div>
+        <ul class="space-y-3 text-sm text-gray-600">
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            Accessible via Airtel and TNM
+          </li>
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            Community members can call free of charge
+          </li>
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            Speak to an operator to ask questions, report problems, or provide feedback
+          </li>
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            SMS confirmation and updates on grievance status are sent to users
+          </li>
+        </ul>
       </div>
       
-      <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-        <h4 class="text-md font-semibold text-gray-900 mb-2">For Field Officers</h4>
-        <p class="text-gray-700 text-sm">
-          Utilize mobile tools for household registration, beneficiary verification, and real-time data collection in communities across Malawi.
-        </p>
+      <!-- Android App -->
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+        <div class="flex items-start mb-4">
+          <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
+            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-900 text-lg">Android App</h4>
+          </div>
+        </div>
+        <ul class="space-y-3 text-sm text-gray-600">
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            Provides project information
+          </li>
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            Enables users to submit feedback and report grievances directly
+          </li>
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            Offers a simple interface for community interaction
+          </li>
+        </ul>
       </div>
-    </div>
-    
-    <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
-      <h3 class="text-lg font-semibold text-gray-900 mb-3">Program Impact</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="text-center">
-          <div class="text-2xl font-bold text-gray-900 mb-1">500K+</div>
-          <div class="text-sm text-gray-600">Beneficiary Households</div>
+      
+      <!-- Web App -->
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+        <div class="flex items-start mb-4">
+          <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s1.343-9 3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-900 text-lg">Web App</h4>
+          </div>
         </div>
-        <div class="text-center">
-          <div class="text-2xl font-bold text-gray-900 mb-1">28</div>
-          <div class="text-sm text-gray-600">Districts Covered</div>
-        </div>
-        <div class="text-center">
-          <div class="text-2xl font-bold text-gray-900 mb-1">99%</div>
-          <div class="text-sm text-gray-600">Payment Accuracy</div>
-        </div>
+        <ul class="space-y-3 text-sm text-gray-600">
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            Facilitates access to project details and feedback submission
+          </li>
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            Enables free calls via Airtel to the grievance line
+          </li>
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            Supports real-time reporting and tracking of grievances
+          </li>
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            SMS notifications for confirmation and status updates
+          </li>
+        </ul>
       </div>
+      
+      <!-- Government Backend -->
+      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+        <div class="flex items-start mb-4">
+          <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-900 text-lg">Government Backend</h4>
+          </div>
+        </div>
+        <ul class="space-y-3 text-sm text-gray-600">
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            Grievances are received in a centralized inbox
+          </li>
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            Authorities can track, manage, and respond to grievances promptly
+          </li>
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+            Enhances accountability and responsiveness
+          </li>
+        </ul>
+      </div>
+      
     </div>
   </div>
+  
 </div>
 
             
@@ -1266,6 +1318,20 @@ beneficiaries receive timely and accurate compensation for their labor.
       The Social Cash Transfer Programme (SCTP) system—sometimes referred to as Mtukula Pakhomo in Malawi—is a government-led social protection initiative designed to provide regular cash payments to ultra-poor and labor-constrained households. The program targets vulnerable groups such as the elderly, people with disabilities, child-headed households, and chronically ill individuals.
     </p>
   </div>
+
+  <!-- SCTP PICTURE-->
+  <div class="mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">Socoal Cash Transfer Program MIS Data Flow</h3>
+    <div class="flex justify-center">
+      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
+        <img 
+          src="/images/deliverySystems/Digital_GRM.png" 
+          alt="Digital_GRM" 
+          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+    </div>
+  </div>
   
   <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
@@ -1523,7 +1589,7 @@ beneficiaries receive timely and accurate compensation for their labor.
   <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Local Authority Performance Assessment System
   </h2>
-  
+
   <!-- Introduction -->
   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
     <p class="text-gray-700 leading-relaxed">
@@ -1531,7 +1597,21 @@ beneficiaries receive timely and accurate compensation for their labor.
       It assists the Malawi Government in enhancing accountability, transparency, and data-driven decision-making through real-time data entry of assessment results, storing and making compliance assessments public, ensuring transparency of Local Authority performance feedback since results are accessible online, and providing basic analysis for writing synthesis reports.
     </p>
   </div>
-  
+
+  <!-- LAPAS PICTURE-->
+  <div class="mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">LAPAS Data Flow</h3>
+    <div class="flex justify-center">
+      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
+        <img 
+          src="/images/deliverySystems/Digital_GRM.png" 
+          alt="Digital_GRM" 
+          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+    </div>
+  </div>
+
   <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
     <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
@@ -1790,7 +1870,6 @@ beneficiaries receive timely and accurate compensation for their labor.
               <p class="text-gray-700">Comprehensive management information system for integrated program coordination.</p>
             </div>
 
-            <!-- PMIS -->
 <!-- PMIS Section -->
 <div v-else-if="item.id === 'pmis'" class="prose max-w-none">
   <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
@@ -2054,25 +2133,6 @@ beneficiaries receive timely and accurate compensation for their labor.
         allowtransparency
         class="w-full"
       ></iframe>
-    </div>
-  </div>
-  
-  <!-- User Benefits Section -->
-  <div class="mt-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-        <h4 class="text-md font-semibold text-gray-900 mb-2">For Project Managers</h4>
-        <p class="text-gray-700 text-sm">
-          Streamline project oversight with real-time tracking, automated reporting, and comprehensive performance analytics.
-        </p>
-      </div>
-      
-      <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-        <h4 class="text-md font-semibold text-gray-900 mb-2">For Development Partners</h4>
-        <p class="text-gray-700 text-sm">
-          Monitor project implementation, track outcomes, and ensure accountability through transparent reporting mechanisms.
-        </p>
-      </div>
     </div>
   </div>
 </div>
