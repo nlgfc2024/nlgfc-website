@@ -9,7 +9,7 @@ const projectGroups = [
     group: 'Delivery Systems',
     items: [
       { id: 'msr', title: 'Malawi Social Registry' },
-      { id: 'laifmis', title: 'LAIFMIS' },
+      { id: 'laifmis', title: 'LA-IFMIS' },
       { id: 'e-payments', title: 'E-Payments' },
       { id: 'publicworks', title: 'Public Works MIS' },
       { id: 'dgrm', title: 'Digital GRM' },
@@ -167,21 +167,22 @@ function updateActiveTabFromHash(hash) {
       the implementation of social support programs and ensure assistance reaches those who need it most.
     </p>
   </div>
-
-  <!-- MSR PICTURE-->
-  <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">Malawi Social Registry Data Flow</h3>
-    <div class="flex justify-center">
-      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
-        <img 
-          src="/images/deliverySystems/Digital_GRM.png" 
-          alt="Digital_GRM" 
-          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-        />
-      </div>
+  
+<!-- MSR Dashboard -->
+  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-3">MSR Dashboard</h3>
+    <div class="bg-white rounded border border-gray-300 overflow-hidden">
+      <iframe
+        src="https://dashboards.malawiubr.org/public/dashboard/0929d069-914b-4d88-9017-1a8b46cdc28f"
+        frameborder="0"
+        width="100%"
+        height="600"
+        allowtransparency
+        class="w-full"
+      ></iframe>
     </div>
   </div>
-  
+
   <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
     <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
@@ -416,21 +417,6 @@ function updateActiveTabFromHash(hash) {
 
     </div>
   </div>
-  
-  <!-- MSR Dashboard -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-3">MSR Dashboard</h3>
-    <div class="bg-white rounded border border-gray-300 overflow-hidden">
-      <iframe
-        src="https://dashboards.malawiubr.org/public/dashboard/0929d069-914b-4d88-9017-1a8b46cdc28f"
-        frameborder="0"
-        width="100%"
-        height="600"
-        allowtransparency
-        class="w-full"
-      ></iframe>
-    </div>
-  </div>
 </div>
 
            <!-- LAIFMIS -->
@@ -616,46 +602,6 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
       and provide social protection beneficiaries with convenient access to social benefits anytime, anywhere.
     </p>
   </div>
-<!-- E-Payment Service Providers Section -->
-  <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">E-Payment Service Providers</h3>
-    
-    <!-- Slider Container -->
-    <div class="relative overflow-hidden bg-white rounded-lg shadow-sm" aria-label="Partner logos carousel">
-      <!-- Gradient Overlays -->
-      <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-      <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
-      
-      <!-- Slider Track -->
-      <div class="overflow-hidden py-6 px-4">
-        <div 
-          class="flex gap-6 animate-scroll hover:pause"
-          :style="`--scroll-duration: ${scrollDuration}s`"
-        >
-          <!-- Two copies for seamless scrolling -->
-          <template v-for="repeat in 2" :key="repeat">
-            <div 
-              v-for="(logo, index) in partnerLogos"
-              :key="`${repeat}-${index}`"
-              class="flex-shrink-0"
-            >
-              <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-center h-24 w-40 sm:h-32 sm:w-48 transition-all hover:scale-105 hover:shadow-xl border border-gray-100">
-                <img
-                  :src="logo.src"
-                  :alt="logo.alt"
-                  loading="lazy"
-                  decoding="async"
-                  width="192"
-                  height="128"
-                  class="max-h-20 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity drop-shadow-md"
-                />
-              </div>
-            </div>
-          </template>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
@@ -825,6 +771,46 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
       </div> 
     </div>
   </div>
+  <!-- E-Payment Service Providers Section -->
+  <div class="mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">E-Payment Service Providers</h3>
+    
+    <!-- Slider Container -->
+    <div class="relative overflow-hidden bg-white rounded-lg shadow-sm" aria-label="Partner logos carousel">
+      <!-- Gradient Overlays -->
+      <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+      <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+      
+      <!-- Slider Track -->
+      <div class="overflow-hidden py-6 px-4">
+        <div 
+          class="flex gap-6 animate-scroll hover:pause"
+          :style="`--scroll-duration: ${scrollDuration}s`"
+        >
+          <!-- Two copies for seamless scrolling -->
+          <template v-for="repeat in 2" :key="repeat">
+            <div 
+              v-for="(logo, index) in partnerLogos"
+              :key="`${repeat}-${index}`"
+              class="flex-shrink-0"
+            >
+              <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-center h-24 w-40 sm:h-32 sm:w-48 transition-all hover:scale-105 hover:shadow-xl border border-gray-100">
+                <img
+                  :src="logo.src"
+                  :alt="logo.alt"
+                  loading="lazy"
+                  decoding="async"
+                  width="192"
+                  height="128"
+                  class="max-h-20 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity drop-shadow-md"
+                />
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -852,20 +838,6 @@ beneficiaries receive timely and accurate compensation for their labor.
 
 
     </p>
-  </div>
-
-  <!-- Public works PICTURE-->
-  <div class="mt-12">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">Public works Program MIS</h3>
-    <div class="flex justify-center">
-      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
-        <img 
-          src="/images/deliverySystems/Digital_GRM.png"
-          alt="Digital_GRM"
-          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-    </div>
   </div>
 
   <!-- Key Feature Section -->
@@ -1155,9 +1127,24 @@ beneficiaries receive timely and accurate compensation for their labor.
             Community kiosks for areas with limited mobile access
           </li>
         </ul>
-      </div>
+      </div>     
     </div>
   </div>
+<!-- Public Works Dashboard -->
+  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-3">Public Works Dashboard</h3>
+    <div class="bg-white rounded border border-gray-300 overflow-hidden">
+      <iframe
+        src="/images/deliverySystems/MthandiziDashboard.png"
+        frameborder="0"
+        width="100%"
+        height="600"
+        allowtransparency
+        class="w-full"
+      ></iframe>
+    </div>
+  </div>
+
 </div>
 
           
@@ -1332,20 +1319,6 @@ beneficiaries receive timely and accurate compensation for their labor.
     <p class="text-gray-700 leading-relaxed">
       The Social Cash Transfer Programme (SCTP) system—sometimes referred to as Mtukula Pakhomo in Malawi—is a government-led social protection initiative designed to provide regular cash payments to ultra-poor and labor-constrained households. The program targets vulnerable groups such as the elderly, people with disabilities, child-headed households, and chronically ill individuals.
     </p>
-  </div>
-
-  <!-- SCTP PICTURE-->
-  <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">Socoal Cash Transfer Program MIS Data Flow</h3>
-    <div class="flex justify-center">
-      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
-        <img 
-          src="/images/deliverySystems/Digital_GRM.png" 
-          alt="Digital_GRM" 
-          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-    </div>
   </div>
   
   <!-- Key Features Section -->
@@ -1611,20 +1584,6 @@ beneficiaries receive timely and accurate compensation for their labor.
       LAPAS is a web-based data collection tool designed to enable the NLGFC to assess the performance of Local Authorities.
       It assists the Malawi Government in enhancing accountability, transparency, and data-driven decision-making through real-time data entry of assessment results, storing and making compliance assessments public, ensuring transparency of Local Authority performance feedback since results are accessible online, and providing basic analysis for writing synthesis reports.
     </p>
-  </div>
-
-  <!-- LAPAS PICTURE-->
-  <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">LAPAS Data Flow</h3>
-    <div class="flex justify-center">
-      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
-        <img 
-          src="/images/deliverySystems/Digital_GRM.png" 
-          alt="Digital_GRM" 
-          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-    </div>
   </div>
 
   <!-- Key Features Section -->
@@ -1900,19 +1859,6 @@ beneficiaries receive timely and accurate compensation for their labor.
     </p>
   </div>
 
-  <!-- PMIS PICTURE-->
-  <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">PMIS Data Flow</h3>
-    <div class="flex justify-center">
-      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
-        <img 
-          src="/images/deliverySystems/Digital_GRM.png" 
-          alt="Digital_GRM" 
-          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-    </div>
-  </div>
   
   <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
