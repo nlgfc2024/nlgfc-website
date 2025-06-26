@@ -106,8 +106,8 @@ const districts = [
         population: '234,927',
         area: '4,288 km²',
         description: 'Chitipa is located in the far north of Malawi, bordering Tanzania and Zambia.',
-        slug: 'chitipa',
-        pageSlug: 'lilongwecitycouncil'
+        slug: '',
+        pageSlug: 'chitipaDistrict'
     },
     { 
         name: 'Karonga', 
@@ -120,7 +120,7 @@ const districts = [
         area: '3,355 km²',
         description: 'Karonga is known for its rich archaeological sites and borders Lake Malawi.',
         slug: 'karonga',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'karongaDistrict'
     },
     { 
         name: 'Likoma', 
@@ -133,10 +133,10 @@ const districts = [
         area: '18 km²',
         description: 'Likoma is an island district in Lake Malawi, known for its cathedral and beaches.',
         slug: 'likoma',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'likomaDistrict'
     },
     { 
-        name: 'Mzimba', 
+        name: 'Mmbelwa', 
         region: 'Northern',
         capital: 'Mzuzu',
         population: '700,806',
@@ -145,8 +145,8 @@ const districts = [
         PrivateBag:'132',
         area: '10,430 km²',
         description: 'Mzimba is the largest district in the Northern Region and includes Mzuzu city.',
-        slug: 'mzimba',
-        pageSlug: 'lilongwecitycouncil'
+        slug: 'mmbelwa',
+        pageSlug: 'mmbelwaDistrict'
     },
     { 
         name: 'Nkhata Bay', 
@@ -159,7 +159,7 @@ const districts = [
         area: '4,071 km²',
         description: 'Nkhata Bay is famous for its scenic lakeshore and tourism activities.',
         slug: 'nkhata-bay',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'nkhatabayDistrict'
     },
     { 
         name: 'Rumphi', 
@@ -172,7 +172,7 @@ const districts = [
         area: '4,769 km²',
         description: 'Rumphi is known for its mountainous terrain and the Nyika National Park.',
         slug: 'rumphi',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'rumphiDistrict'
     },
     
     // Central Region
@@ -197,7 +197,7 @@ const districts = [
         area: '3,041 km²',
         description: 'Dowa is an agricultural district known for tobacco farming.',
         slug: 'dowa',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'dowaDistrict'
     },
     { 
         name: 'Kasungu', 
@@ -210,7 +210,7 @@ const districts = [
         area: '7,878 km²',
         description: 'Kasungu is home to Kasungu National Park and is an agricultural hub.',
         slug: 'kasungu',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'kasunguDistrict'
     },
     { 
         name: 'Lilongwe city', 
@@ -227,6 +227,20 @@ const districts = [
    
     },
     { 
+        name: 'Lilongwe', 
+        region: 'Central',
+        capital: 'Lilongwe',
+        population: '2,395,454',
+        Phone:'(+265)888308225 / 995625207',
+        email:'info@lilongwedc.gov',
+        PrivateBag:'93',
+        area: '6,159 km²',
+        description: 'Lilongwe is the capital city of Malawi and the largest urban center.',
+        slug: '',
+        pageSlug: 'lilongweDistrict'
+   
+    },
+    { 
         name: 'Mchinji', 
         region: 'Central',
         capital: 'Mchinji',
@@ -237,7 +251,7 @@ const districts = [
         area: '3,356 km²',
         description: 'Mchinji borders Zambia and is a major cross-border trade center.',
         slug: 'mchinji',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'mchinjiDistrict'
     },
     { 
         name: 'Nkhotakota', 
@@ -250,7 +264,7 @@ const districts = [
         area: '4,259 km²',
         description: 'Nkhotakota is located on Lake Malawi and has a rich historical heritage.',
         slug: 'nkhotakota',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'nkhotakotaDistrict'
     },
     { 
         name: 'Ntcheu', 
@@ -263,7 +277,7 @@ const districts = [
         area: '3,424 km²',
         description: 'Ntcheu is known for its mountainous landscape and borders Mozambique.',
         slug: 'ntcheu',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'ntcheuDistrict'
     },
     { 
         name: 'Ntchisi', 
@@ -273,7 +287,7 @@ const districts = [
         area: '1,655 km²',
         description: 'Ntchisi is one of the smaller districts in the Central Region.',
         slug: 'ntchisi',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'ntchisiDistrict'
     },
     { 
         name: 'Salima', 
@@ -286,7 +300,7 @@ const districts = [
         area: '2,196 km²',
         description: 'Salima is located on Lake Malawi and is known for its beaches and fishing.',
         slug: 'salima',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'salimaDistrict'
     },
     
     // Southern Region
@@ -300,8 +314,8 @@ const districts = [
         PrivateBag:'1',
         area: '2,193 km²',
         description: 'Balaka is known for its sugar production and borders Lake Malawi.',
-        slug: 'balaka',
-        pageSlug: 'lilongwecitycouncil'
+        slug: '',
+        pageSlug: 'balakaDistrict'
     },
     { 
         name: 'Blantyre', 
@@ -311,7 +325,7 @@ const districts = [
         area: '2,012 km²',
         description: 'Blantyre is the commercial capital of Malawi and the second-largest city.',
         slug: 'blantyre',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'blantyreDistrict'
     },
     { 
         name: 'Chikwawa', 
@@ -323,8 +337,8 @@ const districts = [
         PrivateBag:'1',
         area: '4,755 km²',
         description: 'Chikwawa is known for sugar estates and is located in the lower Shire valley.',
-        slug: 'chikwawa',
-        pageSlug: 'lilongwecitycouncil'
+        slug: '',
+        pageSlug: 'chikwawaDistrict'
     },
     { 
         name: 'Chiradzulu', 
@@ -336,8 +350,8 @@ const districts = [
         PrivateBag:'1',
         area: '767 km²',
         description: 'Chiradzulu is one of the smallest districts and is known for tea production.',
-        slug: 'chiradzulu',
-        pageSlug: 'lilongwecitycouncil'
+        slug: '',
+        pageSlug: 'chiradzuluDistrict'
     },
     { 
         name: 'Machinga', 
@@ -350,7 +364,7 @@ const districts = [
         area: '3,771 km²',
         description: 'Machinga is home to Liwonde National Park and borders Lake Malawi.',
         slug: 'machinga',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'machingaDistrict'
     },
     { 
         name: 'Mangochi', 
@@ -363,7 +377,7 @@ const districts = [
         area: '6,273 km²',
         description: 'Mangochi is located on Lake Malawi and is known for tourism and fishing.',
         slug: 'mangochi',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'mangochiDistrict'
     },
     { 
         name: 'Mwanza', 
@@ -376,7 +390,7 @@ const districts = [
         area: '2,259 km²',
         description: 'Mwanza borders Mozambique and is known for its border trade.',
         slug: 'mwanza',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'mwanzaDistrict'
     },
     { 
         name: 'Nsanje', 
@@ -385,8 +399,8 @@ const districts = [
         population: '297,257',
         area: '1,942 km²',
         description: 'Nsanje is the southernmost district and borders both Mozambique and Zambia.',
-        slug: 'nsanje',
-        pageSlug: 'lilongwecitycouncil'
+        slug: 'nsanjeDistrict',
+        pageSlug: 'nsanjeDistrict'
     },
     { 
         name: 'Neno', 
@@ -399,7 +413,7 @@ const districts = [
         area: '1,535 km²',
         description: 'Neno is one of the newest districts, created in 2003.',
         slug: 'neno',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'nenoDistrict'
     },
     { 
         name: 'Phalombe', 
@@ -412,7 +426,7 @@ const districts = [
         area: '1,394 km²',
         description: 'Phalombe is known for its agricultural activities and tea estates.',
         slug: 'phalombe',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'phalombeDistrict'
     },
     { 
         name: 'Thyolo', 
@@ -425,7 +439,7 @@ const districts = [
         area: '1,715 km²',
         description: 'Thyolo is famous for its tea and coffee plantations.',
         slug: 'thyolo',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'thyoloDistrict'
     },
     { 
         name: 'Zomba', 
@@ -435,7 +449,7 @@ const districts = [
         area: '2,580 km²',
         description: 'Zomba is the former capital of Malawi and home to the University of Malawi.',
         slug: 'zomba',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'zombaDistrict'
     }
 ]
 
