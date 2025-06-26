@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-  title: 'Mangochi District Council'
+  title: 'Dowa District Council'
 })
 
 const activeTab = ref('profile') // Default active tab
@@ -51,7 +51,7 @@ const projects = [
   {
     name: 'SSRLP',
     fullName: 'Social Support and Resilience Livelihoods Program',
-    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Mangochi Municipal District.',
+    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Chikwawa District.',
     objectives: [
       'Improve household food security and nutrition',
       'Build community resilience to shocks and stresses',
@@ -103,7 +103,7 @@ const reports = [
 
 const news = [
   {
-    title: 'Mangochi Municipal District Council Launches New Water Project',
+    title: 'Chikwawa District Council Launches New Water Project',
     date: '2024-12-10',
     summary: 'The council has initiated a new water infrastructure project to improve access to clean water in rural areas.',
     category: 'Development'
@@ -162,10 +162,10 @@ const news = [
           >
             <div v-if="activeTab === 'profile'" key="profile" class="content-panel">
               <div class="prose max-w-none">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Mangochi Municipal District Council Profile</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Chikwawa District Council Profile</h2>
                 <div class="space-y-6">
                   <div class="bg-blue-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Mangochi Municipal District Council</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Chikwawa District Council</h3>
                     <p class="text-gray-700 leading-relaxed">
                        </p>
                   </div>
