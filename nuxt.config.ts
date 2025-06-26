@@ -22,7 +22,11 @@ export default defineNuxtConfig({
         lang: 'en',
       },
       link: [
+<<<<<<< HEAD
         { rel: 'icon', type: 'image/x-icon', href: '/NLGFC-Logo.png' },
+=======
+        { rel: 'icon', type: 'image/x-icon', href: 'images/logo/NLGFC-Logo.png' },
+>>>>>>> 7e5ed2d6a01bcf0e718976fedc48b66d79aaaade
       ],
       // ✅ Add reCAPTCHA v2 script here
       script: [

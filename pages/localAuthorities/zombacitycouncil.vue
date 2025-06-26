@@ -1,9 +1,10 @@
 <script setup>
 definePageMeta({
-  title: 'Zomba District Council'
+  title: 'Zomba City Council'
 })
 
 const activeTab = ref('profile') // Default active tab
+const isTransitioning = ref(false) // For managing transition state
 
 const tabs = [
   { id: 'profile', title: 'Profile' },
@@ -11,6 +12,19 @@ const tabs = [
   { id: 'reports', title: 'Reports' },
   { id: 'news', title: 'News' }
 ]
+
+// Enhanced tab switching with transition
+const switchTab = (tabId) => {
+  if (tabId === activeTab.value) return
+  
+  isTransitioning.value = true
+  
+  // Small delay to allow fade out
+  setTimeout(() => {
+    activeTab.value = tabId
+    isTransitioning.value = false
+  }, 150)
+}
 
 // Set active tab from route hash if present
 onMounted(() => {
@@ -26,19 +40,18 @@ const projects = [
   {
     name: 'GESD',
     fullName: 'Governance to Enable Service Delivery',
-    description: 'Governance to Enable Service Delivery (GESD) project development objective is “to strengthen Local Authorities’ institutional performance, responsiveness to citizens and management of resources for service delivery.”',
+    description: 'Governance to Enable Service Delivery (GESD) project development objective is to strengthen Local Authorities\' institutional performance, responsiveness to citizens and management of resources for service delivery.',
     objectives: [
       'Strengthened institutional performance tracking of improvements in Local Authorities (LAs) institutional performance for service delivery',
       'Strengthened management of resources tracking of improvements in LAs management of financial and human resources in terms of their conversion into development assets in accordance with Annual Investment Plans',
-      'Strengthened management of resources tracking of improvements in LAs management of financial and human resources in terms of their conversion into development assets in accordance with Annual Investment Plans (AIPs',
-     
+      'Strengthened management of resources tracking of improvements in LAs management of financial and human resources in terms of their conversion into development assets in accordance with Annual Investment Plans (AIPs)'
     ],
     status: 'Active'
   },
   {
     name: 'SSRLP',
     fullName: 'Social Support and Resilience Livelihoods Program',
-    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Blantyre District.',
+    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Zomba city District.',
     objectives: [
       'Improve household food security and nutrition',
       'Build community resilience to shocks and stresses',
@@ -90,7 +103,7 @@ const reports = [
 
 const news = [
   {
-    title: 'Blantyre District Council Launches New Water Project',
+    title: 'Zomba city District Council Launches New Water Project',
     date: '2024-12-10',
     summary: 'The council has initiated a new water infrastructure project to improve access to clean water in rural areas.',
     category: 'Development'
@@ -124,227 +137,301 @@ const news = [
         <nav class="border-r border-gray-200 pr-4">
           <ul class="space-y-1">
             <li v-for="tab in tabs" :key="tab.id">
-              <NuxtLink
-                :to="`#${tab.id}`"
-                @click="activeTab = tab.id"
-                class="block px-4 py-3 rounded transition-colors text-gray-700 hover:bg-blue-50 hover:text-gray-800"
+              <button
+                @click="switchTab(tab.id)"
+                class="w-full text-left block px-4 py-3 rounded transition-all duration-300 text-gray-700 hover:bg-blue-50 hover:text-gray-800 hover:shadow-sm transform hover:translate-x-1"
                 :class="{
-                  'bg-blue-50 text-gray-800 font-medium border-l-4 border-gray-600': activeTab === tab.id
+                  'bg-blue-50 text-gray-800 font-medium border-l-4 border-gray-600 shadow-sm': activeTab === tab.id,
+                  'hover:scale-105': activeTab !== tab.id
                 }"
               >
                 {{ tab.title }}
-              </NuxtLink>
+              </button>
             </li>
           </ul>
         </nav>
       </div>
 
-      <!-- Main Content Area -->
-      <div class="flex-1 min-w-0">
-        <!-- Council Profile Content -->
-        <div v-show="activeTab === 'profile'" class="prose max-w-none">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Zomba District Council Profile</h2>
-          <div class="space-y-6">
-            <div class="bg-blue-50 p-6 rounded-lg border border-gray-200">
-              <h3 class="text-lg font-semibold text-gray-900 mb-3">About Zomba District Council</h3>
-              <p class="text-gray-700 leading-relaxed">
-               Zomba District covers an area of 2,580 km², representing about 3% of the total land area of Malawi. It is located on latitude 15.3860S and longitude 35.3188E south-east of Malawi, about 70km from Blantyre City to the south, and 49.4kms from Liwonde Town to the east. It is also located some 333.2kms south-south east ofLilongwe, the capital city. The District shares boundaries with Machinga District to the north, Balaka District to the north west, Mulanje and Phalombe Districts to the south, Chiradzulu and Blantyre Districts to the south west and the Republic of Mozambique to the east.  
-            </p>
-            </div>
-         
-
-            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-              <h3 class="text-lg font-semibold text-gray-900 mb-3">Mandate</h3>
-              <ul class="space-y-2">
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To promote local democratic participation</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To promote infrastructural and economic development through District Development Plan</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To make bylaws that facilitate its functions</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To mobilise resources within and outside the District </span>
-                </li>
-              </ul>
-            </div>
-                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                              <h3 class="text-lg font-semibold text-gray-900 mb-3">Vision</h3>
-                             <p class="text-gray-700 leading-relaxed font-medium">A Council that can provide sustainable, quality socio-economic services adequately to its community.</p>
+      <!-- Main Content Area with Transition Container -->
+      <div class="flex-1 min-w-0 relative overflow-hidden">
+        <div class="transition-container">
+          <!-- Council Profile Content -->
+          <Transition
+            name="fade-slide"
+            mode="out-in"
+          >
+            <div v-if="activeTab === 'profile'" key="profile" class="content-panel">
+              <div class="prose max-w-none">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Zomba city District Council Profile</h2>
+                <div class="space-y-6">
+                  <div class="bg-blue-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Zomba city District Council</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                       </p>
                   </div>
-                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                              <h3 class="text-lg font-semibold text-gray-900 mb-3">Mission</h3>
-                             <p class="text-gray-700 leading-relaxed font-medium">To provide timely, high-quality quality and equitable social services through the promotion of Local governance and popular participation of the communities for the attainment of sustainable socio-economic development of the District.</p>
+
+                  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mandate</h3>
+                    <ul class="space-y-2">
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>   //</span>  <!-- this is kovahiwa and ken we left these spaces so that we can the data for district in the spans elements-->
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>///</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>///</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>////// </span>
+                      </li>
+                    </ul>
                   </div>
-                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                              <h3 class="text-lg font-semibold text-gray-900 mb-3">Strategic Objectives</h3>
-                             <ul class="space-y-2">
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To create a democratic environment for popular participation in governance and development at the local level.</span>
-                </li>
-                  <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To provide social-economic services, coordinate and guide development issues in the District</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To improve access, quality, and utilisation of social services by communities</span>
-                </li>
-                 <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To enhance and improve revenue generation and human resource capacity for optimal operational performance</span>
-                </li>
-                 <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To reduce food security through diversification and commercialization of agricultural production.</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To improve access of vulnerable children and people living with disability to essential quality services</span>
-                </li>
-                 <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>To promote public employment services through strengthening the linkage between registered job seekers and potential employers</span>
-                </li>
-                
-             
-              </ul>
+
+                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Vision</h3>
+                    <p class="text-gray-700 leading-relaxed font-medium">..//.</p>
                   </div>
-          
 
-            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
-              <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Functions</h3>
-              <ul class="space-y-2">
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>Local governance and administration</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>Development planning and implementation</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>Service delivery and infrastructure development</span>
-                </li>
-                <li class="flex items-start">
-                  <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                  <span>Revenue collection and financial management</span>
-                </li>
-              </ul>
-            </div>
-            
+                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mission</h3>
+                    <p class="text-gray-700 leading-relaxed font-medium">///</p>
+                  </div>
 
-               
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="bg-blue-50 p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">Major Achievements</h4>
-                <p class="text-gray-700">Improved in LAPA scores for three consecutive years, hence more GESD funds for projects.</p>
-                <p class="text-gray-700">The  District is implementing the Kadidi project, which is one of the flagship projects under GESD funds. Under the project, there will be an OPD, staff house, incinerator, and maternity wing</p>
-              
-              </div>
-              <div class="bg-blue-50 p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">Jurisdiction</h4>
-                <p class="text-gray-700">Covers 1,785 square kilometres in the Southern Region of Malawi</p>
-              </div>
-              <div class="bg-blue-50 p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">Population</h4>
-                <p class="text-gray-700">Blantyre District has a total population of 451,220 people, of which 218,464 (48.4 %) are males and 232,756 (51.6 %) are females (Population& Housing Census 2018).</p>
-              </div>
-              <div class="bg-blue-50 p-4 rounded-lg">
-                <h4 class="font-semibold text-gray-900 mb-2">Structure</h4>
-                <p class="text-gray-700">Comprised of elected councillors and appointed technical staff</p>
-              </div>
-            </div>
-          </div>
-        </div>
+                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Strategic Objectives</h3>
+                    <ul class="space-y-2">
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>////</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>///</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>////</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>////</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>/////</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>///////</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>/////</span>
+                      </li>
+                    </ul>
+                  </div>
 
+                  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Functions</h3>
+                    <ul class="space-y-2">
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>/////</span>
+                      </li>
+                      
+                    </ul>
+                  </div>
 
-
-
-
-    
-
-
-        <!-- Projects Content -->
-        <div v-show="activeTab === 'projects'" class="prose max-w-none">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Development Projects</h2>
-          <div class="space-y-8">
-            <div v-for="project in projects" :key="project.name" class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
-              <div class="flex justify-between items-start mb-4">
-                <div>
-                  <h3 class="text-xl font-bold text-gray-900">{{ project.name }}</h3>
-                  <p class="text-gray-600 font-medium">{{ project.fullName }}</p>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
+                      <h4 class="font-semibold text-gray-900 mb-2">Major Achievements</h4>
+                      <p class="text-gray-700">.....</p>
+                      <</div>
+                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
+                      <h4 class="font-semibold text-gray-900 mb-2">Jurisdiction</h4>
+                      <p class="text-gray-700">/////</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
+                      <h4 class="font-semibold text-gray-900 mb-2">Population</h4>
+                      <p class="text-gray-700">///////</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
+                      <h4 class="font-semibold text-gray-900 mb-2">Structure</h4>
+                      <p class="text-gray-700">////</p>
+                    </div>
+                  </div>
                 </div>
-                <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
-                  {{ project.status }}
-                </span>
-              </div>
-              <p class="text-gray-700 mb-4">{{ project.description }}</p>
-              <div>
-                <h4 class="font-semibold text-gray-900 mb-2">Key Objectives:</h4>
-                <ul class="space-y-1">
-                  <li v-for="objective in project.objectives" :key="objective" class="flex items-start">
-                    <span class="inline-block w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></span>
-                    <span class="text-gray-700">{{ objective }}</span>
-                  </li>
-                </ul>
               </div>
             </div>
-          </div>
-        </div>
 
-        <!-- Reports Content -->
-        <div v-show="activeTab === 'reports'" class="prose max-w-none">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Reports & Documents</h2>
-          <div class="space-y-4">
-            <div v-for="report in reports" :key="report.title" class="border border-gray-200 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow">
-              <div class="flex justify-between items-start mb-2">
-                <h3 class="text-lg font-semibold text-gray-900">{{ report.title }}</h3>
-                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
-                  {{ report.type }}
-                </span>
-              </div>
-              <p class="text-gray-600 mb-2">{{ report.description }}</p>
-              <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-500">Published: {{ new Date(report.date).toLocaleDateString() }}</span>
-                <button class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors">
-                  Download PDF
-                </button>
+            <!-- Projects Content -->
+            <div v-else-if="activeTab === 'projects'" key="projects" class="content-panel">
+              <div class="prose max-w-none">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Development Projects</h2>
+                <div class="space-y-8">
+                  <div v-for="(project, index) in projects" :key="project.name" 
+                       class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                       :style="{ animationDelay: `${index * 100}ms` }">
+                    <div class="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 class="text-xl font-bold text-gray-900">{{ project.name }}</h3>
+                        <p class="text-gray-600 font-medium">{{ project.fullName }}</p>
+                      </div>
+                      <span class="px-3 py-1 text-sm font-medium rounded-full transition-colors"
+                            :class="project.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                        {{ project.status }}
+                      </span>
+                    </div>
+                    <p class="text-gray-700 mb-4">{{ project.description }}</p>
+                    <div>
+                      <h4 class="font-semibold text-gray-900 mb-2">Key Objectives:</h4>
+                      <ul class="space-y-1">
+                        <li v-for="objective in project.objectives" :key="objective" class="flex items-start">
+                          <span class="inline-block w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></span>
+                          <span class="text-gray-700">{{ objective }}</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <!-- News Content -->
-        <div v-show="activeTab === 'news'" class="prose max-w-none">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Latest News & Updates</h2>
-          <div class="space-y-6">
-            <article v-for="article in news" :key="article.title" class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
-              <div class="flex justify-between items-start mb-3">
-                <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded">
-                  {{ article.category }}
-                </span>
-                <time class="text-sm text-gray-500">{{ new Date(article.date).toLocaleDateString() }}</time>
+            <!-- Reports Content -->
+            <div v-else-if="activeTab === 'reports'" key="reports" class="content-panel">
+              <div class="prose max-w-none">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Reports & Documents</h2>
+                <div class="space-y-4">
+                  <div v-for="(report, index) in reports" :key="report.title" 
+                       class="border border-gray-200 rounded-lg p-4"
+                       :style="{ animationDelay: `${index * 100}ms` }">
+                    <div class="flex justify-between items-start mb-2">
+                      <h3 class="text-lg font-semibold text-gray-900">{{ report.title }}</h3>
+                      <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
+                        {{ report.type }}
+                      </span>
+                    </div>
+                    <p class="text-gray-600 mb-2">{{ report.description }}</p>
+                    <div class="flex justify-between items-center">
+                      <span class="text-sm text-gray-500">Published: {{ new Date(report.date).toLocaleDateString() }}</span>
+                      <button class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-all duration-300 transform hover:scale-105">
+                        Download PDF
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <h3 class="text-xl font-bold text-gray-900 mb-3">{{ article.title }}</h3>
-              <p class="text-gray-700 leading-relaxed">{{ article.summary }}</p>
-              <div class="mt-4">
-                <button class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-                  Read more →
-                </button>
+            </div>
+
+            <!-- News Content -->
+            <div v-else-if="activeTab === 'news'" key="news" class="content-panel">
+              <div class="prose max-w-none">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Latest News & Updates</h2>
+                <div class="space-y-6">
+                  <article v-for="(article, index) in news" :key="article.title" 
+                           class="border border-gray-200 rounded-lg p-6 bg-white"
+                           :style="{ animationDelay: `${index * 100}ms` }">
+                    <div class="flex justify-between items-start mb-3">
+                      <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded transition-colors hover:bg-gray-200">
+                        {{ article.category }}
+                      </span>
+                      <time class="text-sm text-gray-500">{{ new Date(article.date).toLocaleDateString() }}</time>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">{{ article.title }}</h3>
+                    <p class="text-gray-700 leading-relaxed">{{ article.summary }}</p>
+                    <div class="mt-4">
+                      <button class="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors hover:underline">
+                        Read more →
+                      </button>
+                    </div>
+                  </article>
+                </div>
               </div>
-            </article>
-          </div>
+            </div>
+          </Transition>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Custom transition classes */
+.fade-slide-enter-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.fade-slide-leave-active {
+  transition: all 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+}
+
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateX(20px) translateY(10px);
+}
+
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-20px) translateY(-10px);
+}
+
+.content-panel {
+  animation: slideInUp 0.5s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered animation for list items */
+.content-panel > div > div > div:nth-child(n) {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.content-panel > div > div > div:nth-child(1) { animation-delay: 0.1s; }
+.content-panel > div > div > div:nth-child(2) { animation-delay: 0.2s; }
+.content-panel > div > div > div:nth-child(3) { animation-delay: 0.3s; }
+.content-panel > div > div > div:nth-child(4) { animation-delay: 0.4s; }
+.content-panel > div > div > div:nth-child(5) { animation-delay: 0.5s; }
+.content-panel > div > div > div:nth-child(6) { animation-delay: 0.6s; }
+.content-panel > div > div > div:nth-child(7) { animation-delay: 0.7s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Transition container */
+.transition-container {
+  min-height: 400px;
+  position: relative;
+}
+
+/* Enhanced hover effects */
+.hover\:scale-105:hover {
+  transform: scale(1.05);
+}
+
+.hover\:translate-x-1:hover {
+  transform: translateX(0.25rem);
+}
+</style>

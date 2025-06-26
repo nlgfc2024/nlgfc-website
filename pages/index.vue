@@ -119,6 +119,7 @@ useHead({
         </div>
       </div>
     </section>
+
     <main class="container mx-auto px-4 py-12">
       <!-- Mission, Mandate and Vision -->
       <section class="py-16 bg-gray-50">
@@ -234,8 +235,8 @@ useHead({
                   <!-- Replace with actual SSRP logo -->
                   <img src="/public/images/samples/SSRLP logo(1).jpg" alt="SSRP Logo" class="w-full h-full object-contain" loading="lazy">
                 </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors">SSRP</h3>
-                <p class="text-gray-600 mb-6">Sustainable Schools Rehabilitation Project</p>
+                <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors">SSRLP</h3>
+                <p class="text-gray-600 mb-6">Social Support for Resilient Project</p>
                 <div class="mt-auto pt-4 border-t border-gray-100 w-full">
                   <span class="text-blue-600 font-medium flex items-center justify-center">
                     View project
@@ -252,10 +253,10 @@ useHead({
               <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col items-center text-center border border-gray-100 hover:border-green-200">
                 <div class="w-28 h-28 mb-6 rounded-full bg-green-50 flex items-center justify-center p-4 group-hover:bg-green-100 transition-colors shadow-inner">
                   <!-- Replace with actual GESD logo -->
-                  <img src="/images/logo/NLGFC-Logo.png" alt="GESD Logo" class="w-full h-full object-contain" loading="lazy">
+                  <img src="/images/samples/PBG logo.png" alt="GESD Logo" class="w-full h-full object-contain" loading="lazy">
                 </div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-green-600 transition-colors">GESD</h3>
-                <p class="text-gray-600 mb-6">Green Energy Solutions Deployment</p>
+                <p class="text-gray-600 mb-6">Governance to Enable Service Delivery Project</p>
                 <div class="mt-auto pt-4 border-t border-gray-100 w-full">
                   <span class="text-green-600 font-medium flex items-center justify-center">
                     View project
@@ -275,7 +276,7 @@ useHead({
                   <img src="/images/samples/RCRP LOGO- Final.png" alt="RCRP2 Logo" class="w-full h-full object-contain" loading="lazy">
                 </div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-amber-600 transition-colors">RCRP2</h3>
-                <p class="text-gray-600 mb-6">Rural Communities Resilience Program</p>
+                <p class="text-gray-600 mb-6">Regional Climate Resilience Project 2</p>
                 <div class="mt-auto pt-4 border-t border-gray-100 w-full">
                   <span class="text-amber-600 font-medium flex items-center justify-center">
                     View project
@@ -289,7 +290,7 @@ useHead({
           </div>
 
           <div class="text-center mt-12">
-            <a href="/projects" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-300 shadow-sm hover:shadow-md">
+            <a href="/projects/currentProjects" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-300 shadow-sm hover:shadow-md">
               Explore All Projects
               <svg class="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
@@ -521,14 +522,14 @@ useHead({
           </div>
 
           <!-- Optional View All Button -->
-          <div class="text-center mt-12">
+          <!-- <div class="text-center mt-12">
             <a href="/partners" class="inline-flex items-center px-5 py-2.5 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors text-sm font-medium">
               View All Partners
               <svg class="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </a>
-          </div>
+          </div> -->
         </div>
       </section>
     </main>
