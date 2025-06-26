@@ -466,21 +466,16 @@ const navigateToOpportunities = (section) => {
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="/localAuthorities/Dedza-district" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/dedzaDistrict" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         Dedza District Council
                       </NuxtLink>
                     </li>
                   <li>
-                      <NuxtLink to="/localAuthorities/Dedza-district" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                      <NuxtLink to="/localAuthorities/mulanjeDistrict" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         Mulanje District Council
                       </NuxtLink>
                     </li>
 
-                    <li>
-                      <NuxtLink to="/localAuthorities/mulanje-district" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                        Mulanje District Council
-                      </NuxtLink>
-                    </li>
     
                     <li>
                       <NuxtLink to="/localAuthorities/alldistricts" class="text-gray-700 hover:text-blue-700 transition flex items-center">
