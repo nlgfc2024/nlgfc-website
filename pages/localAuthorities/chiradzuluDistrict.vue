@@ -51,7 +51,7 @@ const projects = [
   {
     name: 'SSRLP',
     fullName: 'Social Support and Resilience Livelihoods Program',
-    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Blantyre District.',
+    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Chikwawa District.',
     objectives: [
       'Improve household food security and nutrition',
       'Build community resilience to shocks and stresses',
@@ -103,7 +103,7 @@ const reports = [
 
 const news = [
   {
-    title: 'Blantyre District Council Launches New Water Project',
+    title: 'Chikwawa District Council Launches New Water Project',
     date: '2024-12-10',
     summary: 'The council has initiated a new water infrastructure project to improve access to clean water in rural areas.',
     category: 'Development'
@@ -162,13 +162,12 @@ const news = [
           >
             <div v-if="activeTab === 'profile'" key="profile" class="content-panel">
               <div class="prose max-w-none">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Blantyre District Council Profile</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Chikwawa District Council Profile</h2>
                 <div class="space-y-6">
                   <div class="bg-blue-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Blantyre District Council</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Chikwawa District Council</h3>
                     <p class="text-gray-700 leading-relaxed">
-                      Blantyre District is one of the districts in the Southern Region of Malawi that lies between longitudes of 33 to 35 degrees east and latitudes of 9.4 to 17.5 degrees south. The district is bordered by Mwanza and Neno Districts in the North, Zomba in the North East, Chiradzulu in the South East, Thyolo in the South and Chikwawa in the West. It is 366km away from the Capital City, Lilongwe and is located in the Shire Highlands. It covers an area of 1,785 square kilometres, which represents 1.7% of the total land area of Malawi. 
-                    </p>
+                       </p>
                   </div>
 
                   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
@@ -176,31 +175,31 @@ const news = [
                     <ul class="space-y-2">
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To promote local democratic participation</span>
+                        <span>   //</span>  <!-- this is kovahiwa and ken we left these spaces so that we can the data for district in the spans elements-->
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To promote infrastructural and economic development through District Development Plan</span>
+                        <span>///</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To make bylaws that facilitate its functions</span>
+                        <span>///</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To mobilise resources within and outside the District </span>
+                        <span>////// </span>
                       </li>
                     </ul>
                   </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
                     <h3 class="text-lg font-semibold text-gray-900 mb-3">Vision</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">A Council that can provide sustainable, quality socio-economic services adequately to its community.</p>
+                    <p class="text-gray-700 leading-relaxed font-medium">..//.</p>
                   </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
                     <h3 class="text-lg font-semibold text-gray-900 mb-3">Mission</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">To provide timely, high-quality quality and equitable social services through the promotion of Local governance and popular participation of the communities for the attainment of sustainable socio-economic development of the District.</p>
+                    <p class="text-gray-700 leading-relaxed font-medium">///</p>
                   </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
@@ -208,31 +207,31 @@ const news = [
                     <ul class="space-y-2">
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To create a democratic environment for popular participation in governance and development at the local level.</span>
+                        <span>////</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To provide social-economic services, coordinate and guide development issues in the District</span>
+                        <span>///</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To improve access, quality, and utilisation of social services by communities</span>
+                        <span>////</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To enhance and improve revenue generation and human resource capacity for optimal operational performance</span>
+                        <span>////</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To reduce food security through diversification and commercialization of agricultural production.</span>
+                        <span>/////</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To improve access of vulnerable children and people living with disability to essential quality services</span>
+                        <span>///////</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To promote public employment services through strengthening the linkage between registered job seekers and potential employers</span>
+                        <span>/////</span>
                       </li>
                     </ul>
                   </div>
@@ -242,40 +241,28 @@ const news = [
                     <ul class="space-y-2">
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>Local governance and administration</span>
+                        <span>/////</span>
                       </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>Development planning and implementation</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>Service delivery and infrastructure development</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>Revenue collection and financial management</span>
-                      </li>
+                      
                     </ul>
                   </div>
 
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
                       <h4 class="font-semibold text-gray-900 mb-2">Major Achievements</h4>
-                      <p class="text-gray-700">Improved in LAPA scores for three consecutive years, hence more GESD funds for projects.</p>
-                      <p class="text-gray-700">The District is implementing the Kadidi project, which is one of the flagship projects under GESD funds. Under the project, there will be an OPD, staff house, incinerator, and maternity wing</p>
-                    </div>
+                      <p class="text-gray-700">.....</p>
+                      <</div>
                     <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
                       <h4 class="font-semibold text-gray-900 mb-2">Jurisdiction</h4>
-                      <p class="text-gray-700">Covers 1,785 square kilometres in the Southern Region of Malawi</p>
+                      <p class="text-gray-700">/////</p>
                     </div>
                     <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
                       <h4 class="font-semibold text-gray-900 mb-2">Population</h4>
-                      <p class="text-gray-700">Blantyre District has a total population of 451,220 people, of which 218,464 (48.4 %) are males and 232,756 (51.6 %) are females (Population& Housing Census 2018).</p>
+                      <p class="text-gray-700">///////</p>
                     </div>
                     <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
                       <h4 class="font-semibold text-gray-900 mb-2">Structure</h4>
-                      <p class="text-gray-700">Comprised of elected councillors and appointed technical staff</p>
+                      <p class="text-gray-700">////</p>
                     </div>
                   </div>
                 </div>
@@ -321,7 +308,7 @@ const news = [
                 <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Reports & Documents</h2>
                 <div class="space-y-4">
                   <div v-for="(report, index) in reports" :key="report.title" 
-                       class="border border-gray-200 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-105"
+                       class="border border-gray-200 rounded-lg p-4"
                        :style="{ animationDelay: `${index * 100}ms` }">
                     <div class="flex justify-between items-start mb-2">
                       <h3 class="text-lg font-semibold text-gray-900">{{ report.title }}</h3>
@@ -347,7 +334,7 @@ const news = [
                 <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Latest News & Updates</h2>
                 <div class="space-y-6">
                   <article v-for="(article, index) in news" :key="article.title" 
-                           class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                           class="border border-gray-200 rounded-lg p-6 bg-white"
                            :style="{ animationDelay: `${index * 100}ms` }">
                     <div class="flex justify-between items-start mb-3">
                       <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded transition-colors hover:bg-gray-200">

@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-  title: 'Nkhata Bay District Council'
+  title: 'Mulanje District Council'
 })
 
 const activeTab = ref('profile') // Default active tab

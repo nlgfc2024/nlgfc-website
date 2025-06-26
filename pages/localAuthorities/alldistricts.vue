@@ -337,7 +337,7 @@ const districts = [
         PrivateBag:'1',
         area: '4,755 km²',
         description: 'Chikwawa is known for sugar estates and is located in the lower Shire valley.',
-        slug: '',
+        slug: 'chikwawaDistrict',
         pageSlug: 'chikwawaDistrict'
     },
     { 
