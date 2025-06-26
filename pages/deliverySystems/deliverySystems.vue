@@ -9,14 +9,14 @@ const projectGroups = [
     group: 'Delivery Systems',
     items: [
       { id: 'msr', title: 'Malawi Social Registry' },
-      { id: 'laifmis', title: 'LA-IFMIS' },
+      { id: 'laifmis', title: 'Local Authorities IFMIS' },
       { id: 'e-payments', title: 'E-Payments' },
       { id: 'publicworks', title: 'Public Works MIS' },
-      { id: 'dgrm', title: 'Digital GRM' },
-      { id: 'sctpmis', title: 'SCTP MIS' },
-      { id: 'lapas', title: 'LAPAS' },
+      { id: 'dgrm', title: 'Digital Grievance Redress Mechanism' },
+      { id: 'sctpmis', title: 'Social Cash Transfer Program MIS' },
+      { id: 'lapas', title: 'Local Authority Performance Assessment System' },
       { id: 'cimis', title: 'CIMIS' },
-      { id: 'pmis', title: 'PMIS' }
+      { id: 'pmis', title: 'Project Monitoring Information System' }
     ]
   }
 ]
@@ -840,6 +840,21 @@ beneficiaries receive timely and accurate compensation for their labor.
     </p>
   </div>
 
+<!-- Public Works Dashboard -->
+  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-3">Public Works Dashboard</h3>
+    <div class="bg-white rounded border border-gray-300 overflow-hidden">
+      <iframe
+        src="/images/deliverySystems/MthandiziDashboard.png"
+        frameborder="0"
+        width="100%"
+        height="600"
+        allowtransparency
+        class="w-full"
+      ></iframe>
+    </div>
+  </div>
+
   <!-- Key Feature Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
     <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
@@ -1130,20 +1145,7 @@ beneficiaries receive timely and accurate compensation for their labor.
       </div>     
     </div>
   </div>
-<!-- Public Works Dashboard -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-3">Public Works Dashboard</h3>
-    <div class="bg-white rounded border border-gray-300 overflow-hidden">
-      <iframe
-        src="/images/deliverySystems/MthandiziDashboard.png"
-        frameborder="0"
-        width="100%"
-        height="600"
-        allowtransparency
-        class="w-full"
-      ></iframe>
-    </div>
-  </div>
+
 
 </div>
 
@@ -1313,7 +1315,8 @@ beneficiaries receive timely and accurate compensation for their labor.
   <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Social Cash Transfer Program
   </h2>
-  
+
+ 
   <!-- Introduction -->
   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
     <p class="text-gray-700 leading-relaxed">
@@ -1321,6 +1324,21 @@ beneficiaries receive timely and accurate compensation for their labor.
     </p>
   </div>
   
+<!-- SCTP Dashboard -->
+  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-3">SCTP Dashboard</h3>
+    <div class="bg-white rounded border border-gray-300 overflow-hidden">
+      <iframe
+        src="http://lapa.nlgfc.gov.mw/data"
+        frameborder="0"
+        width="100%"
+        height="600"
+        allowtransparency
+        class="w-full"
+      ></iframe>
+    </div>
+  </div>
+
   <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
     <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
@@ -1554,21 +1572,6 @@ beneficiaries receive timely and accurate compensation for their labor.
 
     </div>
   </div>
-  
-  <!-- SCTP Dashboard -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-3">SCTP Dashboard</h3>
-    <div class="bg-white rounded border border-gray-300 overflow-hidden">
-      <iframe
-        src="http://lapa.nlgfc.gov.mw/data"
-        frameborder="0"
-        width="100%"
-        height="600"
-        allowtransparency
-        class="w-full"
-      ></iframe>
-    </div>
-  </div>
 </div>
 
 
@@ -1585,8 +1588,23 @@ beneficiaries receive timely and accurate compensation for their labor.
       It assists the Malawi Government in enhancing accountability, transparency, and data-driven decision-making through real-time data entry of assessment results, storing and making compliance assessments public, ensuring transparency of Local Authority performance feedback since results are accessible online, and providing basic analysis for writing synthesis reports.
     </p>
   </div>
+  
+  <!-- LAPAS Dashboard -->
+  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-3">LAPAS Dashboard</h3>
+    <div class="bg-white rounded border border-gray-300 overflow-hidden">
+      <iframe
+        src="http://lapa.nlgfc.gov.mw/data"
+        frameborder="0"
+        width="100%"
+        height="600"
+        allowtransparency
+        class="w-full"
+      ></iframe>
+    </div>
+  </div>
 
-  <!-- Key Features Section -->
+ <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
     <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
     
@@ -1821,21 +1839,7 @@ beneficiaries receive timely and accurate compensation for their labor.
 
     </div>
   </div>
-  
-  <!-- LAPAS Dashboard -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-3">LAPAS Dashboard</h3>
-    <div class="bg-white rounded border border-gray-300 overflow-hidden">
-      <iframe
-        src="http://lapa.nlgfc.gov.mw/data"
-        frameborder="0"
-        width="100%"
-        height="600"
-        allowtransparency
-        class="w-full"
-      ></iframe>
-    </div>
-  </div>
+
 </div>
 
             <!-- CIMIS -->
@@ -1860,7 +1864,23 @@ beneficiaries receive timely and accurate compensation for their labor.
   </div>
 
   
-  <!-- Key Features Section -->
+
+  <!-- PMIS Dashboard -->
+  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-3">PMIS Dashboard</h3>
+    <div class="bg-white rounded border border-gray-300 overflow-hidden">
+      <iframe
+        src="https://projects.nlgfc.gov.mw"
+        frameborder="0"
+        width="100%"
+        height="600"
+        allowtransparency
+        class="w-full"
+      ></iframe>
+    </div>
+  </div>
+
+    <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
     <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
     
@@ -2093,21 +2113,6 @@ beneficiaries receive timely and accurate compensation for their labor.
         </ul>
       </div>
 
-    </div>
-  </div>
-  
-  <!-- PMIS Dashboard -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-3">PMIS Dashboard</h3>
-    <div class="bg-white rounded border border-gray-300 overflow-hidden">
-      <iframe
-        src="https://projects.nlgfc.gov.mw"
-        frameborder="0"
-        width="100%"
-        height="600"
-        allowtransparency
-        class="w-full"
-      ></iframe>
     </div>
   </div>
 </div>
