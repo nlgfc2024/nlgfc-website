@@ -435,20 +435,11 @@ const navigateToOpportunities = (section) => {
               </div>
             </div>
           </div>
-<<<<<<< HEAD
-
-          <!-- Local Councils Mega Menu -->
-          <div @mouseenter="toggleMegaMenu('councils')" @mouseleave="toggleMegaMenu(null)" class="relative">
-            <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
-              Local Councils
-              <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-=======
           
           <!-- Local Councils Mega Menu -->
           <div @mouseenter="toggleMegaMenu('councils')" @mouseleave="toggleMegaMenu(null)" class="relative">
             <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
               Local Authorities           <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
->>>>>>> 7e5ed2d6a01bcf0e718976fedc48b66d79aaaade
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </button>
@@ -472,11 +463,11 @@ const navigateToOpportunities = (section) => {
                     </li>
                   </ul>
 
-                  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Municipal Councils</h3>
+                  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Municipal/Town Councils</h3>
                   <ul class="space-y-2">
                     <li>
-                      <NuxtLink to="/localAuthorities/balakamanucipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">
-                        Balaka Municipal Council
+                      <NuxtLink to="/localAuthorities/Lunchezamanucipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Lunchenza Municipal Council
                       </NuxtLink>
                     </li>
                     <li>
@@ -495,9 +486,7 @@ const navigateToOpportunities = (section) => {
                       </NuxtLink>
                     </li>
                     <li>
-                      <NuxtLink to="/localAuthorities/AllMunicipalCouncils" class="text-gray-600 hover:text-blue-600 transition flex items-center">
-                        All Municipal Councils →
-                      </NuxtLink>
+                     
                     </li>
                   </ul>
                 </div>
@@ -511,17 +500,6 @@ const navigateToOpportunities = (section) => {
                       </NuxtLink>
                     </li>
                     <li>
-<<<<<<< HEAD
-                      <NuxtLink to="" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                        Dedza District Council
-                      </NuxtLink>
-                    </li>
-                    <li>
-                      <NuxtLink to="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                        Mulanje District Council
-                      </NuxtLink>
-                    </li>
-=======
                       <NuxtLink to="/localAuthorities/dedzaDistrict" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         Dedza District Council
                       </NuxtLink>
@@ -533,7 +511,6 @@ const navigateToOpportunities = (section) => {
                     </li>
 
     
->>>>>>> 7e5ed2d6a01bcf0e718976fedc48b66d79aaaade
                     <li>
                       <NuxtLink to="/localAuthorities/alldistricts" class="text-gray-700 hover:text-blue-700 transition flex items-center">
                         All District Councils →
@@ -616,19 +593,11 @@ const navigateToOpportunities = (section) => {
                   <ul class="space-y-2">
                     <li><a href="resourceCenter?tab=0&sub=0" class="text-gray-700 hover:text-blue-700 transition">Press Releases</a></li>
                     <li><a href="resourceCenter?tab=0&sub=1" class="text-gray-700 hover:text-blue-700 transition">Success Stories</a></li>
-<<<<<<< HEAD
-                    <li><a href="resourceCenter?tab=0&sub=2" class="text-gray-700 hover:text-blue-700 transition">Speaches</a></li>
-                    <li><a href="resourceCenter?tab=0&sub=3" class="text-gray-700 hover:text-blue-700 transition">Research & Discussions</a></li>
-                    <li><a href="resourceCenter?tab=0&sub=4" class="text-gray-700 hover:text-blue-700 transition">Budget Documents</a></li>
-                    <li><a href="resourceCenter?tab=0&sub=5" class="text-gray-700 hover:text-blue-700 transition">Disburments</a></li>
-                    <li><a href="resourceCenter?tab=0&sub=6" class="text-gray-700 hover:text-blue-700 transition">Newslatter</a></li>
-=======
                     <li><a href="resourceCenter?tab=0&sub=2" class="text-gray-700 hover:text-blue-700 transition">Speeches</a></li>
                     <li><a href="resourceCenter?tab=0&sub=3" class="text-gray-700 hover:text-blue-700 transition">Research & Discussions</a></li>
                     <li><a href="resourceCenter?tab=0&sub=4" class="text-gray-700 hover:text-blue-700 transition">Budget Documents</a></li>
                     <li><a href="resourceCenter?tab=0&sub=5" class="text-gray-700 hover:text-blue-700 transition">Disbursements</a></li>
                     <li><a href="resourceCenter?tab=0&sub=6" class="text-gray-700 hover:text-blue-700 transition">Newsletter</a></li>
->>>>>>> 7e5ed2d6a01bcf0e718976fedc48b66d79aaaade
                     <li><a href="resourceCenter?tab=0&sub=7" class="text-gray-700 hover:text-blue-700 transition">Manuals & Guidelines</a></li>
                     <li><a href="resourceCenter?tab=0&sub=8" class="text-gray-700 hover:text-blue-700 transition">Policies & Strategies</a></li>
                   </ul>
@@ -665,7 +634,6 @@ const navigateToOpportunities = (section) => {
             </div>
           </div>
 
-          <!-- Opportunities -->
           <!-- Opportunities -->
           <div @mouseenter="toggleMegaMenu('opportunities')" @mouseleave="toggleMegaMenu(null)" class="relative">
             <button class="flex items-center px-4 py-2 text-gray-800 hover:text-blue-700 hover:bg-blue-50 rounded-md transition font-medium">
@@ -750,7 +718,7 @@ const navigateToOpportunities = (section) => {
               Contact Us
             </a>
           </div>
-         
+
         </nav>
          <!-- Search Icon -->
         <div class="relative">
@@ -946,17 +914,17 @@ const navigateToOpportunities = (section) => {
 
               <!-- Municipal Councils Section -->
               <button @click="toggleAccordion('mobile-municipal')" class="flex items-center justify-between w-full text-gray-700 font-medium">
-                Municipal Councils
+                Municipal/Town Councils
                 <svg class="w-4 h-4 transform transition" :class="{ 'rotate-180': activeAccordion === 'mobile-municipal' }" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                 </svg>
               </button>
               <div v-show="activeAccordion === 'mobile-municipal'" class="pl-4 py-2 space-y-1">
-                <NuxtLink to="/councils/balaka-municipal" class="block text-gray-600 hover:text-blue-600 py-1">Balaka Municipal Council</NuxtLink>
-                <NuxtLink to="/councils/karonga-municipal" class="block text-gray-600 hover:text-blue-600 py-1">Karonga Municipal Council</NuxtLink>
-                <NuxtLink to="/councils/kasungu-municipal" class="block text-gray-600 hover:text-blue-600 py-1">Kasungu Municipal Council</NuxtLink>
-                <NuxtLink to="/councils/mangochi-municipal" class="block text-gray-600 hover:text-blue-600 py-1">Mangochi Municipal Council</NuxtLink>
-                <NuxtLink to="/councils/all-municipal" class="block text-gray-600 hover:text-blue-600 py-1">All Municipal Councils →</NuxtLink>
+                <NuxtLink to="#" class="block text-gray-600 hover:text-blue-600 py-1">Luncheza Municipal Council</NuxtLink>
+                <NuxtLink to="#" class="block text-gray-600 hover:text-blue-600 py-1">Karonga Municipal Council</NuxtLink>
+                <NuxtLink to="#" class="block text-gray-600 hover:text-blue-600 py-1">Kasungu Municipal Council</NuxtLink>
+                <NuxtLink to="#" class="block text-gray-600 hover:text-blue-600 py-1">Mangochi Municipal Council</NuxtLink>
+                <NuxtLink to="#" class="block text-gray-600 hover:text-blue-600 py-1">All Municipal Councils →</NuxtLink>
               </div>
 
               <!-- District Councils Section -->
