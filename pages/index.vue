@@ -522,14 +522,14 @@ useHead({
           </div>
 
           <!-- Optional View All Button -->
-          <div class="text-center mt-12">
+          <!-- <div class="text-center mt-12">
             <a href="/partners" class="inline-flex items-center px-5 py-2.5 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors text-sm font-medium">
               View All Partners
               <svg class="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </a>
-          </div>
+          </div> -->
         </div>
       </section>
     </main>
