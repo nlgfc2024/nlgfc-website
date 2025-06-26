@@ -157,6 +157,7 @@ function updateActiveTabFromHash(hash) {
     Malawi Social Registry (MSR)
   </h2>
   
+
   <!-- Introduction -->
   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
     <p class="text-gray-700 leading-relaxed">
@@ -165,6 +166,20 @@ function updateActiveTabFromHash(hash) {
       accesses, and shares socioeconomic and demographic data about households across the country to support 
       the implementation of social support programs and ensure assistance reaches those who need it most.
     </p>
+  </div>
+
+  <!-- MSR PICTURE-->
+  <div class="mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">Malawi Social Registry Data Flow</h3>
+    <div class="flex justify-center">
+      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
+        <img 
+          src="/images/deliverySystems/Digital_GRM.png" 
+          alt="Digital_GRM" 
+          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+    </div>
   </div>
   
   <!-- Key Features Section -->
@@ -441,7 +456,7 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
   
   <!-- IFMIS PICTURE-->
   <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">IFMIS</h3>
+    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">IFMIS Data Flow</h3>
     <div class="flex justify-center">
       <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
         <img 
@@ -1883,6 +1898,20 @@ beneficiaries receive timely and accurate compensation for their labor.
       the tracking, coordination, and management of development projects, especially those implemented
       by government ministries, local authorities, and development partners in Malawi.
     </p>
+  </div>
+
+  <!-- PMIS PICTURE-->
+  <div class="mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">PMIS Data Flow</h3>
+    <div class="flex justify-center">
+      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
+        <img 
+          src="/images/deliverySystems/Digital_GRM.png" 
+          alt="Digital_GRM" 
+          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+    </div>
   </div>
   
   <!-- Key Features Section -->
