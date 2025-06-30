@@ -117,9 +117,6 @@
                   </ul>
                 </div>
 
-
-
-
                 <!-- Our Mandate Navigation Section -->
                 <li class="list-none pl-0"> <!-- Removes bullet and padding -->
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Our Mandate</h3>
@@ -170,59 +167,7 @@
                       </NuxtLink>
                     </li>
                   </ul>
-                </li>
-
-
-
-
-
-
-
-                <div class="bg-blue-50 p-4 rounded-lg">
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
-                  <ul class="space-y-3">
-                    <li>
-                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Annual Report
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                        Financial Statements
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                        </svg>
-                        Strategic Plan
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                        </svg>
-                        Audit Reports
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Consolidated LAs Annual Budget
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+                </li> 
               </div>
             </div>
           </div>
@@ -378,53 +323,6 @@
                     <li><NuxtLink to="/localAuthorities/dedzaDistrict" class="text-gray-700 hover:text-blue-700 transition flex items-center">Dedza District Council</NuxtLink></li>
                     <li><NuxtLink to="/localAuthorities/mulanjeDistrict" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mulanje District Council</NuxtLink></li>
                     <li><NuxtLink to="/localAuthorities/alldistricts" class="text-gray-700 hover:text-blue-700 transition flex items-center">All District Councils →</NuxtLink></li>
-                  </ul>
-                </div>
-
-                <div class="bg-blue-50 p-4 rounded-lg">
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
-                  <ul class="space-y-3">
-                    <li>
-                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                        Council Directory
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                        </svg>
-                        Performance Reports
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                        Council Locations
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Budget Allocations
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0h6m-6 0l-2 12a2 2 0 002 2h8a2 2 0 002-2L16 7"></path>
-                        </svg>
-                        Service Applications
-                      </a>
-                    </li>
                   </ul>
                 </div>
               </div>
