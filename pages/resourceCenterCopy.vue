@@ -256,18 +256,58 @@ definePageMeta({
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
 
+// ID mapping for subcategories
+const subcategoryIdMap = {
+  // Publications & Downloads
+  'press-releases': { tab: 0, sub: 0 },
+  'success-stories': { tab: 0, sub: 1 },
+  'speeches': { tab: 0, sub: 2 },
+  'research-discussions': { tab: 0, sub: 3 },
+  'budget-documents': { tab: 0, sub: 4 },
+  'disbursements': { tab: 0, sub: 5 },
+  'newsletters': { tab: 0, sub: 6 },
+  'manuals-guidelines': { tab: 0, sub: 7 },
+  'policies-strategies': { tab: 0, sub: 8 },
+
+  // Project Documents
+  'ssrlp': { tab: 1, sub: 0 },
+  'gesd': { tab: 1, sub: 1 },
+  'rcrp2': { tab: 1, sub: 2 },
+
+  // Reports
+  'audit-reports': { tab: 2, sub: 0 },
+  'financial-reports': { tab: 2, sub: 1 },
+  'financial-statements': { tab: 2, sub: 2 },
+  'lapa-synthesis': { tab: 2, sub: 3 },
+
+  // Knowledge Management Portal
+  'image-gallery': { tab: 3, sub: 0 },
+  'video-library': { tab: 3, sub: 1 }
+};
+
+// Reverse mapping for generating IDs from tab/sub indices
+const getIdFromTabSub = (tabIndex, subIndex) => {
+  for (const [id, mapping] of Object.entries(subcategoryIdMap)) {
+    if (mapping.tab === tabIndex && mapping.sub === subIndex) {
+      return id;
+    }
+  }
+  return null;
+};
+
 const tabs = ref([
-{
+  {
     name: 'Publications & Downloads',
     subcategories: [
       {
         name: 'Press Releases',
+        id: 'press-releases',
         contents: [
           {
             name: 'Uthenga Wapadera Wa Covid 19 Emergency Cash Transfers',
@@ -302,7 +342,7 @@ const tabs = ref([
             link: '/downloads/press-mar2025.pdf',
             type: 'PDF',
             description: 'Special announcement on Government of Malawi COVID-19 response',
-            
+
           },
           {
             name: 'Special Communication on Covid 19 Emergency Cash Transfers',
@@ -315,7 +355,7 @@ const tabs = ref([
             link: '/downloads/press-mar2025.pdf',
             type: 'PDF',
             description: 'Governance to Enable Service Delivery (GESD) Project approval',
-          }, 
+          },
           {
             name: 'STOPCOVID-19 NLGFC',
             link: '/downloads/press-mar2025.pdf',
@@ -334,7 +374,7 @@ const tabs = ref([
             link: '/downloads/press-mar2025.pdf',
             type: 'PDF',
             description: 'Immediate release on second disbursement of COVID-19 urban cash payments',
-          },  
+          },
           {
             name: 'Local Authorities (LAs) Funding Advice',
             link: '/downloads/press-mar2025.pdf',
@@ -353,48 +393,49 @@ const tabs = ref([
       },
       {
         name: 'Success Stories',
+        id: 'success-stories',
         contents: [
           {
             name: 'NLGFC [PWP] Success Stories MASAF IV',
             link: '/downloads/success1.pdf',
             type: 'PDF',
             description: 'NLGFC PWP Success Stories for Booklet-MASAF IV.',
-            date: 'December 2024' 
+            date: 'December 2024'
           },
           {
             name: 'CS-EPWP Balaka Newsletters',
             link: '/downloads/success2.pdf',
             type: 'PDF',
             description: 'Climate Smart Newslatter for Balaka District.',
-            date: 'December 2024' 
-          },  
+            date: 'December 2024'
+          },
           {
             name: 'Lilongwe CS-EPWP Succcess Stories',
             link: '/downloads/success3.pdf',
             type: 'PDF',
             description: 'Summary of Lilongwe CS-EPWP success story',
-            date: 'December 2024'              
+            date: 'December 2024'
           },
           {
             name: 'Likoma CS-EPWP Succcess Stories',
             link: '/downloads/success3.pdf',
             type: 'PDF',
-            description: 'Summary of Likoma CS-EPWP success story', 
-            date: 'December 2024' 
+            description: 'Summary of Likoma CS-EPWP success story',
+            date: 'December 2024'
           },
           {
             name: 'Machinga CS-EPWP Succcess Stories',
             link: '/downloads/success3.pdf',
             type: 'PDF',
-            description: 'Summary of Machinga CS-EPWP success story', 
-            date: 'December 2024' 
+            description: 'Summary of Machinga CS-EPWP success story',
+            date: 'December 2024'
           },
           {
             name: 'Mwanza CS-EPWP Succcess Stories',
             link: '/downloads/success3.pdf',
             type: 'PDF',
             description: 'Summary of Mwanza CS-EPWP success story',
-            date: 'December 2024' 
+            date: 'December 2024'
           },
           {
             name: 'Nsanje CS-EPWP Succcess Stories',
@@ -428,18 +469,20 @@ const tabs = ref([
       },
       {
         name: 'Speeches',
+        id: 'speeches',
         contents: [
           {
             name: 'NLGFC [PWP] Success Stories MASAF IV',
             link: '/downloads/success1.pdf',
             type: 'PDF',
             description: 'NLGFC PWP Success Stories for Booklet-MASAF IV.',
-            date: 'December 2024' 
+            date: 'December 2024'
           }
         ]
       },
       {
         name: 'Research & Discussions',
+        id: 'research-discussions',
         contents: [
           {
             name: 'Research on Local Governance',
@@ -452,6 +495,7 @@ const tabs = ref([
       },
       {
         name: 'Budget Documents',
+        id: 'budget-documents',
         contents: [
           {
             name: 'Budget Document 2025',
@@ -464,6 +508,7 @@ const tabs = ref([
       },
       {
         name: 'Disbursements',
+        id: 'disbursements',
         contents: [
           {
             name: 'Disbursement Report Q1 2025',
@@ -476,6 +521,7 @@ const tabs = ref([
       },
       {
         name: 'Newsletters & Magazines',
+        id: 'newsletters',
         contents: [
           {
             name: 'January Newsletter',
@@ -497,7 +543,7 @@ const tabs = ref([
             type: 'PDF',
             description: 'Highlights from March 2025 newsletter.',
             date: 'March 2025'
-          },  
+          },
           {
             name: 'April Newsletter',
             link: '/downloads/newsletter-jan2025.pdf',
@@ -523,171 +569,210 @@ const tabs = ref([
       },
       {
         name: 'Manuals and Guidelines',
+        id: 'manuals-guidelines',
         contents: []
       },
-      { name: 'Policies and Strategies', contents: [
-        {
-          name: 'Policy Framework 2025',
-          link: '/downloads/policy-framework-2025.pdf',
-          type: 'PDF',
-          description: 'Framework for policy implementation in 2025.'
-        },
-        {
-          name: 'Strategic Plan 2025',
-          link: '/downloads/strategic-plan-2025.pdf',
-          type: 'PDF',
-          description: 'Strategic plan outlining goals and objectives for 2025.'
-        } 
-      ] }
+      {
+        name: 'Policies and Strategies',
+        id: 'policies-strategies',
+        contents: [
+          {
+            name: 'Policy Framework 2025',
+            link: '/downloads/policy-framework-2025.pdf',
+            type: 'PDF',
+            description: 'Framework for policy implementation in 2025.'
+          },
+          {
+            name: 'Strategic Plan 2025',
+            link: '/downloads/strategic-plan-2025.pdf',
+            type: 'PDF',
+            description: 'Strategic plan outlining goals and objectives for 2025.'
+          }
+        ]
+      }
     ]
   },
   {
     name: 'Project Documents',
     subcategories: [
-      { name: 'SSRLP', contents: [
-        {
-          name: 'SSRLP Report 2025',
-          link: '/downloads/ssrlp-report-2025.pdf',
-          type: 'PDF',
-          description: 'SSRLP annual report for 2025.'
-        },
-        {
-          name: 'SSRLP Guidelines',
-          link: '/downloads/ssrlp-guidelines.pdf',
-          type: 'PDF',
-          description: 'Guidelines for SSRLP project implementation.'
-        }
-      ] },
-      { name: 'GESD', contents: [
-        {
-          name: 'GESD Plan 2025',
-          link: '/downloads/gesd-plan-2025.pdf',
-          type: 'PDF',
-          description: 'GESD strategic plan for 2025.'
-        }
-      ] },
-      { name: 'RCRP 2', contents: [
-        {
-          name: 'RCRP Overview',
-          link: '/downloads/rcrp-overview.pdf',
-          type: 'PDF',
-          description: 'Overview of the RCRP project.'
-        },
-        {
-          name: 'RCRP Implementation Guide',
-          link: '/downloads/rcrp-guide.pdf',
-          type: 'PDF',
-          description: 'Implementation guide for RCRP projects.'
-        }
-      ] }
+      {
+        name: 'SSRLP',
+        id: 'ssrlp',
+        contents: [
+          {
+            name: 'SSRLP Report 2025',
+            link: '/downloads/ssrlp-report-2025.pdf',
+            type: 'PDF',
+            description: 'SSRLP annual report for 2025.'
+          },
+          {
+            name: 'SSRLP Guidelines',
+            link: '/downloads/ssrlp-guidelines.pdf',
+            type: 'PDF',
+            description: 'Guidelines for SSRLP project implementation.'
+          }
+        ]
+      },
+      {
+        name: 'GESD',
+        id: 'gesd',
+        contents: [
+          {
+            name: 'GESD Plan 2025',
+            link: '/downloads/gesd-plan-2025.pdf',
+            type: 'PDF',
+            description: 'GESD strategic plan for 2025.'
+          }
+        ]
+      },
+      {
+        name: 'RCRP 2',
+        id: 'rcrp2',
+        contents: [
+          {
+            name: 'RCRP Overview',
+            link: '/downloads/rcrp-overview.pdf',
+            type: 'PDF',
+            description: 'Overview of the RCRP project.'
+          },
+          {
+            name: 'RCRP Implementation Guide',
+            link: '/downloads/rcrp-guide.pdf',
+            type: 'PDF',
+            description: 'Implementation guide for RCRP projects.'
+          }
+        ]
+      }
     ]
   },
   {
     name: 'Reports',
     subcategories: [
-      { name: 'Audit Reports', contents: [
-        {
-          name: 'Annual Report 2024',
-          link: '/downloads/annual-report-2024.pdf',
-          type: 'PDF',
-          description: 'Comprehensive overview of 2024 activities.'
-        },
-        {
-          name: 'Monthly Report - Jan 2025',
-          link: '/downloads/monthly-report-jan2025.pdf',
-          type: 'PDF',
-          description: 'Highlights from January 2025 monthly report.'
-        }
-      ] },
-      { name: 'Financial Reports', contents: [
-        {
-          name: 'Financial Report Q1 2025',
-          link: '/downloads/financial-report-q1-2025.pdf',
-          type: 'PDF',
-          description: 'Financial overview for the first quarter of 2025.'
-        },
-        {
-          name: 'Budget Report 2025',
-          link: '/downloads/budget-report-2025.pdf',
-          type: 'PDF',
-          description: 'Detailed budget report for the year 2025.'
-        }
-      ] },
-      { name: 'Financial statements', contents: [
-        {
-          name: 'Project Evaluation 2024',
-          link: '/downloads/project-evaluation-2024.pdf',
-          type: 'PDF',
-          description: 'Evaluation of projects completed in 2024.'
-        },
-        {
-          name: 'Mid-Year Evaluation 2025',
-          link: '/downloads/mid-year-evaluation-2025.pdf',
-          type: 'PDF',
-          description: 'Mid-year evaluation report for 2025.'
-        }
-      ] },
-      { name: 'LAPA Synthesis', contents: [
-        {
-          name: 'Project Evaluation Report 2024',
-          link: '/downloads/project-evaluation-2024.pdf',
-          type: 'PDF',
-          description: 'Evaluation report for projects completed in 2024.'
-        },
-        {
-          name: 'Mid-Year Evaluation Report 2025',
-          link: '/downloads/mid-year-evaluation-2025.pdf',
-          type: 'PDF',
-          description: 'Mid-year evaluation report for 2025.'
-        }
-      ] }
-        
+      {
+        name: 'Audit Reports',
+        id: 'audit-reports',
+        contents: [
+          {
+            name: 'Annual Report 2024',
+            link: '/downloads/annual-report-2024.pdf',
+            type: 'PDF',
+            description: 'Comprehensive overview of 2024 activities.'
+          },
+          {
+            name: 'Monthly Report - Jan 2025',
+            link: '/downloads/monthly-report-jan2025.pdf',
+            type: 'PDF',
+            description: 'Highlights from January 2025 monthly report.'
+          }
+        ]
+      },
+      {
+        name: 'Financial Reports',
+        id: 'financial-reports',
+        contents: [
+          {
+            name: 'Financial Report Q1 2025',
+            link: '/downloads/financial-report-q1-2025.pdf',
+            type: 'PDF',
+            description: 'Financial overview for the first quarter of 2025.'
+          },
+          {
+            name: 'Budget Report 2025',
+            link: '/downloads/budget-report-2025.pdf',
+            type: 'PDF',
+            description: 'Detailed budget report for the year 2025.'
+          }
+        ]
+      },
+      {
+        name: 'Financial statements',
+        id: 'financial-statements',
+        contents: [
+          {
+            name: 'Project Evaluation 2024',
+            link: '/downloads/project-evaluation-2024.pdf',
+            type: 'PDF',
+            description: 'Evaluation of projects completed in 2024.'
+          },
+          {
+            name: 'Mid-Year Evaluation 2025',
+            link: '/downloads/mid-year-evaluation-2025.pdf',
+            type: 'PDF',
+            description: 'Mid-year evaluation report for 2025.'
+          }
+        ]
+      },
+      {
+        name: 'LAPA Synthesis',
+        id: 'lapa-synthesis',
+        contents: [
+          {
+            name: 'Project Evaluation Report 2024',
+            link: '/downloads/project-evaluation-2024.pdf',
+            type: 'PDF',
+            description: 'Evaluation report for projects completed in 2024.'
+          },
+          {
+            name: 'Mid-Year Evaluation Report 2025',
+            link: '/downloads/mid-year-evaluation-2025.pdf',
+            type: 'PDF',
+            description: 'Mid-year evaluation report for 2025.'
+          }
+        ]
+      }
     ]
   },
   {
     name: 'Knowledge Management Portal',
     subcategories: [
-      { name: 'Image Gallery', contents: [
-        {
-          name: 'Community Event Photos',
-          link: 'https://demo2.gov.mw/nlgfc-portal/public/?page=1',
-          type: 'Gallery',
-          description: 'Gallery showcasing community events, activities and projects.'
-        }
-
-      ] },
-      { name: 'Video', contents: [
-        {
-          name: 'Phalombe District Council',
-          link: 'https://www.youtube.com/watch?v=xfMlyumpENU',
-          type: 'Video',
-          description: 'GESD project overview in Phalombe District Council.'
-        },
-        {
-          name: 'Nkhotakota District Council',
-          link: 'https://www.youtube.com/watch?v=YTbn2duu4og',
-          type: 'Video',
-          description: 'GESD project overview in Nkhotakota District council.'
-        },
-        {
-          name: 'Mmbelwa District Council',
-          link: 'https://www.youtube.com/watch?v=YTbn2duu4og',
-          type: 'Video',
-          description: 'GESD project Impact in Mmbelwa District Council.'
-        },  
-        {
-          name: 'Scalable Safety Nets',
-          link: 'https://www.youtube.com/watch?v=JY_A56sfnlU',
-          type: 'Video',
-          description: 'Scalable Safety Nets under SSRLP Tidzidalire project overview.'
-        },
-        {
-          name: 'Ntchisi District Council',
-          link: 'https://www.youtube.com/watch?v=MCQCw74_V-0',
-          type: 'Video',
-          description: 'GESD project Impact'
-        }
-      ] }
+      {
+        name: 'Image Gallery',
+        id: 'image-gallery',
+        contents: [
+          {
+            name: 'Community Event Photos',
+            link: 'https://demo2.gov.mw/nlgfc-portal/public/?page=1',
+            type: 'Gallery',
+            description: 'Gallery showcasing community events, activities and projects.'
+          }
+        ]
+      },
+      {
+        name: 'Video',
+        id: 'video-library',
+        contents: [
+          {
+            name: 'Phalombe District Council',
+            link: 'https://www.youtube.com/watch?v=xfMlyumpENU',
+            type: 'Video',
+            description: 'GESD project overview in Phalombe District Council.'
+          },
+          {
+            name: 'Nkhotakota District Council',
+            link: 'https://www.youtube.com/watch?v=YTbn2duu4og',
+            type: 'Video',
+            description: 'GESD project overview in Nkhotakota District council.'
+          },
+          {
+            name: 'Mmbelwa District Council',
+            link: 'https://www.youtube.com/watch?v=YTbn2duu4og',
+            type: 'Video',
+            description: 'GESD project Impact in Mmbelwa District Council.'
+          },
+          {
+            name: 'Scalable Safety Nets',
+            link: 'https://www.youtube.com/watch?v=JY_A56sfnlU',
+            type: 'Video',
+            description: 'Scalable Safety Nets under SSRLP Tidzidalire project overview.'
+          },
+          {
+            name: 'Ntchisi District Council',
+            link: 'https://www.youtube.com/watch?v=MCQCw74_V-0',
+            type: 'Video',
+            description: 'GESD project Impact'
+          }
+        ]
+      }
     ]
   }
 ]);
@@ -700,17 +785,32 @@ const iframeLoaded = ref(false);
 
 // Function to handle query parameters and open specific tab/subcategory
 function handleQueryParams() {
+  const idParam = route.query.id;
   const tabParam = route.query.tab;
   const subParam = route.query.sub;
-  
+
+  // Handle ID-based routing (preferred)
+  if (idParam && subcategoryIdMap[idParam]) {
+    const mapping = subcategoryIdMap[idParam];
+    const tabIndex = mapping.tab;
+    const subIndex = mapping.sub;
+
+    // Set the active tab and subcategory
+    expandedTab.value = tabIndex;
+    activeTab.value = tabIndex;
+    activeSub.value = subIndex;
+    return;
+  }
+
+  // Fallback to old tab/sub parameter system
   if (tabParam !== undefined && subParam !== undefined) {
     const tabIndex = parseInt(tabParam);
     const subIndex = parseInt(subParam);
-    
+
     // Validate indices
-    if (tabIndex >= 0 && tabIndex < tabs.value.length && 
+    if (tabIndex >= 0 && tabIndex < tabs.value.length &&
         subIndex >= 0 && subIndex < tabs.value[tabIndex].subcategories.length) {
-      
+
       // Set the active tab and subcategory
       expandedTab.value = tabIndex;
       activeTab.value = tabIndex;
@@ -744,13 +844,24 @@ function selectSub(tabIndex, subIndex) {
   activeSub.value = subIndex;
   // Reset iframe loaded state when switching subcategories
   iframeLoaded.value = false;
-  // Update the URL with query parameters
-  router.push({
-    query: {
-      tab: tabIndex,
-      sub: subIndex
-    }
-  });
+
+  // Get the ID for this tab/sub combination
+  const subcategoryId = getIdFromTabSub(tabIndex, subIndex);
+
+  // Update the URL with ID parameter (preferred) or fallback to tab/sub
+  if (subcategoryId) {
+    router.push({
+      query: { id: subcategoryId }
+    });
+  } else {
+    // Fallback to old system
+    router.push({
+      query: {
+        tab: tabIndex,
+        sub: subIndex
+      }
+    });
+  }
 }
 
 function hideLoadingOverlay() {
