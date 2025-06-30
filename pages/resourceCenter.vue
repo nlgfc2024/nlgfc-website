@@ -645,7 +645,7 @@ const tabs = ref([
     ]
   },
   {
-    name: 'Knowledge Management Portal',
+    name: 'Knowledge Management',
     subcategories: [
       { name: 'Image Gallery', contents: [
           {
