@@ -108,7 +108,7 @@ function updateActiveTabFromHash(hash) {
         <!-- Header Section -->
         <div class="mb-10">
           <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-indigo-100">
-            Fiscal Decentralization Framework
+            Fiscal Decentralization
           </h2>
           <p class="text-lg text-gray-600">
             Managing intergovernmental fiscal transfers to empower local service delivery
@@ -183,7 +183,7 @@ function updateActiveTabFromHash(hash) {
         <div class="space-y-8">
           <!-- Types of Transfers -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-600 px-6 py-4">
               <h3 class="text-lg font-semibold text-white">A. Types of Fiscal Transfers</h3>
             </div>
             <div class="p-6">
@@ -215,7 +215,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- Formula Components -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-600 px-6 py-4">
               <h3 class="text-lg font-semibold text-white">B. Formula Allocation Criteria</h3>
             </div>
             <div class="p-6">
@@ -242,7 +242,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- Dashboard Section -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-600 px-6 py-4">
               <h3 class="text-lg font-semibold text-white">C. IGTF Monitoring Dashboard</h3>
             </div>
             <div class="p-6">
@@ -293,11 +293,12 @@ function updateActiveTabFromHash(hash) {
         </div>
       </div>
 
+      <!-- Financial Management -->
       <div v-show="activeTab === 'financialManagement'" class="prose max-w-none">
         <!-- Header Section -->
         <div class="mb-10">
           <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
-            Financial Management Framework
+            Financial Management
           </h2>
           <p class="text-lg text-gray-600">
             Comprehensive oversight of the public financial management cycle for local governance
@@ -307,12 +308,12 @@ function updateActiveTabFromHash(hash) {
         <!-- Overview Section -->
         <div class="bg-gradient-to-br from-blue-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
           <div class="flex items-start">
-            <div class="bg-blue-100 p-3 rounded-lg mr-5">
+            <div class="bg-blue-100 p-3 rounded-lg mr-5 flex-shrink-0 mt-1">
               <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <div>
+            <div class="flex flex-col justify-center">
               <h3 class="text-xl font-semibold text-gray-800 mb-3">PFM Cycle Management</h3>
               <p class="text-gray-700 leading-relaxed">
                 NLGFC oversees the entire public financial management cycle, from resource mobilization and allocation to utilization, reporting, and accountability. Our mandate promotes sound fiscal governance, transparency, and efficient service delivery across all local authorities in Malawi.
@@ -325,7 +326,7 @@ function updateActiveTabFromHash(hash) {
         <div class="space-y-8">
           <!-- Resource Mobilization -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-600 px-6 py-4">
               <h3 class="text-lg font-semibold text-white flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -399,7 +400,6 @@ function updateActiveTabFromHash(hash) {
             </div>
           </div>
 
-          <!-- Continue with all other sections following the same pattern -->
           <!-- Budgeting and Consolidation -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div class="bg-gray-700 px-6 py-4">
@@ -484,7 +484,6 @@ function updateActiveTabFromHash(hash) {
             </div>
           </div>
 
-          <!-- Continue with remaining sections (5-9) following same structure -->
           <!-- Audit Oversight -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div class="bg-gray-600 px-6 py-4">
@@ -674,12 +673,12 @@ function updateActiveTabFromHash(hash) {
 
       <!-- Local Development Support -->
       <div v-show="activeTab === 'localDevelopmentSupport'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div class="p-6">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Local Development Support</h2>
-              <div class="prose max-w-none text-gray-700">
-                <p>NLGFC provides local development project support to LAs through supervision and monitoring of both GoM and donor-funded projects in local governments. Malawi administers several funding mechanisms to support local development projects. These funds are designed to empower districts and constituencies to address key socio-economic challenges, improve infrastructure, and enhance service delivery at the grassroots level.</p>
-              </div>
+        <div class="p-6">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6">Local Development Support</h2>
+          <div class="prose max-w-none text-gray-700">
+            <p>NLGFC provides local development project support to LAs through supervision and monitoring of both GoM and donor-funded projects in local governments. Malawi administers several funding mechanisms to support local development projects. These funds are designed to empower districts and constituencies to address key socio-economic challenges, improve infrastructure, and enhance service delivery at the grassroots level.</p>
           </div>
+        </div>
       </div>
 
       <!-- DDF -->
