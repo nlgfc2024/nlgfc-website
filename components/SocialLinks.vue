@@ -1,0 +1,28 @@
+<template>
+    <div class="flex gap-2">
+      <UButton
+        icon="i-simple-icons-facebook"
+        color="white"
+        variant="ghost"
+        aria-label="Facebook"
+        to="https://facebook.com/nlgfc"
+        target="_blank"
+      />
+      <UButton
+        icon="i-simple-icons-twitter"
+        color="white"
+        variant="ghost"
+        aria-label="Twitter"
+        to="https://twitter.com/nlgfc"
+        target="_blank"
+      />
+      <UButton
+        icon="i-simple-icons-linkedin"
+        color="white"
+        variant="ghost"
+        aria-label="LinkedIn"
+        to="https://linkedin.com/company/nlgfc"
+        target="_blank"
+      />
+    </div>
+  </template>

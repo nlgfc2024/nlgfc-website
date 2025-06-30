@@ -21,7 +21,7 @@ useHead({
               <!-- Image on left -->
               <div class="w-1/3 relative overflow-hidden">
                 <img 
-                  src="/public/news1.jpg" 
+                  src="/images/samples/news1.jpg" 
                   alt="Article image"
                   class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
@@ -55,7 +55,7 @@ useHead({
               <!-- Image on left -->
               <div class="w-1/3 relative overflow-hidden">
                 <img 
-                  src="/public/news2.jpg" 
+                  src="/images/samples/news2.jpg" 
                   alt="Article image"
                   class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
@@ -89,7 +89,7 @@ useHead({
               <!-- Image on left -->
               <div class="w-1/3 relative overflow-hidden">
                 <img 
-                  src="/public/news3.jpg" 
+                  src="/images/samples/news3.jpg" 
                   alt="Article image"
                   class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
@@ -119,6 +119,7 @@ useHead({
         </div>
       </div>
     </section>
+
     <main class="container mx-auto px-4 py-12">
       <!-- Mission, Mandate and Vision -->
       <section class="py-16 bg-gray-50">
@@ -232,10 +233,10 @@ useHead({
               <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col items-center text-center border border-gray-100 hover:border-blue-200">
                 <div class="w-28 h-28 mb-6 rounded-full bg-blue-50 flex items-center justify-center p-4 group-hover:bg-blue-100 transition-colors shadow-inner">
                   <!-- Replace with actual SSRP logo -->
-                  <img src="/public/NLGFC-Logo.png" alt="SSRP Logo" class="w-full h-full object-contain" loading="lazy">
+                  <img src="/public/images/samples/SSRLP logo(1).jpg" alt="SSRP Logo" class="w-full h-full object-contain" loading="lazy">
                 </div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors">SSRP</h3>
-                <p class="text-gray-600 mb-6">Sustainable Schools Rehabilitation Project</p>
+                <p class="text-gray-600 mb-6">Social Support for Resilient Project</p>
                 <div class="mt-auto pt-4 border-t border-gray-100 w-full">
                   <span class="text-blue-600 font-medium flex items-center justify-center">
                     View project
@@ -252,10 +253,10 @@ useHead({
               <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col items-center text-center border border-gray-100 hover:border-green-200">
                 <div class="w-28 h-28 mb-6 rounded-full bg-green-50 flex items-center justify-center p-4 group-hover:bg-green-100 transition-colors shadow-inner">
                   <!-- Replace with actual GESD logo -->
-                  <img src="/public/NLGFC-Logo.png" alt="GESD Logo" class="w-full h-full object-contain" loading="lazy">
+                  <img src="/images/samples/PBG logo.png" alt="GESD Logo" class="w-full h-full object-contain" loading="lazy">
                 </div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-green-600 transition-colors">GESD</h3>
-                <p class="text-gray-600 mb-6">Green Energy Solutions Deployment</p>
+                <p class="text-gray-600 mb-6">Governance to Enable Service Deliver Project</p>
                 <div class="mt-auto pt-4 border-t border-gray-100 w-full">
                   <span class="text-green-600 font-medium flex items-center justify-center">
                     View project
@@ -272,10 +273,10 @@ useHead({
               <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col items-center text-center border border-gray-100 hover:border-amber-200">
                 <div class="w-28 h-28 mb-6 rounded-full bg-amber-50 flex items-center justify-center p-4 group-hover:bg-amber-100 transition-colors shadow-inner">
                   <!-- Replace with actual RCRP2 logo -->
-                  <img src="/public/NLGFC-Logo.png" alt="RCRP2 Logo" class="w-full h-full object-contain" loading="lazy">
+                  <img src="/images/samples/RCRP LOGO- Final.png" alt="RCRP2 Logo" class="w-full h-full object-contain" loading="lazy">
                 </div>
                 <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-amber-600 transition-colors">RCRP2</h3>
-                <p class="text-gray-600 mb-6">Rural Communities Resilience Program</p>
+                <p class="text-gray-600 mb-6">Regional Climate Resilience Project 2</p>
                 <div class="mt-auto pt-4 border-t border-gray-100 w-full">
                   <span class="text-amber-600 font-medium flex items-center justify-center">
                     View project
@@ -289,8 +290,8 @@ useHead({
           </div>
 
           <div class="text-center mt-12">
-            <a href="/projects" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-300 shadow-sm hover:shadow-md">
-              Explore All Initiatives
+            <a href="/projects/currentProjects" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-300 shadow-sm hover:shadow-md">
+              Explore All Projects
               <svg class="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
@@ -403,32 +404,57 @@ useHead({
                 <div class="flex shrink-0 gap-6">
                   <!-- Partner 1 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/public/images/partners/Ireland_Std_Colour.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 2 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/partners/gizlogo-unternehmen-de-rgb-300.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 3 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/partners/EU normal-reproduction-high-resolution.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 4 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/partners/Embassy of Iceland logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 5 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/partners/Cooperation logo.bmp" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 6 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/partners/New EU logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                  </div>
+                  
+                  <!-- Partner 7 -->
+                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
+                    <img src="/images/partners/New EU logo.PNG" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                  </div>
+                  
+                  <!-- Partner 8 -->
+                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
+                    <img src="/images/partners/UK AID - Standard - 4C PNG.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                  </div>
+                  
+                  <!-- Partner 9 -->
+                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
+                    <img src="/public/images/partners/USaid logo Horizontal RGB_JPEG.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                  </div>
+                  
+                  <!-- Partner 10 -->
+                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
+                    <img src="/public/images/partners/USAID Logo Vertical RGB_JPEG.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                  </div>
+                  
+                  <!-- Partner 11 -->
+                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
+                    <img src="/public/images/partners/WB-WBG-horizontal-RGB (1).jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                 </div>
                 
@@ -436,33 +462,60 @@ useHead({
                 <div class="flex shrink-0 gap-6" aria-hidden="true">
                   <!-- Partner 1 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/public/images/partners/Ireland_Std_Colour.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 2 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/partners/gizlogo-unternehmen-de-rgb-300.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 3 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/partners/EU normal-reproduction-high-resolution.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 4 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/partners/Embassy of Iceland logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 5 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/partners/Cooperation logo.bmp" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
                   
                   <!-- Partner 6 -->
                   <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/NLGFC-Logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                    <img src="/images/partners/New EU logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
                   </div>
+                  
+                  <!-- Partner 7 -->
+                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
+                    <img src="/images/partners/New EU logo.PNG" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                  </div>
+                  
+                  <!-- Partner 8 -->
+                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
+                    <img src="/images/partners/UK AID - Standard - 4C PNG.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                  </div>
+                  
+                  <!-- Partner 9 -->
+                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
+                    <img src="/public/images/partners/USaid logo Horizontal RGB_JPEG.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                  </div>
+                  
+                  <!-- Partner 10 -->
+                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
+                    <img src="/public/images/partners/USAID Logo Vertical RGB_JPEG.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                  </div>
+                  
+                  <!-- Partner 11 -->
+                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
+                    <img src="/public/images/partners/WB-WBG-horizontal-RGB (1).jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+                  </div>
+                  
+                  
                 </div>
               </div>
             </div>
