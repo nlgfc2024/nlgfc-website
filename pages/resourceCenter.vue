@@ -1,9 +1,3 @@
-<script>
-definePageMeta({
-  title: 'Resource Center' // This will be available in route.meta.title
-})
-</script>
-
 <template>
   <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
     <!-- Left Sidebar -->
@@ -112,8 +106,9 @@ definePageMeta({
         <div
             v-else-if="currentSubcategoryType === 'Image Gallery'"
             class="w-full">
+            <!--I removed index on the v-for loop since we're using iframe now -->
           <div
-              v-for="(doc, index) in displayedDocuments"
+              v-for="doc in displayedDocuments"
               :key="doc.name"
               class="bg-white rounded-lg shadow-lg overflow-hidden mb-6 transition-all duration-300 hover:shadow-xl"
           >
@@ -908,6 +903,7 @@ const currentSubcategoryType = computed(() => {
   }
   return '';
 });
+
 </script>
 
 <style scoped>

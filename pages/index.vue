@@ -5,6 +5,30 @@ useHead({
     { name: 'description', content: 'Welcome to our website' }
   ]
 });
+
+const partnerLogos = [
+  { src: "/images/partners/Ireland_Std_Colour.png", alt: "Ireland" },
+  { src: "/images/partners/gizlogo-unternehmen-de-rgb-300.jpg", alt: "GIZ" },
+  { src: "/images/partners/EU normal-reproduction-high-resolution.jpg", alt: "EU" },
+  { src: "/images/partners/Embassy of Iceland logo.png", alt: "Embassy of Iceland" },
+  { src: "/images/partners/Cooperation logo.bmp", alt: "Cooperation" },
+  { src: "/images/partners/New EU logo.png", alt: "New EU" },
+  { src: "/images/partners/UK AID - Standard - 4C PNG.png", alt: "UK Aid" },
+  { src: "/images/partners/USaid logo Horizontal RGB_JPEG.jpg", alt: "USAID" },
+  { src: "/images/partners/WB-WBG-horizontal-RGB (1).jpg", alt: "World Bank" },
+]
+
+const props = defineProps({
+  partnerLogos: {
+    type: Array,
+    required: true,
+    validator: (logos) => logos.every(logo => logo.src && logo.alt)
+  },
+  scrollDuration: {
+    type: Number,
+    default: 20
+  }
+})
 </script>
 
 <template>
@@ -396,140 +420,35 @@ useHead({
             <!-- Gradient Overlays -->
             <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10"></div>
             <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10"></div>
-            
-            <!-- Slider Track -->
-            <div class="overflow-hidden py-4">
-              <div class="flex gap-6 animate-scroll hover:pause">
-                <!-- Partner Items (duplicated for seamless looping) -->
-                <div class="flex shrink-0 gap-6">
-                  <!-- Partner 1 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/Ireland_Std_Colour.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+             <!-- Slider Track -->
+            <div class="overflow-hidden py-6 px-4">
+              <div 
+                class="flex gap-6 animate-scroll hover:pause"
+                :style="`--scroll-duration: ${scrollDuration}s`"
+              >
+                <!-- Two copies for seamless scrolling -->
+                <template v-for="repeat in 2" :key="repeat">
+                  <div 
+                    v-for="(logo, index) in partnerLogos"
+                    :key="`${repeat}-${index}`"
+                    class="flex-shrink-0"
+                  >
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-center h-24 w-40 sm:h-32 sm:w-48 transition-all hover:scale-105 hover:shadow-xl border border-gray-100">
+                      <img
+                        :src="logo.src"
+                        :alt="logo.alt"
+                        loading="lazy"
+                        decoding="async"
+                        width="192"
+                        height="128"
+                        class="max-h-20 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity drop-shadow-md"
+                      />
+                    </div>
                   </div>
-                  
-                  <!-- Partner 2 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/gizlogo-unternehmen-de-rgb-300.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 3 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/EU normal-reproduction-high-resolution.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 4 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/Embassy of Iceland logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 5 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/Cooperation logo.bmp" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 6 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/New EU logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 7 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/New EU logo.PNG" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 8 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/UK AID - Standard - 4C PNG.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 9 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/USaid logo Horizontal RGB_JPEG.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 10 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/USAID Logo Vertical RGB_JPEG.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 11 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/WB-WBG-horizontal-RGB (1).jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                </div>
-                
-                <!-- Duplicate slides for seamless looping -->
-                <div class="flex shrink-0 gap-6" aria-hidden="true">
-                  <!-- Partner 1 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/Ireland_Std_Colour.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 2 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/gizlogo-unternehmen-de-rgb-300.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 3 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/EU normal-reproduction-high-resolution.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 4 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/Embassy of Iceland logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 5 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/Cooperation logo.bmp" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 6 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/New EU logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 7 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/New EU logo.PNG" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 8 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/UK AID - Standard - 4C PNG.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 9 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/USaid logo Horizontal RGB_JPEG.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 10 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/USAID Logo Vertical RGB_JPEG.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 11 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/WB-WBG-horizontal-RGB (1).jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  
-                </div>
+                </template>
               </div>
             </div>
           </div>
-
-          <!-- Optional View All Button -->
-          <!-- <div class="text-center mt-12">
-            <a href="/partners" class="inline-flex items-center px-5 py-2.5 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors text-sm font-medium">
-              View All Partners
-              <svg class="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-              </svg>
-            </a>
-          </div> -->
         </div>
       </section>
     </main>
@@ -539,16 +458,41 @@ useHead({
 
 
 <style scoped>
-    @keyframes scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(calc(-100% - 1.5rem)); } /* 1.5rem = gap-6 */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
   }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll var(--scroll-duration, 20s) linear infinite;
+  display: flex;
+  min-width: fit-content; /* Better for dynamic content */
+  will-change: transform; /* Optimize for animation */
+}
+
+.hover\:pause:hover,
+.animate-scroll:focus-within,
+.animate-scroll:active {
+  animation-play-state: paused;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
   .animate-scroll {
-    animation: scroll 20s linear infinite;
-    width: calc(200% + 1.5rem); /* Double width + gap */
+    animation: none;
+    justify-content: center;
+    min-width: auto;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
   }
-  .hover\:pause:hover {
-    animation-play-state: paused;
+  
+  .animate-scroll::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
   }
+}
 
 </style>
