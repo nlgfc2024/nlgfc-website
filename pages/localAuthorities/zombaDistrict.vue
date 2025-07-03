@@ -167,7 +167,7 @@ const news = [
                   <div class="bg-blue-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
                     <h3 class="text-lg font-semibold text-gray-900 mb-3">About Zomba District Council</h3>
                     <p class="text-gray-700 leading-relaxed">
-                      total land area of Malawi. It is located on latitude 15.3860S and longitude 35.3188E south-east of Malawi, about 70km from Blantyre City to the south, and 49.4kms from Liwonde Town to the east. It is also located some 333.2kms south-south east ofLilongwe, the capital city. The District shares boundaries with Machinga District to the north, Balaka District to the north west, Mulanje and Phalombe Districts to the south, Chiradzulu and Blantyre Districts to the south west and the Republic of Mozambique to the east.  </p>
+                     Zomba District covers an area of 2,580 km², representing about 3% of the total land area of Malawi. It is located on latitude 15.3860S and longitude 35.3188E south-east of Malawi, about 70km from Blantyre City to the south, and 49.4kms from Liwonde Town to the east. It is also located some 333.2kms south-south east ofLilongwe, the capital city. The District shares boundaries with Machinga District to the north, Balaka District to the north west, Mulanje and Phalombe Districts to the south, Chiradzulu and Blantyre Districts to the south west and the Republic of Mozambique to the east.</p>
                   </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
