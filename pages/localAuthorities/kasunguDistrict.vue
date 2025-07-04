@@ -167,6 +167,7 @@ const news = [
                   <div class="bg-blue-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
                     <h3 class="text-lg font-semibold text-gray-900 mb-3">About Kasungu District Council</h3>
                     <p class="text-gray-700 leading-relaxed">
+                      Karonga District Council is a statutory body established under the Local Government Act of 1998 cap. 22.02 of the Laws of Malawi. The District Council is composed of ten councilors, five Members of Parliament (MPs), six Traditional Authorities (TAs); Kyungu, Kilupula, Mwakaboko, Mwirang’ombe, Wasambo, and five appointed members from interest groups. The District Commissioner (DC) heads the Council Secretariat supported by professional heads of government departments.
                        </p>
                   </div>
 
