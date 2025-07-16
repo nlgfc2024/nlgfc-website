@@ -329,10 +329,28 @@
                 <div>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">District Councils</h3>
                   <ul class="space-y-2">
-                    <li><NuxtLink to="/localAuthorities/chikwawa-district" class="text-gray-700 hover:text-blue-700 transition flex items-center">Chikwawa District Council</NuxtLink></li>
-                    <li><NuxtLink to="/localAuthorities/dedzaDistrict" class="text-gray-700 hover:text-blue-700 transition flex items-center">Dedza District Council</NuxtLink></li>
-                    <li><NuxtLink to="/localAuthorities/mulanjeDistrict" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mulanje District Council</NuxtLink></li>
-                    <li><NuxtLink to="/localAuthorities/alldistricts" class="text-gray-700 hover:text-blue-700 transition flex items-center">All District Councils →</NuxtLink></li>
+                    <li>
+                      <NuxtLink to="/localAuthorities/chikwawaDistrict" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                        Chikwawa District Council
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/localAuthorities/dedzaDistrict" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                        Dedza District Council
+                      </NuxtLink>
+                    </li>
+                  <li>
+                      <NuxtLink to="/localAuthorities/mulanjeDistrict" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                        Mulanje District Council
+                      </NuxtLink>
+                    </li>
+
+    
+                    <li>
+                      <NuxtLink to="/localAuthorities/alldistricts" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                        All District Councils →
+                      </NuxtLink>
+                    </li>
                   </ul>
                 </div>
               </div>

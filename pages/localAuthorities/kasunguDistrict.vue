@@ -51,7 +51,7 @@ const projects = [
   {
     name: 'SSRLP',
     fullName: 'Social Support and Resilience Livelihoods Program',
-    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Nkotakota District.',
+    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Kasungu District.',
     objectives: [
       'Improve household food security and nutrition',
       'Build community resilience to shocks and stresses',
@@ -103,7 +103,7 @@ const reports = [
 
 const news = [
   {
-    title: 'Nkotakota District Council Launches New Water Project',
+    title: 'Kasungu District Council Launches New Water Project',
     date: '2024-12-10',
     summary: 'The council has initiated a new water infrastructure project to improve access to clean water in rural areas.',
     category: 'Development'
@@ -162,11 +162,12 @@ const news = [
           >
             <div v-if="activeTab === 'profile'" key="profile" class="content-panel">
               <div class="prose max-w-none">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Nkotakota District Council Profile</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Kasungu District Council Profile</h2>
                 <div class="space-y-6">
                   <div class="bg-blue-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Nkotakota District Council</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Kasungu District Council</h3>
                     <p class="text-gray-700 leading-relaxed">
+                      Karonga District Council is a statutory body established under the Local Government Act of 1998 cap. 22.02 of the Laws of Malawi. The District Council is composed of ten councilors, five Members of Parliament (MPs), six Traditional Authorities (TAs); Kyungu, Kilupula, Mwakaboko, Mwirang’ombe, Wasambo, and five appointed members from interest groups. The District Commissioner (DC) heads the Council Secretariat supported by professional heads of government departments.
                        </p>
                   </div>
 
