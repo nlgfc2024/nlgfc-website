@@ -116,23 +116,33 @@ const onClickOutside = () => {
                 <div>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Organization</h3>
                   <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                      Mission, Vision, Core Values</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                      Powers & Functions</a></li>
+                    <!-- <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                      Mission, Vision, Core Values</a></li> -->
+                    <li>
+                      <NuxtLink to="/aboutUs/visionMissionValues" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mission, Vision, Core Values</NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/aboutUs/powersFunctions" class="text-gray-700 hover:text-blue-700 transition flex items-center">Powers & Functions</NuxtLink>
+                    </li>
                   </ul>
                   
                   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Leadership</h3>
                   <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                     
-                      Board of Directors</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                      
-                      Management</a></li>
-                    <li class="pl-6"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Executive Management</a></li>
-                    <li class="pl-6"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Departments and Sections</a></li>
-                    <li class="pl-6"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Organigram</a></li>
+                    <li>
+                      <NuxtLink to="/aboutUs/boardOfDirectors" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Board of Directors
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/aboutUs/executiveManagement" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Executive Management
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/aboutUs/directoratesDivisions" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Directorates and Divisions
+                      </NuxtLink>
+                    </li>
                   </ul>
                 </div>
                 
@@ -156,23 +166,48 @@ const onClickOutside = () => {
                 
                 <div class="bg-blue-50 p-4 rounded-lg">
                   <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
-                  <ul class="space-y-3">
-                    <li><a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                      </svg>
-                      Annual Report</a></li>
-                    <li><a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                      </svg>
-                      Financial Statements</a></li>
-                    <li><a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                      </svg>
-                      Strategic Plan</a></li>
-                  </ul>
+              <ul class="space-y-3">
+  <li>
+    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      Annual Report
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+      </svg>
+      Financial Statements
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+      </svg>
+      Strategic Plan
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+      </svg>
+      Audit Reports
+    </a>
+  </li>
+  <li>
+    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      Consolidated LAs Annual Budget
+    </a>
+  </li>
+</ul>
                 </div>
               </div>
             </div>
@@ -190,51 +225,104 @@ const onClickOutside = () => {
             <div v-show="activeMegaMenu === 'projects'" class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 900px;">
               <div class="grid grid-cols-4 gap-6 p-6">
                 <div>
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Current Projects</h3>
+  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Current Projects</h3>
+  <ul class="space-y-2">
+
+    <!-- SSRLP -->
+    <li>
+      <strong class="text-gray-700 flex items-center">SSRLP</strong>
+      <ul class="space-y-1 pl-4">
+        <li><NuxtLink to="/projects/currentProjects#SCTP" class="text-gray-600 hover:text-blue-600">SCTP</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Public Works</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#emergency" class="text-gray-600 hover:text-blue-600">Emergency Cash Transfer</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
+      </ul>
+    </li>
+
+    <!-- GESD -->
+    <li class="mt-3">
+      <strong class="text-gray-700 flex items-center">GESD</strong>
+      <ul class="space-y-1 pl-4">
+        <li><NuxtLink to="/projects/currentProjects#pbg" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#lapa" class="text-gray-600 hover:text-blue-600">LAPA</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#adaptive" class="text-gray-600 hover:text-blue-600">Adaptive Management</NuxtLink></li>
+      </ul>
+    </li>
+
+    <!-- RCRP -->
+    <li class="mt-3">
+      <strong class="text-gray-700 flex items-center">RCRP</strong>
+      <ul class="space-y-1 pl-4">
+        <li><NuxtLink to="/projects/currentProjects#usr" class="text-gray-600 hover:text-blue-600">Urban Social Registry</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#upw" class="text-gray-600 hover:text-blue-600">Urban Public Works</NuxtLink></li>
+        <li><NuxtLink to="/projects/currentProjects#pbg2" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
+      </ul>
+    </li>
+
+  </ul>
+  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Past Projects</h3>
                   <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                      SSRLP</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">SCTP</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Public Works</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Emergency Cash Transfer</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Livelihoods Support</a></li>
-                    
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center mt-3">
-                      GESD</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Performance Based Grants</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">LAPA</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Adaptive Management</a></li>
-                    
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition flex items-center mt-3">
-                      RCRP</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Urban Social Registry</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Urban Public Works</a></li>
-                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition pl-6">Performance Based Grants</a></li>
+                   <li><NuxtLink to="/projects/pastProjects#masaf" class="text-gray-600 hover:text-blue-600">MASAF</NuxtLink></li>
+                    <li><NuxtLink to="/projects/pastProjects#miera" class="text-gray-600 hover:text-blue-600">MIERA</NuxtLink></li>
                   </ul>
-                </div>
-                
+</div>     
                 <div>
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
-                  <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">MSR</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">E-Payments</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Public Works MIS</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">GRM</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">SCTP MIS</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">LAPA MIS</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">CIMIS</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">PMIS</a></li>
-                  </ul>
-                  
-                  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Past Projects</h3>
-                  <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">MASAF 4</a></li>
-                  </ul>
+                 
                   
                   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Upcoming Projects</h3>
+                  <ul class="space-y-2 mb-10">
+                    <li><NuxtLink to="/projects/upcomingProjects#gesd2" class="text-gray-600 hover:text-blue-600">GESD 2.0</NuxtLink></li>
+                    <li><NuxtLink to="/projects/upcomingProjects#inspire" class="text-gray-600 hover:text-blue-600">INSPIRE-O</NuxtLink></li>
+                  </ul>
+
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
                   <ul class="space-y-2">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">GESD 2.0</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">INSPIRE</a></li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#msr" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        MSR
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#e-payments" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        E-Payments
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#publicworks" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Public Works MIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#grm" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        GRM MIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#sctmis" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        SCTP MIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#lapas" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        LAPA MIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#cimis" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        CIMIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#pmis" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        PMIS
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        LAIF MIS
+                      </NuxtLink>
+                    </li>
+                  
                   </ul>
                 </div>
                 
@@ -490,9 +578,8 @@ const onClickOutside = () => {
               <ul class="pl-2 space-y-2">
                 <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Board of Directors</a></li>
                 <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Management</a></li>
-                <li class="pl-4"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Executive Management</a></li>
-                <li class="pl-4"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Departments and Sections</a></li>
-                <li class="pl-4"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Organigram</a></li>
+                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Executive Management</a></li>
+                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">Departments and Sections</a></li>
               </ul>
               
               <h4 class="font-semibold text-blue-800 mt-3">Our Mandate</h4>
@@ -515,25 +602,79 @@ const onClickOutside = () => {
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </button>
-            <div v-show="activeAccordion === 'mobile-projects'" class="pl-4 space-y-3">
-              <h4 class="font-semibold text-blue-800 mt-2">Current Projects</h4>
-              <ul class="pl-2 space-y-2">
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">SSRLP</a></li>
-                <li class="pl-4"><a href="#" class="text-gray-600 hover:text-blue-600 transition">SCTP</a></li>
-                <li class="pl-4"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Public Works</a></li>
-                
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">GESD</a></li>
-                <li class="pl-4"><a href="#" class="text-gray-600 hover:text-blue-600 transition">Performance Based Grants</a></li>
-                
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">RCRP</a></li>
-              </ul>
-              
-              <h4 class="font-semibold text-blue-800 mt-3">Delivery Systems</h4>
-              <ul class="pl-2 space-y-2">
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">MSR</a></li>
-                <li><a href="#" class="text-gray-700 hover:text-blue-700 transition">E-Payments</a></li>
-              </ul>
-            </div>
+           <!-- Mobile Accordion Menu -->
+<div
+  v-show="activeAccordion === 'mobile-projects'"
+  class="block md:hidden bg-white rounded-md shadow-md mt-2 "
+>
+  <div class="p-4 space-y-6 max-h-[75vh] overflow-y-auto">
+    
+    <!-- Current Projects -->
+    <div>
+      <h3 class="font-semibold text-blue-800  pb-2">Current Projects</h3>
+      <ul class="pl-2 mt-2 space-y-1">
+        <li>
+          <strong class="text-gray-700">SSRLP</strong>
+          <ul class="pl-4 space-y-1">
+            <li><NuxtLink to="/projects/currentProjects#SCTP" class="text-gray-600 hover:text-blue-600">SCTP</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Public Works</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#emergency" class="text-gray-600 hover:text-blue-600">Emergency Cash Transfer</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
+          </ul>
+        </li>
+        <li class="mt-4">
+          <strong class="text-gray-700">GESD</strong>
+          <ul class="pl-4 space-y-1">
+            <li><NuxtLink to="/projects/currentProjects#pbg" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#lapa" class="text-gray-600 hover:text-blue-600">LAPA</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#adaptive" class="text-gray-600 hover:text-blue-600">Adaptive Management</NuxtLink></li>
+          </ul>
+        </li>
+        <li class="mt-4">
+          <strong class="text-gray-700">RCRP</strong>
+          <ul class="pl-4 space-y-1">
+            <li><NuxtLink to="/projects/currentProjects#usr" class="text-gray-600 hover:text-blue-600">Urban Social Registry</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#upw" class="text-gray-600 hover:text-blue-600">Urban Public Works</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects#pbg2" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Past Projects -->
+    <div>
+      <h3 class="font-semibold text-blue-800 border-b pb-2">Past Projects</h3>
+      <ul class="pl-2 mt-2 space-y-1">
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">MASAF 4</a></li>
+      </ul>
+    </div>
+
+    <!-- Upcoming Projects -->
+    <div>
+      <h3 class="font-semibold text-blue-800 border-b pb-2">Upcoming Projects</h3>
+      <ul class="pl-2 mt-2 space-y-1">
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">GESD 2.0</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">INSPIRE</a></li>
+      </ul>
+    </div>
+
+    <!-- Delivery Systems -->
+    <div>
+      <h3 class="font-semibold text-blue-800 border-b pb-2">Delivery Systems</h3>
+      <ul class="pl-2 mt-2 space-y-1">
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">MSR</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">E-Payments</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">Public Works MIS</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">GRM</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">SCTP MIS</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">LAPA MIS</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">CIMIS</a></li>
+        <li><a href="#" class="text-gray-700 hover:text-blue-700">PMIS</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
           </div>
           
           <!-- Local Councils Accordion -->

@@ -1,5 +1,6 @@
 <script setup>
-// Layout-level logic can go here
+
+
 const route = useRoute()
 const isHomePage = computed(() => route.path === '/')
 </script>
@@ -12,7 +13,8 @@ const isHomePage = computed(() => route.path === '/')
     <main class="flex-grow">
       <slot /> <!-- This renders the page content -->
     </main>
-    
+     <!-- Chat Widget - Always visible -->
+    <ChatWidget />
     <AppFooter />
   </div>
 </template>

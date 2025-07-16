@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
@@ -11,6 +12,12 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/tailwindcss'
   ],
+
+  // css: ['~/assets/css/main.css'],
+
+  future: {
+    compatibilityVersion: 4
+  },
   app: {
     // pageTransition: { name: 'page', mode: 'out-in' },
     head: {
