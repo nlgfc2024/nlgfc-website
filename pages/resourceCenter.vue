@@ -251,6 +251,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+    title: 'Resource Center'
+    })
+
 import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
