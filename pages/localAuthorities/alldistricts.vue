@@ -187,7 +187,7 @@ const districts = [
         area: '3,624 km²',
         description: 'Dedza is known for pottery and borders Mozambique.',
         slug: 'dedza',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'dedzaDistrict'
     },
     { 
         name: 'Dowa', 
