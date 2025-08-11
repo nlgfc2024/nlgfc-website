@@ -1,9 +1,3 @@
-<script>
-definePageMeta({
-  title: 'Resource Center' // This will be available in route.meta.title
-})
-</script>
-
 <template>
   <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
     <!-- Left Sidebar -->
@@ -112,8 +106,9 @@ definePageMeta({
         <div
             v-else-if="currentSubcategoryType === 'Image Gallery'"
             class="w-full">
+            <!--I removed index on the v-for loop since we're using iframe now -->
           <div
-              v-for="(doc, index) in displayedDocuments"
+              v-for="doc in displayedDocuments"
               :key="doc.name"
               class="bg-white rounded-lg shadow-lg overflow-hidden mb-6 transition-all duration-300 hover:shadow-xl"
           >
@@ -256,11 +251,54 @@ definePageMeta({
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+definePageMeta({
+    title: 'Resource Center'
+    })
+
+import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
+
+// ID mapping for subcategories
+const subcategoryIdMap = {
+  // Publications & Downloads
+  'press-releases': { tab: 0, sub: 0 },
+  'success-stories': { tab: 0, sub: 1 },
+  'speeches': { tab: 0, sub: 2 },
+  'research-discussions': { tab: 0, sub: 3 },
+  'budget-documents': { tab: 0, sub: 4 },
+  'disbursements': { tab: 0, sub: 5 },
+  'newsletters': { tab: 0, sub: 6 },
+  'manuals-guidelines': { tab: 0, sub: 7 },
+  'policies-strategies': { tab: 0, sub: 8 },
+
+  // Project Documents
+  'ssrlp': { tab: 1, sub: 0 },
+  'gesd': { tab: 1, sub: 1 },
+  'rcrp2': { tab: 1, sub: 2 },
+
+  // Reports
+  'audit-reports': { tab: 2, sub: 0 },
+  'financial-reports': { tab: 2, sub: 1 },
+  'financial-statements': { tab: 2, sub: 2 },
+  'lapa-synthesis': { tab: 2, sub: 3 },
+
+  // Knowledge Management Portal
+  'image-gallery': { tab: 3, sub: 0 },
+  'video-library': { tab: 3, sub: 1 }
+};
+
+// Reverse mapping for generating IDs from tab/sub indices
+const getIdFromTabSub = (tabIndex, subIndex) => {
+  for (const [id, mapping] of Object.entries(subcategoryIdMap)) {
+    if (mapping.tab === tabIndex && mapping.sub === subIndex) {
+      return id;
+    }
+  }
+  return null;
+};
 
 const tabs = ref([
   {
@@ -268,24 +306,25 @@ const tabs = ref([
     subcategories: [
       {
         name: 'Press Releases',
+        id: 'press-releases',
         contents: [
           {
             name: 'Uthenga Wapadera Wa Covid 19 Emergency Cash Transfers',
-            link: '/documents/ECT_UTHENGA_WAPADERA_WA_COVID_19_LILONGWE_IMMEDIATE_RELEASE_APRIL_19_2020_1.pdf',
+            link: '/downloads/ECT_UTHENGA_WAPADERA_WA_COVID_19_LILONGWE_IMMEDIATE_RELEASE_APRIL_19_2020_1.pdf',
             type: 'PDF',
             description: 'ECT - Uthenga Wapadera Wa Covid 19 - Lilongwe - Immediate Release',
             date: '19 April 2020'
           },
           {
             name: 'Press Release on Covid-19',
-            link: '/documents/Councils_Cumulative_funding_figures_for_Publication_April_2020.xlsx',
+            link: '/downloads/Councils_Cumulative_funding_figures_for_Publication_April_2020.xlsx',
             type: 'Excel',
             description: 'Revised after Governors meetings with MNOS MAMN and MUSCCO',
             date: '22  Jan 2025'
           },
           {
             name: 'Councils Funding Figures',
-            link: '/documents/Councils_funding_figures_for_publication_April_2020 _Word_Version.docx',
+            link: '/downloads/Councils_funding_figures_for_publication_April_2020 _Word_Version.docx',
             type: 'Word',
             description: 'Council funding figures for publications',
             date: 'April, 2020'
@@ -353,6 +392,7 @@ const tabs = ref([
       },
       {
         name: 'Success Stories',
+        id: 'success-stories',
         contents: [
           {
             name: 'NLGFC [PWP] Success Stories MASAF IV',
@@ -428,6 +468,7 @@ const tabs = ref([
       },
       {
         name: 'Speeches',
+        id: 'speeches',
         contents: [
           {
             name: 'NLGFC [PWP] Success Stories MASAF IV',
@@ -440,6 +481,7 @@ const tabs = ref([
       },
       {
         name: 'Research & Discussions',
+        id: 'research-discussions',
         contents: [
           {
             name: 'Research on Local Governance',
@@ -452,6 +494,7 @@ const tabs = ref([
       },
       {
         name: 'Budget Documents',
+        id: 'budget-documents',
         contents: [
           {
             name: 'Budget Document 2025',
@@ -464,6 +507,7 @@ const tabs = ref([
       },
       {
         name: 'Disbursements',
+        id: 'disbursements',
         contents: [
           {
             name: 'Disbursement Report Q1 2025',
@@ -476,6 +520,7 @@ const tabs = ref([
       },
       {
         name: 'Newsletters & Magazines',
+        id: 'newsletters',
         contents: [
           {
             name: 'January Newsletter',
@@ -523,9 +568,13 @@ const tabs = ref([
       },
       {
         name: 'Manuals and Guidelines',
+        id: 'manuals-guidelines',
         contents: []
       },
-      { name: 'Policies and Strategies', contents: [
+      {
+        name: 'Policies and Strategies',
+        id: 'policies-strategies',
+        contents: [
           {
             name: 'Policy Framework 2025',
             link: '/downloads/policy-framework-2025.pdf',
@@ -538,13 +587,17 @@ const tabs = ref([
             type: 'PDF',
             description: 'Strategic plan outlining goals and objectives for 2025.'
           }
-        ] }
+        ]
+      }
     ]
   },
   {
     name: 'Project Documents',
     subcategories: [
-      { name: 'SSRLP', contents: [
+      {
+        name: 'SSRLP',
+        id: 'ssrlp',
+        contents: [
           {
             name: 'SSRLP Report 2025',
             link: '/downloads/ssrlp-report-2025.pdf',
@@ -557,16 +610,24 @@ const tabs = ref([
             type: 'PDF',
             description: 'Guidelines for SSRLP project implementation.'
           }
-        ] },
-      { name: 'GESD', contents: [
+        ]
+      },
+      {
+        name: 'GESD',
+        id: 'gesd',
+        contents: [
           {
             name: 'GESD Plan 2025',
             link: '/downloads/gesd-plan-2025.pdf',
             type: 'PDF',
             description: 'GESD strategic plan for 2025.'
           }
-        ] },
-      { name: 'RCRP 2', contents: [
+        ]
+      },
+      {
+        name: 'RCRP 2',
+        id: 'rcrp2',
+        contents: [
           {
             name: 'RCRP Overview',
             link: '/downloads/rcrp-overview.pdf',
@@ -579,13 +640,17 @@ const tabs = ref([
             type: 'PDF',
             description: 'Implementation guide for RCRP projects.'
           }
-        ] }
+        ]
+      }
     ]
   },
   {
     name: 'Reports',
     subcategories: [
-      { name: 'Audit Reports', contents: [
+      {
+        name: 'Audit Reports',
+        id: 'audit-reports',
+        contents: [
           {
             name: 'Annual Report 2024',
             link: '/downloads/annual-report-2024.pdf',
@@ -598,8 +663,12 @@ const tabs = ref([
             type: 'PDF',
             description: 'Highlights from January 2025 monthly report.'
           }
-        ] },
-      { name: 'Financial Reports', contents: [
+        ]
+      },
+      {
+        name: 'Financial Reports',
+        id: 'financial-reports',
+        contents: [
           {
             name: 'Financial Report Q1 2025',
             link: '/downloads/financial-report-q1-2025.pdf',
@@ -612,8 +681,12 @@ const tabs = ref([
             type: 'PDF',
             description: 'Detailed budget report for the year 2025.'
           }
-        ] },
-      { name: 'Financial statements', contents: [
+        ]
+      },
+      {
+        name: 'Financial statements',
+        id: 'financial-statements',
+        contents: [
           {
             name: 'Project Evaluation 2024',
             link: '/downloads/project-evaluation-2024.pdf',
@@ -626,8 +699,12 @@ const tabs = ref([
             type: 'PDF',
             description: 'Mid-year evaluation report for 2025.'
           }
-        ] },
-      { name: 'LAPA Synthesis', contents: [
+        ]
+      },
+      {
+        name: 'LAPA Synthesis',
+        id: 'lapa-synthesis',
+        contents: [
           {
             name: 'Project Evaluation Report 2024',
             link: '/downloads/project-evaluation-2024.pdf',
@@ -640,23 +717,29 @@ const tabs = ref([
             type: 'PDF',
             description: 'Mid-year evaluation report for 2025.'
           }
-        ] }
-
+        ]
+      }
     ]
   },
   {
-    name: 'Knowledge Management Portal',
+    name: 'Knowledge Management',
     subcategories: [
-      { name: 'Image Gallery', contents: [
+      {
+        name: 'Image Gallery',
+        id: 'image-gallery',
+        contents: [
           {
             name: 'Community Event Photos',
             link: 'https://demo2.gov.mw/nlgfc-portal/public/?page=1',
             type: 'Gallery',
             description: 'Gallery showcasing community events, activities and projects.'
           }
-
-        ] },
-      { name: 'Video', contents: [
+        ]
+      },
+      {
+        name: 'Video',
+        id: 'video-library',
+        contents: [
           {
             name: 'Phalombe District Council',
             link: 'https://www.youtube.com/watch?v=xfMlyumpENU',
@@ -687,7 +770,8 @@ const tabs = ref([
             type: 'Video',
             description: 'GESD project Impact'
           }
-        ] }
+        ]
+      }
     ]
   }
 ]);
@@ -700,9 +784,24 @@ const iframeLoaded = ref(false);
 
 // Function to handle query parameters and open specific tab/subcategory
 function handleQueryParams() {
+  const idParam = route.query.id;
   const tabParam = route.query.tab;
   const subParam = route.query.sub;
 
+  // Handle ID-based routing (preferred)
+  if (idParam && subcategoryIdMap[idParam]) {
+    const mapping = subcategoryIdMap[idParam];
+    const tabIndex = mapping.tab;
+    const subIndex = mapping.sub;
+
+    // Set the active tab and subcategory
+    expandedTab.value = tabIndex;
+    activeTab.value = tabIndex;
+    activeSub.value = subIndex;
+    return;
+  }
+
+  // Fallback to old tab/sub parameter system
   if (tabParam !== undefined && subParam !== undefined) {
     const tabIndex = parseInt(tabParam);
     const subIndex = parseInt(subParam);
@@ -744,13 +843,24 @@ function selectSub(tabIndex, subIndex) {
   activeSub.value = subIndex;
   // Reset iframe loaded state when switching subcategories
   iframeLoaded.value = false;
-  // Update the URL with query parameters
-  router.push({
-    query: {
-      tab: tabIndex,
-      sub: subIndex
-    }
-  });
+
+  // Get the ID for this tab/sub combination
+  const subcategoryId = getIdFromTabSub(tabIndex, subIndex);
+
+  // Update the URL with ID parameter (preferred) or fallback to tab/sub
+  if (subcategoryId) {
+    router.push({
+      query: { id: subcategoryId }
+    });
+  } else {
+    // Fallback to old system
+    router.push({
+      query: {
+        tab: tabIndex,
+        sub: subIndex
+      }
+    });
+  }
 }
 
 function hideLoadingOverlay() {
@@ -797,6 +907,7 @@ const currentSubcategoryType = computed(() => {
   }
   return '';
 });
+
 </script>
 
 <style scoped>

@@ -5,6 +5,110 @@ useHead({
     { name: 'description', content: 'Welcome to our website' }
   ]
 });
+
+const partnerLogos = [
+  { src: "/images/partners/Ireland_Std_Colour.png", alt: "Ireland" },
+  { src: "/images/partners/gizlogo-unternehmen-de-rgb-300.jpg", alt: "GIZ" },
+  { src: "/images/partners/EU normal-reproduction-high-resolution.jpg", alt: "EU" },
+  { src: "/images/partners/Embassy of Iceland logo.png", alt: "Embassy of Iceland" },
+  { src: "/images/partners/Cooperation logo.bmp", alt: "Cooperation" },
+  { src: "/images/partners/New EU logo.png", alt: "New EU" },
+  { src: "/images/partners/UK AID - Standard - 4C PNG.png", alt: "UK Aid" },
+  { src: "/images/partners/USaid logo Horizontal RGB_JPEG.jpg", alt: "USAID" },
+  { src: "/images/partners/WB-WBG-horizontal-RGB (1).jpg", alt: "World Bank" },
+]
+
+const props = defineProps({
+  partnerLogos: {
+    type: Array,
+    required: true,
+    validator: (logos) => logos.every(logo => logo.src && logo.alt)
+  },
+  scrollDuration: {
+    type: Number,
+    default: 20
+  }
+})
+
+const activeTab = ref('procurements')
+
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'short', day: 'numeric' }
+  return new Date(dateString).toLocaleDateString(undefined, options)
+}
+
+// Projects
+const projects = [
+ {
+  title: 'SSRLP',
+  description: 'Social Support for Resilient Livelihoods Project focuses on reducing poverty and enhancing resilience in vulnerable communities through targeted interventions and capacity building.',
+  imagePath: '/images/samples/SSRLP logo(1).jpg',
+  url: '/projects/currentProjects#ssrlp_overview'
+},
+
+  {
+    title: 'GESD',
+    description: 'Governance to Enable Service Delivery Project aims to improve local government capacity and citizen service access through institutional strengthening and policy reforms.',
+    imagePath: '/images/samples/PBG logo.png',
+    url: '/projects/currentProjects#gesd_overview'
+  },
+  {
+    title: 'RCRP 2',
+    description: 'The second phase of the Climate Resilience Project supports districts in disaster preparedness and mitigation through infrastructure development and community training.',
+     imagePath: '/images/samples/RCRP LOGO- Final.png',
+    url: '/projects/currentProjects#rcrp_overview'
+  }
+]
+
+// Opportunity tabs
+const opportunityTabs = ref([
+  {
+    key: 'procurements',
+    label: 'Procurements',
+    items: [
+      { 
+        title: 'Supply of IT Equipment for Local Offices', 
+        deadline: '2024-08-15',
+        file: '/tenders/it-equipment-supply.pdf'
+      },
+      { 
+        title: 'Construction of School Blocks in Rural Areas', 
+        deadline: '2024-09-01',
+        file: '/tenders/school-construction.pdf'
+      }
+    ]
+  },
+  {
+    key: 'jobs',
+    label: 'Job Opportunities',
+    items: [
+      { 
+        title: 'Finance Officer Position (Multiple Locations)', 
+        deadline: '2024-07-30',
+        applyLink: '/careers/finance-officer'
+      },
+      { 
+        title: 'Monitoring & Evaluation Specialist', 
+        deadline: '2024-08-10',
+        applyLink: '/careers/monitoring-specialist'
+      }
+    ]
+  }
+])
+
+const currentOpportunities = computed(() => {
+  const tab = opportunityTabs.value.find(t => t.key === activeTab.value)
+  return tab?.items || []
+})
+
+// Publications
+const publications = ref([
+  { title: '2024 Annual Report and Financial Statements', date: '2024-12-31', file: '/pdfs/annual-report-2024.pdf' },
+  { title: 'Q1 Monitoring and Evaluation Brief', date: '2024-03-30', file: '/pdfs/q1-brief-2024.pdf' },
+  { title: 'Local Authority Financial Management Handbook', date: '2023-11-10', file: '/pdfs/handbook-2023.pdf' },
+  { title: 'Comprehensive Financial Audit Summary Report', date: '2023-08-15', file: '/pdfs/audit-summary-2023.pdf' },
+  { title: 'Development Budget Review and Analysis', date: '2023-06-01', file: '/pdfs/budget-review-2023.pdf' }
+])
 </script>
 
 <template>
@@ -216,168 +320,225 @@ useHead({
           </div>
         </div>
       </section>
-      <!-- Projects Section -->
-      <section class="py-16 bg-gray-50">
-        <div class="container mx-auto px-4">
-          <div class="text-center mb-12">
-            <span class="inline-block px-4 py-1 text-sm font-semibold text-blue-600 bg-blue-100 rounded-full mb-3">Our Work</span>
-            <h2 class="text-4xl font-bold text-gray-900 mb-4">Featured Projects</h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-              Discover our key initiatives creating lasting impact
-            </p>
-          </div>
+    
+      <!-- Projects Section with Interactive Cards -->
+     <section class="py-2 bg-gradient-to-b from-primary-50 to-white">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-16">
+          <span class="inline-block px-3 py-1 text-sm font-medium text-primary-700 bg-primary-100 rounded-full mb-4">
+            Our Initiatives
+          </span>
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Current <span class="text-primary-600">Projects</span>
+          </h2>
+          <p class="max-w-2xl mx-auto text-gray-600">
+            Discover our key programs that are transforming local governance and service delivery across the nation.
+          </p>
+        </div>
 
-          <div class="grid md:grid-cols-3 gap-8">
-            <!-- SSRP Card -->
-            <a href="/projects/ssrp" class="group transform hover:-translate-y-1 transition-transform duration-300">
-              <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col items-center text-center border border-gray-100 hover:border-blue-200">
-                <div class="w-28 h-28 mb-6 rounded-full bg-blue-50 flex items-center justify-center p-4 group-hover:bg-blue-100 transition-colors shadow-inner">
-                  <!-- Replace with actual SSRP logo -->
-                  <img src="/public/images/samples/SSRLP logo(1).jpg" alt="SSRP Logo" class="w-full h-full object-contain" loading="lazy">
-                </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-blue-600 transition-colors">SSRLP</h3>
-                <p class="text-gray-600 mb-6">Social Support for Resilient Project</p>
-                <div class="mt-auto pt-4 border-t border-gray-100 w-full">
-                  <span class="text-blue-600 font-medium flex items-center justify-center">
-                    View project
-                    <svg class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                    </svg>
-                  </span>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div
+            v-for="(project, index) in projects"
+            :key="index"
+            class="group relative overflow-hidden rounded-2xl shadow-xl h-96"
+          >
+            <img
+              :src="`https://picsum.photos/600/400?random=${index + 10}`"
+              :alt="project.title"
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+            
+            <div class="relative h-full flex flex-col justify-end p-6 text-white">
+              <div class="flex items-center justify-center w-20 h-20 mb-4 bg-white rounded-xl shadow-md p-2">
+                <img
+                  v-if="project.imagePath"
+                  :src="project.imagePath"
+                  alt="Project Logo"
+                  class="w-full h-full object-contain"
+                  loading="lazy"
+                />
+                <svg
+                  v-else
+                  class="w-8 h-8 text-primary-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    :d="project.iconPath"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  ></path>
+                </svg>
               </div>
-            </a>
 
-            <!-- GESD Card -->
-            <a href="/projects/gesd" class="group transform hover:-translate-y-1 transition-transform duration-300">
-              <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col items-center text-center border border-gray-100 hover:border-green-200">
-                <div class="w-28 h-28 mb-6 rounded-full bg-green-50 flex items-center justify-center p-4 group-hover:bg-green-100 transition-colors shadow-inner">
-                  <!-- Replace with actual GESD logo -->
-                  <img src="/images/samples/PBG logo.png" alt="GESD Logo" class="w-full h-full object-contain" loading="lazy">
-                </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-green-600 transition-colors">GESD</h3>
-                <p class="text-gray-600 mb-6">Governance to Enable Service Delivery Project</p>
-                <div class="mt-auto pt-4 border-t border-gray-100 w-full">
-                  <span class="text-green-600 font-medium flex items-center justify-center">
-                    View project
-                    <svg class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                    </svg>
-                  </span>
-                </div>
-              </div>
-            </a>
-
-            <!-- RCRP2 Card -->
-            <a href="/projects/rcrp2" class="group transform hover:-translate-y-1 transition-transform duration-300">
-              <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col items-center text-center border border-gray-100 hover:border-amber-200">
-                <div class="w-28 h-28 mb-6 rounded-full bg-amber-50 flex items-center justify-center p-4 group-hover:bg-amber-100 transition-colors shadow-inner">
-                  <!-- Replace with actual RCRP2 logo -->
-                  <img src="/images/samples/RCRP LOGO- Final.png" alt="RCRP2 Logo" class="w-full h-full object-contain" loading="lazy">
-                </div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-3 group-hover:text-amber-600 transition-colors">RCRP2</h3>
-                <p class="text-gray-600 mb-6">Regional Climate Resilience Project 2</p>
-                <div class="mt-auto pt-4 border-t border-gray-100 w-full">
-                  <span class="text-amber-600 font-medium flex items-center justify-center">
-                    View project
-                    <svg class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                    </svg>
-                  </span>
-                </div>
-              </div>
-            </a>
-          </div>
-
-          <div class="text-center mt-12">
-            <a href="/projects/currentProjects" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-900 transition-colors duration-300 shadow-sm hover:shadow-md">
-              Explore All Projects
-              <svg class="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-              </svg>
-            </a>
+              <h3 class="text-2xl font-bold mb-2">{{ project.title }}</h3>
+              <p class="text-white/90 mb-4 line-clamp-2">{{ project.description }}</p>
+              <a
+                :href="project.url"
+                class="inline-flex items-center text-sm font-medium text-white group-hover:text-primary-300 transition"
+              >
+                Learn more
+                <svg
+                  class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  ></path>
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
-      </section>
-      <!-- Publications Section -->
-      <section class="py-12 bg-white">
-        <div class="container mx-auto px-4">
-          <div class="grid md:grid-cols-2 gap-8">
-            <!-- Recent Publications Column -->
-            <div>
-              <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-200">Recent Publications</h2>
-              <div class="space-y-6">
-                <!-- Publication Item 1 -->
-                <div class="border-b border-gray-100 pb-4">
-                  <h3 class="font-semibold text-lg text-gray-800 mb-1">Annual Impact Report 2023</h3>
-                  <p class="text-gray-600 text-sm mb-2">Published: May 15, 2024</p>
-                  <p class="text-gray-700 mb-3">Comprehensive review of our organization's achievements and financial performance last year.</p>
-                  <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Download PDF →</a>
+      </div>
+     </section>
+
+
+      
+      <!-- Publications & Opportunities Section -->
+      <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            <!-- Publications Column -->
+            <div class="lg:col-span-7">
+              <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-900">
+                  Latest <span class="text-primary-600">Publications</span>
+                </h3>
+                <a
+                  href="/publications"
+                  class="text-sm font-medium text-primary-600 hover:text-primary-800 flex items-center"
+                >
+                  View all
+                  <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              </div>
+
+              <div class="space-y-4">
+                <div
+                  v-for="(pub, index) in publications"
+                  :key="index"
+                  class="group flex items-start gap-4 p-4 hover:bg-gray-50 rounded-xl transition"
+                >
+                  <div class="flex-shrink-0 w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                  </div>
+                  <div class="flex-grow">
+                    <h4 class="font-medium text-gray-900 group-hover:text-primary-600 transition">
+                      {{ pub.title }}
+                    </h4>
+                    <p class="text-sm text-gray-500 mt-1">
+                      Published {{ formatDate(pub.date) }}
+                    </p>
+                  </div>
+                  <a
+                    :href="pub.file"
+                    download
+                    class="flex-shrink-0 text-primary-600 hover:text-primary-800 p-2 rounded-full hover:bg-primary-50 transition"
+                    title="Download"
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                  </a>
                 </div>
-                
-                <!-- Publication Item 2 -->
-                <div class="border-b border-gray-100 pb-4">
-                  <h3 class="font-semibold text-lg text-gray-800 mb-1">Community Development Guidelines</h3>
-                  <p class="text-gray-600 text-sm mb-2">Published: March 28, 2024</p>
-                  <p class="text-gray-700 mb-3">Best practices for sustainable community engagement and development.</p>
-                  <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Read More →</a>
-                </div>
-                
-                <!-- Publication Item 3 -->
-                <!-- <div>
-                  <h3 class="font-semibold text-lg text-gray-800 mb-1">Policy Brief: Education Reform</h3>
-                  <p class="text-gray-600 text-sm mb-2">Published: February 10, 2024</p>
-                  <p class="text-gray-700 mb-3">Analysis and recommendations for improving education access in rural areas.</p>
-                  <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">View Details →</a>
-                </div> -->
               </div>
             </div>
-            
-            <!-- Recent Opportunities Column -->
-            <div>
-              <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-2 border-b border-gray-200">Recent Opportunities</h2>
-              <div class="space-y-6">
-                <!-- Job Opportunity -->
-                <div class="border-b border-gray-100 pb-4">
-                  <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-semibold text-lg text-gray-800">Program Manager</h3>
-                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Job</span>
-                  </div>
-                  <p class="text-gray-600 text-sm mb-2">Deadline: June 30, 2024</p>
-                  <p class="text-gray-700 mb-3">Lead our flagship community development program in the Eastern Region.</p>
-                  <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Apply Now →</a>
+
+            <!-- Opportunities Column -->
+            <div class="lg:col-span-5">
+              <div class="sticky top-24">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                  Current <span class="text-primary-600">Opportunities</span>
+                </h3>
+
+                <!-- Tabs -->
+                <div class="flex border-b border-gray-200 mb-6">
+                  <button
+                    v-for="tab in opportunityTabs"
+                    :key="tab.key"
+                    @click="activeTab = tab.key"
+                    :class="[
+                      'px-4 py-2 font-medium text-sm border-b-2 -mb-px transition',
+                      activeTab === tab.key
+                        ? 'border-primary-600 text-primary-600'
+                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                    ]"
+                  >
+                    {{ tab.label }}
+                  </button>
                 </div>
-                
-                <!-- Procurement Opportunity -->
-                <div class="border-b border-gray-100 pb-4">
-                  <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-semibold text-lg text-gray-800">IT Equipment Supply</h3>
-                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Procurement</span>
+
+                <!-- Items -->
+                <div class="space-y-4">
+                  <div
+                    v-for="(op, index) in currentOpportunities"
+                    :key="index"
+                    class="p-4 border border-gray-200 rounded-xl hover:shadow-md transition"
+                  >
+                    <div class="flex items-start justify-between gap-4">
+                      <div>
+                        <h4 class="font-medium text-gray-900">{{ op.title }}</h4>
+                        <p class="text-sm text-gray-500 mt-1">
+                          Deadline: {{ formatDate(op.deadline) }}
+                        </p>
+                      </div>
+                      <template v-if="activeTab === 'procurements'">
+                        <a
+                          :href="op.file"
+                          download
+                          class="px-3 py-1 bg-primary-50 text-primary-600 rounded-md text-sm font-medium flex items-center"
+                        >
+                          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                          </svg>
+                          Download
+                        </a>
+                      </template>
+                      <template v-else-if="activeTab === 'jobs'">
+                        <a
+                          :href="op.applyLink"
+                          class="px-3 py-1 bg-primary-600 text-white rounded-md text-sm font-medium hover:bg-primary-700 transition"
+                        >
+                          Apply Now
+                        </a>
+                      </template>
+                    </div>
                   </div>
-                  <p class="text-gray-600 text-sm mb-2">Deadline: July 15, 2024</p>
-                  <p class="text-gray-700 mb-3">Bid for supplying laptops and tablets for our education initiative.</p>
-                  <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">View Tender →</a>
                 </div>
-                
-                <!-- Job Opportunity -->
-                <!-- <div>
-                  <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-semibold text-lg text-gray-800">Monitoring & Evaluation Officer</h3>
-                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Job</span>
+
+                <div class="mt-6 bg-blue-50 p-4 rounded-xl border border-blue-100">
+                  <div class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                    </svg>
+                    <div>
+                      <h4 class="font-medium text-blue-800">Get Notified</h4>
+                      <p class="text-sm text-blue-600 mt-1">
+                        Subscribe to receive alerts about new opportunities
+                      </p>
+                      <button
+                        class="mt-2 px-3 py-1 text-blue-600 hover:text-blue-800 text-sm font-medium"
+                      >
+                        Subscribe Now
+                      </button>
+                    </div>
                   </div>
-                  <p class="text-gray-600 text-sm mb-2">Deadline: June 25, 2024</p>
-                  <p class="text-gray-700 mb-3">Join our team to measure and analyze program effectiveness.</p>
-                  <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Apply Now →</a>
-                </div> -->
+                </div>
               </div>
             </div>
-          </div>
-          
-          <!-- View All Link -->
-          <div class="text-center mt-10">
-            <a href="#" class="inline-block px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors">
-              View All Publications & Opportunities
-            </a>
           </div>
         </div>
       </section>
@@ -396,140 +557,35 @@ useHead({
             <!-- Gradient Overlays -->
             <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10"></div>
             <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10"></div>
-            
-            <!-- Slider Track -->
-            <div class="overflow-hidden py-4">
-              <div class="flex gap-6 animate-scroll hover:pause">
-                <!-- Partner Items (duplicated for seamless looping) -->
-                <div class="flex shrink-0 gap-6">
-                  <!-- Partner 1 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/Ireland_Std_Colour.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
+             <!-- Slider Track -->
+            <div class="overflow-hidden py-6 px-4">
+              <div 
+                class="flex gap-6 animate-scroll hover:pause"
+                :style="`--scroll-duration: ${scrollDuration}s`"
+              >
+                <!-- Two copies for seamless scrolling -->
+                <template v-for="repeat in 2" :key="repeat">
+                  <div 
+                    v-for="(logo, index) in partnerLogos"
+                    :key="`${repeat}-${index}`"
+                    class="flex-shrink-0"
+                  >
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-center h-24 w-40 sm:h-32 sm:w-48 transition-all hover:scale-105 hover:shadow-xl border border-gray-100">
+                      <img
+                        :src="logo.src"
+                        :alt="logo.alt"
+                        loading="lazy"
+                        decoding="async"
+                        width="192"
+                        height="128"
+                        class="max-h-20 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity drop-shadow-md"
+                      />
+                    </div>
                   </div>
-                  
-                  <!-- Partner 2 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/gizlogo-unternehmen-de-rgb-300.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 3 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/EU normal-reproduction-high-resolution.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 4 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/Embassy of Iceland logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 5 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/Cooperation logo.bmp" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 6 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/New EU logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 7 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/New EU logo.PNG" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 8 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/UK AID - Standard - 4C PNG.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 9 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/USaid logo Horizontal RGB_JPEG.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 10 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/USAID Logo Vertical RGB_JPEG.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 11 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/WB-WBG-horizontal-RGB (1).jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                </div>
-                
-                <!-- Duplicate slides for seamless looping -->
-                <div class="flex shrink-0 gap-6" aria-hidden="true">
-                  <!-- Partner 1 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/Ireland_Std_Colour.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 2 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/gizlogo-unternehmen-de-rgb-300.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 3 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/EU normal-reproduction-high-resolution.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 4 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/Embassy of Iceland logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 5 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/Cooperation logo.bmp" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 6 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/New EU logo.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 7 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/New EU logo.PNG" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 8 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/images/partners/UK AID - Standard - 4C PNG.png" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 9 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/USaid logo Horizontal RGB_JPEG.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 10 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/USAID Logo Vertical RGB_JPEG.jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  <!-- Partner 11 -->
-                  <div class="bg-gray-50 p-4 rounded-lg flex items-center justify-center h-32 w-48">
-                    <img src="/public/images/partners/WB-WBG-horizontal-RGB (1).jpg" alt="Partner Logo" class="max-h-16 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" loading="lazy">
-                  </div>
-                  
-                  
-                </div>
+                </template>
               </div>
             </div>
           </div>
-
-          <!-- Optional View All Button -->
-          <!-- <div class="text-center mt-12">
-            <a href="/partners" class="inline-flex items-center px-5 py-2.5 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors text-sm font-medium">
-              View All Partners
-              <svg class="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-              </svg>
-            </a>
-          </div> -->
         </div>
       </section>
     </main>
@@ -539,16 +595,41 @@ useHead({
 
 
 <style scoped>
-    @keyframes scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(calc(-100% - 1.5rem)); } /* 1.5rem = gap-6 */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
   }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll var(--scroll-duration, 20s) linear infinite;
+  display: flex;
+  min-width: fit-content; /* Better for dynamic content */
+  will-change: transform; /* Optimize for animation */
+}
+
+.hover\:pause:hover,
+.animate-scroll:focus-within,
+.animate-scroll:active {
+  animation-play-state: paused;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
   .animate-scroll {
-    animation: scroll 20s linear infinite;
-    width: calc(200% + 1.5rem); /* Double width + gap */
+    animation: none;
+    justify-content: center;
+    min-width: auto;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
   }
-  .hover\:pause:hover {
-    animation-play-state: paused;
+  
+  .animate-scroll::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
   }
+}
 
 </style>

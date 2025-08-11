@@ -51,7 +51,7 @@ const projects = [
   {
     name: 'SSRLP',
     fullName: 'Social Support and Resilience Livelihoods Program',
-    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Chikwawa District.',
+    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Chitipa District.',
     objectives: [
       'Improve household food security and nutrition',
       'Build community resilience to shocks and stresses',
@@ -103,7 +103,7 @@ const reports = [
 
 const news = [
   {
-    title: 'Chikwawa District Council Launches New Water Project',
+    title: 'Chitipa District Council Launches New Water Project',
     date: '2024-12-10',
     summary: 'The council has initiated a new water infrastructure project to improve access to clean water in rural areas.',
     category: 'Development'
@@ -162,109 +162,34 @@ const news = [
           >
             <div v-if="activeTab === 'profile'" key="profile" class="content-panel">
               <div class="prose max-w-none">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Chikwawa District Council Profile</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Chitipa District Council Profile</h2>
                 <div class="space-y-6">
                   <div class="bg-blue-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Chikwawa District Council</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Chitipa District Council</h3>
                     <p class="text-gray-700 leading-relaxed">
-                       </p>
+                       Chitipa District is located at the northern tip of Malawi. It is bordered by two international boundaries, namely; Tanzania to the North (Ileje District) and Zambia to the west (Isoka District). Locally, it shares boundaries with Karonga to the North East and Rumphi District to the South. The district is approximately 329 Km away from Mzuzu city and 691 Km away from Lilongwe, the Capital City of Malawi. Chitipa district population has increased from 234,797 in 2018 to 259,879 in the year 2022 which is expected to increase (NSO 2018 Projection) representing intercensal annual growth rate of 2.8 %. About 51% of the population is female while the remaining 49 % is male, consistent with the national sex ratios (NSO 2021). The name of Chitipa originates from a stream called Nachitipa which flows across the Chitipa district headquarters from the west to the east. </p>
                   </div>
 
-                  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mandate</h3>
-                    <ul class="space-y-2">
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>   //</span>  <!-- this is kovahiwa and ken we left these spaces so that we can the data for district in the spans elements-->
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////// </span>
-                      </li>
-                    </ul>
-                  </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Vision</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">..//.</p>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Population</h3>
+                    <p class="text-gray-700 leading-relaxed font-medium">The total land area of the district is 4,288 square Kilometres making up 3.62 % of the total land area of Malawi, which is 118,484 square kilometers. It is the third largest district in the northern region of Malawi and is located on longitude -9.9273° and latitude 33.4254°.
+
+The District is predominantly hilly with scattered plains. The most important landforms include the Nyika Plateau at the southern end of the district, the Mafinga Hills in the central part, to the west of Chisenga, and the Misuku Hills in the northeastern part of the District. 
+
+Chitipa District Council is a statutory body established under the Local Government Act of 1998 cap.22.02 of the Laws of Malawi. The formal administrative structure comprises the technical officers employed by the government and have a technical committee called, District Executive Committee (DEC), traditional leaders and elected ward councilors and Members of Parliament.
+
+Chitipa District Council is composed of 10 elected Ward Councilors from 10 wards ,5 Members of Parliament from 5 constituencies, 8 Traditional Authorities (ex-official members) and 6 members of Special Interest Groups (ex-officio members) representing women, orphans, the disabled, youth, and the business community.  We also have 10 Area Development Committees and 111 Village Development Committees.
+
+
+</p>
                   </div>
 
-                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mission</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">///</p>
-                  </div>
+                 
 
-                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Strategic Objectives</h3>
-                    <ul class="space-y-2">
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
-                      </li>
-                    </ul>
-                  </div>
+                  
 
-                  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Functions</h3>
-                    <ul class="space-y-2">
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
-                      </li>
-                      
-                    </ul>
-                  </div>
 
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Major Achievements</h4>
-                      <p class="text-gray-700">.....</p>
-                      <</div>
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Jurisdiction</h4>
-                      <p class="text-gray-700">/////</p>
-                    </div>
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Population</h4>
-                      <p class="text-gray-700">///////</p>
-                    </div>
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Structure</h4>
-                      <p class="text-gray-700">////</p>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

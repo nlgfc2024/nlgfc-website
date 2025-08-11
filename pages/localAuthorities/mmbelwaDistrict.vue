@@ -51,7 +51,7 @@ const projects = [
   {
     name: 'SSRLP',
     fullName: 'Social Support and Resilience Livelihoods Program',
-    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Nkotakota District.',
+    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Mmbelwa District.',
     objectives: [
       'Improve household food security and nutrition',
       'Build community resilience to shocks and stresses',
@@ -103,7 +103,7 @@ const reports = [
 
 const news = [
   {
-    title: 'Nkotakota District Council Launches New Water Project',
+    title: 'Mmbelwa District Council Launches New Water Project',
     date: '2024-12-10',
     summary: 'The council has initiated a new water infrastructure project to improve access to clean water in rural areas.',
     category: 'Development'
@@ -162,109 +162,46 @@ const news = [
           >
             <div v-if="activeTab === 'profile'" key="profile" class="content-panel">
               <div class="prose max-w-none">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Nkotakota District Council Profile</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Mmbelwa District Council Profile</h2>
                 <div class="space-y-6">
                   <div class="bg-blue-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Nkotakota District Council</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Mmbelwa District Council</h3>
                     <p class="text-gray-700 leading-relaxed">
-                       </p>
+                       Mzimba is the largest district in Malawi. It borders Zambia to the west, Kasungu district to the south, NkhataBay district to the east, Nkhotakota district to the southeast, and Rumphi district to the north. The total land area of the district is 10, 430 square kilometers. It is linked with other districts mainly through the M9 Road, which connects to the Mzuzu-Lilongwe M1 road. The district council of Mzimba is called M’mbelwa District Council after the district’s Paramount Chief Mmbelwa.  The council was established by the Local Government Act of 1998 following the adoption of the National Decentralization Policy.</p>
                   </div>
 
                   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mandate</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Governance</h3>
                     <ul class="space-y-2">
                       <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>   //</span>  <!-- this is kovahiwa and ken we left these spaces so that we can the data for district in the spans elements-->
+                        <span>The council is constituted by elected councilors, traditional leaders and Members of parliament and interest groups. There are 11 constituencies, therefore 11 Members of parliament and 22 wards, 10 Traditional Authorities.</span>  <!-- this is kovahiwa and ken we left these spaces so that we can the data for district in the spans elements-->
                       </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////// </span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Vision</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">..//.</p>
-                  </div>
-
-                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mission</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">///</p>
-                  </div>
-
-                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Strategic Objectives</h3>
-                    <ul class="space-y-2">
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Functions</h3>
-                    <ul class="space-y-2">
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
-                      </li>
+                     
                       
                     </ul>
+
+
+                      <h3 class="text-lg font-semibold text-gray-900 mb-3">Social and Economic Activities</h3>
+
+                    <ul class="space-y-2">
+                      <li class="flex items-start">
+                        <span>The district main economic stay is household agriculture or fishing activities followed by casual, part time or ganyu labour. The major services provided in the district include education, health, water and sanitation; transport and communications. Malaria and HIV/AIDS related illnesses remain the leading causes of morbidity and mortality. 
+
+                                </span>  <!--we left these spaces so that we can the data for district in the spans elements-->
+                      </li>
+                     
+                      
+                    </ul>
+
                   </div>
 
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Major Achievements</h4>
-                      <p class="text-gray-700">.....</p>
-                      <</div>
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Jurisdiction</h4>
-                      <p class="text-gray-700">/////</p>
-                    </div>
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Population</h4>
-                      <p class="text-gray-700">///////</p>
-                    </div>
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Structure</h4>
-                      <p class="text-gray-700">////</p>
-                    </div>
-                  </div>
+                 
+
+
+                  
+
+
+                 
                 </div>
               </div>
             </div>
