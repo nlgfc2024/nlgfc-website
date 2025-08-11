@@ -30,3 +30,6 @@ logs
 .env
 .env.*
 !.env.example
+
+# Ignore SQLite content database
+.data/content/contents.sqlite
