@@ -239,49 +239,45 @@ const downloadImage = () => {
         <div v-show="activeTab === 'mvc'" class="prose max-w-none">
             <!-- Mission Section -->
             <div class="bg-white rounded-xl shadow-sm p-8 mb-10 border border-gray-100">
-                <div class="flex items-start mb-6">
+                <div class="flex items-center mb-6"> <!-- Changed from items-start to items-center -->
                     <div class="bg-blue-100 p-3 rounded-lg mr-6">
-                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-900 mb-3">Our Mission</h2>
-                        <p class="text-gray-700 text-lg leading-relaxed">
-                            To provide efficient and effective technical, financial and economic management services for mobilization, 
-                            distribution and utilization of resources for quality service delivery by Local Governments
-                        </p>
-                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900">Our Mission</h2> <!-- Removed mb-3 from here -->
                 </div>
+                <p class="text-gray-700 text-lg leading-relaxed pl-16"> <!-- Added pl-16 for proper indentation -->
+                    To provide efficient and effective technical, financial and economic management services for mobilization, 
+                    distribution and utilization of resources for quality service delivery by Local Governments
+                </p>
             </div>
 
             <!-- Vision Section -->
-            <div class="bg-white rounded-xl shadow-sm p-8 mb-10 border border-gray-100">
-                <div class="flex items-start">
+            <div class="bg-white rounded-xl     shadow-sm p-8 mb-10 border border-gray-100">
+                <div class="flex items-center mb-6"> <!-- Changed to items-center for vertical alignment -->
                     <div class="bg-purple-100 p-3 rounded-lg mr-6">
-                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                         </svg>
                     </div>
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-900 mb-3">Our Vision</h2>
-                        <p class="text-gray-700 text-lg leading-relaxed">
-                            Delivering effective and responsive financing for Local Governments
-                        </p>
-                    </div>
+                    <h2 class="text-2xl font-bold text-gray-900">Our Vision</h2> <!-- Removed mb-3 -->
                 </div>
+                <p class="text-gray-700 text-lg leading-relaxed pl-16"> <!-- Added pl-16 for indentation -->
+                    Delivering effective and responsive financing for Local Governments
+                </p>
             </div>
 
             <!-- Core Values Section -->
             <div class="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
-                <div class="flex items-start mb-6">
+                <div class="flex items-center mb-6">
                     <div class="bg-green-100 p-3 rounded-lg mr-6">
-                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900 mb-3">Our Core Values</h2>
+                        <h2 class="text-2xl font-bold text-gray-900">Our Core Values</h2>
                         <p class="text-gray-600">
                             The fundamental beliefs that guide our actions and decisions
                         </p>
@@ -395,19 +391,17 @@ const downloadImage = () => {
 
             <!-- Powers Section -->
             <div class="mb-14">
-                <div class="flex items-start mb-6">
+                <div class="flex items-center mb-6"> <!-- Changed to items-center -->
                     <div class="bg-blue-100 p-3 rounded-lg mr-5">
                         <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>
                     </div>
-                    <div>
-                        <h3 class="text-2xl font-semibold text-gray-800 mb-4">Constitutional Powers</h3>
-                        <p class="text-gray-700 mb-6">
-                            The National Local Government Finance Committee (NLGFC) was established by the constitution of the Republic of Malawi (Section 149 of 1994) and it assumes other powers and functions as conferred on it by the Local Government Act (1998).
-                        </p>
-                    </div>
+                    <h3 class="text-2xl font-semibold text-gray-800">Constitutional Powers</h3> <!-- Removed mb-4 -->
                 </div>
+                <p class="text-gray-700 mb-6 pl-16"> <!-- Added pl-16 for indentation -->
+                    The National Local Government Finance Committee (NLGFC) was established by the constitution of the Republic of Malawi (Section 149 of 1994) and it assumes other powers and functions as conferred on it by the Local Government Act (1998).
+                </p>
 
                 <div class="bg-blue-50/50 p-6 rounded-xl border border-blue-100">
                     <ul class="space-y-4">
@@ -616,58 +610,59 @@ const downloadImage = () => {
 
             <!-- Key Functions Section -->
             <div class="bg-gradient-to-br from-blue-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
-                <div class="flex items-start mb-2">
+                <!-- Heading with inline icon -->
+                <div class="flex items-center mb-6">  <!-- Changed to items-center and increased mb -->
                     <div class="bg-blue-100 p-2 rounded-lg mr-4">
                         <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                     </div>
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Key Functions</h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Managing and accounting for local authorities (LAs) financial resources</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Monitoring and regulating finance utilization</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Promoting effective LAs budgeting and fiscal decentralization</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Disbursing and accounting for LA financial resources</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Monitoring LGA financial regulations, procedures, systems and controls</span>
-                            </li>
-                        </ul>
-                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800">Key Functions</h3>  <!-- Removed mb-4 -->
                 </div>
+
+                <!-- List with proper indentation -->
+                <ul class="space-y-3 pl-10">  <!-- Added pl-10 for indentation -->
+                    <li class="flex">
+                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Managing and accounting for local authorities (LAs) financial resources</span>
+                    </li>
+                    <li class="flex">
+                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Monitoring and regulating finance utilization</span>
+                    </li>
+                    <li class="flex">
+                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Promoting effective LAs budgeting and fiscal decentralization</span>
+                    </li>
+                    <li class="flex">
+                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Disbursing and accounting for LA financial resources</span>
+                    </li>
+                    <li class="flex">
+                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Monitoring LGA financial regulations, procedures, systems and controls</span>
+                    </li>
+                </ul>
             </div>
 
             <!-- Divisions Section -->
@@ -825,66 +820,67 @@ const downloadImage = () => {
 
             <!-- Key Functions Section -->
             <div class="bg-gradient-to-br from-blue-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
-                <div class="flex items-start mb-2">
+                <!-- Heading with inline icon -->
+                <div class="flex items-center mb-6">
                     <div class="bg-blue-100 p-2 rounded-lg mr-4">
                         <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                     </div>
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Key Functions</h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Provide technical support for strategic planning, monitoring, and evaluation</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Lead institutional planning and policy review processes</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Manage organizational data systems and reporting</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Conduct research and analysis to inform decision-making</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Oversee monitoring and evaluation framework implementation</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Coordinate performance reporting across the organization</span>
-                            </li>
-                        </ul>
-                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800">Key Functions</h3>
                 </div>
+
+                <!-- List with proper indentation and alignment -->
+                <ul class="space-y-3 pl-10">
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Provide technical support for strategic planning, monitoring, and evaluation</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Lead institutional planning and policy review processes</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Manage organizational data systems and reporting</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Conduct research and analysis to inform decision-making</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Oversee monitoring and evaluation framework implementation</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Coordinate performance reporting across the organization</span>
+                    </li>
+                </ul>
             </div>
 
             <!-- Responsibilities Section -->
@@ -964,66 +960,67 @@ const downloadImage = () => {
 
             <!-- Key Functions Section -->
             <div class="bg-gradient-to-br from-blue-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
-                <div class="flex items-start mb-2">
+                <!-- Icon and heading inline alignment -->
+                <div class="flex items-center mb-6">  <!-- Changed to items-center and increased mb -->
                     <div class="bg-blue-100 p-2 rounded-lg mr-4">
                         <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                         </svg>
                     </div>
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Key Functions</h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Manage procurement of goods, works, and services</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Oversee asset disposal processes</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Handle procurement contract management</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Provide procurement support to Local Authorities (LAs)</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Ensure compliance with procurement regulations</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                </span>
-                                <span class="text-gray-700">Maintain procurement records and documentation</span>
-                            </li>
-                        </ul>
-                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800">Key Functions</h3>  <!-- Removed mb-4 -->
                 </div>
+
+                <!-- List with proper indentation -->
+                <ul class="space-y-3 pl-10">  <!-- Added pl-10 for indentation -->
+                    <li class="flex">
+                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">  <!-- Adjusted mt -->
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Manage procurement of goods, works, and services</span>
+                    </li>
+                    <li class="flex">
+                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Oversee asset disposal processes</span>
+                    </li>
+                    <li class="flex">
+                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Handle procurement contract management</span>
+                    </li>
+                    <li class="flex">
+                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Provide procurement support to Local Authorities (LAs)</span>
+                    </li>
+                    <li class="flex">
+                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Ensure compliance with procurement regulations</span>
+                    </li>
+                    <li class="flex">
+                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <span class="text-gray-700">Maintain procurement records and documentation</span>
+                    </li>
+                </ul>
             </div>
 
             <!-- Core Operations Section -->
@@ -1157,66 +1154,67 @@ const downloadImage = () => {
 
         <!-- Key Functions Section -->
         <div class="bg-gradient-to-br from-blue-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
-        <div class="flex items-start mb-2">
-            <div class="bg-blue-100 p-2 rounded-lg mr-4">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
+            <!-- Icon and heading inline alignment -->
+            <div class="flex items-center mb-6">
+                <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800">Key Functions</h3>
             </div>
-            <div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-4">Key Functions</h3>
-                <ul class="space-y-3">
-                    <li class="flex items-start">
-                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Conduct comprehensive internal audits</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Investigate fraud and financial irregularities</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Evaluate resource utilization and efficiency</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Assess organizational risks and controls</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Coordinate external audit processes</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Support Local Authorities on audit and risk matters</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
+
+            <!-- List with proper indentation -->
+            <ul class="space-y-3 pl-10">
+                <li class="flex">
+                    <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </span>
+                    <span class="text-gray-700">Conduct comprehensive internal audits</span>
+                </li>
+                <li class="flex">
+                    <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </span>
+                    <span class="text-gray-700">Investigate fraud and financial irregularities</span>
+                </li>
+                <li class="flex">
+                    <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </span>
+                    <span class="text-gray-700">Evaluate resource utilization and efficiency</span>
+                </li>
+                <li class="flex">
+                    <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </span>
+                    <span class="text-gray-700">Assess organizational risks and controls</span>
+                </li>
+                <li class="flex">
+                    <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </span>
+                    <span class="text-gray-700">Coordinate external audit processes</span>
+                </li>
+                <li class="flex">
+                    <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </span>
+                    <span class="text-gray-700">Support Local Authorities on audit and risk matters</span>
+                </li>
+            </ul>
         </div>
 
         <!-- Core Responsibilities Section -->
@@ -1410,9 +1408,6 @@ const downloadImage = () => {
   </div>
         </div>
 
-
-
-
       </main>
     </div>
   </div>
@@ -1438,7 +1433,7 @@ nav h3 {
   margin-bottom: 0.5rem;
 }
 
-/*Board of DIRECTOS */
+/* Board of Directors */
 .board-page {
   max-width: 1200px;
   margin: 2rem auto;
@@ -1446,131 +1441,86 @@ nav h3 {
   text-align: center;
 }
 
-h1 {
+.board-page h1 {
   color: #2c3e50;
   margin-bottom: 2.5rem;
   font-size: 2rem;
 }
 
-.org-level {
+.board-page .org-level {
   display: flex;
   justify-content: center;
   gap: 1.5rem;
   flex-wrap: wrap;
 }
 
-.top-level {
+.board-page .top-level {
   margin-bottom: 1rem;
 }
 
-.middle-level {
+.board-page .middle-level {
   margin-top: 1rem;
 }
 
-.board-card {
+.board-page .board-card {
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 1.5rem;
   width: 200px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  min-height: 300px; /* Added for consistent height */
 }
 
-.top-level .board-card {
+.board-page .top-level .board-card {
   background: #f8f9fa;
   border-top: 4px solid #2c3e50;
   width: 220px;
 }
 
-.position {
+.board-page .position {
   color: #666;
   font-style: italic;
   margin-top: 0.5rem;
   font-size: 0.9rem;
 }
 
-.board-image {
+.board-page .board-image {
   width: 100px;
   height: 100px;
   border-radius: 50%;
   overflow: hidden;
   margin: 0 auto 1rem;
   border: 3px solid #f1f1f1;
+  background: #f8f8f8; /* Fallback background */
 }
 
-.top-level .board-image {
+.board-page .top-level .board-image {
   width: 110px;
   height: 110px;
 }
 
-.board-image img {
+.board-page .board-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block; /* Remove extra space under image */
 }
 
-.connector-container {
+.board-page .connector-container {
   display: flex;
   justify-content: center;
   margin: 0.5rem 0;
 }
 
-.connector-line {
+.board-page .connector-line {
   height: 30px;
   width: 80%;
   max-width: 800px;
   border-bottom: 2px solid #ddd;
 }
 
-@media (max-width: 768px) {
-  .org-level {
-    gap: 1rem;
-  }
-  
-  .board-card {
-    width: 160px;
-    padding: 1rem;
-  }
-  
-  .top-level .board-card {
-    width: 180px;
-  }
-  
-  .board-image {
-    width: 80px;
-    height: 80px;
-  }
-  
-  .top-level .board-image {
-    width: 90px;
-    height: 90px;
-  }
-  
-  .connector-line {
-    width: 60%;
-  }
-}
-
-@media (max-width: 480px) {
-  .org-level {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .board-card {
-    width: 100%;
-    max-width: 250px;
-  }
-  
-  .connector-line {
-    height: 20px;
-    width: 2px;
-    border-bottom: none;
-    border-left: 2px solid #ddd;
-  }
-}
-
-/* Executive Management Styles */
+/* Executive Management */
 .executive-page {
   max-width: 1000px;
   margin: 2rem auto;
@@ -1578,83 +1528,130 @@ h1 {
   text-align: center;
 }
 
-h1 {
+.executive-page h1 {
   color: #2c3e50;
   margin-bottom: 2rem;
 }
 
-.org-level {
+.executive-page .org-level {
   display: flex;
   justify-content: center;
   gap: 2rem;
+  flex-wrap: wrap; /* Added for better responsiveness */
 }
 
-.top-level {
+.executive-page .top-level {
   margin-bottom: 1rem;
 }
 
-.middle-level {
+.executive-page .middle-level {
   margin-top: 1rem;
 }
 
-.executive-card {
+.executive-page .executive-card {
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 1.5rem;
   min-width: 250px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  min-height: 320px; /* Added for consistent height */
 }
 
-.top-level .executive-card {
+.executive-page .top-level .executive-card {
   background: #f8f9fa;
   border-top: 4px solid #e74c3c;
 }
 
-.position {
+.executive-page .position {
   color: #666;
   font-style: italic;
   margin-top: 0.5rem;
 }
 
-.connector {
+.executive-page .connector {
   height: 40px;
   width: 2px;
   background: #ddd;
   margin: 0 auto;
 }
 
-.executive-image {
+.executive-page .executive-image {
   width: 120px;
   height: 120px;
   border-radius: 50%;
   overflow: hidden;
   margin: 0 auto 1rem;
   border: 3px solid #f1f1f1;
+  background: #f8f8f8; /* Fallback background */
 }
 
-.executive-image img {
+.executive-page .executive-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block; /* Remove extra space under image */
 }
 
+/* Responsive Styles */
 @media (max-width: 768px) {
-  .org-level {
-    flex-direction: column;
-    align-items: center;
+  .board-page .org-level,
+  .executive-page .org-level {
     gap: 1rem;
   }
   
-  .connector {
-    height: 20px;
+  .board-page .board-card {
+    width: 160px;
+    padding: 1rem;
+    min-height: 280px;
   }
   
-  .executive-card {
-    width: 100%;
-    max-width: 300px;
+  .board-page .top-level .board-card {
+    width: 180px;
+  }
+  
+  .board-page .board-image {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .board-page .top-level .board-image {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .board-page .connector-line {
+    width: 60%;
+  }
+
+  .executive-page .executive-card {
+    min-height: 300px;
+    min-width: 200px;
   }
 }
 
-
+@media (max-width: 480px) {
+  .board-page .org-level,
+  .executive-page .org-level {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .board-page .board-card,
+  .executive-page .executive-card {
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .board-page .connector-line {
+    height: 20px;
+    width: 2px;
+    border-bottom: none;
+    border-left: 2px solid #ddd;
+  }
+  
+  .executive-page .connector {
+    height: 20px;
+  }
+}
 </style>

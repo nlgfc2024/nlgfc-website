@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-  title: 'Mangochi District Council'
+  title: 'Likoma District Council'
 })
 
 const activeTab = ref('profile') // Default active tab
@@ -51,7 +51,7 @@ const projects = [
   {
     name: 'SSRLP',
     fullName: 'Social Support and Resilience Livelihoods Program',
-    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Mangochi Municipal District.',
+    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Likoma District.',
     objectives: [
       'Improve household food security and nutrition',
       'Build community resilience to shocks and stresses',
@@ -103,7 +103,7 @@ const reports = [
 
 const news = [
   {
-    title: 'Mangochi Municipal District Council Launches New Water Project',
+    title: 'Likoma District Council Launches New Water Project',
     date: '2024-12-10',
     summary: 'The council has initiated a new water infrastructure project to improve access to clean water in rural areas.',
     category: 'Development'
@@ -162,109 +162,85 @@ const news = [
           >
             <div v-if="activeTab === 'profile'" key="profile" class="content-panel">
               <div class="prose max-w-none">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Mangochi Municipal District Council Profile</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Likoma District Council Profile</h2>
                 <div class="space-y-6">
                   <div class="bg-blue-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Mangochi Municipal District Council</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Likoma District Council</h3>
                     <p class="text-gray-700 leading-relaxed">
-                       </p>
+                       
+                    Likoma District, with a total land area of 28 km², is the smallest district in the Northern Region. According to the 2018 Population and Housing Census projections by the National Statistical Office (NSO), Likoma’s population was estimated at 14 527, growing at 3.0 % per annum—higher than the national average and on par with the regional rate of 2.9 %–3.0 %. This yields a population density of roughly 726 persons/km².
+                    </p>
                   </div>
 
                   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mandate</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Economic Activities</h3>
                     <ul class="space-y-2">
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>   //</span>  <!-- this is kovahiwa and ken we left these spaces so that we can the data for district in the spans elements-->
+                        <span>  Fishing is the islanders main source of income and informal employment. The district enjoys a warm tropical climate, heavily influenced by Lake Malawi: mean daily temperatures range from 28 °C to 30 °C. Its waters support diverse fish species, including chambo, usipa, utaka, mcheni, mbuna and kampango.</span>  <!-- this is kovahiwa and ken we left these spaces so that we can the data for district in the spans elements-->
                       </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////// </span>
-                      </li>
+                     
+                    
                     </ul>
                   </div>
 
-                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Vision</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">..//.</p>
-                  </div>
+
+                
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mission</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">///</p>
-                  </div>
-
-                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Strategic Objectives</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Administration</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                     Likoma District Council comprises one constituency and four wards, served by three Area Development Committees (ADCs) and nine Village Development Committees (VDCs). Under the Local Government Act, 1998, the Assembly is the highest policy-making body at district level, responsible for approving and executing the District Development Planning Framework (DDPF) and District Development Plan (DDP). Its membership includes: </p>
                     <ul class="space-y-2">
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
+                        <span>Ward councillors</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
+                        <span>Traditional and sub-traditional authorities</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
+                        <span>The Member of Parliament</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
+                        <span>Five representatives of special-interest groups</span>
                       </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
-                      </li>
+                    
                     </ul>
-                  </div>
-
-                  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Functions</h3>
-                    <ul class="space-y-2">
+                    <p class="text-gray-700 leading-relaxed">
+                    The District Executive Committee (DEC) is the Assemblys technical and advisory arm, charged with implementing the District Development Planning System (DDPS). Recommended DEC members are:</p>
+            
+                       <ul class="space-y-2">
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
+                        <span>Chairperson: District Commissioner</span>
                       </li>
-                      
-                    </ul>
-                  </div>
+                       <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>Secretary: Director of Planning and Development</span>
+                      </li>
+                       <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>Representatives of local NGOs</span>
+                      </li>
+                       <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>Co-opted members</span>
+                      </li>
 
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Major Achievements</h4>
-                      <p class="text-gray-700">.....</p>
-                      <</div>
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Jurisdiction</h4>
-                      <p class="text-gray-700">/////</p>
-                    </div>
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Population</h4>
-                      <p class="text-gray-700">///////</p>
-                    </div>
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Structure</h4>
-                      <p class="text-gray-700">////</p>
-                    </div>
+                    </ul>
+
+                    <p class="text-gray-700 leading-relaxed">
+                   Each ADC represents all VDCs under a Traditional Authority. ADCs identify, prioritize and prepare community needs spanning multiple VDCs, then submit proposals to the DEC. Likoma has three ADCs. At sub-district level, 26 Area Extension Committees (AECs)—groups of extension workers—advise ADCs on needs assessment, project identification and proposal preparation. VDCs operate at the grassroots, facilitating planning and development for their villages. Likoma District has nine VDCs </p>
+            
+
                   </div>
+                  
+
+
                 </div>
               </div>
             </div>

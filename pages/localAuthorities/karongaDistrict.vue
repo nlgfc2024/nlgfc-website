@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-  title: 'Mangochi District Council'
+  title: 'Karonga District Council'
 })
 
 const activeTab = ref('profile') // Default active tab
@@ -51,7 +51,7 @@ const projects = [
   {
     name: 'SSRLP',
     fullName: 'Social Support and Resilience Livelihoods Program',
-    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Mangochi Municipal District.',
+    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Karonga District.',
     objectives: [
       'Improve household food security and nutrition',
       'Build community resilience to shocks and stresses',
@@ -103,7 +103,7 @@ const reports = [
 
 const news = [
   {
-    title: 'Mangochi Municipal District Council Launches New Water Project',
+    title: 'Karonga District Council Launches New Water Project',
     date: '2024-12-10',
     summary: 'The council has initiated a new water infrastructure project to improve access to clean water in rural areas.',
     category: 'Development'
@@ -162,109 +162,62 @@ const news = [
           >
             <div v-if="activeTab === 'profile'" key="profile" class="content-panel">
               <div class="prose max-w-none">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Mangochi Municipal District Council Profile</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Karonga District Council Profile</h2>
                 <div class="space-y-6">
                   <div class="bg-blue-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Mangochi Municipal District Council</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Karonga District Council</h3>
                     <p class="text-gray-700 leading-relaxed">
-                       </p>
+                      Karonga District Council is a statutory body established under the Local Government Act of 1998 cap. 22.02 of the Laws of Malawi. The District Council is composed of ten councilors, five Members of Parliament (MPs), six Traditional Authorities (TAs); Kyungu, Kilupula, Mwakaboko, Mwirang’ombe, Wasambo, and five appointed members from interest groups. The District Commissioner (DC) heads the Council Secretariat supported by professional heads of government departments.
+                    Situated along Lake Malawi in the northern region of Malawi, Karonga District covers an approximate area of 3,416 square kilometers. It shares borders with Chitipa District to the West, Rumphi District to the South, and Tanzania to the North and East. With an estimated population of about 365,028, Karonga District represents 2.07% of Malawi's total population, boasting a growth rate of 3.2%. The district exhibits a population density of 107 people per square kilometer, as reported by the National Statistical Office in 2018.   
+                    
+                    </p>
                   </div>
 
                   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mandate</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">PEOPLE</h3>
                     <ul class="space-y-2">
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>   //</span>  <!-- this is kovahiwa and ken we left these spaces so that we can the data for district in the spans elements-->
+                        <span>
+                          The natives of Karonga district mainly fall into two distinct ethnic groups: the Ngonde who constitute 38% of the current population and the Tumbuka accounting for 42%. There are, however, minor ethnic groups of the NyaKyusa and the Ndali. The major languages spoken are chiTumbuka and kyaNgonde. The main known religious groups in the district are Christianity (87.2%), Islam (1.4%) and other religions (10.2%). There are also those whose religion is tradition and they account for 0.7% while those with no religion constitute 0.5% (NSO, 2018).
+
+
+                        </span>  <!-- this is kovahiwa and ken we left these spaces so that we can the data for district in the spans elements-->
                       </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////// </span>
-                      </li>
+                     
+                    
                     </ul>
                   </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Vision</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">..//.</p>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">LAND</h3>
+                    <p class="text-gray-700 leading-relaxed font-medium">  There are three land tenure systems within Karonga town: public, private, and customary. Traditional leaders manage customary land, while public land is managed by the Department of Lands in liaison with the District Council. Private land is land held freehold or leased by individuals or private or government institutions from customary or public land for predetermined periods. The principal leasehold tenants include statutory bodies like the Agricultural Development and Marketing Corporation (ADMARC) and the Malawi Broadcasting Corporation (MBC). Malawi Housing Corporation (MHC), the Catholic Mission at St. Mary’s Parish, Karonga Town Council, and the Shire Bus Lines Company at Bwiba Township own land on a freehold basis.</p>
                   </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mission</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">///</p>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">MINING</h3>
+                    <p class="text-gray-700 leading-relaxed font-medium">Karonga District has experienced a boom in mining operations and the sector is an area of great potential for the economy of the district.  Mining sector falls within pillar number 2 of the Malawi Vision 2063 which is industrialization and in line with Sustainable Development Goals 1 and 9 of reducing poverty and industrialization respectively. There are different levels and scales of mining happening in the district with minerals ranging from sand, quarry, coal, and uranium.
+The district has the following active mines; Kayerekera, Nkhauti Kasikizi, Lusikwa, Hara C&M and Xai xai.  All of the mines in the district are open-pit mines.
+</p>
                   </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Strategic Objectives</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Tourism Potential in Karonga</h3>
                     <ul class="space-y-2">
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
+                        <span>Karonga has high tourism potential areas namely Karonga Museum, Lake Malawi beaches, Mpata and Ngara hot springs, Mbande Hills, Chiwondo and Mlare Lagoons, Tuluwi escapements. Pictures below are some of the potential tourism areas although the roads leading to these destinations are in bad condition in addition to the district having poor water and air transport services.</span>
                       </li>
                     </ul>
                   </div>
 
-                  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Functions</h3>
-                    <ul class="space-y-2">
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
-                      </li>
-                      
-                    </ul>
-                  </div>
 
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Major Achievements</h4>
-                      <p class="text-gray-700">.....</p>
-                      <</div>
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Jurisdiction</h4>
-                      <p class="text-gray-700">/////</p>
-                    </div>
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Population</h4>
-                      <p class="text-gray-700">///////</p>
-                    </div>
-                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Structure</h4>
-                      <p class="text-gray-700">////</p>
-                    </div>
-                  </div>
+                  
+                   
+                   
+                    
+              </div>
                 </div>
               </div>
             </div>
