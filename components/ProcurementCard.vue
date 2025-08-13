@@ -39,9 +39,9 @@ const getStatusColor = (status) => {
 
 const getTypeColor = (type) => {
   const colors = {
-    'RFQ': 'text-blue-600 bg-blue-50',
-    'RFP': 'text-purple-600 bg-purple-50',
-    'Tender': 'text-orange-600 bg-orange-50'
+    'RFQ': 'text-pink-600 bg-pink-50',
+    'RFP': 'text-pink-600 bg-pink-50',
+    'Tender': 'text-pink-600 bg-pink-50'
   }
   return colors[type] || 'text-gray-600 bg-gray-50'
 }

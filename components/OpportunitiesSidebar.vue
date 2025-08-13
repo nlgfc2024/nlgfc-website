@@ -115,11 +115,11 @@ const closeFaqModal = () => {
       <h4 class="text-sm font-medium text-gray-900 mb-3">Quick Stats</h4>
       <div class="space-y-2">
         <div class="flex justify-between text-sm">
-          <span class="text-gray-600">Active Jobs</span>
+          <span class="text-emerald-700">Active Jobs</span>
           <span class="font-medium text-green-600">{{ stats.activeJobs }}</span>
         </div>
         <div class="flex justify-between text-sm">
-          <span class="text-gray-600">Open Tenders</span>
+          <span class="text-emerald-700">Open Tenders</span>
           <span class="font-medium text-blue-600">{{ stats.openTenders }}</span>
         </div>
         <div class="flex justify-between text-sm">
@@ -178,30 +178,30 @@ const closeFaqModal = () => {
     <div class="mt-6 pt-6 border-t border-gray-200">
       <div class="bg-blue-50 rounded-lg p-4">
         <div class="flex items-start space-x-3">
-          <Icon name="heroicons:information-circle" class="w-5 h-5 text-blue-600 mt-0.5" />
+          <Icon name="heroicons:information-circle" class="w-5 h-5 text-gray-800 mt-0.5" />
           <div>
-            <h5 class="text-sm font-medium text-blue-900">Need Help?</h5>
+            <h5 class="text-sm font-medium text-gray-800">Need Help?</h5>
             <div class="mt-6 pt-2 border-t border-gray-200">
-              <p class="text-xs text-blue-700 mt-1">
+              <p class="text-xs text-emerald-700 mt-1">
                 Contact our Human Resource department for job inquiries.
               </p>
               <div class="mt-2 space-y-1">
-                <div class="text-xs text-blue-600">
+                <div class="text-xs text-emerald-700">
                   <Icon name="heroicons:phone" class="w-3 h-3 inline mr-1" />
                   +265 1 770 244
                 </div>
               </div>
             </div>
             <div class="mt-6 pt-2 border-t border-gray-200">
-              <p class="text-xs text-blue-700 mt-1">
+              <p class="text-xs text-emerald-700 mt-1">
                 Contact our Procurement office for tender questions.
               </p>
               <div class="mt-2 space-y-1">
-                <div class="text-xs text-blue-600">
+                <div class="text-xs text-emerald-700">
                   <Icon name="heroicons:phone" class="w-3 h-3 inline mr-1" />
                   +265 1 770 244
                 </div>
-                <div class="mt-6 pt-2 border-t border-gray-200 text-xs text-blue-600">
+                <div class="mt-6 pt-2 border-t border-gray-200 text-xs text-emerald-700">
                   <Icon name="heroicons:map-pin" class="w-3 h-3 inline mr-1" />
                   Area 14, Red Cross Premises, Lilongwe
                 </div>
