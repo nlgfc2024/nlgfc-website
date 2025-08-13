@@ -102,7 +102,7 @@ const getTypeColor = (type) => {
         <button
             v-if="jobStatus === 'active'"
             @click="emit('apply', job.id)"
-            class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-blue-500 rounded-lg transition-colors flex items-center justify-center space-x-2"
+            class="px-4 py-2 text-sm font-medium text-white bg-gray-800 hover:bg-emerald-700 rounded-lg transition-colors flex items-center justify-center space-x-2"
         >
           <Icon name="heroicons:paper-airplane" class="w-4 h-4" />
           <span>Apply Now</span>
