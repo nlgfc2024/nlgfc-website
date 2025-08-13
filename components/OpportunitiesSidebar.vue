@@ -90,7 +90,7 @@ const closeFaqModal = () => {
           :class="[
           'w-full text-left p-4 rounded-lg transition-all duration-200 group',
           activeSection === section.id
-            ? 'bg-blue-50 border-2 border-blue-200 text-blue-700'
+            ? 'bg-emerald-50 border-2 border-emerald-200 text-emerald-700'
             : 'hover:bg-gray-50 border-2 border-transparent text-gray-700 hover:text-gray-900'
         ]"
       >
@@ -99,7 +99,7 @@ const closeFaqModal = () => {
               :name="section.icon"
               :class="[
               'w-6 h-6 mt-0.5 transition-colors',
-              activeSection === section.id ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'
+              activeSection === section.id ? 'text-emerald-600' : 'text-gray-400 group-hover:text-gray-600'
             ]"
           />
           <div>
