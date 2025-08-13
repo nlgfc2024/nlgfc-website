@@ -40,13 +40,12 @@
         Our <span class="text-primary-600">Mandate</span>
       </h2>
       <p class="text-lg text-gray-600 leading-relaxed">
-        To ensure effective financial management and service delivery at the local government level
-        through strategic funding, oversight, and support mechanisms in line with national goals.
+        To facilitate fiscal decentralization, financial management and local development in Local Governments
       </p>
     </div>
 
     <!-- Vision, Mission, Values, Goals Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       
       <!-- Vision Card -->
       <div class="bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl shadow-md p-6 flex flex-col">
@@ -59,7 +58,7 @@
         </div>
         <h3 class="text-xl font-bold text-gray-900 mb-2">Our Vision</h3>
         <p class="text-gray-600 text-sm">
-          A financially autonomous and accountable local government system that delivers quality services to citizens.
+          Delivering effective and responsive financing for Local Governments
         </p>
       </div>
 
@@ -74,7 +73,8 @@
         </div>
         <h3 class="text-xl font-bold text-gray-900 mb-2">Our Mission</h3>
         <p class="text-gray-600 text-sm">
-          To facilitate and manage fiscal transfers and provide technical support to local authorities for improved governance and service delivery.
+          To provide efficient and effective technical, financial and economic management services for mobilization, distribution and utilization of resources 
+                for quality service delivery by Local Governments
         </p>
       </div>
 
@@ -92,24 +92,14 @@
           <li>Integrity</li>
           <li>Transparency</li>
           <li>Accountability</li>
-          <li>Inclusiveness</li>
+          <li>Innovation</li>
+          <li>Teamwork</li>
+          <li>Professionalism</li>
+          
         </ul>
       </div>
 
-      <!-- Strategic Goals Card -->
-      <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl shadow-md p-6 flex flex-col">
-        <div class="inline-flex items-center justify-center w-14 h-14 mb-4 bg-white rounded-xl shadow-sm">
-          <svg class="w-7 h-7 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 8c1.104 0 2 .896 2 2s-.896 2-2 2-2-.896-2-2 .896-2 2-2zm0 10c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z">
-            </path>
-          </svg>
-        </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-2">Strategic Goals</h3>
-        <p class="text-gray-600 text-sm">
-          Drive innovation, ensure equitable resource distribution, and strengthen institutional capacity at the local level.
-        </p>
-      </div>
+     
 
     </div>
   </div>
@@ -351,7 +341,7 @@
             Our Initiatives
           </span>
           <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Featured <span class="text-primary-600">Projects</span>
+            Current <span class="text-primary-600">Projects</span>
           </h2>
           <p class="max-w-2xl mx-auto text-gray-600">
             Discover our key programs that are transforming local governance and service delivery across the nation.
@@ -372,9 +362,30 @@
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
             <div class="relative h-full flex flex-col justify-end p-6 text-white">
               <div class="flex items-center justify-center w-14 h-14 mb-4 bg-white/20 backdrop-blur-sm rounded-xl">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path :d="project.iconPath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-                </svg>
+               <div class="w-30 h-30">
+  <img
+    v-if="project.imagePath"
+    :src="project.imagePath"
+    alt="Project Logo"
+    class="w-full h-full object-contain"
+    loading="lazy"
+  />
+  <svg
+    v-else
+    class="w-6 h-6 text-white"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      :d="project.iconPath"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+    ></path>
+  </svg>
+</div>
+
               </div>
               <h3 class="text-2xl font-bold mb-2">{{ project.title }}</h3>
               <p class="text-white/90 mb-4 line-clamp-2">{{ project.description }}</p>
@@ -391,11 +402,7 @@
           </div>
         </div>
 
-        <div class="text-center mt-12">
-          <button class="px-8 py-3 border-2 border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition">
-            View All Projects
-          </button>
-        </div>
+       
       </div>
     </section>
 
@@ -670,23 +677,24 @@ const coreValues = [
 
 // Projects
 const projects = [
-  {
-    title: 'SSRP',
-    description: 'Social Support for Resilient Livelihoods Project focuses on reducing poverty and enhancing resilience in vulnerable communities through targeted interventions and capacity building.',
-    iconPath: "M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z",
-    url: '/projects/ssrp'
-  },
+ {
+  title: 'SSRLP',
+  description: 'Social Support for Resilient Livelihoods Project focuses on reducing poverty and enhancing resilience in vulnerable communities through targeted interventions and capacity building.',
+  imagePath: '/images/samples/SSRLP logo(1).jpg',
+  url: '/projects/currentProjects#ssrlp_overview'
+},
+
   {
     title: 'GESD',
     description: 'Governance to Enable Service Delivery Project aims to improve local government capacity and citizen service access through institutional strengthening and policy reforms.',
-    iconPath: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4",
-    url: '/projects/gesd'
+    imagePath: '/images/samples/PBG logo.png',
+    url: '/projects/currentProjects#gesd_overview'
   },
   {
-    title: 'RCRP2',
+    title: 'RCRP 2',
     description: 'The second phase of the Climate Resilience Project supports districts in disaster preparedness and mitigation through infrastructure development and community training.',
-    iconPath: "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z",
-    url: '/projects/rcrp2'
+     imagePath: '/images/samples/RCRP LOGO- Final.png',
+    url: '/projects/currentProjects#rcrp_overview'
   }
 ]
 
