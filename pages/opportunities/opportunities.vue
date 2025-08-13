@@ -4,6 +4,17 @@ definePageMeta({
   title: 'Opportunities'
 })
 
+const menuItems = [
+    { 
+        items: [
+          { id: 'jobs', title: 'Jobs Listing' },
+          { id: 'procurement', title: 'Procurement notices' },
+          { id: 'jobport', title: 'Jobs Portal' },
+          { id: 'supplyport', title: 'Procurement Portal' },
+        ]
+    }
+  ]
+
 // Reactive data
 const activeTab = ref('procurement')
 const searchQuery = ref('')
@@ -22,7 +33,19 @@ const itemsPerPage = ref(5)
 const route = useRoute()
 const router = useRouter()
 
+// Watch for hash changes and update activeTab accordingly
+const handleHashChange = () => {
+  const hash = window.location.hash.replace('#', '')
+  if (hash === 'jobs' || hash === 'job-opportunities') {
+    activeTab.value = 'jobs'
+  } else if (hash === 'procurement' || hash === 'procurement-notices') {
+    activeTab.value = 'procurement'
+  }
+}
+
+
 onMounted(() => {
+  // Handle initial route params
   if (route.query.section) {
     activeTab.value = route.query.section
   }
@@ -32,25 +55,83 @@ onMounted(() => {
   if (route.query.limit) {
     itemsPerPage.value = parseInt(route.query.limit)
   }
+  
+  // Handle hash on mount
+  handleHashChange()
+  
+  // Listen for hash changes
+  window.addEventListener('hashchange', handleHashChange)
 })
 
-// Watch for route changes
+onUnmounted(() => {
+  window.removeEventListener('hashchange', handleHashChange)
+})
+
+
+// Watch for route query changes
 watch(() => route.query.section, (newSection) => {
-  if (newSection) {
+  if (newSection && newSection !== activeTab.value) {
     activeTab.value = newSection
   }
 })
 
-// Watch for changes and update URL
-watch([activeTab, currentPage, itemsPerPage], () => {
-  router.push({
-    query: {
-      ...route.query,
-      section: activeTab.value,
-      page: currentPage.value,
-      limit: itemsPerPage.value
+// Enhanced watch for changes - updates both URL query params and hash
+watch([activeTab, currentPage, itemsPerPage], ([newTab]) => {
+  // Update URL with both query params and hash
+  const newQuery = {
+    ...route.query,
+    section: newTab,
+    page: currentPage.value,
+    limit: itemsPerPage.value
+  }
+  
+  // Update hash based on active tab
+  const hash = newTab === 'jobs' ? '#job-opportunities' : '#procurement-notices'
+  
+  // Use replace to avoid creating too many history entries
+  router.replace({
+    query: newQuery,
+    hash: hash
+  })
+}, { immediate: false })
+
+// Enhanced tab switching function
+const switchTab = (tab) => {
+  activeTab.value = tab
+  currentPage.value = 1 // Reset pagination when switching tabs
+  
+  // Force component reactivity by updating a key if needed
+  nextTick(() => {
+    // Scroll to top of content area when switching tabs
+    const contentElement = document.querySelector('#opportunities-content')
+    if (contentElement) {
+      contentElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   })
+}
+
+// Navigation helper functions for external use
+const navigateToJobs = () => {
+  router.push({
+    path: '/opportunities',
+    query: { section: 'jobs' },
+    hash: '#job-opportunities'
+  })
+}
+
+const navigateToProcurement = () => {
+  router.push({
+    path: '/opportunities',
+    query: { section: 'procurement' },
+    hash: '#procurement-notices'
+  })
+}
+
+// Expose navigation functions globally for navbar usage
+defineExpose({
+  navigateToJobs,
+  navigateToProcurement,
+  switchTab
 })
 
 // Utility functions
@@ -473,7 +554,7 @@ const downloadDocument = (url, filename) => {
         </div>
       </div>
 
-      <!-- Procurement Portal Content -->
+      <!-- Procurement notices Content -->
       <div v-if="activeTab === 'procurement'">
         <div class="space-y-6">
           <div
@@ -550,7 +631,7 @@ const downloadDocument = (url, filename) => {
         </div>
       </div>
 
-      <!-- Job Opportunities Content -->
+      <!-- Job Listings Content -->
       <div v-if="activeTab === 'jobs'">
         <div class="space-y-6">
           <div
@@ -634,7 +715,7 @@ const downloadDocument = (url, filename) => {
               </div>
               <button
                   v-if="job.status === 'active'"
-                  class="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  class="px-6 py-2 bg-emerald-600 text-white font-medium rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <Icon name="heroicons:paper-airplane" class="w-4 h-4 inline mr-2" />
                 Apply Now
