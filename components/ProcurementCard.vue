@@ -101,7 +101,7 @@ const getDocumentIcon = (type) => {
                 v-for="document in notice.documents"
                 :key="document.name"
                 @click="emit('download', document, notice.title)"
-                class="flex items-center space-x-2 px-3 py-2 text-sm text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                class="flex items-center space-x-2 px-3 py-2 text-sm text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors"
             >
               <Icon :name="getDocumentIcon(document.type)" class="w-4 h-4" />
               <span>{{ document.name }}</span>
@@ -124,7 +124,7 @@ const getDocumentIcon = (type) => {
         <button
             v-if="noticeStatus === 'active'"
             @click="emit('express-interest', notice.id)"
-            class="w-full px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-blue-500 rounded-lg transition-colors flex items-center justify-center space-x-2"
+            class="w-full px-4 py-2 text-sm font-medium text-white bg-gray-800 hover:bg-emerald-700 rounded-lg transition-colors flex items-center justify-center space-x-2"
         >
           <Icon name="heroicons:hand-raised" class="w-4 h-4" />
           <span>Express Interest</span>
