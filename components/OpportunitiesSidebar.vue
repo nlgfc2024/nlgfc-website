@@ -116,15 +116,15 @@ const closeFaqModal = () => {
       <div class="space-y-2">
         <div class="flex justify-between text-sm">
           <span class="text-emerald-700">Active Jobs</span>
-          <span class="font-medium text-green-600">{{ stats.activeJobs }}</span>
+          <span class="font-medium text-emerald-700">{{ stats.activeJobs }}</span>
         </div>
         <div class="flex justify-between text-sm">
           <span class="text-emerald-700">Open Tenders</span>
-          <span class="font-medium text-blue-600">{{ stats.openTenders }}</span>
+          <span class="font-medium text-emerald-700">{{ stats.openTenders }}</span>
         </div>
         <div class="flex justify-between text-sm">
-          <span class="text-gray-600">Closing Soon</span>
-          <span class="font-medium text-orange-600">{{ stats.closingSoon }}</span>
+          <span class="text-red-600">Closing Soon</span>
+          <span class="font-medium text-red-600">{{ stats.closingSoon }}</span>
         </div>
       </div>
     </div>
