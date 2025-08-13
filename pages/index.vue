@@ -57,7 +57,20 @@ const projects = [
     description: 'The second phase of the Climate Resilience Project supports districts in disaster preparedness and mitigation through infrastructure development and community training.',
      imagePath: '/images/samples/RCRP LOGO- Final.png',
     url: '/projects/currentProjects#rcrp_overview'
+  },
+  {
+    title: 'RCRP 1',
+    description: 'The first phase of the Climate Resilience Project focuses on disaster preparedness and mitigation through infrastructure development and community training.',
+     imagePath: '/images/samples/RCRP LOGO- Final.png',
+    url: '/projects/currentProjects#rcrp_overview'
+  },
+  {
+    title: 'GESD',
+    description: 'Governance to Enable Service Delivery Project aims to improve local government capacity and citizen service access through institutional strengthening and policy reforms.',
+    imagePath: '/images/samples/PBG logo.png',
+    url: '/projects/currentProjects#gesd_overview'
   }
+
 ]
 
 // Opportunity tabs
@@ -336,11 +349,11 @@ const publications = ref([
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="flex overflow-x-auto pb-4 gap-8">
           <div
             v-for="(project, index) in projects"
             :key="index"
-            class="group relative overflow-hidden rounded-2xl shadow-xl h-96"
+            class="group relative overflow-hidden rounded-2xl shadow-xl h-80"
           >
             <img
               :src="`https://picsum.photos/600/400?random=${index + 10}`"
