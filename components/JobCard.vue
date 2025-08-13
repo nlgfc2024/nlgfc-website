@@ -38,7 +38,7 @@ const getStatusColor = (status) => {
 }
 
 const getTypeColor = (type) => {
-  return type === 'Full-time' ? 'text-blue-600 bg-blue-50' : 'text-purple-600 bg-purple-50'
+  return type === 'Full-time' ? 'text-gray-800 bg-blue-50' : 'text-purple-600 bg-purple-50'
 }
 </script>
 
@@ -93,16 +93,16 @@ const getTypeColor = (type) => {
       <div class="flex flex-col sm:flex-row lg:flex-col gap-2 lg:w-40">
         <button
             @click="emit('view-details', job)"
-            class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors flex items-center justify-center space-x-2"
+            class="px-4 py-2 text-sm font-medium text-gray-800 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors flex items-center justify-center space-x-2"
         >
-          <Icon name="heroicons:eye" class="w-4 h-4" />
+          <Icon name="heroicons:eye" class="w-4 h-4 text-gray-800" />
           <span>View Details</span>
         </button>
 
         <button
             v-if="jobStatus === 'active'"
             @click="emit('apply', job.id)"
-            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors flex items-center justify-center space-x-2"
+            class="px-4 py-2 text-sm font-medium text-white bg-gray-800 hover:bg-emerald-700 rounded-lg transition-colors flex items-center justify-center space-x-2"
         >
           <Icon name="heroicons:paper-airplane" class="w-4 h-4" />
           <span>Apply Now</span>

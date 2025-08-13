@@ -116,7 +116,7 @@ const showAll = () => {
         </select>
         <button
             @click="showAll"
-            class="text-sm text-blue-600 hover:text-blue-800 font-medium"
+            class="text-sm text-gray-800 hover:text-blue-800 font-medium"
         >
           Show All
         </button>
@@ -147,7 +147,7 @@ const showAll = () => {
               :class="[
               'relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors',
               page === currentPage
-                ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
+                ? 'z-10 bg-gray-50 border-gray-500 text-gray-800'
                 : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50 hover:text-gray-700'
             ]"
           >
