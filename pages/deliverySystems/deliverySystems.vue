@@ -8,15 +8,14 @@ const projectGroups = [
   {
     group: 'Delivery Systems',
     items: [
-      { id: 'msr', title: 'Malawi Social Registry' },
-      { id: 'laifmis', title: 'Local Authorities IFMIS' },
-      { id: 'e-payments', title: 'E-Payments' },
-      { id: 'publicworks', title: 'Public Works MIS' },
-      { id: 'dgrm', title: 'Digital Grievance Redress Mechanism' },
-      { id: 'sctpmis', title: 'Social Cash Transfer Program MIS' },
-      { id: 'lapas', title: 'Local Authority Performance Assessment System' },
       { id: 'comsip', title: 'Community Savings and Investment Promotion' },
-      { id: 'pmis', title: 'Project Monitoring Information System' }
+{ id: 'dgrm', title: 'Digital Grievance Redress Mechanism' },
+{ id: 'e-payments', title: 'E-Payment' },
+ { id: 'laifmis', title: 'Local Authorities IFMIS' },
+{ id: 'lapas', title: 'Local Authority Performance Assessment System' },
+{ id: 'msr', title: 'Malawi Social Registry' },
+{ id: 'pmis', title: 'Project Monitoring Information System' },
+{ id: 'publicworks', title: 'Public Works MIS' }
     ]
   }
 ]
@@ -165,7 +164,10 @@ function updateActiveTabFromHash(hash) {
       of Malawi in 2016 through the Department of Economic Planning and Development (EP&D). It collects, stores, 
       accesses, and shares socioeconomic and demographic data about households across the country to support 
       the implementation of social support programs and ensure assistance reaches those who need it most.
+    <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
+
     </p>
+    
   </div>
   
 <!-- MSR Dashboard -->
@@ -437,6 +439,7 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
  Financial Management System that would help Local Authorities produce standardized reports for onward transmission 
  to the central Government and other relevant stakeholders. By the close of 2013 calendar year, all Local Authorities
   had IFMIS installed and all relevant personnel trained in its usage. Now IFMIS is being used in all the 35 LAs in Malawi
+  <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
   </div>
   
@@ -462,15 +465,15 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
       <ul class="space-y-3 text-sm text-gray-600">
         <li class="flex items-start">
           <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-          <strong>Toll-Free Line (3056)</strong> available on Airtel and TNM
+          Toll-Free Line (3056) available on Airtel and TNM
         </li>
         <li class="flex items-start">
           <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-          <strong>Android App</strong> for mobile accessibility
+          Android App for mobile accessibility
         </li>
         <li class="flex items-start">
           <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-          <strong>Web App</strong> for online access
+          Web App for online access
         </li>
       </ul>
     </div>
@@ -639,6 +642,7 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
       and convenient digital payment solutions for citizens and businesses.
       These systems enable seamless transactions
       and provide social protection beneficiaries with convenient access to social benefits anytime, anywhere.
+      <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
   </div>
 
@@ -874,8 +878,7 @@ The MIS ensures efficient coordination and management of activities by digitally
 By integrating payment systems, grievance redress mechanisms, and performance monitoring tools, 
 the Public Works MIS plays a vital role in ensuring that resources are properly utilized and that 
 beneficiaries receive timely and accurate compensation for their labor.
-
-
+<a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
   </div>
 
@@ -1015,6 +1018,7 @@ beneficiaries receive timely and accurate compensation for their labor.
       Digital Grievance Redress Mechanism (Digital GRM) is a technology-enabled platform designed to enhance citizen engagement, 
       accountability, and transparency in project implementation. It allows community members to report issues, ask questions, 
       and provide feedback on development projects through multiple user-friendly channels.
+      <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
   </div>
   
@@ -1440,6 +1444,7 @@ beneficiaries receive timely and accurate compensation for their labor.
     <p class="text-gray-700 leading-relaxed">
       LAPAS is a web-based data collection tool designed to enable the NLGFC to assess the performance of Local Authorities.
       It assists the Malawi Government in enhancing accountability, transparency, and data-driven decision-making through real-time data entry of assessment results, storing and making compliance assessments public, ensuring transparency of Local Authority performance feedback since results are accessible online, and providing basic analysis for writing synthesis reports.
+      <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
   </div>
   
@@ -1547,7 +1552,10 @@ beneficiaries receive timely and accurate compensation for their labor.
   
   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 mb-6">
     <p class="text-gray-700 leading-relaxed">
-The COMSIP MIS (Management Information System) is a digital platform that supports COMSIP's operations by enabling efficient coordination, monitoring, and reporting across its cooperative and social protection initiatives.
+The COMSIP MIS (Management Information System) is a digital platform that supports COMSIP's operations by 
+enabling efficient coordination, monitoring, and reporting across its cooperative and social protection 
+initiatives.
+<a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
   </div>
   
@@ -1715,6 +1723,7 @@ The COMSIP MIS (Management Information System) is a digital platform that suppor
       The Project Monitoring Information System (PMIS) is a digital platform designed to support
       the tracking, coordination, and management of development projects, especially those implemented
       by government ministries, local authorities, and development partners in Malawi.
+      <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
   </div>
 
