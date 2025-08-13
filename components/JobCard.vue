@@ -38,7 +38,7 @@ const getStatusColor = (status) => {
 }
 
 const getTypeColor = (type) => {
-  return type === 'Full-time' ? 'text-blue-600 bg-blue-50' : 'text-purple-600 bg-purple-50'
+  return type === 'Full-time' ? 'text-gray-800 bg-blue-50' : 'text-purple-600 bg-purple-50'
 }
 </script>
 
