@@ -146,7 +146,7 @@
                         Local Development Support
                       </NuxtLink>
                     </li>
-                    <li class="pl-4">
+                    <!-- <li class="pl-4">
                       <NuxtLink to="/mandate/ourMandate#cdf" class="text-gray-600 hover:text-blue-600">
                         CDF
                       </NuxtLink>
@@ -175,7 +175,7 @@
                       <NuxtLink to="/mandate/ourMandate#rrf" class="text-gray-600 hover:text-blue-600">
                         Road Rehabilitation Fund (RRF)
                       </NuxtLink>
-                    </li>
+                    </li> -->
                   </ul>
                 </li> 
               </div>

@@ -14,15 +14,7 @@ const tabGroups = [
       { id: 'financialManagement', title: 'Financial Management' },
       {
         id: 'localDevelopmentSupport',
-        title: 'Local Development Support',
-        children: [
-          { id: 'cdf', title: 'CDF' },
-          { id: 'ddf', title: 'DDF' },
-          { id: 'waterStructuresFund', title: 'Water Structures Fund' },
-          { id: 'healthRehabilitation', title: 'Health Rehabilitation' },
-          { id: 'idf', title: 'Infrastructure Development Fund (IDF)' },
-          { id: 'rrf', title: 'Road Rehabilitation Fund (RRF)' }
-        ]
+        title: 'Local Development Support'
       }
     ]
   }
@@ -81,20 +73,7 @@ function updateActiveTabFromHash(hash) {
               >
                 {{ item.title }}
               </NuxtLink>
-              <ul v-if="item.children" class="ml-4 pl-4 border-l border-gray-300 space-y-1 mt-1">
-                <li v-for="sub in item.children" :key="sub.id">
-                  <NuxtLink
-                    :to="`#${sub.id}`"
-                    @click="activeTab = sub.id"
-                    class="block px-3 py-2 rounded text-gray-600 hover:bg-gray-100 hover:text-gray-800 text-sm"
-                    :class="{
-                      'bg-gray-100 text-gray-900 font-medium border-l-2 border-gray-600': activeTab === sub.id
-                    }"
-                  >
-                    {{ sub.title }}
-                  </NuxtLink>
-                </li>
-              </ul>
+              <ul v-if="item.children" class="ml-4 pl-4 border-l border-gray-300 space-y-1 mt-1"></ul>
             </li>
           </ul>
         </div>
@@ -676,69 +655,14 @@ function updateActiveTabFromHash(hash) {
           <h2 class="text-2xl font-bold text-gray-800 mb-6">Local Development Support</h2>
           <div class="prose max-w-none text-gray-700">
             <p>NLGFC provides local development project support to LAs through supervision and monitoring of both GoM and donor-funded projects in local governments. Malawi administers several funding mechanisms to support local development projects. These funds are designed to empower districts and constituencies to address key socio-economic challenges, improve infrastructure, and enhance service delivery at the grassroots level.</p>
+            <p class="mt-4">
+              <NuxtLink :to="'/projects/currentProjects#ssrlp_overview'" class="text-blue-600 hover:underline">Read More</NuxtLink>
+            </p>
           </div>
         </div>
       </div>
 
-      <!-- DDF -->
-      <div v-show="activeTab === 'ddf'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">District Development Fund (DDF)</h2>
-          <div class="prose max-w-none text-gray-700">
-            <p>District Development Fund supports locally prioritised development projects identified through District Development Plans (DDPs). The purpose of this fund is to enhance service delivery in sectors like education, health, agriculture, and local governance. The fund is allocated directly to District Councils based on approved budgets. Projects are implemented by councils in collaboration with communities.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- CDF -->
-      <div v-show="activeTab === 'cdf'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Constituency Development Fund (CDF)</h2>
-          <div class="prose max-w-none text-gray-700">
-            <p>The purpose of this fund is to finance small-scale community projects at the constituency level. The aim is to improve local infrastructure, livelihoods, and social services. CDF is channelled through Members of Parliament (MPs) in consultation with local structures, and projects are selected by community demand.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Health Rehabilitation -->
-      <div v-show="activeTab === 'healthRehabilitation'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Health Rehabilitation Fund</h2>
-          <div class="prose max-w-none text-gray-700">
-            <p>Health Rehabilitation Fund is for rehabilitating and upgrading health facilities (clinics, hospitals, staff housing) to improve access to quality healthcare services.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- IDF -->
-      <div v-show="activeTab === 'idf'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Infrastructure Development Fund (IDF)</h2>
-          <div class="prose max-w-none text-gray-700">
-            <p>IDF supports the construction and rehabilitation of critical public infrastructure (schools, markets, government buildings) to enhance economic and social service delivery in urban councils in Malawi.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- RRF -->
-      <div v-show="activeTab === 'rrf'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Road Rehabilitation Fund (RRF)</h2>
-          <div class="prose max-w-none text-gray-700">
-            <p>Rural and urban councils are provided with funds for the maintenance and rehabilitation to improve transport connectivity for trade and mobility. The fund is managed by District Councils with technical support from the Roads Authority.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Water Structures Fund -->
-      <div v-show="activeTab === 'waterStructuresFund'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Water Structures Fund</h2>
-          <div class="prose max-w-none text-gray-700">
-            <p>The fund is for the construction and rehabilitation of water supply systems (boreholes, piped schemes, dams) and ensures sustainable access to clean water.</p>
-          </div>
-        </div>
-      </div>
+      
     </main>
   </div>
 </template>
