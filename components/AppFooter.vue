@@ -50,9 +50,9 @@
           <ul class="space-y-3">
               <li><NuxtLink to="/" class="text-gray-400 hover:text-white transition text-sm">Home</NuxtLink></li>
             <li><NuxtLink to="/about" class="text-gray-400 hover:text-white transition text-sm">About Us</NuxtLink></li>
-            <li><NuxtLink to="/projects" class="text-gray-400 hover:text-white transition text-sm">Projects</NuxtLink></li>
-            <li><NuxtLink to="/localAuthories" class="text-gray-400 hover:text-white transition text-sm">Local Councils</NuxtLink></li>
-            <li><NuxtLink to="/resources" class="text-gray-400 hover:text-white transition text-sm">Resource Centre</NuxtLink></li>
+            <li><NuxtLink to="/projects/currentProjects" class="text-gray-400 hover:text-white transition text-sm">Projects</NuxtLink></li>
+            <li><NuxtLink to="/localAuthorities/alldistricts" class="text-gray-400 hover:text-white transition text-sm">Local Councils</NuxtLink></li>
+            <li><NuxtLink to="/resourceCenter" class="text-gray-400 hover:text-white transition text-sm">Resource Centre</NuxtLink></li>
             <li><NuxtLink to="/opportunities" class="text-gray-400 hover:text-white transition text-sm">Opportunities</NuxtLink></li>
             
           </ul>

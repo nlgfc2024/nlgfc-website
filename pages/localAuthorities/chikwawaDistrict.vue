@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-  title: 'Mangochi District Council'
+  title: 'Chikwawa District Council'
 })
 
 const activeTab = ref('profile') // Default active tab
@@ -51,7 +51,7 @@ const projects = [
   {
     name: 'SSRLP',
     fullName: 'Social Support and Resilience Livelihoods Program',
-    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Mangochi Municipal District.',
+    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Balaka District.',
     objectives: [
       'Improve household food security and nutrition',
       'Build community resilience to shocks and stresses',
@@ -103,7 +103,7 @@ const reports = [
 
 const news = [
   {
-    title: 'Mangochi Municipal District Council Launches New Water Project',
+    title: 'Balaka District Council Launches New Water Project',
     date: '2024-12-10',
     summary: 'The council has initiated a new water infrastructure project to improve access to clean water in rural areas.',
     category: 'Development'
@@ -162,44 +162,68 @@ const news = [
           >
             <div v-if="activeTab === 'profile'" key="profile" class="content-panel">
               <div class="prose max-w-none">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Mangochi Municipal District Council Profile</h2>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Chikwawa District Council Profile</h2>
                 <div class="space-y-6">
                   <div class="bg-blue-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Mangochi Municipal District Council</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About</h3>
                     <p class="text-gray-700 leading-relaxed">
+                      Chikwawa, one of Malawi’s 28 districts, is in the Southern Region, bordering Mozambique (West), Mwanza (North), 
+                      Thyolo (East), Blantyre (Northeast), and Nsanje (South).
                        </p>
                   </div>
 
                   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mandate</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Socio-Economic Profile</h3>
                     <ul class="space-y-2">
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>   //</span>  <!-- this is kovahiwa and ken we left these spaces so that we can the data for district in the spans elements-->
+                        <span><b>Population:</b> 653,240 (2025 projection).</span>  <!-- this is kovahiwa and ken we left these spaces so that we can the data for district in the spans elements-->
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
+                        <span><b>Land Size:</b> 4,755 km² (2nd largest in Southern Region).</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
+                        <span><b>Ethnic Groups:</b> Mang’anja, Sena (major); Chewa, Yao, Lomwe (minor).</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////// </span>
+                        <span><b>Languages:</b> Chichewa, Chisena, Mang’anja.</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span><b>Governance:</b> 14 Traditional Authorities, 6 MPs, 12 Councillors.</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span><b>Climate:</b> Extreme temps (20°C–44°C), erratic rainfall (170–967.6 mm/year).</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span><b>Disasters:</b> Frequent floods and droughts.</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span><b>Food Insecurity:</b> 77.6% of households (IHS5 2019–20).</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span><b>Poverty:</b> 44.3% poor, 44.5% ultra-poor.</span>
                       </li>
                     </ul>
                   </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
                     <h3 class="text-lg font-semibold text-gray-900 mb-3">Vision</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">..//.</p>
+                    <p>To be a self-sustaining council delivering reliable, quality socio-economic services.</p>
                   </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
                     <h3 class="text-lg font-semibold text-gray-900 mb-3">Mission</h3>
-                    <p class="text-gray-700 leading-relaxed font-medium">///</p>
+                    <p>To promote sustainable development through good 
+                      governance, community participation, food security, 
+                      economic growth, education, health, and environmental conservation.</p>
                   </div>
 
                   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
@@ -207,41 +231,43 @@ const news = [
                     <ul class="space-y-2">
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
+                        <span>Reduce disease burden through preventive healthcare</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///</span>
+                        <span>Provide accessible, quality education</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
+                        <span>Enhance agriculture for food security and income growth</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>////</span>
+                        <span>Improve access to safe water and sanitation</span>
                       </li>
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
+                        <span>Minimize environmental degradation</span>
                       </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>///////</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
-                      </li>
+  
+      
                     </ul>
                   </div>
 
                   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Functions</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Health</h3>
                     <ul class="space-y-2">
                       <li class="flex items-start">
                         <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>/////</span>
+                        <span>3 hospitals, 30 health centers</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>HIV prevalence: 7.5% (higher in females at 8.4%).</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>Child malnutrition: 38.7% stunting, 12.8% wasting</span>
                       </li>
                       
                     </ul>
@@ -249,20 +275,22 @@ const news = [
 
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Major Achievements</h4>
-                      <p class="text-gray-700">.....</p>
-                      <</div>
+                      <h4 class="font-semibold text-gray-900 mb-2">Economy</h4>
+                      <p class="text-gray-700">85.6% depend on agriculture/fishing; 47.7% on casual labor</p>
+                      </div>
                     <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Jurisdiction</h4>
-                      <p class="text-gray-700">/////</p>
+                      <h4 class="font-semibold text-gray-900 mb-2">Education</h4>
+                      <p class="text-gray-700">325 preschools, 203 primary, 59 secondary schools</p>
+                      <p class="text-gray-700">Literacy: 60.8% (male 66.5%, female 55.2%)</p>
+                      <p class="text-gray-700">High pupil-teacher (87:1) and pupil-classroom (124:1) ratios</p>
                     </div>
                     <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
                       <h4 class="font-semibold text-gray-900 mb-2">Population</h4>
-                      <p class="text-gray-700">///////</p>
+                      <p class="text-gray-700">653,240 (2025 projection)</p>
                     </div>
                     <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
-                      <h4 class="font-semibold text-gray-900 mb-2">Structure</h4>
-                      <p class="text-gray-700">////</p>
+                      <h4 class="font-semibold text-gray-900 mb-2">Water Access</h4>
+                      <p class="text-gray-700">94.2% have improved water sources</p>
                     </div>
                   </div>
                 </div>
