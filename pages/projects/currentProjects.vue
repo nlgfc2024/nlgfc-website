@@ -2,46 +2,138 @@
 definePageMeta({ title: 'Current Projects' })
 
 const route = useRoute()
-const activeTab = ref('ssrlp_overview')
+const activeTab = ref('government_funded')
 
+// Sidebar structure with groups and nested sub-groups
 const projectGroups = [
   {
-    group: 'SSRLP',
+    group: 'Government Funded Projects',
+    id: 'government_funded',
     items: [
-      { id: 'ssrlp_overview', title: ' Overview' },
-      { id: 'SCTP', title: 'SCTP' },
-      { id: 'publicWorks', title: 'Public Works' },
-      { id: 'emergency', title: 'Scalable Social Safety Nets' },
-      { id: 'livelihoods', title: 'Livelihoods Support' }
+      { id: 'cdf', title: 'Constituency Development Fund' },
+      { id: 'ddf', title: 'District Development Fund' },
+      { id: 'wsf', title: 'Water Structures Fund' },
+      { id: 'health_rehab', title: 'Health Rehabilitation' },
+      { id: 'idf', title: 'Infrastructure Development Fund (IDF)' },
+      { id: 'rrf', title: 'Road Rehabilitation Fund (RRF)' }
     ]
   },
   {
-    group: 'GESD',
-    items: [
-    { id: 'gesd_overview', title: ' Overview' },
-      { id: 'pbf', title: 'Performance-Based Financing' },
-      { id: 'ias', title: 'Intergovernmental Accountability Systems' },
-      { id: 'lgpi', title: 'Local Government Performance Improvement' },
-      { id: 'adaptive', title: 'Adaptive Management and Innovation' }
-    ]
-  },
-  {
-    group: 'RCRP 2',
-    items: [
-    { id: 'rcrp_overview', title: ' Overview' },
-      { id: 'drb', title: 'District-Led Resilience Building' },
-      { id: 'usr', title: 'Urban Malawi Social Registry' },
-      { id: 'upw', title: 'Urban Climate Smart Public Works Program' }
-      
+    group: 'Donor Funded Projects',
+    subgroups: [
+      {
+        subgroup: 'SSRLP',
+        id: 'ssrlp_news',
+        items: [
+          { id: 'ssrlp_overview', title: 'Overview' },
+          { id: 'SCTP', title: 'SCTP' },
+          { id: 'publicWorks', title: 'Public Works' },
+          { id: 'emergency', title: 'Scalable Social Safety Nets' },
+          { id: 'livelihoods', title: 'Livelihoods Support' }
+        ]
+      },
+      {
+        subgroup: 'GESD',
+        id: 'gesd_news',
+        items: [
+          { id: 'gesd_overview', title: 'Overview' },
+          { id: 'pbf', title: 'Performance-Based Financing' },
+          { id: 'ias', title: 'Intergovernmental Accountability Systems' },
+          { id: 'lgpi', title: 'Local Government Performance Improvement' },
+          { id: 'adaptive', title: 'Adaptive Management and Innovation' }
+        ]
+      },
+      {
+        subgroup: 'RCRP 2',
+        id: 'rcrp2_news',
+        items: [
+          { id: 'rcrp_overview', title: 'Overview' },
+          { id: 'drb', title: 'District-Led Resilience Building' },
+          { id: 'usr', title: 'Urban Malawi Social Registry' },
+          { id: 'upw', title: 'Urban Climate Smart Public Works Program' }
+        ]
+      }
     ]
   }
 ]
 
-// const openGroup = ref(projectGroups[0].group)
-const openGroup = ref(null)
+// Collapsible state
+const openGroup = ref(projectGroups[0].group)
+const openSubgroup = ref(null)
 
 
 const projectContent = {
+  // Group and subgroup landing content
+  government_funded: {
+    title: 'Government Funded Projects',
+    body: `
+      <p>Explore government funded programs implemented through the National Local Government Finance Committee.</p>
+      <ul>
+        <li>Constituency Development Fund (CDF)</li>
+        <li>District Development Fund (DDF)</li>
+        <li>Water Structures Fund</li>
+        <li>Health Rehabilitation</li>
+        <li>Infrastructure Development Fund (IDF)</li>
+        <li>Road Rehabilitation Fund (RRF)</li>
+      </ul>
+    `
+  },
+  ssrlp_news: {
+    title: 'SSRLP News & Updates',
+    body: `
+      <p>Latest news, notices, and highlights from the Social Support for Resilient Livelihoods Project.</p>
+    `
+  },
+  gesd_news: {
+    title: 'GESD News & Updates',
+    body: `
+      <p>Latest news and announcements under the Governance to Enable Service Delivery project.</p>
+    `
+  },
+  rcrp2_news: {
+    title: 'RCRP 2 News & Updates',
+    body: `
+      <p>Latest updates for the Regional Climate Resilience Project Phase 2.</p>
+    `
+  },
+
+  // Government funded items
+  cdf: {
+    title: 'Constituency Development Fund',
+    body: `
+      <p>The Constituency Development Fund supports community-led development priorities at constituency level.</p>
+    `
+  },
+  ddf: {
+    title: 'District Development Fund',
+    body: `
+      <p>The District Development Fund finances district investment plans to improve local service delivery.</p>
+    `
+  },
+  wsf: {
+    title: 'Water Structures Fund',
+    body: `
+      <p>Finances construction and rehabilitation of water-related infrastructure for resilience and access.</p>
+    `
+  },
+  health_rehab: {
+    title: 'Health Rehabilitation',
+    body: `
+      <p>Supports rehabilitation of health facilities and essential health infrastructure.</p>
+    `
+  },
+  idf: {
+    title: 'Infrastructure Development Fund (IDF)',
+    body: `
+      <p>Funds key local infrastructure to catalyze economic activity and improve services.</p>
+    `
+  },
+  rrf: {
+    title: 'Road Rehabilitation Fund (RRF)',
+    body: `
+      <p>Invests in rehabilitating local road networks to improve connectivity and access.</p>
+    `
+  },
   ssrlp_overview: {
     title: 'Social Support for Resilient Livelihoods Overview',
     body: `
@@ -225,6 +317,17 @@ const projectContent = {
   }
 }
 const projectUpdates = {
+  // Sub-group landing news feeds
+  ssrlp_news: [
+    { date: '2024-06-20', title: 'SSRLP mid-year review completed', tags: ['ssrlp','review'], summary: 'Key milestones achieved across all pillars; detailed report forthcoming.', link: '#' },
+    { date: '2024-05-14', title: 'Additional livelihood grants disbursed', tags: ['livelihoods'], summary: 'Disbursements reached 3,000 households in priority districts.', link: '#' }
+  ],
+  gesd_news: [
+    { date: '2024-06-08', title: 'New LAPA guidelines issued', tags: ['gesd','governance'], summary: 'Updated guidance for council performance assessments released.', link: '#' }
+  ],
+  rcrp2_news: [
+    { date: '2024-05-30', title: 'RCRP 2 launch workshops held', tags: ['rcrp'], summary: 'Stakeholder workshops conducted in Blantyre and Lilongwe.', link: '#' }
+  ],
  
   SCTP: [
     {
@@ -370,11 +473,38 @@ watch(() => route.hash, (newHash) => {
 
 function updateActiveTabFromHash(hash) {
   for (const group of projectGroups) {
-    const match = group.items.find(item => item.id === hash)
-    if (match) {
-      activeTab.value = match.id
-      openGroup.value = group.group // <-- expand the matching group
-      break
+    // Match group landing
+    if (group.id && group.id === hash) {
+      activeTab.value = group.id
+      openGroup.value = group.group
+      return
+    }
+    // Flat items (government group)
+    if (group.items) {
+      const match = group.items.find(item => item.id === hash)
+      if (match) {
+        activeTab.value = match.id
+        openGroup.value = group.group
+        return
+      }
+    }
+    // Subgroups (donor group)
+    if (group.subgroups) {
+      for (const sg of group.subgroups) {
+        if (sg.id === hash) {
+          activeTab.value = sg.id
+          openGroup.value = group.group
+          openSubgroup.value = sg.subgroup
+          return
+        }
+        const subMatch = sg.items.find(item => item.id === hash)
+        if (subMatch) {
+          activeTab.value = subMatch.id
+          openGroup.value = group.group
+          openSubgroup.value = sg.subgroup
+          return
+        }
+      }
     }
   }
 }
@@ -419,49 +549,90 @@ watch(activeTab, () => {
   <div class="flex flex-col md:flex-row gap-8 max-w-7xl mx-auto px-4 py-8">
     <!-- Sidebar -->
     <aside class="w-full md:w-72 flex-shrink-0">
-      <div
-        v-for="group in projectGroups"
-        :key="group.group"
-        class="mb-4 rounded-lg overflow-hidden shadow-sm"
-      >
-        <button
-          @click="openGroup = openGroup === group.group ? null : group.group"
-          class="w-full text-left px-5 py-3 font-semibold bg-gradient-to-r from-blue-900 to-blue-200 text-white hover:from-blue-400 hover:to-blue-300 transition-all duration-200 flex justify-between items-center"
-        >
-          <span>{{ group.group }}</span>
-          <svg
-            class="w-4 h-4 transform transition-transform duration-200"
-            :class="{ 'rotate-180': openGroup === group.group }"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <nav class="space-y-4">
+          <!-- Groups -->
+          <div v-for="group in projectGroups" :key="group.group" class="">
+            <!-- Group header button -->
+            <button
+              @click="() => { openGroup = openGroup === group.group ? null : group.group; if (group.id) { activeTab = group.id; history.replaceState(null, '', `#${group.id}`) } }"
+              :class="[
+                'w-full text-left p-4 rounded-lg transition-all duration-200 group flex items-center justify-between',
+                activeTab === group.id ? 'bg-emerald-50 border-2 border-emerald-200 text-emerald-700' : 'hover:bg-gray-50 border-2 border-transparent text-gray-700 hover:text-gray-900'
+              ]"
+            >
+              <span class="flex items-center gap-2">
+                <svg :class="[ 'w-5 h-5 transition-colors', activeTab === group.id ? 'text-emerald-600' : 'text-gray-400 group-hover:text-gray-600' ]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
+                <span class="font-semibold">{{ group.group }}</span>
+              </span>
+              <svg class="w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': openGroup === group.group }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
 
-        <div
-          v-show="openGroup === group.group"
-          class="bg-white border border-gray-200 border-t-0 rounded-b-lg"
-        >
-          <ul class="py-2">
-            <li v-for="item in group.items" :key="item.id">
-              <a
-                :href="`#${item.id}`"
-                @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
-                :class="[
-                  'block px-5 py-2.5 text-sm transition-colors duration-150',
-                  item.id === activeTab
-                    ? 'bg-blue-50 text-blue-700 font-medium border-l-4 border-blue-600'
-                    : 'hover:bg-gray-50 text-gray-700'
-                ]"
-              >
-                {{ item.title }}
-              </a>
-            </li>
-          </ul>
-        </div>
+            <!-- Group items: flat list (Government Funded) -->
+            <div v-if="group.items && openGroup === group.group" class="mt-2">
+              <ul class="space-y-2">
+                <li v-for="item in group.items" :key="item.id">
+                  <a
+                    :href="`#${item.id}`"
+                    @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
+                    :class="[
+                      'block p-3 rounded-lg transition-all duration-200 group',
+                      activeTab === item.id ? 'bg-emerald-50 border-2 border-emerald-200 text-emerald-700' : 'hover:bg-gray-50 border-2 border-transparent text-gray-700 hover:text-gray-900'
+                    ]"
+                  >
+                    <div class="flex items-center gap-3">
+                      <svg :class="[ 'w-4 h-4 transition-colors', activeTab === item.id ? 'text-emerald-600' : 'text-gray-400 group-hover:text-gray-600' ]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="2" stroke-width="2"/></svg>
+                      <span class="text-sm font-medium">{{ item.title }}</span>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Donor subgroups -->
+            <div v-if="group.subgroups && openGroup === group.group" class="mt-2 space-y-2">
+              <div v-for="sg in group.subgroups" :key="sg.subgroup" class="">
+                <!-- Subgroup header: clicking shows news landing -->
+                <button
+                  @click="() => { openSubgroup = openSubgroup === sg.subgroup ? null : sg.subgroup; activeTab = sg.id; history.replaceState(null, '', `#${sg.id}`) }"
+                  :class="[
+                    'w-full text-left p-3 rounded-lg transition-all duration-200 group flex items-center justify-between',
+                    activeTab === sg.id ? 'bg-emerald-50 border-2 border-emerald-200 text-emerald-700' : 'hover:bg-gray-50 border-2 border-transparent text-gray-700 hover:text-gray-900'
+                  ]"
+                >
+                  <span class="flex items-center gap-2">
+                    <svg :class="[ 'w-4 h-4 transition-colors', activeTab === sg.id ? 'text-emerald-600' : 'text-gray-400 group-hover:text-gray-600' ]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16v12H4z"/></svg>
+                    <span class="text-sm font-semibold">{{ sg.subgroup }}</span>
+                  </span>
+                  <svg class="w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': openSubgroup === sg.subgroup }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+
+                <!-- Subgroup items -->
+                <div v-show="openSubgroup === sg.subgroup" class="ml-2 mt-2">
+                  <ul class="space-y-2">
+                    <li v-for="item in sg.items" :key="item.id">
+                      <a
+                        :href="`#${item.id}`"
+                        @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
+                        :class="[
+                          'block p-3 rounded-lg transition-all duration-200 group',
+                          activeTab === item.id ? 'bg-emerald-50 border-2 border-emerald-200 text-emerald-700' : 'hover:bg-gray-50 border-2 border-transparent text-gray-700 hover:text-gray-900'
+                        ]"
+                      >
+                        <div class="flex items-center gap-3">
+                          <svg :class="[ 'w-4 h-4 transition-colors', activeTab === item.id ? 'text-emerald-600' : 'text-gray-400 group-hover:text-gray-600' ]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="2" stroke-width="2"/></svg>
+                          <span class="text-sm font-medium">{{ item.title }}</span>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-gray-200"></div>
+          </div>
+        </nav>
       </div>
     </aside>
 

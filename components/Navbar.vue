@@ -197,14 +197,7 @@
       </NuxtLink>
     </li>
   </ul>
-</li>
-
-
-
-
-                
-
-                
+</li>           
                 <div class="bg-blue-50 p-4 rounded-lg">
                   <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
               <ul class="space-y-3">
