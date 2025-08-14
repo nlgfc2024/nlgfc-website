@@ -206,10 +206,11 @@ watch(() => route.hash, (newHash) => {
       </aside>
 
       <div
-        :class="[
-          'flex-1 transition-all duration-300 ease-in-out',
-          !sidebarProps ? 'max-w-full' : ''
-        ]"
+        class="flex-1 p-4 md:p-8 transition-all duration-300 ease-in-out"
+        :class="{
+          'md:ml-5': isSidebarOpen && sidebarProps,
+          'md:ml-0': !isSidebarOpen || !sidebarProps
+        }"
       >
         <slot />
       </div>
