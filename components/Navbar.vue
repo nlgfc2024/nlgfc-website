@@ -148,108 +148,56 @@
 
                 
                 <!-- Our Mandate Navigation Section -->
-<li class="list-none pl-0"> <!-- Removes bullet and padding -->
-  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Our Mandate</h3>
-  <ul class="space-y-2 pl-5"> <!-- Keeps indentation for nested items -->
-    <li>
-      <NuxtLink to="/mandate/ourMandate#fiscalDecentralization" class="text-gray-600 hover:text-blue-600">
-        Fiscal Decentralization
-      </NuxtLink>
-    </li>
-    <li>
-      <NuxtLink to="/mandate/ourMandate#financialManagement" class="text-gray-600 hover:text-blue-600">
-        Financial Management
-      </NuxtLink>
-    </li>
-    <li>
-      <NuxtLink to="/mandate/ourMandate#localDevelopmentSupport" class="text-gray-600 hover:text-blue-600">
-        Local Development Support
-      </NuxtLink>
-    </li>
-    <li class="pl-4">
-      <NuxtLink to="/mandate/ourMandate#cdf" class="text-gray-600 hover:text-blue-600">
-        CDF
-      </NuxtLink>
-    </li>
-    <li class="pl-4">
-      <NuxtLink to="/mandate/ourMandate#ddf" class="text-gray-600 hover:text-blue-600">
-        DDF
-      </NuxtLink>
-    </li>
-    <li class="pl-4">
-      <NuxtLink to="/mandate/ourMandate#waterStructuresFund" class="text-gray-600 hover:text-blue-600">
-        Water Structures Fund
-      </NuxtLink>
-    </li>
-    <li class="pl-4">
-      <NuxtLink to="/mandate/ourMandate#healthRehabilitation" class="text-gray-600 hover:text-blue-600">
-        Health Rehabilitation
-      </NuxtLink>
-    </li>
-    <li class="pl-4">
-      <NuxtLink to="/mandate/ourMandate#idf" class="text-gray-600 hover:text-blue-600">
-        Infrastructure Development Fund (IDF)
-      </NuxtLink>
-    </li>
-    <li class="pl-4">
-      <NuxtLink to="/mandate/ourMandate#rrf" class="text-gray-600 hover:text-blue-600">
-        Road Rehabilitation Fund (RRF)
-      </NuxtLink>
-    </li>
-  </ul>
-</li>
-
-
-
-
-                
-
-                
-                <div class="bg-blue-50 p-4 rounded-lg">
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
-              <ul class="space-y-3">
-  <li>
-    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-      </svg>
-      Annual Report
-    </a>
-  </li>
-  <li>
-    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-      </svg>
-      Financial Statements
-    </a>
-  </li>
-  <li>
-    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-      </svg>
-      Strategic Plan
-    </a>
-  </li>
-  <li>
-    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-      </svg>
-      Audit Reports
-    </a>
-  </li>
-  <li>
-    <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-      </svg>
-      Consolidated LAs Annual Budget
-    </a>
-  </li>
-</ul>
-                </div>
+                <li class="list-none pl-0"> <!-- Removes bullet and padding -->
+                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Our Mandate</h3>
+                  <ul class="space-y-2 pl-5"> <!-- Keeps indentation for nested items -->
+                    <li>
+                      <NuxtLink to="/mandate/ourMandate#fiscalDecentralization" class="text-gray-600 hover:text-blue-600">
+                        Fiscal Decentralization
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/mandate/ourMandate#financialManagement" class="text-gray-600 hover:text-blue-600">
+                        Financial Management
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/mandate/ourMandate#localDevelopmentSupport" class="text-gray-600 hover:text-blue-600">
+                        Local Development Support
+                      </NuxtLink>
+                    </li>
+                    <!-- <li class="pl-4">
+                      <NuxtLink to="/mandate/ourMandate#cdf" class="text-gray-600 hover:text-blue-600">
+                        CDF
+                      </NuxtLink>
+                    </li>
+                    <li class="pl-4">
+                      <NuxtLink to="/mandate/ourMandate#ddf" class="text-gray-600 hover:text-blue-600">
+                        DDF
+                      </NuxtLink>
+                    </li>
+                    <li class="pl-4">
+                      <NuxtLink to="/mandate/ourMandate#waterStructuresFund" class="text-gray-600 hover:text-blue-600">
+                        Water Structures Fund
+                      </NuxtLink>
+                    </li>
+                    <li class="pl-4">
+                      <NuxtLink to="/mandate/ourMandate#healthRehabilitation" class="text-gray-600 hover:text-blue-600">
+                        Health Rehabilitation
+                      </NuxtLink>
+                    </li>
+                    <li class="pl-4">
+                      <NuxtLink to="/mandate/ourMandate#idf" class="text-gray-600 hover:text-blue-600">
+                        Infrastructure Development Fund (IDF)
+                      </NuxtLink>
+                    </li>
+                    <li class="pl-4">
+                      <NuxtLink to="/mandate/ourMandate#rrf" class="text-gray-600 hover:text-blue-600">
+                        Road Rehabilitation Fund (RRF)
+                      </NuxtLink>
+                    </li> -->
+                  </ul>
+                </li> 
               </div>
             </div>
           </div>
@@ -280,65 +228,92 @@
                 <!-- Column 1 -->
                 <div>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Current Projects</h3>
-                  <strong class="text-gray-700 flex items-center">SSRLP</strong>
+                  <strong class="text-gray-700 flex items-center">Government Funded Projects</strong>
                   <ul class="space-y-1 pl-4 mb-4">
-                    <li><NuxtLink to="/projects/currentProjects#ssrlp_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#SCTP" class="text-gray-600 hover:text-blue-600">SCTP</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Public Works</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#emergency" class="text-gray-600 hover:text-blue-600">Emergency Cash Transfer</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#cdf" class="text-gray-600 hover:text-blue-600">Constituency Development Fund (CDF)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#ddf" class="text-gray-600 hover:text-blue-600">District Development Fund (DDF)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#idf" class="text-gray-600 hover:text-blue-600">Infrastructure Development Fund (IDF)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#rrf" class="text-gray-600 hover:text-blue-600">Road Rehabilitation Fund (RRF)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#wsf" class="text-gray-600 hover:text-blue-600">Water Structures Fund (WSF)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#health_rehab" class="text-gray-600 hover:text-blue-600">Health Rehabilitation (HR) </NuxtLink></li>
                   </ul>
 
-                  <strong class="text-gray-700 flex items-center mt-4">RCRP</strong>
+                  <strong class="text-gray-700 flex items-center mt-4">Donor Funded Projects</strong>
                   <ul class="space-y-1 pl-4">
-                    <li><NuxtLink to="/projects/currentProjects#rcrp_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#drb" class="text-gray-600 hover:text-blue-600">District Resilience</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#usr" class="text-gray-600 hover:text-blue-600">Urban Malawi Social Registry</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#upw" class="text-gray-600 hover:text-blue-600">Urban Climate Smart Public Works Program</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#ssrlp_news" class="text-gray-600 hover:text-blue-600">Social Support For Resilient Livelihoods (SSRLP)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#gesd_news" class="text-gray-600 hover:text-blue-600">Governance To Enable Service Delivery (GESD)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#rcrp2_news" class="text-gray-600 hover:text-blue-600">Regional Climate Resilience Project (RCRP2)</NuxtLink></li>
                   </ul>
                 </div>
 
-                <!-- Column 2 -->
-                <div class="mt-10 md:mt-0">
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2 pt-7"></h3>
-                  <strong class="text-gray-700 flex items-center">GESD</strong>
-                  <ul class="space-y-1 pl-4 mb-4">
-                    <li><NuxtLink to="/projects/currentProjects#gesd_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#pbf" class="text-gray-600 hover:text-blue-600">Performance-Based Financing</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#ias" class="text-gray-600 hover:text-blue-600">Intergovernmental Accountability</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#lgpi" class="text-gray-600 hover:text-blue-600">Local Government Performance Improvement</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#adaptive" class="text-gray-600 hover:text-blue-600">Adaptive Management and Innovation</NuxtLink></li>
-                  </ul>
-
-
-                </div>
-
-                <!-- Column 3 -->
+              
+                <!-- Past Projects-->
                 <div class="mt-10 md:mt-0">
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Past Projects</h3>
-                  <ul class="space-y-2 mb-6">
-                    <strong class="text-gray-700 flex items-center">MASAF</strong>
-                    <ul class="space-y-1 pl-4 mb-4">
-                      <li><NuxtLink to="/projects/pastProjects#masaf_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
-                      <li><NuxtLink to="/projects/pastProjects#psn" class="text-gray-600 hover:text-blue-600">Productive Safety Nets</NuxtLink></li>
-                      <li><NuxtLink to="/projects/pastProjects#scb" class="text-gray-600 hover:text-blue-600">Systems and Capacity Building</NuxtLink></li>
-                      <li><NuxtLink to="/projects/pastProjects#pm" class="text-gray-600 hover:text-blue-600">Project Management</NuxtLink></li>
+                  <ul class="space-y-1 pl-4 mb-4">
+                      <li><NuxtLink to="/projects/pastProjects#masaf_overview" class="text-gray-600 hover:text-blue-600">Malawi Social Action Fund (MASAF)</NuxtLink></li>
+                      <li><NuxtLink to="/projects/pastProjects#miera_overview" class="text-gray-600 hover:text-blue-600">More Income and Employment in Rural Areas (MIERA)</NuxtLink></li>
+                      <li><NuxtLink to="/projects/pastProjects#led_overview" class="text-gray-600 hover:text-blue-600">Local Economic Development (LED)</NuxtLink></li>
+                  
                     </ul>
-                    <strong class="text-gray-700 flex items-center">MIERA</strong>
-                    <ul class="space-y-1 pl-4 mb-4">
-                      <li><NuxtLink to="/projects/pastProjects#miera_overview" class="text-gray-600 hover:text-blue-600">Overview</NuxtLink></li>
-                    </ul>
-                  </ul>
+                 
 
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Upcoming Projects</h3>
                   <ul class="space-y-2">
-                    <li><NuxtLink to="/projects/upcomingProjects#gesd2" class="text-gray-600 hover:text-blue-600">GESD 2.0</NuxtLink></li>
-                    <li><NuxtLink to="/projects/upcomingProjects#inspire" class="text-gray-600 hover:text-blue-600">INSPIRE-O</NuxtLink></li>
+                    <li><NuxtLink to="/projects/upcomingProjects#gesd2" class="text-gray-600 hover:text-blue-600">Governance To Enable Service Delivery (GESD 2.0)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/upcomingProjects#inspire" class="text-gray-600 hover:text-blue-600">Integrated Social Protection Inclusion and Resilience Project (INSPIRE-O)</NuxtLink></li>
                   </ul>
                 </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                                <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
+                            <ul class="space-y-3">
+                <li>
+                  <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <li><NuxtLink to="/projects/currentProjects#publicWorks"  class="text-gray-600 hover:text-blue-600">Climate Smart Public Works</NuxtLink></li>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <li><NuxtLink to="/projects/currentProjects#SCTP"  class="text-gray-600 hover:text-blue-600">Social Cash Transfer</NuxtLink></li>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                    </svg>
+                    <li><NuxtLink to="/projects/currentProjects#livelihoods"  class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                    <li><NuxtLink to="/projects/currentProjects#usr"  class="text-gray-600 hover:text-blue-600">Urban Malawi Social Registry</NuxtLink></li>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                  <li><NuxtLink to="/projects/currentProjects#pbf"  class="text-gray-600 hover:text-blue-600">Performance Based Financing</NuxtLink></li>
+                  </a>
+                </li>
+              </ul>
+                </div>
+
               </div>
             </div>
           </div>
+          
 
           <!-- Delivery Systems menu -->
           <div @mouseenter="toggleMegaMenu('deliver')" @mouseleave="toggleMegaMenu(null)" class="relative">
