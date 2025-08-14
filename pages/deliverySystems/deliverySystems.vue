@@ -8,15 +8,14 @@ const projectGroups = [
   {
     group: 'Delivery Systems',
     items: [
-      { id: 'msr', title: 'Malawi Social Registry' },
-      { id: 'laifmis', title: 'LAIFMIS' },
-      { id: 'e-payments', title: 'E-Payments' },
-      { id: 'publicworks', title: 'Public Works MIS' },
-      { id: 'dgrm', title: 'Digital GRM' },
-      { id: 'sctpmis', title: 'SCTP MIS' },
-      { id: 'lapas', title: 'LAPAS' },
-      { id: 'cimis', title: 'CIMIS' },
-      { id: 'pmis', title: 'PMIS' }
+      { id: 'comsip', title: 'Community Savings and Investment Promotion' },
+{ id: 'dgrm', title: 'Digital Grievance Redress Mechanism' },
+{ id: 'e-payments', title: 'E-Payment' },
+ { id: 'laifmis', title: 'Local Authorities IFMIS' },
+{ id: 'lapas', title: 'Local Authority Performance Assessment System' },
+{ id: 'msr', title: 'Malawi Social Registry' },
+{ id: 'pmis', title: 'Project Monitoring Information System' },
+{ id: 'publicworks', title: 'Public Works MIS' }
     ]
   }
 ]
@@ -165,23 +164,27 @@ function updateActiveTabFromHash(hash) {
       of Malawi in 2016 through the Department of Economic Planning and Development (EP&D). It collects, stores, 
       accesses, and shares socioeconomic and demographic data about households across the country to support 
       the implementation of social support programs and ensure assistance reaches those who need it most.
-    </p>
-  </div>
+    <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
 
-  <!-- MSR PICTURE-->
-  <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">Malawi Social Registry Data Flow</h3>
-    <div class="flex justify-center">
-      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
-        <img 
-          src="/images/deliverySystems/Digital_GRM.png" 
-          alt="Digital_GRM" 
-          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-    </div>
+    </p>
+    
   </div>
   
+<!-- MSR Dashboard -->
+  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-3">MSR Dashboard</h3>
+    <div class="bg-white rounded border border-gray-300 overflow-hidden">
+      <iframe
+        src="https://dashboards.malawiubr.org/public/dashboard/0929d069-914b-4d88-9017-1a8b46cdc28f"
+        frameborder="0"
+        width="100%"
+        height="600"
+        allowtransparency
+        class="w-full"
+      ></iframe>
+    </div>
+  </div>
+
   <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
     <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
@@ -416,21 +419,6 @@ function updateActiveTabFromHash(hash) {
 
     </div>
   </div>
-  
-  <!-- MSR Dashboard -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-3">MSR Dashboard</h3>
-    <div class="bg-white rounded border border-gray-300 overflow-hidden">
-      <iframe
-        src="https://dashboards.malawiubr.org/public/dashboard/0929d069-914b-4d88-9017-1a8b46cdc28f"
-        frameborder="0"
-        width="100%"
-        height="600"
-        allowtransparency
-        class="w-full"
-      ></iframe>
-    </div>
-  </div>
 </div>
 
            <!-- LAIFMIS -->
@@ -451,152 +439,192 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
  Financial Management System that would help Local Authorities produce standardized reports for onward transmission 
  to the central Government and other relevant stakeholders. By the close of 2013 calendar year, all Local Authorities
   had IFMIS installed and all relevant personnel trained in its usage. Now IFMIS is being used in all the 35 LAs in Malawi
+  <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
   </div>
   
-  <!-- IFMIS PICTURE-->
-  <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">IFMIS Data Flow</h3>
-    <div class="flex justify-center">
-      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
-        <img 
-          src="/images/deliverySystems/Digital_GRM.png" 
-          alt="Digital_GRM" 
-          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-    </div>
-  </div>
+<!-- Key Features Section -->
+<div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+  <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features of Digital GRM</h3>
   
-  <!-- Key Feature Section -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
+  <!-- Features Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     
-    <!-- Components Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      
-      <!-- Toll-Free Line -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Toll-Free Line (3056)</h4>
-          </div>
+    <!-- Multi-Channel Access -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>
+          </svg>
         </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Accessible via Airtel and TNM
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Community members can call free of charge
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Speak to an operator to ask questions, report problems, or provide feedback
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            SMS confirmation and updates on grievance status are sent to users
-          </li>
-        </ul>
-      </div>
-      
-      <!-- Android App -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Android App</h4>
-          </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Multi-Channel Access</h4>
         </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Provides project information
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Enables users to submit feedback and report grievances directly
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Offers a simple interface for community interaction
-          </li>
-        </ul>
       </div>
-      
-      <!-- Web App -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s1.343-9 3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Web App</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Facilitates access to project details and feedback submission
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Enables free calls via Airtel to the grievance line
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Supports real-time reporting and tracking of grievances
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            SMS notifications for confirmation and status updates
-          </li>
-        </ul>
-      </div>
-      
-      <!-- Government Backend -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Government Backend</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Grievances are received in a centralized inbox
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Authorities can track, manage, and respond to grievances promptly
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Enhances accountability and responsiveness
-          </li>
-        </ul>
-      </div>
-      
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Toll-Free Line (3056) available on Airtel and TNM
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Android App for mobile accessibility
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Web App for online access
+        </li>
+      </ul>
     </div>
+
+    <!-- User-Friendly Reporting -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">User-Friendly Reporting</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Users can <strong>ask questions</strong>, <strong>report problems</strong>, and <strong>submit feedback</strong> easily
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Interface designed for <strong>community interaction</strong> and <strong>ease of use</strong>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Real-Time Notifications -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4.828 7l2.829 2.829A4 4 0 017 10h1a3 3 0 003 3h5a3 3 0 003-3h1a4 4 0 01-.172.172L18 10H4.828z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4a2 2 0 00-2-2H8a2 2 0 00-2 2v2"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Real-Time Notifications</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          <strong>SMS confirmations and updates</strong> on grievance status sent to users
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Ensures transparency and trust in the system
+        </li>
+      </ul>
+    </div>
+
+    <!-- Centralized Grievance Management -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Centralized Grievance Management</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          All grievances received go into a <strong>central inbox</strong>
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Authorities can <strong>track</strong>, <strong>manage</strong>, and <strong>respond</strong> to issues promptly
+        </li>
+      </ul>
+    </div>
+
+    <!-- Government Backend Integration -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Government Backend Integration</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Enables <strong>monitoring and accountability</strong>
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Promotes <strong>timely response</strong> and <strong>transparency</strong> in grievance handling
+        </li>
+      </ul>
+    </div>
+
+    <!-- Empowerment & Inclusion -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Empowerment & Inclusion</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Empowers citizens by ensuring concerns are <strong>heard and acted upon</strong>
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Encourages <strong>active community participation</strong> in development projects
+        </li>
+      </ul>
+    </div>
+
+    <!-- Accessibility -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Accessibility</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          <strong>Free calls</strong> to report grievances
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Designed to be accessible to both urban and rural populations
+        </li>
+      </ul>
+    </div>
+
   </div>
+</div>
   
 </div>
 
@@ -614,47 +642,8 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
       and convenient digital payment solutions for citizens and businesses.
       These systems enable seamless transactions
       and provide social protection beneficiaries with convenient access to social benefits anytime, anywhere.
+      <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
-  </div>
-<!-- E-Payment Service Providers Section -->
-  <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">E-Payment Service Providers</h3>
-    
-    <!-- Slider Container -->
-    <div class="relative overflow-hidden bg-white rounded-lg shadow-sm" aria-label="Partner logos carousel">
-      <!-- Gradient Overlays -->
-      <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-      <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
-      
-      <!-- Slider Track -->
-      <div class="overflow-hidden py-6 px-4">
-        <div 
-          class="flex gap-6 animate-scroll hover:pause"
-          :style="`--scroll-duration: ${scrollDuration}s`"
-        >
-          <!-- Two copies for seamless scrolling -->
-          <template v-for="repeat in 2" :key="repeat">
-            <div 
-              v-for="(logo, index) in partnerLogos"
-              :key="`${repeat}-${index}`"
-              class="flex-shrink-0"
-            >
-              <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-center h-24 w-40 sm:h-32 sm:w-48 transition-all hover:scale-105 hover:shadow-xl border border-gray-100">
-                <img
-                  :src="logo.src"
-                  :alt="logo.alt"
-                  loading="lazy"
-                  decoding="async"
-                  width="192"
-                  height="128"
-                  class="max-h-20 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity drop-shadow-md"
-                />
-              </div>
-            </div>
-          </template>
-        </div>
-      </div>
-    </div>
   </div>
 
   <!-- Key Features Section -->
@@ -825,6 +814,46 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
       </div> 
     </div>
   </div>
+  <!-- E-Payment Service Providers Section -->
+  <div class="mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">E-Payment Service Providers</h3>
+    
+    <!-- Slider Container -->
+    <div class="relative overflow-hidden bg-white rounded-lg shadow-sm" aria-label="Partner logos carousel">
+      <!-- Gradient Overlays -->
+      <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+      <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+      
+      <!-- Slider Track -->
+      <div class="overflow-hidden py-6 px-4">
+        <div 
+          class="flex gap-6 animate-scroll hover:pause"
+          :style="`--scroll-duration: ${scrollDuration}s`"
+        >
+          <!-- Two copies for seamless scrolling -->
+          <template v-for="repeat in 2" :key="repeat">
+            <div 
+              v-for="(logo, index) in partnerLogos"
+              :key="`${repeat}-${index}`"
+              class="flex-shrink-0"
+            >
+              <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-center h-24 w-40 sm:h-32 sm:w-48 transition-all hover:scale-105 hover:shadow-xl border border-gray-100">
+                <img
+                  :src="logo.src"
+                  :alt="logo.alt"
+                  loading="lazy"
+                  decoding="async"
+                  width="192"
+                  height="128"
+                  class="max-h-20 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity drop-shadow-md"
+                />
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -849,315 +878,132 @@ The MIS ensures efficient coordination and management of activities by digitally
 By integrating payment systems, grievance redress mechanisms, and performance monitoring tools, 
 the Public Works MIS plays a vital role in ensuring that resources are properly utilized and that 
 beneficiaries receive timely and accurate compensation for their labor.
-
-
+<a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
   </div>
 
-  <!-- Public works PICTURE-->
-  <div class="mt-12">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">Public works Program MIS</h3>
-    <div class="flex justify-center">
-      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
-        <img 
-          src="/images/deliverySystems/Digital_GRM.png"
-          alt="Digital_GRM"
-          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-    </div>
-  </div>
-
-  <!-- Key Feature Section -->
+<!-- Public Works Dashboard -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
-    
-    <!-- Components Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      
-      <!-- Android App -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Android App</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Provides project information
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Enables users to submit feedback and report grievances directly
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Offers a simple interface for community interaction
-          </li>
-        </ul>
-      </div>
-      
-      <!-- Web App -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s1.343-9 3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Web App</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Facilitates access to project details and feedback submission
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Enables free calls via Airtel to the grievance line
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Supports real-time reporting and tracking of grievances
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            SMS notifications for confirmation and status updates
-          </li>
-        </ul>
-      </div>
-      
-      <!-- Government Backend -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Government Backend</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Grievances are received in a centralized inbox
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Authorities can track, manage, and respond to grievances promptly
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Enhances accountability and responsiveness
-          </li>
-        </ul>
-      </div>
-
-      <!-- Real-time Analytics -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Real-time Analytics</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Dashboard for monitoring grievance trends and patterns
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Performance metrics and response time tracking
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Data-driven insights for policy improvements
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Geographic mapping of grievances for targeted interventions
-          </li>
-        </ul>
-      </div>
-     
-
-
- <!-- Multi-language Support -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Multi-language Support</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Support for local languages including Chichewa
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Voice-to-text translation capabilities
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Culturally appropriate communication channels
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Accessibility features for users with disabilities
-          </li>
-        </ul>
-      </div>
-
-      <!-- Security & Privacy -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Security & Privacy</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            End-to-end encryption for sensitive communications
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Anonymous reporting options to protect whistleblowers
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            GDPR-compliant data handling and storage
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Regular security audits and vulnerability assessments
-          </li>
-        </ul>
-      </div>
-
-      <!-- Integration & Interoperability -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Integration & Interoperability</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            API integration with existing government systems
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Seamless data exchange with project management platforms
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Integration with national ID systems for user verification
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Cross-platform compatibility and data synchronization
-          </li>
-        </ul>
-      </div>
-
-      <!-- Training & Capacity Building -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Training & Capacity Building</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Community outreach programs for platform awareness
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Training modules for government officials and operators
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Digital literacy programs for rural communities
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Continuous professional development for support staff
-          </li>
-        </ul>
-      </div>
-
-      <!-- Offline Capabilities -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Offline Capabilities</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Offline data collection and synchronization when connected
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            SMS-based grievance submission for areas with poor internet
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Local data storage with automatic cloud backup
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Community kiosks for areas with limited mobile access
-          </li>
-        </ul>
-      </div>
+    <h3 class="text-lg font-semibold text-gray-900 mb-3">Public Works Dashboard</h3>
+    <div class="bg-white rounded border border-gray-300 overflow-hidden">
+      <iframe
+        src="/images/deliverySystems/MthandiziDashboard.png"
+        frameborder="0"
+        width="100%"
+        height="600"
+        allowtransparency
+        class="w-full"
+      ></iframe>
     </div>
   </div>
+
+ <!-- Key Feature Section -->
+<div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+  <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features of Public Works MIS</h3>
+  
+  <!-- Components Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    
+    <!-- Digital Tracking and Monitoring -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Digital Tracking and Monitoring</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Tracks work logs in real-time for comprehensive project oversight
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Monitors participation levels and workforce engagement
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Records material usage and resource allocation efficiently
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Provides real-time payment tracking and disbursement monitoring
+        </li>
+      </ul>
+    </div>
+    
+    <!-- Integrated Payment and Grievance Systems -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Integrated Payment and Grievance Systems</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Supports seamless payment processing for beneficiaries
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Enables grievance redress through integrated channels
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Provides performance monitoring within unified platform
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Streamlines administrative processes and reduces manual workload
+        </li>
+      </ul>
+    </div>
+  
+
+    <!-- Enhanced Transparency and Accountability -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Enhanced Transparency and Accountability</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Minimizes administrative errors through automated processes
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Promotes resource efficiency and optimal allocation
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Ensures timely compensation for all beneficiaries
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Maintains complete audit trail for all transactions and activities
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
 </div>
 
           
@@ -1172,6 +1018,7 @@ beneficiaries receive timely and accurate compensation for their labor.
       Digital Grievance Redress Mechanism (Digital GRM) is a technology-enabled platform designed to enhance citizen engagement, 
       accountability, and transparency in project implementation. It allows community members to report issues, ask questions, 
       and provide feedback on development projects through multiple user-friendly channels.
+      <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
   </div>
   
@@ -1326,28 +1173,30 @@ beneficiaries receive timely and accurate compensation for their labor.
   <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Social Cash Transfer Program
   </h2>
-  
+
+ 
   <!-- Introduction -->
   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
     <p class="text-gray-700 leading-relaxed">
       The Social Cash Transfer Programme (SCTP) system—sometimes referred to as Mtukula Pakhomo in Malawi—is a government-led social protection initiative designed to provide regular cash payments to ultra-poor and labor-constrained households. The program targets vulnerable groups such as the elderly, people with disabilities, child-headed households, and chronically ill individuals.
     </p>
   </div>
-
-  <!-- SCTP PICTURE-->
-  <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">Socoal Cash Transfer Program MIS Data Flow</h3>
-    <div class="flex justify-center">
-      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
-        <img 
-          src="/images/deliverySystems/Digital_GRM.png" 
-          alt="Digital_GRM" 
-          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-        />
-      </div>
+  
+<!-- SCTP Dashboard -->
+  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-3">SCTP Dashboard</h3>
+    <div class="bg-white rounded border border-gray-300 overflow-hidden">
+      <iframe
+        src="http://lapa.nlgfc.gov.mw/data"
+        frameborder="0"
+        width="100%"
+        height="600"
+        allowtransparency
+        class="w-full"
+      ></iframe>
     </div>
   </div>
-  
+
   <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
     <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
@@ -1581,21 +1430,6 @@ beneficiaries receive timely and accurate compensation for their labor.
 
     </div>
   </div>
-  
-  <!-- SCTP Dashboard -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-3">SCTP Dashboard</h3>
-    <div class="bg-white rounded border border-gray-300 overflow-hidden">
-      <iframe
-        src="http://lapa.nlgfc.gov.mw/data"
-        frameborder="0"
-        width="100%"
-        height="600"
-        allowtransparency
-        class="w-full"
-      ></iframe>
-    </div>
-  </div>
 </div>
 
 
@@ -1610,257 +1444,8 @@ beneficiaries receive timely and accurate compensation for their labor.
     <p class="text-gray-700 leading-relaxed">
       LAPAS is a web-based data collection tool designed to enable the NLGFC to assess the performance of Local Authorities.
       It assists the Malawi Government in enhancing accountability, transparency, and data-driven decision-making through real-time data entry of assessment results, storing and making compliance assessments public, ensuring transparency of Local Authority performance feedback since results are accessible online, and providing basic analysis for writing synthesis reports.
+      <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
-  </div>
-
-  <!-- LAPAS PICTURE-->
-  <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">LAPAS Data Flow</h3>
-    <div class="flex justify-center">
-      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
-        <img 
-          src="/images/deliverySystems/Digital_GRM.png" 
-          alt="Digital_GRM" 
-          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-    </div>
-  </div>
-
-  <!-- Key Features Section -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
-    
-    <!-- Features Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      
-      <!-- Performance Monitoring -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Performance Monitoring & Evaluation</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Real-time performance tracking and assessment
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Key Performance Indicators (KPI) monitoring
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Automated evaluation workflows and scoring
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Historical performance trend analysis
-          </li>
-        </ul>
-      </div>
-
-      <!-- Transparent Reporting -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Transparent Reporting Mechanisms</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Public accessibility to assessment results
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Automated report generation and distribution
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Standardized reporting templates and formats
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Multi-format export capabilities (PDF, Excel, CSV)
-          </li>
-        </ul>
-      </div>
-
-      <!-- Data-Driven Decision Making -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Data-Driven Decision Making</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Evidence-based policy recommendations
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Predictive analytics for resource allocation
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Comparative analysis between local authorities
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Strategic planning support tools
-          </li>
-        </ul>
-      </div>
-
-      <!-- Analytics & Insights -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Comprehensive Analytics & Insights</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Interactive dashboards and visualizations
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Advanced statistical analysis capabilities
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Synthesis report generation tools
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Customizable metrics and benchmarking
-          </li>
-        </ul>
-      </div>
-
-      <!-- Real-time Data Entry -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Real-time Data Entry & Management</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Instant data capture and validation
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Multi-user collaborative data entry
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Data quality assurance and error checking
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Audit trails and version control
-          </li>
-        </ul>
-      </div>     
-
-
-
- <!-- Compliance Assessment -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Compliance Assessment & Monitoring</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Regulatory compliance tracking and scoring
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Automated compliance alerts and notifications
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Gap analysis and improvement recommendations
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Public disclosure of compliance status
-          </li>
-        </ul>
-      </div>
-
-      <!-- User Management & Security -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">User Management & Security</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Role-based access control and permissions
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Secure authentication and authorization
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Data encryption and secure transmission
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Activity logging and security monitoring
-          </li>
-        </ul>
-      </div>
-
-    </div>
   </div>
   
   <!-- LAPAS Dashboard -->
@@ -1877,13 +1462,254 @@ beneficiaries receive timely and accurate compensation for their labor.
       ></iframe>
     </div>
   </div>
+
+<!-- Key Features Section -->
+<div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+  <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
+  
+  <!-- Features Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    
+    <!-- Real-time Data Entry -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Real-time Data Entry of Assessment Results</h4>
+        </div>
+      </div>
+      <p class="text-sm text-gray-600">
+        Instant capture and processing of assessment results as they are completed, ensuring immediate availability of performance data for monitoring and decision-making purposes.
+      </p>
+    </div>
+
+    <!-- Storing and Making Compliance Assessments Public -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Storing and Making Compliance Assessments Public</h4>
+        </div>
+      </div>
+      <p class="text-sm text-gray-600">
+        Secure storage of all compliance assessment data with public accessibility features, ensuring transparency and accountability in local authority performance evaluation.
+      </p>
+    </div>
+
+    <!-- Transparency of LA Performance Feedback -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Transparency of LA Performance Feedback</h4>
+        </div>
+      </div>
+      <p class="text-sm text-gray-600">
+        Online accessibility of Local Authority performance results and feedback, promoting transparency and enabling public oversight of government service delivery standards.
+      </p>
+    </div>
+
+    <!-- Basic Analysis for Writing Synthesis Reports -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Basic Analysis for Writing Synthesis Report(s)</h4>
+        </div>
+      </div>
+      <p class="text-sm text-gray-600">
+        Analytical tools and data processing capabilities to support the creation of comprehensive synthesis reports that summarize performance trends and provide insights for policy development.
+      </p>
+    </div>
+
+  </div>
 </div>
 
-            <!-- CIMIS -->
-            <div v-else-if="item.id === 'cimis'">
-              <h2 class="text-2xl font-bold text-gray-900 mb-6">Comsip Integrated MIS (CIMIS)</h2>
-              <p class="text-gray-700">Comprehensive management information system for integrated program coordination.</p>
-            </div>
+</div>
+
+           <!-- COMSIP -->
+<div v-else-if="item.id === 'comsip'" class="prose max-w-none">
+  <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+    Community Savings and Investment Promotion MIS
+  </h2>
+  
+  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 mb-6">
+    <p class="text-gray-700 leading-relaxed">
+The COMSIP MIS (Management Information System) is a digital platform that supports COMSIP's operations by 
+enabling efficient coordination, monitoring, and reporting across its cooperative and social protection 
+initiatives.
+<a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
+    </p>
+  </div>
+  
+<!-- Key Features Section -->
+<div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+  <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features of COMSIP MIS</h3>
+  
+  <!-- Features Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    
+    <!-- Beneficiary and Group Management -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Beneficiary and Group Management</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Registers and manages data for savings and loan groups
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Tracks individual and group participation in COMSIP-related activities
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Monitors savings, loans, and training participation
+        </li>
+      </ul>
+    </div>
+
+    <!-- SMS-Based Data Reporting -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">SMS-Based Data Reporting</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Allows group members and officers to submit activity reports via SMS
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Facilitates fast, low-cost data collection from remote areas
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Enables real-time communication with field operations
+        </li>
+      </ul>
+    </div>
+
+    <!-- Monitoring and Evaluation (M&E) -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Monitoring and Evaluation (M&E)</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Tracks performance indicators such as training attendance and grants usage
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Monitors livelihoods progress and development outcomes
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Provides real-time visibility into program impact at district and national levels
+        </li>
+      </ul>
+    </div>
+
+    <!-- Integration with Financial Services -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Integration with Financial Services</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Links with service providers to monitor disbursements (loans, grants, microinsurance)
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Supports coordination of productive inputs like seeds and tools
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Tracks outcomes and impact of financial interventions
+        </li>
+      </ul>
+    </div>
+
+    <!-- Transparency and Accountability -->
+    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+      <div class="flex items-start mb-4">
+        <div class="flex-shrink-0 w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-4">
+          <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-lg">Transparency and Accountability</h4>
+        </div>
+      </div>
+      <ul class="space-y-3 text-sm text-gray-600">
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Enhances data accuracy and reduces manual errors
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Ensures timely reporting and comprehensive documentation
+        </li>
+        <li class="flex items-start">
+          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+          Supports informed decision-making through centralized data access
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+  
+</div>
 
 <!-- PMIS Section -->
 <div v-else-if="item.id === 'pmis'" class="prose max-w-none">
@@ -1897,24 +1723,28 @@ beneficiaries receive timely and accurate compensation for their labor.
       The Project Monitoring Information System (PMIS) is a digital platform designed to support
       the tracking, coordination, and management of development projects, especially those implemented
       by government ministries, local authorities, and development partners in Malawi.
+      <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
   </div>
 
-  <!-- PMIS PICTURE-->
-  <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">PMIS Data Flow</h3>
-    <div class="flex justify-center">
-      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
-        <img 
-          src="/images/deliverySystems/Digital_GRM.png" 
-          alt="Digital_GRM" 
-          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-        />
-      </div>
+  
+
+  <!-- PMIS Dashboard -->
+  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+    <h3 class="text-lg font-semibold text-gray-900 mb-3">PMIS Dashboard</h3>
+    <div class="bg-white rounded border border-gray-300 overflow-hidden">
+      <iframe
+        src="https://projects.nlgfc.gov.mw"
+        frameborder="0"
+        width="100%"
+        height="600"
+        allowtransparency
+        class="w-full"
+      ></iframe>
     </div>
   </div>
-  
-  <!-- Key Features Section -->
+
+    <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
     <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
     
@@ -2147,21 +1977,6 @@ beneficiaries receive timely and accurate compensation for their labor.
         </ul>
       </div>
 
-    </div>
-  </div>
-  
-  <!-- PMIS Dashboard -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-3">PMIS Dashboard</h3>
-    <div class="bg-white rounded border border-gray-300 overflow-hidden">
-      <iframe
-        src="https://projects.nlgfc.gov.mw"
-        frameborder="0"
-        width="100%"
-        height="600"
-        allowtransparency
-        class="w-full"
-      ></iframe>
     </div>
   </div>
 </div>

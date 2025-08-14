@@ -41,7 +41,7 @@ const getSectionIcon = computed(() => {
     <!-- Filter Header -->
     <div class="flex items-center justify-between mb-4">
       <h3 class="text-lg font-medium text-gray-900 flex items-center">
-        <Icon :name="getSectionIcon" class="w-5 h-5 mr-2 text-blue-600" />
+        <Icon :name="getSectionIcon" class="w-5 h-5 mr-2 text-gray-900" />
         Filter {{ activeSection === 'jobs' ? 'Jobs' : 'Procurement Notices' }}
       </h3>
       <div v-if="hasActiveFilters" class="flex items-center text-sm text-gray-500">

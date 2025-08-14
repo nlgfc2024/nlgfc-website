@@ -1,4 +1,8 @@
 <script setup>
+import { ref, onMounted, watch, computed } from 'vue';
+// Import GeneralSidebar component
+import GeneralSidebar from '../../components/GeneralSidebar.vue'; // Adjust path as necessary
+
 definePageMeta({ title: 'Current Projects' })
 
 const route = useRoute()
@@ -37,9 +41,9 @@ const projectGroups = [
   }
 ]
 
-// const openGroup = ref(projectGroups[0].group)
-const openGroup = ref(null)
-
+// The openGroup state will now be managed internally by GeneralSidebar,
+// but we might need to react to activeTab changes to ensure the correct group is open on initial load/hash change.
+// However, the GeneralSidebar itself will handle opening the correct group based on activeId.
 
 const projectContent = {
   ssrlp_overview: {
@@ -373,13 +377,11 @@ function updateActiveTabFromHash(hash) {
     const match = group.items.find(item => item.id === hash)
     if (match) {
       activeTab.value = match.id
-      openGroup.value = group.group // <-- expand the matching group
+      // openGroup.value = group.group // GeneralSidebar will handle this based on activeId
       break
     }
   }
 }
-
-
 
 // Optional: scroll to top on tab change
 watch(activeTab, () => {
@@ -419,50 +421,13 @@ watch(activeTab, () => {
   <div class="flex flex-col md:flex-row gap-8 max-w-7xl mx-auto px-4 py-8">
     <!-- Sidebar -->
     <aside class="w-full md:w-72 flex-shrink-0">
-      <div
-        v-for="group in projectGroups"
-        :key="group.group"
-        class="mb-4 rounded-lg overflow-hidden shadow-sm"
-      >
-        <button
-          @click="openGroup = openGroup === group.group ? null : group.group"
-          class="w-full text-left px-5 py-3 font-semibold bg-gradient-to-r from-blue-900 to-blue-200 text-white hover:from-blue-400 hover:to-blue-300 transition-all duration-200 flex justify-between items-center"
-        >
-          <span>{{ group.group }}</span>
-          <svg
-            class="w-4 h-4 transform transition-transform duration-200"
-            :class="{ 'rotate-180': openGroup === group.group }"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-
-        <div
-          v-show="openGroup === group.group"
-          class="bg-white border border-gray-200 border-t-0 rounded-b-lg"
-        >
-          <ul class="py-2">
-            <li v-for="item in group.items" :key="item.id">
-              <a
-                :href="`#${item.id}`"
-                @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
-                :class="[
-                  'block px-5 py-2.5 text-sm transition-colors duration-150',
-                  item.id === activeTab
-                    ? 'bg-blue-50 text-blue-700 font-medium border-l-4 border-blue-600'
-                    : 'hover:bg-gray-50 text-gray-700'
-                ]"
-              >
-                {{ item.title }}
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <GeneralSidebar
+        sidebarType="projects"
+        :sectionsData="projectGroups"
+        :activeId="activeTab"
+        sidebarTitle="Current Projects"
+        @update:activeId="activeTab = $event"
+      />
     </aside>
 
     <!-- Main Content Area -->

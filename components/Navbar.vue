@@ -121,12 +121,32 @@
 
                   <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Leadership</h3>
                   <ul class="space-y-2">
-                    <li><NuxtLink to="/about#board" class="text-gray-600 hover:text-blue-600 transition flex items-center">Board of Directors</NuxtLink></li>
-                    <li><NuxtLink to="/about#management" class="text-gray-600 hover:text-blue-600 transition flex items-center">Executive Management</NuxtLink></li>
-                    <li><NuxtLink to="/about#directorates" class="text-gray-600 hover:text-blue-600 transition flex items-center">Directorates and Divisions</NuxtLink></li>
+                    <li>
+                      <NuxtLink to="/about#board" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Board of Directors
+                      </NuxtLink>
+                    </li>
+                    <li>
+                      <NuxtLink to="/about#management" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Executive Management
+                      </NuxtLink>
+                    </li>
+                    <!-- <li>
+                      <NuxtLink to="/about#structure" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Organogram
+                      </NuxtLink>
+                    </li> -->
+                    <li>
+                      <NuxtLink to="/about#directorates" class="text-gray-600 hover:text-blue-600 transition flex items-center">
+                        Directorates and Divisions
+                      </NuxtLink>
+                    </li>
                   </ul>
                 </div>
 
+
+
+                
                 <!-- Our Mandate Navigation Section -->
                 <li class="list-none pl-0"> <!-- Removes bullet and padding -->
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Our Mandate</h3>
@@ -146,7 +166,7 @@
                         Local Development Support
                       </NuxtLink>
                     </li>
-                    <li class="pl-4">
+                    <!-- <li class="pl-4">
                       <NuxtLink to="/mandate/ourMandate#cdf" class="text-gray-600 hover:text-blue-600">
                         CDF
                       </NuxtLink>
@@ -175,7 +195,7 @@
                       <NuxtLink to="/mandate/ourMandate#rrf" class="text-gray-600 hover:text-blue-600">
                         Road Rehabilitation Fund (RRF)
                       </NuxtLink>
-                    </li>
+                    </li> -->
                   </ul>
                 </li> 
               </div>
@@ -437,12 +457,12 @@
                       </button>
                     </li>
                     <li>
-                      <a href="/opportunities" class="flex items-center text-gray-700 hover:text-blue-700 transition group">
+                      <NuxtLink to="/opportunities#jobs" class="flex items-center text-gray-700 hover:text-blue-700 transition">
                         <svg class="w-5 h-5 mr-2 text-indigo-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                         </svg>
-                        Applicant Registration
-                      </a>
+                        Jobs Listing
+                      </NuxtLink>
                     </li>
                   </ul>
                 </div>
@@ -459,12 +479,12 @@
                       </button>
                     </li>
                     <li>
-                      <a href="#" class="flex items-center text-gray-700 hover:text-blue-700 transition group">
+                      <NuxtLink to="/opportunities#procurement" class="flex items-center text-gray-700 hover:text-blue-700 transition">
                         <svg class="w-5 h-5 mr-2 text-indigo-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                         </svg>
-                        Supplier Registration
-                      </a>
+                        Procurement Notices
+                      </NuxtLink>
                     </li>
                   </ul>
                 </div>
