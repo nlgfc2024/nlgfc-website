@@ -230,19 +230,19 @@
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Current Projects</h3>
                   <strong class="text-gray-700 flex items-center">Government Funded Projects</strong>
                   <ul class="space-y-1 pl-4 mb-4">
-                    <li><NuxtLink to="/projects/currentProjects#ssrlp_overview" class="text-gray-600 hover:text-blue-600">Constituency Development Fund (CDF)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#SCTP" class="text-gray-600 hover:text-blue-600">District Development Fund (DDF)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Infrastructure Development Fund (IDF)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Water Structures Fund (WSF)</NuxtLink></li>
-                     <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Road Rehabilitation Fund (RRF)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#emergency" class="text-gray-600 hover:text-blue-600">Health Rehabilitation (HR) </NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#cdf" class="text-gray-600 hover:text-blue-600">Constituency Development Fund (CDF)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#ddf" class="text-gray-600 hover:text-blue-600">District Development Fund (DDF)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#idf" class="text-gray-600 hover:text-blue-600">Infrastructure Development Fund (IDF)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#rrf" class="text-gray-600 hover:text-blue-600">Road Rehabilitation Fund (RRF)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#wsf" class="text-gray-600 hover:text-blue-600">Water Structures Fund (WSF)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#health_rehab" class="text-gray-600 hover:text-blue-600">Health Rehabilitation (HR) </NuxtLink></li>
                   </ul>
 
                   <strong class="text-gray-700 flex items-center mt-4">Donor Funded Projects</strong>
                   <ul class="space-y-1 pl-4">
-                    <li><NuxtLink to="/projects/currentProjects#rcrp_overview" class="text-gray-600 hover:text-blue-600">Social Support For Resilient Livelihoods (SSRLP)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#drb" class="text-gray-600 hover:text-blue-600">Governance To Enable Service Delivery (GESD)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#usr" class="text-gray-600 hover:text-blue-600">Regional Climate Resilience Project (RCRP2)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#ssrlp_news" class="text-gray-600 hover:text-blue-600">Social Support For Resilient Livelihoods (SSRLP)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#gesd_news" class="text-gray-600 hover:text-blue-600">Governance To Enable Service Delivery (GESD)</NuxtLink></li>
+                    <li><NuxtLink to="/projects/currentProjects#rcrp2_news" class="text-gray-600 hover:text-blue-600">Regional Climate Resilience Project (RCRP2)</NuxtLink></li>
                   </ul>
                 </div>
 
@@ -252,8 +252,8 @@
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Past Projects</h3>
                   <ul class="space-y-1 pl-4 mb-4">
                       <li><NuxtLink to="/projects/pastProjects#masaf_overview" class="text-gray-600 hover:text-blue-600">Malawi Social Action Fund (MASAF)</NuxtLink></li>
-                      <li><NuxtLink to="/projects/pastProjects#psn" class="text-gray-600 hover:text-blue-600">More Income and Employment in Rural Areas (MIERA)</NuxtLink></li>
-                      <li><NuxtLink to="/projects/pastProjects#scb" class="text-gray-600 hover:text-blue-600">Local Economic Development (LED)</NuxtLink></li>
+                      <li><NuxtLink to="/projects/pastProjects#miera_overview" class="text-gray-600 hover:text-blue-600">More Income and Employment in Rural Areas (MIERA)</NuxtLink></li>
+                      <li><NuxtLink to="/projects/pastProjects#led_overview" class="text-gray-600 hover:text-blue-600">Local Economic Development (LED)</NuxtLink></li>
                   
                     </ul>
                  

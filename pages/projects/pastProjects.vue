@@ -19,6 +19,12 @@ const projectGroups = [
     items: [
       { id: 'miera_overview', title: 'Overview' }
     ]
+  },
+  {
+    group: 'LED',
+    items: [
+      { id: 'led_overview', title: 'Overview' }
+    ]
   }
 ]
 
@@ -100,6 +106,27 @@ const projectContent = {
       </ul>
 
       <h3>MIERA Project Components</h3>
+      <ul>
+        <li><strong>Implementation of Economic Infrastructure:</strong> 7 million Euros, managed via the Local Development Fund.</li>
+        <li><strong>Support to Malawi Innovation Challenge Fund (MICF):</strong> 3 million Euros, implemented by UNDP under the Private Sector Development Project (PSDP).</li>
+      </ul>
+    `
+  },
+
+    led_overview: {
+    title: 'Local Economic Development (LED)',
+    body: `
+      <p><strong>LED</strong> aimed to improve the business environment for smallholder farmers and small-to-medium enterprises in rural Malawi through economic infrastructure development.</p>
+
+      <p>Funded by the German Government through KfW with a budget of 10 million Euros, the project was implemented by AHT Consultants from January 2017 to December 2020, co-funded by the Government of Malawi (GoM) with a contribution of at least MK200 million.</p>
+
+      <h3>Target Markets</h3>
+      <ul>
+        <li>Upgrades to: Sadzi, Lunzu, Goliati, Neno, and Nkhata Bay markets (Fast Track Markets)</li>
+        <li>New construction: Dyeratu, Chinkhoma, and Embangweni markets</li>
+      </ul>
+
+      <h3>LED Project Components</h3>
       <ul>
         <li><strong>Implementation of Economic Infrastructure:</strong> 7 million Euros, managed via the Local Development Fund.</li>
         <li><strong>Support to Malawi Innovation Challenge Fund (MICF):</strong> 3 million Euros, implemented by UNDP under the Private Sector Development Project (PSDP).</li>

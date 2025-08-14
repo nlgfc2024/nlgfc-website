@@ -16,10 +16,10 @@ const projectGroups = [
     items: [
       { id: 'cdf', title: 'Constituency Development Fund' },
       { id: 'ddf', title: 'District Development Fund' },
-      { id: 'wsf', title: 'Water Structures Fund' },
-      { id: 'health_rehab', title: 'Health Rehabilitation' },
       { id: 'idf', title: 'Infrastructure Development Fund (IDF)' },
-      { id: 'rrf', title: 'Road Rehabilitation Fund (RRF)' }
+      { id: 'rrf', title: 'Road Rehabilitation Fund (RRF)' },
+      { id: 'wsf', title: 'Water Structures Fund' },
+       { id: 'health_rehab', title: 'Health Rehabilitation' }    
     ]
   },
   {
@@ -30,10 +30,11 @@ const projectGroups = [
         id: 'ssrlp_news',
         items: [
           { id: 'ssrlp_overview', title: 'Overview' },
-          { id: 'SCTP', title: 'SCTP' },
+          { id: 'SCTP', title: 'Social Cash Transfer' },
           { id: 'publicWorks', title: 'Public Works' },
-          { id: 'emergency', title: 'Scalable Social Safety Nets' },
-          { id: 'livelihoods', title: 'Livelihoods Support' }
+          { id: 'livelihoods', title: 'Livelihoods Support' },
+          { id: 'scalable', title: 'Scalable Social Safety Nets' },
+          { id: 'cerp', title: 'Contigency Emergency Response' }
         ]
       },
       {
@@ -104,37 +105,37 @@ const projectContent = {
   cdf: {
     title: 'Constituency Development Fund',
     body: `
-      <p>The Constituency Development Fund supports community-led development priorities at constituency level.</p>
+      <p>The purpose of this fund is to finance small-scale community projects at the constituency level. The aim is to improve local infrastructure, livelihoods, and social services. CDF is channelled through Members of Parliament (MPs) in consultation with local structures, and projects are selected by community demand.</p>
     `
   },
   ddf: {
     title: 'District Development Fund',
     body: `
-      <p>The District Development Fund finances district investment plans to improve local service delivery.</p>
+      <p>District Development Fund supports locally prioritised development projects identified through District Development Plans (DDPs). The purpose of this fund is to enhance service delivery in sectors like education, health, agriculture, and local governance. The fund is allocated directly to District Councils based on approved budgets. Projects are implemented by councils in collaboration with communities.</p>
     `
   },
   wsf: {
     title: 'Water Structures Fund',
     body: `
-      <p>Finances construction and rehabilitation of water-related infrastructure for resilience and access.</p>
+      <p>The fund is for the construction and rehabilitation of water supply systems (boreholes, piped schemes, dams) and ensures sustainable access to clean water.</p>
     `
   },
   health_rehab: {
     title: 'Health Rehabilitation',
     body: `
-      <p>Supports rehabilitation of health facilities and essential health infrastructure.</p>
+      <p>Health Rehabilitation Fund is for rehabilitating and upgrading health facilities (clinics, hospitals, staff housing) to improve access to quality healthcare services.</p>
     `
   },
   idf: {
     title: 'Infrastructure Development Fund (IDF)',
     body: `
-      <p>Funds key local infrastructure to catalyze economic activity and improve services.</p>
+      <p>IDF supports the construction and rehabilitation of critical public infrastructure (schools, markets, government buildings) to enhance economic and social service delivery in urban councils in Malawi.</p>
     `
   },
   rrf: {
     title: 'Road Rehabilitation Fund (RRF)',
     body: `
-      <p>Invests in rehabilitating local road networks to improve connectivity and access.</p>
+      <p>Rural and urban councils are provided with funds for the maintenance and rehabilitation to improve transport connectivity for trade and mobility. The fund is managed by District Councils with technical support from the Roads Authority.</p>
     `
   },
   ssrlp_overview: {
@@ -237,16 +238,7 @@ const projectContent = {
     body: `
       <p>This programme aims to build <strong>resilient community assets</strong> to improve household resilience, income, and food security.</p>
 
-      <p>It has reached <strong>538,983 ultra-poor households</strong> and focuses on restoring micro catchments, degraded land, water, soil, and trees across all 28 districts.</p>
-    `
-  },
-
-  emergency: {
-    title: 'Scalable Social Safety Nets',
-    body: `
-      <p>This component provides <strong>shock-responsive support</strong> to households affected by droughts, floods, and other disasters.</p>
-
-      <p>So far, <strong>515 households</strong> in 10 districts have benefited through additional support under SCTP and CS-EPWP during emergency periods.</p>
+      <p>It has reached <strong>538,983 ultra-poor households</strong> and focuses on restoring micro catchments, degraded land, water, soil and trees across all 28 districts.</p>
     `
   },
 
@@ -265,6 +257,24 @@ const projectContent = {
         <li>443 clusters trained in cooperative development</li>
         <li>25,250 members linked to market-based initiatives</li>
       </ul>
+    `
+  },
+
+  scalable: {
+    title: 'Scalable Social Safety Nets',
+    body: `
+      <p>This component provides <strong>shock-responsive support</strong> to households affected by droughts, floods, and other disasters.</p>
+
+      <p>So far, <strong>515 households</strong> in 10 districts have benefited through additional support under SCTP and CS-EPWP during emergency periods.</p>
+    `
+  },
+
+  cerp: {
+    title: 'Contigency Emergency Response Programme (CERP)',
+    body: `
+      <p>Waiting for Data to be inserted here</p>
+
+      
     `
   },
 
