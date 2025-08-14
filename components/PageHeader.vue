@@ -1,6 +1,5 @@
 <template>
   <div class="relative">
-    <!-- Background with enhanced overlay -->
     <div class="absolute inset-0 z-0">
       <img 
         :src="backgroundImage" 
@@ -11,11 +10,9 @@
       <div class="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-900/60"></div>
     </div>
     
-    <!-- Content container with reduced padding -->
-    <div class="relative z-10 py-2 md:py-6 px-2 sm:px-4 lg:px-6 max-w-7xl mx-auto">
+    <div class="relative z-10 py-8 md:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div class="text-center">
-        <!-- Compact Breadcrumbs -->
-        <!-- <nav class="flex justify-center mb-3 md:mb-4" aria-label="Breadcrumb">
+        <nav class="flex justify-center mb-2 md:mb-3" aria-label="Breadcrumb">
           <ol class="inline-flex items-center space-x-1 md:space-x-2">
             <li class="inline-flex items-center">
               <a href="/" class="inline-flex items-center text-xs md:text-sm font-medium text-white hover:text-blue-300 transition-colors duration-200 group">
@@ -46,18 +43,16 @@
           </ol>
         </nav> -->
 
-        <!-- Compact Page title -->
-        <h1 class="text-xl sm:text-2xl md:text-2xl font-bold text-white mb-1 md:mb-2 tracking-tight">
+        <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 md:mb-2 tracking-tight">
           <span class="relative">
             <span class="relative z-10">{{ title }}</span>
             <span class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-transparent blur-md opacity-70 -z-0"></span>
           </span>
         </h1>
         
-        <!-- Compact Page description -->
-        <!-- <p 
+        <p 
           v-if="description" 
-          class="max-w-2xl md:max-w-3xl mx-auto text-sm md:text-base text-gray-100/90 leading-snug"
+          class="max-w-2xl md:max-w-3xl mx-auto text-xs md:text-sm text-gray-100/90 leading-snug"
         >
           {{ description }}
         </p> -->
@@ -89,12 +84,12 @@ const props = defineProps({
 
 <style scoped>
 .relative {
-  min-height: 50px; /* Reduced from 280px */
+  min-height: 150px; /* Reduced from 200px */
 }
 
 @media (min-width: 768px) {
   .relative {
-    min-height: 50px; /* Reduced from 350px */
+    min-height: 150px; /* Reduced from 200px */
   }
 }
 
