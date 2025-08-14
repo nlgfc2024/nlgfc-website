@@ -14,15 +14,7 @@ const tabGroups = [
       { id: 'financialManagement', title: 'Financial Management' },
       {
         id: 'localDevelopmentSupport',
-        title: 'Local Development Support',
-        children: [
-          { id: 'cdf', title: 'CDF' },
-          { id: 'ddf', title: 'DDF' },
-          { id: 'waterStructuresFund', title: 'Water Structures Fund' },
-          { id: 'healthRehabilitation', title: 'Health Rehabilitation' },
-          { id: 'idf', title: 'Infrastructure Development Fund (IDF)' },
-          { id: 'rrf', title: 'Road Rehabilitation Fund (RRF)' }
-        ]
+        title: 'Local Development Support'
       }
     ]
   }
@@ -65,7 +57,7 @@ function updateActiveTabFromHash(hash) {
 <template>
   <div class="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto px-4 py-8">
     <!-- Sidebar Navigation -->
-    <aside class="w-full md:w-64 flex-shrink-0">
+    <aside class="w-full md:w-64 flex-shrink-0 md:sticky md:top-4 md:max-h-[calc(100vh-1rem)] md:overflow-y-auto self-start">
       <div v-for="group in tabGroups" :key="group.group" class="mb-6">
         <div class="border-r border-gray-200 pr-4">
           <h2 class="text-lg font-semibold text-gray-900 mb-4 pl-2 border-l-4 border-gray-600">{{ group.group }}</h2>
@@ -74,27 +66,14 @@ function updateActiveTabFromHash(hash) {
               <NuxtLink
                 :to="`#${item.id}`"
                 @click="activeTab = item.id"
-                class="block px-4 py-3 rounded transition-colors text-gray-700 hover:bg-blue-50 hover:text-gray-800"
+                class="block px-4 py-3 rounded transition-colors text-gray-700 hover:bg-emerald-100 hover:text-gray-800"
                 :class="{
-                  'bg-blue-50 text-gray-800 font-medium border-l-4 border-gray-600': activeTab === item.id || (item.children && item.children.some(child => child.id === activeTab))
+                  'bg-emerald-50 text-gray-800 font-medium border-l-4 border-gray-600': activeTab === item.id || (item.children && item.children.some(child => child.id === activeTab))
                 }"
               >
                 {{ item.title }}
               </NuxtLink>
-              <ul v-if="item.children" class="ml-4 pl-4 border-l border-gray-300 space-y-1 mt-1">
-                <li v-for="sub in item.children" :key="sub.id">
-                  <NuxtLink
-                    :to="`#${sub.id}`"
-                    @click="activeTab = sub.id"
-                    class="block px-3 py-2 rounded text-gray-600 hover:bg-gray-100 hover:text-gray-800 text-sm"
-                    :class="{
-                      'bg-gray-100 text-gray-900 font-medium border-l-2 border-gray-600': activeTab === sub.id
-                    }"
-                  >
-                    {{ sub.title }}
-                  </NuxtLink>
-                </li>
-              </ul>
+              <ul v-if="item.children" class="ml-4 pl-4 border-l border-gray-300 space-y-1 mt-1"></ul>
             </li>
           </ul>
         </div>
@@ -107,7 +86,7 @@ function updateActiveTabFromHash(hash) {
       <div v-show="activeTab === 'fiscalDecentralization'" class="prose max-w-none">
         <!-- Header Section -->
         <div class="mb-10">
-          <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-indigo-100">
+          <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-emerald-100">
             Fiscal Decentralization
           </h2>
           <p class="text-lg text-gray-600">
@@ -116,10 +95,10 @@ function updateActiveTabFromHash(hash) {
         </div>
 
         <!-- Overview Section -->
-        <div class="bg-gradient-to-br from-indigo-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
+        <div class="bg-gradient-to-br from-emerald-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
           <div class="flex items-center mb-6"> <!-- Changed to items-center and added mb-6 -->
-              <div class="bg-indigo-100 p-3 rounded-lg mr-5">
-                  <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="bg-emerald-50 p-3 rounded-lg mr-5">
+                  <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
               </div>
@@ -133,7 +112,7 @@ function updateActiveTabFromHash(hash) {
         <!-- IGTF Explanation -->
         <div class="mb-10 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
           <h3 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center">
-            <svg class="w-6 h-6 text-indigo-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-6 h-6 text-emerald-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
             Intergovernmental Fiscal Transfer Formula (IGTF)
@@ -143,32 +122,32 @@ function updateActiveTabFromHash(hash) {
           </p>
           <div class="grid md:grid-cols-2 gap-4 mt-4">
             <div class="flex items-center">
-              <div class="bg-indigo-100 p-1 rounded-full mr-3">
-                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="bg-emerald-50 p-1 rounded-full mr-3">
+                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
               <span class="text-gray-700">Equity in resource distribution</span>
             </div>
             <div class="flex items-center">
-              <div class="bg-indigo-100 p-1 rounded-full mr-3">
-                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="bg-emerald-50 p-1 rounded-full mr-3">
+                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
               <span class="text-gray-700">Transparency in allocations</span>
             </div>
             <div class="flex items-center">
-              <div class="bg-indigo-100 p-1 rounded-full mr-3">
-                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="bg-emerald-50 p-1 rounded-full mr-3">
+                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
               <span class="text-gray-700">Accountability mechanisms</span>
             </div>
             <div class="flex items-center">
-              <div class="bg-indigo-100 p-1 rounded-full mr-3">
-                <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="bg-emerald-50 p-1 rounded-full mr-3">
+                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
@@ -181,7 +160,7 @@ function updateActiveTabFromHash(hash) {
         <div class="space-y-8">
           <!-- Types of Transfers -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-800 px-6 py-4">
               <h3 class="font-semibold !text-white">A. Types of Fiscal Transfers</h3>
             </div>
             <div class="p-6">
@@ -213,7 +192,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- Formula Components -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-800 px-6 py-4">
               <h3 class="font-semibold !text-white">B. Formula Allocation Criteria</h3>
             </div>
             <div class="p-6">
@@ -240,7 +219,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- Dashboard Section -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-800 px-6 py-4">
               <h3 class="font-semibold !text-white">C. IGTF Monitoring Dashboard</h3>
             </div>
             <div class="p-6">
@@ -253,7 +232,7 @@ function updateActiveTabFromHash(hash) {
                   allowfullscreen>
                 </iframe>
               </div>
-              <p class="mt-4 text-sm text-gray-600 italic">
+              <p class="mt-4 text-sm text-pink-600 bg-pink-50 italic">
                 Note: The IGTF is currently under review to better reflect contemporary financing needs across Local Councils.
               </p>
             </div>
@@ -295,7 +274,7 @@ function updateActiveTabFromHash(hash) {
       <div v-show="activeTab === 'financialManagement'" class="prose max-w-none">
         <!-- Header Section -->
         <div class="mb-10">
-          <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
+          <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-emerald-100">
             Financial Management
           </h2>
           <p class="text-lg text-gray-600">
@@ -304,11 +283,11 @@ function updateActiveTabFromHash(hash) {
         </div>
 
         <!-- Overview Section -->
-        <div class="bg-gradient-to-br from-blue-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
+        <div class="bg-gradient-to-br from-emerald-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
             <!-- Icon and heading inline alignment -->
             <div class="flex items-center mb-6">
-                <div class="bg-blue-100 p-3 rounded-lg mr-5">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-emerald-50 p-3 rounded-lg mr-5">
+                    <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
@@ -339,8 +318,8 @@ function updateActiveTabFromHash(hash) {
               </p>
               <div class="grid md:grid-cols-2 gap-4 mt-4">
                 <div class="flex items-start">
-                  <div class="bg-blue-100 p-1 rounded-full mr-3 flex-shrink-0">
-                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="bg-emerald-50 p-1 rounded-full mr-3 flex-shrink-0">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
@@ -349,8 +328,8 @@ function updateActiveTabFromHash(hash) {
                   </div>
                 </div>
                 <div class="flex items-start">
-                  <div class="bg-blue-100 p-1 rounded-full mr-3 flex-shrink-0">
-                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="bg-emerald-50 p-1 rounded-full mr-3 flex-shrink-0">
+                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
@@ -364,7 +343,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- Intergovernmental Fiscal Transfers -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-800 px-6 py-4">
               <h3 class="text-lg font-semibold !text-white flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
@@ -401,7 +380,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- Budgeting and Consolidation -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-800 px-6 py-4">
               <h3 class="text-lg font-semibold !text-white flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
@@ -438,7 +417,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- Financial Monitoring and Reporting -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-800 px-6 py-4">
               <h3 class="text-lg font-semibold !text-white flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -485,7 +464,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- Audit Oversight -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-800 px-6 py-4">
               <h3 class="text-lg font-semibold !text-white flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -522,7 +501,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- Capacity Building -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-800 px-6 py-4">
               <h3 class="text-lg font-semibold !text-white flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -559,7 +538,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- LGR Improvement -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-800 px-6 py-4">
               <h3 class="text-lg font-semibold !text-white flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -596,7 +575,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- Financial Systems -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-800 px-6 py-4">
               <h3 class="text-lg font-semibold !text-white flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
@@ -633,7 +612,7 @@ function updateActiveTabFromHash(hash) {
 
           <!-- Policy Compliance -->
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
+            <div class="bg-gray-800 px-6 py-4">
               <h3 class="text-lg font-semibold !text-white flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -676,69 +655,14 @@ function updateActiveTabFromHash(hash) {
           <h2 class="text-2xl font-bold text-gray-800 mb-6">Local Development Support</h2>
           <div class="prose max-w-none text-gray-700">
             <p>NLGFC provides local development project support to LAs through supervision and monitoring of both GoM and donor-funded projects in local governments. Malawi administers several funding mechanisms to support local development projects. These funds are designed to empower districts and constituencies to address key socio-economic challenges, improve infrastructure, and enhance service delivery at the grassroots level.</p>
+            <p class="mt-4">
+              <NuxtLink :to="'/projects/currentProjects#ssrlp_overview'" class="text-blue-600 hover:underline">Read More</NuxtLink>
+            </p>
           </div>
         </div>
       </div>
 
-      <!-- DDF -->
-      <div v-show="activeTab === 'ddf'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">District Development Fund (DDF)</h2>
-          <div class="prose max-w-none text-gray-700">
-            <p>District Development Fund supports locally prioritised development projects identified through District Development Plans (DDPs). The purpose of this fund is to enhance service delivery in sectors like education, health, agriculture, and local governance. The fund is allocated directly to District Councils based on approved budgets. Projects are implemented by councils in collaboration with communities.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- CDF -->
-      <div v-show="activeTab === 'cdf'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Constituency Development Fund (CDF)</h2>
-          <div class="prose max-w-none text-gray-700">
-            <p>The purpose of this fund is to finance small-scale community projects at the constituency level. The aim is to improve local infrastructure, livelihoods, and social services. CDF is channelled through Members of Parliament (MPs) in consultation with local structures, and projects are selected by community demand.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Health Rehabilitation -->
-      <div v-show="activeTab === 'healthRehabilitation'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Health Rehabilitation Fund</h2>
-          <div class="prose max-w-none text-gray-700">
-            <p>Health Rehabilitation Fund is for rehabilitating and upgrading health facilities (clinics, hospitals, staff housing) to improve access to quality healthcare services.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- IDF -->
-      <div v-show="activeTab === 'idf'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Infrastructure Development Fund (IDF)</h2>
-          <div class="prose max-w-none text-gray-700">
-            <p>IDF supports the construction and rehabilitation of critical public infrastructure (schools, markets, government buildings) to enhance economic and social service delivery in urban councils in Malawi.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- RRF -->
-      <div v-show="activeTab === 'rrf'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Road Rehabilitation Fund (RRF)</h2>
-          <div class="prose max-w-none text-gray-700">
-            <p>Rural and urban councils are provided with funds for the maintenance and rehabilitation to improve transport connectivity for trade and mobility. The fund is managed by District Councils with technical support from the Roads Authority.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Water Structures Fund -->
-      <div v-show="activeTab === 'waterStructuresFund'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6">Water Structures Fund</h2>
-          <div class="prose max-w-none text-gray-700">
-            <p>The fund is for the construction and rehabilitation of water supply systems (boreholes, piped schemes, dams) and ensures sustainable access to clean water.</p>
-          </div>
-        </div>
-      </div>
+      
     </main>
   </div>
 </template>
