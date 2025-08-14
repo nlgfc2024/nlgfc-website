@@ -10,6 +10,7 @@ const showRegionFilter = ref(false)
 const activeContent = ref([])
 const isLoading = ref(false)
 const transitionName = ref('fade')
+const hoveredDistrict = ref('')
 
 // District ID mapping for SVG paths
 const districtIdMap = {
@@ -158,11 +159,26 @@ const zoomToDistrict = (districtName) => {
   // Highlight the selected district
   // Remove highlight from all districts
   svg.querySelectorAll('path').forEach(path => {
-    path.style.fill = '#6f9c76'
+    path.style.fill = 'url(#deepNavyGradient)';
   })
   
   // Highlight selected district
   districtPath.style.fill = '#ff6b6b'
+}
+
+// Add this function to handle mouseover events
+const handleDistrictHover = (districtName) => {
+  hoveredDistrict.value = districtName
+}
+
+// Add this function to handle mouseout events
+const handleDistrictLeave = () => {
+  hoveredDistrict.value = ''
+}
+
+// Add this function to handle district clicks on the map
+const handleDistrictClick = (districtName) => {
+  selectedDistrict.value = districtName
 }
 
 // Watch for selectedDistrict changes
@@ -748,21 +764,21 @@ const districts = [
                                     <a
                                         :href="`/localAuthorities/${selectedDistrictDetails.pageSlug}?tab=projects`"
                                         @click="handleProjectsClick"
-                                        class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full hover:bg-purple-200 transition-colors"
+                                        class="inline-flex items-center px-3 py-1 bg-purple-100 text-gray-600 text-xs font-medium rounded-full hover:bg-purple-200 transition-colors"
                                     >
                                         District Profile
                                     </a>
                                     <a
                                         :href="`/localAuthorities/${selectedDistrictDetails.pageSlug}?tab=projects`"
                                         @click="handleProjectsClick"
-                                        class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full hover:bg-purple-200 transition-colors"
+                                        class="inline-flex items-center px-3 py-1 bg-purple-100 text-gray-600 text-xs font-medium rounded-full hover:bg-purple-200 transition-colors"
                                     >
                                         Projects
                                     </a>
                                     <a 
                                         :href="`/localAuthorities/${selectedDistrictDetails.pageSlug}?tab=news`"
                                         @click="handleNewsClick"
-                                        class="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full hover:bg-red-200 transition-colors"
+                                        class="inline-flex items-center px-3 py-1 bg-red-100 text-gray-600 text-xs font-medium rounded-full hover:bg-red-200 transition-colors"
                                     >
                                         News
                                     </a>
@@ -867,43 +883,48 @@ const districts = [
                                         </div>
                 
                 <!-- Map Info -->
-                <transition name="fade-slide-up">
-                    <div v-if="selectedDistrictDetails" class="text-sm text-gray-900 bg-emerald-800 border border-blue-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
-                        <div class="font-medium text-gray-900 mb-2">Currently viewing Details for {{ selectedDistrictDetails.name }}</div>
-                        <ul class="space-y-2">
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                </svg>
-                                <span>Phone: {{ selectedDistrictDetails.Phone }}</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                                <span>Email: {{ selectedDistrictDetails.email }}</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                                </svg>
-                                <span>Private Bag: {{ selectedDistrictDetails.PrivateBag }}</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div v-else class="text-sm text-gray-800 bg-emerald-700 border border-gray-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
-                        <div class="flex items-center">
-                            <svg class="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span>Select a district from the dropdown to highlight it and see all details</span>
+                                <transition name="fade-slide-up">
+                                    <div v-if="selectedDistrictDetails" class="text-sm text-gray-900 bg-emerald-800 border border-blue-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
+                                        <div class="font-medium text-gray-900 mb-2">Currently viewing Details for {{ selectedDistrictDetails.name }}</div>
+                                        <ul class="space-y-2">
+                                            <li class="flex items-start">
+                                                <svg class="h-5 w-5 text-gray-800 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                </svg>
+                                                <span>Phone: {{ selectedDistrictDetails.Phone }}</span>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <svg class="h-5 w-5  text-gray-800 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                </svg>
+                                                <span>Email: {{ selectedDistrictDetails.email }}</span>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <svg class="h-5 w-5  text-gray-800 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                                </svg>
+                                                <span>Private Bag: {{ selectedDistrictDetails.PrivateBag }}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div v-else class="text-sm text-gray-800 bg-emerald-700 border border-gray-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
+                                        <div class="flex items-center">
+                                            <svg class="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Select a district from the dropdown to highlight it and see all details</span>
+                                        </div>
+                                    </div>
+                                </transition>
+                                
+                                <!-- Hover display for district names -->
+                                <div v-if="hoveredDistrict" class="mt-2 text-center text-sm font-medium text-gray-700 bg-gray-100 p-2 rounded">
+                                  {{ hoveredDistrict }}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </transition>
-            </div>
-        </div>
-    </div>
-</template>
+                </template>
 
 <style>
 /* Transition effects */
@@ -985,9 +1006,21 @@ path {
 
 path:hover {
   fill: #00320d !important;
+  stroke: #ffffff;
+  stroke-width: 2px;
 }
 
 path.highlighted {
   fill: #4a0202 !important;
 }
+
+path {
+  transition: fill 0.3s ease;
+  cursor: pointer;
+  stroke: #ffffff; /* Add this line for black borders */
+  stroke-width: 1px; /* Add this line for border thickness */
+}
+
+
+
 </style>
