@@ -4,7 +4,7 @@ import { ref, onMounted, watch, computed, provide } from 'vue';
 definePageMeta({ title: 'Current Projects' })
 
 const route = useRoute()
-const activeTab = ref('ssrlp_overview')
+const activeTab = ref(null) // Start with null, let the sidebar handle initialization
 
 const projectGroups = [
   {
@@ -356,10 +356,13 @@ const projectUpdates = {
   ]
 }
 
-// Set from initial hash on load
+// Set from initial hash on load or default to first item
 onMounted(() => {
   if (route.hash) {
     updateActiveTabFromHash(route.hash.replace('#', ''))
+  } else {
+    // Default to first item if no hash
+    activeTab.value = 'ssrlp_overview'
   }
 })
 
@@ -367,6 +370,9 @@ onMounted(() => {
 watch(() => route.hash, (newHash) => {
   if (newHash) {
     updateActiveTabFromHash(newHash.replace('#', ''))
+  } else {
+    // If hash is cleared, go back to default
+    activeTab.value = 'ssrlp_overview'
   }
 })
 
