@@ -26,31 +26,31 @@ const projectGroups = [
         id: 'ssrlp_news',
         items: [
           { id: 'ssrlp_overview', title: 'Overview' },
-          { id: 'SCTP', title: 'SCTP' },
-          { id: 'publicWorks', title: 'Public Works' },
-          { id: 'emergency', title: 'Scalable Social Safety Nets' },
-          { id: 'livelihoods', title: 'Livelihoods Support' }
-        ]
-      },
-      {
+      { id: 'SCTP', title: 'SCTP' },
+      { id: 'publicWorks', title: 'Public Works' },
+      { id: 'emergency', title: 'Scalable Social Safety Nets' },
+      { id: 'livelihoods', title: 'Livelihoods Support' }
+    ]
+  },
+  {
         subgroup: 'GESD',
         id: 'gesd_news',
-        items: [
+    items: [
           { id: 'gesd_overview', title: 'Overview' },
-          { id: 'pbf', title: 'Performance-Based Financing' },
-          { id: 'ias', title: 'Intergovernmental Accountability Systems' },
-          { id: 'lgpi', title: 'Local Government Performance Improvement' },
-          { id: 'adaptive', title: 'Adaptive Management and Innovation' }
-        ]
-      },
-      {
+      { id: 'pbf', title: 'Performance-Based Financing' },
+      { id: 'ias', title: 'Intergovernmental Accountability Systems' },
+      { id: 'lgpi', title: 'Local Government Performance Improvement' },
+      { id: 'adaptive', title: 'Adaptive Management and Innovation' }
+    ]
+  },
+  {
         subgroup: 'RCRP 2',
         id: 'rcrp2_news',
-        items: [
+    items: [
           { id: 'rcrp_overview', title: 'Overview' },
-          { id: 'drb', title: 'District-Led Resilience Building' },
-          { id: 'usr', title: 'Urban Malawi Social Registry' },
-          { id: 'upw', title: 'Urban Climate Smart Public Works Program' }
+      { id: 'drb', title: 'District-Led Resilience Building' },
+      { id: 'usr', title: 'Urban Malawi Social Registry' },
+      { id: 'upw', title: 'Urban Climate Smart Public Works Program' }
         ]
       }
     ]
@@ -320,13 +320,19 @@ const projectUpdates = {
   // Sub-group landing news feeds
   ssrlp_news: [
     { date: '2024-06-20', title: 'SSRLP mid-year review completed', tags: ['ssrlp','review'], summary: 'Key milestones achieved across all pillars; detailed report forthcoming.', link: '#' },
-    { date: '2024-05-14', title: 'Additional livelihood grants disbursed', tags: ['livelihoods'], summary: 'Disbursements reached 3,000 households in priority districts.', link: '#' }
+    { date: '2024-05-14', title: 'Additional livelihood grants disbursed', tags: ['livelihoods'], summary: 'Disbursements reached 3,000 households in priority districts.', link: '#' },
+    { date: '2024-04-08', title: 'Shock response window activated', tags: ['emergency'], summary: 'Activation supports drought-affected households with temporary assistance.', link: '#' },
+    { date: '2024-03-18', title: 'CS-EPWP sites expanded', tags: ['publicWorks'], summary: 'New catchment restoration sites opened across 5 districts.', link: '#' }
   ],
   gesd_news: [
-    { date: '2024-06-08', title: 'New LAPA guidelines issued', tags: ['gesd','governance'], summary: 'Updated guidance for council performance assessments released.', link: '#' }
+    { date: '2024-06-08', title: 'New LAPA guidelines issued', tags: ['gesd','governance'], summary: 'Updated guidance for council performance assessments released.', link: '#' },
+    { date: '2024-05-12', title: 'PBG top performers announced', tags: ['pbf'], summary: 'Councils exceeding 85% receive performance-based grants.', link: '#' },
+    { date: '2024-04-22', title: 'Audit improvements rolled out', tags: ['ias'], summary: 'New intergovernmental accountability tools deployed nationwide.', link: '#' }
   ],
   rcrp2_news: [
-    { date: '2024-05-30', title: 'RCRP 2 launch workshops held', tags: ['rcrp'], summary: 'Stakeholder workshops conducted in Blantyre and Lilongwe.', link: '#' }
+    { date: '2024-05-30', title: 'RCRP 2 launch workshops held', tags: ['rcrp'], summary: 'Stakeholder workshops conducted in Blantyre and Lilongwe.', link: '#' },
+    { date: '2024-05-10', title: 'Hydro-meteorological stations upgraded', tags: ['infrastructure'], summary: 'Upgrades will improve early warning systems and data accuracy.', link: '#' },
+    { date: '2024-04-19', title: 'Catchment rehabilitation plan approved', tags: ['resilience'], summary: 'Plan targets priority basins for ecosystem restoration.', link: '#' }
   ],
  
   SCTP: [
@@ -481,9 +487,9 @@ function updateActiveTabFromHash(hash) {
     }
     // Flat items (government group)
     if (group.items) {
-      const match = group.items.find(item => item.id === hash)
-      if (match) {
-        activeTab.value = match.id
+    const match = group.items.find(item => item.id === hash)
+    if (match) {
+      activeTab.value = match.id
         openGroup.value = group.group
         return
       }
@@ -515,31 +521,104 @@ function updateActiveTabFromHash(hash) {
 watch(activeTab, () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 })
-const updatesPerPage = 3
-const currentPage = ref(1)
+// Removed legacy pagination for Latest Updates section
 
-const paginatedUpdates = computed(() => {
-  const updates = projectUpdates[activeTab.value] || []
-  const start = (currentPage.value - 1) * updatesPerPage
-  return updates.slice(start, start + updatesPerPage)
-})
+// News landing configuration (hero + featured grid + stats)
+const newsLandingTabs = ['ssrlp_news', 'gesd_news', 'rcrp2_news']
+const isNewsLanding = computed(() => newsLandingTabs.includes(activeTab.value))
 
-const totalPages = computed(() => {
-  const updates = projectUpdates[activeTab.value] || []
-  return Math.ceil(updates.length / updatesPerPage) || 1
-})
+const newsHero = {
+  ssrlp_news: { image: '/images/samples/news1.jpg', category: 'SSRLP' },
+  gesd_news: { image: '/images/samples/news2.jpg', category: 'GESD' },
+  rcrp2_news: { image: '/images/samples/news3.jpg', category: 'RCRP 2' }
+}
 
-function goToPage(page) {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page
+const newsItemsForActive = computed(() => projectUpdates[activeTab.value] || [])
+const heroNewsItem = computed(() => newsItemsForActive.value[0] || null)
+const featuredArticles = computed(() => newsItemsForActive.value.slice(0, 3))
+
+const projectStats = {
+  ssrlp_news: [
+    { label: 'Beneficiaries', value: '590k+' },
+    { label: 'Districts & Cities', value: '18 + 4' },
+    { label: 'Budget', value: '$516M' }
+  ],
+  gesd_news: [
+    { label: 'Councils', value: '28' },
+    { label: 'PBG Windows', value: 'Multiple' },
+    { label: 'Assessment', value: 'Annual LAPA' }
+  ],
+  rcrp2_news: [
+    { label: 'Budget', value: '$240M' },
+    { label: 'Duration', value: '2024–2029' },
+    { label: 'Components', value: '5' }
+  ]
+}
+
+// Slider state for news landing
+const currentSlide = ref(0)
+const autoplay = ref(true)
+const autoplayInterval = ref(5000)
+let autoplayTimer = null
+
+const newsImages = ['/images/samples/news1.jpg','/images/samples/news2.jpg','/images/samples/news3.jpg']
+
+const slidesForActive = computed(() => (isNewsLanding.value ? (projectUpdates[activeTab.value] || []) : []))
+
+function nextSlide() {
+  if (!slidesForActive.value.length) return
+  currentSlide.value = (currentSlide.value + 1) % slidesForActive.value.length
+  resetAutoplay()
+}
+
+function prevSlide() {
+  if (!slidesForActive.value.length) return
+  currentSlide.value = (currentSlide.value - 1 + slidesForActive.value.length) % slidesForActive.value.length
+  resetAutoplay()
+}
+
+function goToSlide(index) {
+  if (!slidesForActive.value.length) return
+  currentSlide.value = index
+  resetAutoplay()
+}
+
+function resetAutoplay() {
+  if (autoplay.value) {
+    clearInterval(autoplayTimer)
+    startAutoplay()
   }
 }
 
-// Reset to first page when switching tabs
+function startAutoplay() {
+  if (autoplay.value) {
+    clearInterval(autoplayTimer)
+    autoplayTimer = setInterval(() => {
+      nextSlide()
+    }, autoplayInterval.value)
+  }
+}
+
+function toggleAutoplay() {
+  autoplay.value = !autoplay.value
+  if (autoplay.value) startAutoplay()
+  else clearInterval(autoplayTimer)
+}
+
 watch(activeTab, () => {
-  currentPage.value = 1
+  // reset slider when switching between tabs
+  currentSlide.value = 0
+  if (isNewsLanding.value) startAutoplay()
+  else clearInterval(autoplayTimer)
 })
 
+onMounted(() => {
+  if (isNewsLanding.value) startAutoplay()
+})
+
+onBeforeUnmount(() => {
+  clearInterval(autoplayTimer)
+})
 
 </script>
 
@@ -554,7 +633,7 @@ watch(activeTab, () => {
           <!-- Groups -->
           <div v-for="group in projectGroups" :key="group.group" class="">
             <!-- Group header button -->
-            <button
+        <button
               @click="() => { openGroup = openGroup === group.group ? null : group.group; if (group.id) { activeTab = group.id; history.replaceState(null, '', `#${group.id}`) } }"
               :class="[
                 'w-full text-left p-4 rounded-lg transition-all duration-200 group flex items-center justify-between',
@@ -566,16 +645,16 @@ watch(activeTab, () => {
                 <span class="font-semibold">{{ group.group }}</span>
               </span>
               <svg class="w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': openGroup === group.group }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-            </button>
+        </button>
 
             <!-- Group items: flat list (Government Funded) -->
             <div v-if="group.items && openGroup === group.group" class="mt-2">
               <ul class="space-y-2">
-                <li v-for="item in group.items" :key="item.id">
-                  <a
-                    :href="`#${item.id}`"
-                    @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
-                    :class="[
+            <li v-for="item in group.items" :key="item.id">
+              <a
+                :href="`#${item.id}`"
+                @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
+                :class="[
                       'block p-3 rounded-lg transition-all duration-200 group',
                       activeTab === item.id ? 'bg-emerald-50 border-2 border-emerald-200 text-emerald-700' : 'hover:bg-gray-50 border-2 border-transparent text-gray-700 hover:text-gray-900'
                     ]"
@@ -623,10 +702,10 @@ watch(activeTab, () => {
                           <svg :class="[ 'w-4 h-4 transition-colors', activeTab === item.id ? 'text-emerald-600' : 'text-gray-400 group-hover:text-gray-600' ]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="2" stroke-width="2"/></svg>
                           <span class="text-sm font-medium">{{ item.title }}</span>
                         </div>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
               </div>
             </div>
 
@@ -638,7 +717,127 @@ watch(activeTab, () => {
 
     <!-- Main Content Area -->
     <main class="flex-1 min-w-0">
-      <div v-if="projectContent[activeTab]" class="bg-white rounded-xl shadow-sm overflow-hidden">
+      <!-- News Landing: Sliding Hero + Related News + Stats (replaces the default header/intro for news tabs) -->
+      <div v-if="isNewsLanding" class="space-y-10">
+        <!-- Sliding Hero (multiple news items) -->
+       <section class="relative overflow-hidden rounded-xl shadow-2xl h-[360px] md:h-[420px]">
+  <div 
+    v-for="(item, index) in slidesForActive" 
+    :key="index" 
+    class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+    :class="{ 'opacity-100 z-10': currentSlide === index, 'opacity-0 z-0': currentSlide !== index }"
+  >
+    <!-- Background image with overlay -->
+    <div class="absolute inset-0">
+      <img :src="newsImages[index % newsImages.length]" :alt="item.title" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+    </div>
+    <!-- Content -->
+    <div class="relative h-full flex flex-col justify-end z-10 pb-12">
+      <div class="px-6">
+        <div class="mb-3">
+          <span class="inline-block px-3 py-1 text-xs font-semibold tracking-wider text-white uppercase bg-blue-600 rounded-full">
+            {{ (activeTab.split('_')[0] || 'Project').toUpperCase() }} News
+          </span>
+        </div>
+        <div class="max-w-3xl">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-3 leading-tight">{{ item.title }}</h2>
+          <p class="text-white/90">{{ item.summary }}</p>
+        </div>
+        <div class="mt-5" v-if="item.link">
+          <a :href="item.link" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
+            Read More
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="absolute bottom-2 left-0 right-0 z-20 pt-5">
+    <div class="px-6 flex items-center justify-between">
+      <!-- Indicators -->
+      <div class="flex space-x-2">
+        <button
+          v-for="(item, idx) in slidesForActive"
+          :key="'ind-' + idx"
+          @click="goToSlide(idx)"
+          class="w-3 h-3 rounded-full transition-all duration-300"
+          :class="{ 'w-8 bg-white': currentSlide === idx, 'w-3 bg-white/30 hover:bg-white/50': currentSlide !== idx }"
+        ></button>
+      </div>
+      <!-- Arrows + autoplay -->
+      <div class="flex items-center space-x-4">
+        <button @click="toggleAutoplay" class="p-2 text-white/70 hover:text-white transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path v-if="autoplay" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+          </svg>
+        </button>
+        <button @click="prevSlide" class="p-2 text-white/70 hover:text-white transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <button @click="nextSlide" class="p-2 text-white/70 hover:text-white transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+        <!-- Related News (Featured Articles Grid style) -->
+        <section v-if="slidesForActive.length" class="px-1">
+          <div class="grid md:grid-cols-3 gap-6">
+            <article
+              v-for="(news, nIdx) in slidesForActive"
+              :key="'rel-'+nIdx"
+              class="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
+            >
+              <div class="flex h-full">
+                <!-- Image on left -->
+                <div class="w-1/3 relative overflow-hidden">
+                  <img 
+                    :src="newsImages[nIdx % newsImages.length]" 
+                    alt="Article image"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  >
+                </div>
+                
+                <!-- Content on right -->
+                <div class="w-2/3 p-5 flex flex-col">
+                  <span class="text-xs font-medium text-gray-500 mb-1 flex items-center">
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    {{ new Date(news.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}
+                  </span>
+                  <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                    <a :href="news.link">{{ news.title }}</a>
+                  </h3>
+                  <p class="text-sm text-gray-600 line-clamp-2">{{ news.summary }}</p>
+                  <a :href="news.link" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    Read more
+                    <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- Project Statistics -->
+        <section class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div v-for="(stat, sIdx) in projectStats[activeTab]" :key="sIdx" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="text-sm text-gray-500">{{ stat.label }}</div>
+            <div class="mt-2 text-2xl font-bold text-emerald-700">{{ stat.value }}</div>
+          </div>
+        </section>
+      </div>
+      <div v-if="projectContent[activeTab] && !isNewsLanding" class="bg-white rounded-xl shadow-sm overflow-hidden">
         <!-- Project Header -->
         <div class="bg-gradient-to-r from-blue-50 to-blue-100 px-6 py-5 border-b border-blue-200">
           <h2 class="text-3xl font-bold text-gray-900 mb-1">
@@ -658,99 +857,16 @@ watch(activeTab, () => {
         </div>
       </div>
 
-      <div v-else class="bg-white rounded-lg shadow p-6 text-center">
+      <!-- <div v-else class="bg-white rounded-lg shadow p-6 text-center">
         <div class="text-gray-400 mb-4">
           <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
           </svg>
         </div>
         <p class="text-gray-500 italic">No content available for this project.</p>
-      </div>
+      </div> -->
       
-      <!-- Latest Updates Section -->
-      <div v-if="projectUpdates[activeTab]" class="mt-10">
-        <div class="flex items-center justify-between mb-6">
-          <h3 class="text-2xl font-bold text-gray-900">
-            <span class="inline-block border-b-2 border-blue-500 pb-1">Latest Updates</span>
-          </h3>
-          <div class="text-sm text-gray-500">
-            Showing {{ paginatedUpdates.length }} of {{ projectUpdates[activeTab].length }} updates
-          </div>
-        </div>
-        
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <div
-            v-for="(update, index) in paginatedUpdates"
-            :key="index"
-            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-100"
-          >
-            <div class="p-5">
-              <div class="flex justify-between items-start mb-2">
-                <span class="text-xs font-semibold px-2 py-1 bg-blue-100 text-blue-800 rounded-full">
-                  {{ update.tags[0] }}
-                </span>
-                <span class="text-xs text-gray-500">
-                  {{ new Date(update.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }}
-                </span>
-              </div>
-              <h4 class="text-lg font-semibold mb-2 text-gray-900 hover:text-blue-600 transition-colors">
-                <a :href="update.link" class="hover:underline">{{ update.title }}</a>
-              </h4>
-              <p class="text-gray-600 text-sm mb-3">{{ update.summary }}</p>
-              <a
-                :href="update.link"
-                class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800"
-              >
-                Read more
-                <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Pagination -->
-        <div class="mt-8 flex items-center justify-between">
-          <button
-            @click="goToPage(currentPage - 1)"
-            :disabled="currentPage === 1"
-            class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-            </svg>
-            Previous
-          </button>
-          
-          <div class="hidden sm:flex sm:space-x-2">
-            <button
-              v-for="page in totalPages"
-              :key="page"
-              @click="goToPage(page)"
-              :class="[
-                'px-4 py-2 text-sm font-medium rounded-lg',
-                page === currentPage
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
-              ]"
-            >
-              {{ page }}
-            </button>
-          </div>
-          
-          <button
-            @click="goToPage(currentPage + 1)"
-            :disabled="currentPage === totalPages"
-            class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Next
-            <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
+      <!-- Latest Updates Section removed entirely -->
     </main>
   </div>
 </template>
