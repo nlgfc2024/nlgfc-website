@@ -113,9 +113,9 @@ function updateActiveTabFromHash(hash) {
         </div>
 
         <!-- Overview Section -->
-        <div class="bg-gradient-to-br from-emerald-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10 flex flex-col">
+        <div class="bg-gradient-to-br from-emerald-50 to-gray-50  rounded-xl shadow-sm border border-gray-100 mb-10 flex flex-col">
           <div class="flex items-center mb-0"> <!-- Remove margin-bottom -->
-            <div class="bg-emerald-50 p-3 rounded-lg mr-5">
+            <div class="bg-emerald-50 rounded-lg mr-5">
               <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
@@ -128,14 +128,14 @@ function updateActiveTabFromHash(hash) {
         </div>
 
         <!-- IGTF Explanation -->
-        <div class="mb-10 bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex flex-col">
+        <div class="mb-10 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col">
           <div class="flex items-center mb-0"> <!-- Remove margin-bottom -->
             <svg class="w-6 h-6 text-emerald-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
             <h3 class="text-2xl font-semibold text-gray-800 flex-1">Intergovernmental Fiscal Transfer Formula (IGTF)</h3>
           </div>
-          <p class="text-gray-700 mb-4 mt-2">
+          <p class="text-gray-700 mb-4">
             The IGTF system enables the central government to allocate financial resources to Local Government Authorities (LGAs) to support decentralized service delivery, designed to promote:
           </p>
           <div class="grid md:grid-cols-2 gap-4 mt-4">
@@ -299,7 +299,7 @@ function updateActiveTabFromHash(hash) {
         </div>
 
         <!-- Overview Section (PFM Cycle Management title moved up) -->
-        <div class="bg-gradient-to-br from-emerald-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10 flex flex-col">
+        <div class="bg-gradient-to-br from-emerald-50 to-gray-50 rounded-xl shadow-sm border border-gray-100 mb-10 flex flex-col">
           <div class="flex items-center mb-0"> <!-- Remove margin-bottom to move title up -->
             <div class="bg-emerald-50 p-3 rounded-lg mr-5">
               <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -308,7 +308,7 @@ function updateActiveTabFromHash(hash) {
             </div>
             <h3 class="text-xl font-semibold text-gray-800 flex-1">PFM Cycle Management</h3>
           </div>
-          <p class="text-gray-700 leading-relaxed pl-16 mt-2">
+          <p class="text-gray-700 leading-relaxed pl-16">
             NLGFC oversees the entire public financial management cycle, from resource mobilization and allocation to utilization, reporting, and accountability. Our mandate promotes sound fiscal governance, transparency, and efficient service delivery across all local authorities in Malawi.
           </p>
         </div>
