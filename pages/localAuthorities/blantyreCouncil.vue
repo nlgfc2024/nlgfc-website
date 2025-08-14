@@ -85,6 +85,7 @@ const handleButtonClick = (event, action = null) => {
 onMounted(() => {
   if (window.location.hash) {
     const hash = window.location.hash.replace('#', '')
+    
     if (tabs.some(tab => tab.id === hash)) {
       activeTab.value = hash
     }
@@ -229,9 +230,9 @@ const news = [
   <!-- Vision Card -->
   <div 
     @click="openModal('vision')"
-    class="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden group">
+    class="bg-b rounded-lg border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden group">
     <!-- Purple top border -->
-    <div class="h-1 bg-purple-500"></div>
+    <div class="h-1 bg-gray-800"></div>
     <div class="p-6">
       <!-- Eye icon for Vision -->
       <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
@@ -260,7 +261,7 @@ const news = [
     @click="openModal('mission')"
     class="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden group">
     <!-- Blue top border -->
-    <div class="h-1 bg-blue-500"></div>
+    <div class="h-1 bg-gray-800"></div>
     <div class="p-6">
       <!-- Lightning/Energy icon for Mission -->
       <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
@@ -275,9 +276,7 @@ const news = [
           @click.stop="openModal('mission')"
           class="text-blue-600 hover:text-blue-800 font-medium flex items-center group-hover:underline">
           Read more
-          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-          </svg>
+         
         </button>
       </div>
     </div>
@@ -288,7 +287,7 @@ const news = [
     @click="openModal('values')"
     class="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden group">
     <!-- Green top border -->
-    <div class="h-1 bg-green-500"></div>
+    <div class="h-1 bg-gray-800"></div>
     <div class="p-6">
       <!-- Heart icon for Core Values -->
       <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
