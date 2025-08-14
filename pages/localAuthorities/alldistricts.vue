@@ -1,17 +1,22 @@
 <script setup>
+import { useDistrictPDF } from '~/composables/useDistrictPDF';
+
 definePageMeta({
-    title: 'For all local authorities' 
+    title: 'For all local authorities'
 })
+
 
 // Reactive variables
 const selectedDistrict = ref('')
 const selectedRegion = ref('')
 const showRegionFilter = ref(false)
+const searchQuery = ref('')
+const sortCriteria = ref('name')
+const sortDirection = ref('asc')
 const activeContent = ref([])
 const isLoading = ref(false)
 const transitionName = ref('fade')
 const hoveredDistrict = ref('')
-
 // District ID mapping for SVG paths
 const districtIdMap = {
   'Chitipa': 'MWCT',
@@ -52,6 +57,39 @@ const svgRef = ref(null)
 const filteredDistricts = computed(() => {
     if (!selectedRegion.value) return districts
     return districts.filter(district => district.region === selectedRegion.value)
+})
+
+// Computed property to filter districts by search query
+const searchedDistricts = computed(() => {
+    let result = filteredDistricts.value
+    
+    // Apply search filter
+    if (searchQuery.value) {
+        const query = searchQuery.value.toLowerCase().trim()
+        result = result.filter(district =>
+            district.name.toLowerCase().includes(query) ||
+            district.region.toLowerCase().includes(query) ||
+            district.description.toLowerCase().includes(query) ||
+            district.population.toLowerCase().includes(query) ||
+            district.area.toLowerCase().includes(query) ||
+            district.capital.toLowerCase().includes(query)
+        )
+    }
+    
+    // Apply sorting
+    return [...result].sort((a, b) => {
+        let aValue, bValue
+        
+        // Only sort by name since other options were removed
+        aValue = a.name
+        bValue = b.name
+        
+        if (sortDirection.value === 'asc') {
+            return aValue > bValue ? 1 : aValue < bValue ? -1 : 0
+        } else {
+            return aValue < bValue ? 1 : aValue > bValue ? -1 : 0
+        }
+    })
 })
 
 // Unique regions for the region filter
@@ -122,6 +160,195 @@ const clearFilters = () => {
     transitionName.value = 'fade'
     selectedDistrict.value = ''
     selectedRegion.value = ''
+}
+
+// Method to export data to CSV
+const exportToCSV = () => {
+  // Create CSV content
+  const headers = ['Name', 'Region', 'Capital', 'Population', 'Area', 'Description', 'Phone', 'Email', 'Private Bag'];
+  const csvContent = [
+    headers.join(','),
+    ...searchedDistricts.value.map(district => [
+      district.name,
+      district.region,
+      district.capital || '',
+      district.population || '',
+      district.area || '',
+      district.description || '',
+      district.Phone || '',
+      district.email || '',
+      district.PrivateBag || ''
+    ].map(field => `"${field}"`).join(','))
+  ].join('\n');
+
+  // Create download link
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', 'malawi_districts.csv');
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Method to export data to PDF
+const exportToPDF = async () => {
+  try {
+    // Show loading state
+    isLoading.value = true;
+    
+    // Dynamically import jsPDF to avoid SSR issues
+    const jsPDF = await import('jspdf');
+    const autoTable = await import('jspdf-autotable');
+    
+    const doc = new jsPDF.default();
+    
+    // Add title
+    doc.setFontSize(18);
+    doc.text('Malawi Districts Report', 14, 20);
+    
+    // Add date
+    doc.setFontSize(12);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+    
+    // Add table
+    autoTable.default(doc, {
+      startY: 40,
+      head: [['Name', 'Region', 'Capital', 'Population', 'Area']],
+      body: searchedDistricts.value.map(district => [
+        district.name,
+        district.region,
+        district.capital || '',
+        district.population || '',
+        district.area || ''
+      ]),
+      styles: {
+        fontSize: 8
+      },
+      headStyles: {
+        fillColor: [0, 50, 13]
+      }
+    });
+    
+    // Save the PDF
+    doc.save('malawi_districts.pdf');
+  } catch (error) {
+    console.error('Error exporting to PDF:', error);
+    // Handle error (show notification to user)
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+// Method to dynamically import district page data
+const getDistrictPageData = async (pageSlug) => {
+  try {
+    // Dynamically import the district page component
+    const districtModule = await import(`./${pageSlug}.vue`);
+    
+    // If the component has a default export with setup function
+    if (districtModule && districtModule.default) {
+      return districtModule.default;
+    }
+    
+    return null;
+  } catch (error) {
+    console.warn(`Could not load district page data for ${pageSlug}:`, error);
+    return null;
+  }
+};
+
+// Method to extract detailed district data from page
+const extractDistrictData = (district, pageData) => {
+  // If we have detailed page data, use it; otherwise fall back to basic data
+  if (pageData && pageData.data) {
+    // This would be used if the page data was structured in a specific way
+    // For now, we'll use the basic district data and enhance it where possible
+  }
+  
+  // Prepare comprehensive district data for PDF generation
+  const districtData = {
+    profile: {
+      about: district.description || 'No description available',
+      vision: district.vision || "Not specified",
+      mission: district.mission || "Not specified",
+      values: district.values || [
+        "Transparency and accountability: council shall discharge its duties in an open and reliable manner",
+        "Integrity: the council shall act with honesty and without compromising the truth",
+        "Client focused: the client shall be served in an efficient and effective manner",
+        "Collaboration: council shall enhance interaction with all relevant stakeholders",
+        "Open communication: the council shall enhance inter and intra communication",
+        "Responsiveness: council shall provide services that are demand driven without discrimination"
+      ],
+      strategicObjectives: district.strategicObjectives || [
+        "Not specified"
+      ],
+      keyFunctions: district.keyFunctions || [
+        "Local governance and administration",
+        "Development planning and implementation",
+        "Service delivery and infrastructure development",
+        "Revenue collection and financial management"
+      ],
+      additionalInfo: {
+        "Major Achievements": district.majorAchievements || "Not specified",
+        "Jurisdiction": district.jurisdiction || `Located in ${district.region} Region of Malawi`,
+        "Population": district.population || 'Not specified',
+        "Structure": district.structure || "Comprised of elected councillors and appointed technical staff"
+      }
+    },
+    projects: district.projects || [
+      {
+        name: 'SSRLP,GESD,SEP',
+        fullName: '2025',
+        description: 'This is a sample project description for districts that do not have detailed project information.',
+        objectives: [
+          'Sample objective 1',
+          'Sample objective 2'
+        ],
+        status: 'Not Active'
+      }
+    ],
+    reports: district.reports || [],
+    news: district.news || []
+  };
+  
+  return districtData;
+};
+
+// Method to export district information to PDF
+const exportDistrictInfoToPDF = async () => {
+  // Check if a district is selected
+  if (!selectedDistrict.value) {
+    console.warn('No district selected for PDF export');
+    return;
+  }
+  
+  // Get the selected district details
+  const district = selectedDistrictDetails.value;
+  
+  // Try to get detailed data from the district page
+  let districtData;
+  
+  if (district.pageSlug) {
+    try {
+      // Try to import the district page to get detailed data
+      const pageData = await getDistrictPageData(district.pageSlug);
+      districtData = extractDistrictData(district, pageData);
+    } catch (error) {
+      console.warn('Could not load detailed district data, using basic data:', error);
+      // Fallback to basic data extraction
+      districtData = extractDistrictData(district, null);
+    }
+  } else {
+    // Fallback to basic data extraction
+    districtData = extractDistrictData(district, null);
+  }
+  
+  // Call the useDistrictPDF composable to generate the PDF
+  const { generateDistrictPDF } = useDistrictPDF();
+  generateDistrictPDF(districtData, district.name);
 }
 
 // Method to select popular district
@@ -567,11 +794,12 @@ const districts = [
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Left side - Controls -->
             <div class="space-y-6">
+              
                 <!-- Region Filter Toggle -->
                 <div class="flex items-center space-x-3">
-                    <input 
-                        type="checkbox" 
-                        id="regionFilter" 
+                    <input
+                        type="checkbox"
+                        id="regionFilter"
                         v-model="showRegionFilter"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                     >
@@ -610,9 +838,9 @@ const districts = [
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-gray-300"
                     >
                         <option value="">Choose a district...</option>
-                        <option 
-                            v-for="district in filteredDistricts" 
-                            :key="district.name" 
+                        <option
+                            v-for="district in searchedDistricts"
+                            :key="district.name"
                             :value="district.name"
                         >
                             {{ district.name }} ({{ district.region }})
@@ -621,14 +849,17 @@ const districts = [
                 </div>
 
                 <!-- Clear Button -->
-                <button 
-                    @click="clearFilters"
-                    class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
-                    :class="{ 'opacity-50': !selectedDistrict && !selectedRegion }"
-                    :disabled="!selectedDistrict && !selectedRegion"
-                >
-                    Clear Selection
-                </button>
+                                 <button
+                                     @click="clearFilters"
+                                     class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+                                     :class="{ 'opacity-50': !selectedDistrict && !selectedRegion }"
+                                     :disabled="!selectedDistrict && !selectedRegion"
+                                 >
+                                     Clear Selection
+                                 </button>
+                
+                                 <!-- Export Buttons -->
+                                
 
                 <!-- Transition wrapper for content -->
                 <transition :name="transitionName" mode="out-in">
@@ -736,7 +967,7 @@ const districts = [
                             
                             <!-- Action Buttons -->
                             <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
-                                <button 
+                                <button
                                     @click="handleDistrictLinkClick(selectedDistrictDetails)"
                                     class="flex-1 bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm font-medium flex items-center justify-center"
                                 >
@@ -745,7 +976,16 @@ const districts = [
                                     </svg>
                                     View {{ selectedDistrictDetails.name }} Details
                                 </button>
-                                <a 
+                                <button
+                                    @click="exportDistrictInfoToPDF"
+                                    class="flex-1 bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm font-medium flex items-center justify-center"
+                                >
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    Export District Info to PDF
+                                </button>
+                                <a
                                     :href="selectedDistrictDetails.slug"
                                     target="_blank"
                                     class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm font-medium text-center flex items-center justify-center"

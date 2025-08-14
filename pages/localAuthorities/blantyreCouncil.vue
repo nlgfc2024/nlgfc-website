@@ -1,4 +1,6 @@
 <script setup>
+import { useDistrictPDF } from '~/composables/useDistrictPDF';
+
 definePageMeta({
   title: 'Blantyre District Council'
 })
@@ -75,6 +77,51 @@ const handleButtonClick = (event, action = null) => {
   if (action === 'download') {
     // Handle download logic here
     console.log('Download initiated')
+    
+    // Prepare district data for PDF generation
+    const districtData = {
+      profile: {
+        about: "Blantyre District covers an area of 1,785 square kilometres in the Southern Region of Malawi. The District has a total population of 451,220 people, of which 218,464 (48.4 %) are males and 232,756 (51.6 %) are females (Population& Housing Census 2018).",
+        vision: "A Council that can provide sustainable, quality socio-economic services adequately to its community.",
+        mission: "To provide timely, high-quality and equitable social services through the promotion of Local governance and popular participation of the communities for the attainment of sustainable socio-economic development of the District.",
+        values: [
+          "Integrity: We uphold the highest standards of honesty and ethical conduct",
+          "Transparency: We operate with openness and clarity in all our dealings",
+          "Accountability: We take responsibility for our actions and decisions",
+          "Innovation: We embrace creative solutions to community challenges",
+          "Teamwork: We collaborate effectively to achieve common goals",
+          "Professionalism: We maintain excellence in all our services"
+        ],
+        strategicObjectives: [
+          "To create a democratic environment for popular participation in governance and development at the local level.",
+          "To provide social-economic services, coordinate and guide development issues in the District",
+          "To improve access, quality, and utilisation of social services by communities",
+          "To enhance and improve revenue generation and human resource capacity for optimal operational performance",
+          "To reduce food security through diversification and commercialization of agricultural production.",
+          "To improve access of vulnerable children and people living with disability to essential quality services",
+          "To promote public employment services through strengthening the linkage between registered job seekers and potential employers"
+        ],
+        keyFunctions: [
+          "Local governance and administration",
+          "Development planning and implementation",
+          "Service delivery and infrastructure development",
+          "Revenue collection and financial management"
+        ],
+        additionalInfo: {
+          "Major Achievements": "Improved in LAPA scores for three consecutive years, hence more GESD funds for projects. The District is implementing the Kadidi project, which is one of the flagship projects under GESD funds. Under the project, there will be an OPD, staff house, incinerator, and maternity wing",
+          "Jurisdiction": "Covers 1,785 square kilometres in the Southern Region of Malawi",
+          "Population": "Blantyre District has a total population of 451,220 people, of which 218,464 (48.4 %) are males and 232,756 (51.6 %) are females (Population& Housing Census 2018).",
+          "Structure": "Comprised of elected councillors and appointed technical staff"
+        }
+      },
+      projects: projects,
+      reports: reports,
+      news: news
+    };
+    
+    // Generate PDF
+    const { generateDistrictPDF } = useDistrictPDF();
+    generateDistrictPDF(districtData, 'Blantyre District Council');
   } else if (action === 'readmore') {
     // Handle read more logic here
     console.log('Read more clicked')
