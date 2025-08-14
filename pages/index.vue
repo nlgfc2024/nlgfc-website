@@ -331,84 +331,81 @@ const publications = ref([
       </section>
     
       <!-- Projects Section with Interactive Cards -->
-     <section class="py-8 bg-gradient-to-b from-primary-50 to-white">
-      <div class="container mx-auto px-6">
-        <div class="text-center mb-16">
-          <!-- <span class="inline-block px-3 py-1 text-sm font-medium text-primary-700 bg-primary-100 rounded-full mb-4">
-            Our Initiatives
-          </span> -->
-          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Current <span class="text-primary-600">Projects</span>
-          </h2>
-          <p class="max-w-2xl mx-auto text-gray-600">
-            Discover our key programs that are transforming local governance and service delivery across the nation.
-          </p>
-        </div>
+      <section class="py-8 bg-gradient-to-b from-primary-50 to-white">
+        <div class="container mx-auto px-4 sm:px-6">
+          <div class="text-center mb-12 md:mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Current <span class="text-primary-600">Projects</span>
+            </h2>
+            <p class="max-w-2xl mx-auto text-gray-600 px-4">
+              Discover our key programs that are transforming local governance and service delivery across the nation.
+            </p>
+          </div>
 
-        <div class="flex overflow-x-auto pb-4 gap-8">
-          <div
-            v-for="(project, index) in projects"
-            :key="index"
-            class="group relative overflow-hidden rounded-2xl shadow-xl h-80"
-          >
-            <img
-              :src="`https://picsum.photos/600/400?random=${index + 10}`"
-              :alt="project.title"
-              class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-            
-            <div class="relative h-full flex flex-col justify-end p-6 text-white">
-              <div class="flex items-center justify-center w-20 h-20 mb-4 bg-white rounded-xl shadow-md p-2">
-                <img
-                  v-if="project.imagePath"
-                  :src="project.imagePath"
-                  alt="Project Logo"
-                  class="w-full h-full object-contain"
-                  loading="lazy"
-                />
-                <svg
-                  v-else
-                  class="w-8 h-8 text-primary-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-0">
+            <div
+              v-for="(project, index) in projects"
+              :key="index"
+              class="group relative overflow-hidden rounded-2xl shadow-xl h-80 min-w-0"
+            >
+              <img
+                :src="`https://picsum.photos/600/400?random=${index + 10}`"
+                :alt="project.title"
+                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+              
+              <div class="relative h-full flex flex-col justify-end p-6 text-white">
+                <div class="flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 mb-4 bg-white rounded-xl shadow-md p-2">
+                  <img
+                    v-if="project.imagePath"
+                    :src="project.imagePath"
+                    alt="Project Logo"
+                    class="w-full h-full object-contain"
+                    loading="lazy"
+                  />
+                  <svg
+                    v-else
+                    class="w-6 h-6 sm:w-8 sm:h-8 text-primary-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      :d="project.iconPath"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                    ></path>
+                  </svg>
+                </div>
+
+                <h3 class="text-xl sm:text-2xl font-bold mb-2">{{ project.title }}</h3>
+                <p class="text-white/90 mb-4 line-clamp-2 text-sm sm:text-base">{{ project.description }}</p>
+                <a
+                  :href="project.url"
+                  class="inline-flex items-center text-sm font-medium text-white group-hover:text-primary-300 transition"
                 >
-                  <path
-                    :d="project.iconPath"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                  ></path>
-                </svg>
+                  Learn more
+                  <svg
+                    class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    ></path>
+                  </svg>
+                </a>
               </div>
-
-              <h3 class="text-2xl font-bold mb-2">{{ project.title }}</h3>
-              <p class="text-white/90 mb-4 line-clamp-2">{{ project.description }}</p>
-              <a
-                :href="project.url"
-                class="inline-flex items-center text-sm font-medium text-white group-hover:text-primary-300 transition"
-              >
-                Learn more
-                <svg
-                  class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  ></path>
-                </svg>
-              </a>
             </div>
           </div>
         </div>
-      </div>
-     </section>
+      </section>
 
       <!-- Publications & Opportunities Section -->
       <section class="py-8 bg-gray-50">
