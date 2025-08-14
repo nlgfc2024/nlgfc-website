@@ -40,22 +40,22 @@ const projectGroups = [
       {
         subgroup: 'GESD',
         id: 'gesd_news',
-        items: [
+    items: [
           { id: 'gesd_overview', title: 'Overview' },
-          { id: 'pbf', title: 'Performance-Based Financing' },
-          { id: 'ias', title: 'Intergovernmental Accountability Systems' },
-          { id: 'lgpi', title: 'Local Government Performance Improvement' },
-          { id: 'adaptive', title: 'Adaptive Management and Innovation' }
-        ]
-      },
-      {
+      { id: 'pbf', title: 'Performance-Based Financing' },
+      { id: 'ias', title: 'Intergovernmental Accountability Systems' },
+      { id: 'lgpi', title: 'Local Government Performance Improvement' },
+      { id: 'adaptive', title: 'Adaptive Management and Innovation' }
+    ]
+  },
+  {
         subgroup: 'RCRP 2',
         id: 'rcrp2_news',
-        items: [
+    items: [
           { id: 'rcrp_overview', title: 'Overview' },
-          { id: 'drb', title: 'District-Led Resilience Building' },
-          { id: 'usr', title: 'Urban Malawi Social Registry' },
-          { id: 'upw', title: 'Urban Climate Smart Public Works Program' }
+      { id: 'drb', title: 'District-Led Resilience Building' },
+      { id: 'usr', title: 'Urban Malawi Social Registry' },
+      { id: 'upw', title: 'Urban Climate Smart Public Works Program' }
         ]
       }
     ]
@@ -348,7 +348,7 @@ const projectUpdates = {
     { date: '2024-05-10', title: 'Hydro-meteorological stations upgraded', tags: ['infrastructure'], summary: 'Upgrades will improve early warning systems and data accuracy.', link: '#' },
     { date: '2024-04-19', title: 'Catchment rehabilitation plan approved', tags: ['resilience'], summary: 'Plan targets priority basins for ecosystem restoration.', link: '#' }
   ],
-
+ 
   SCTP: [
     {
       date: '2024-05-05',
@@ -501,9 +501,9 @@ function updateActiveTabFromHash(hash) {
     }
     // Flat items (government group)
     if (group.items) {
-      const match = group.items.find(item => item.id === hash)
-      if (match) {
-        activeTab.value = match.id
+    const match = group.items.find(item => item.id === hash)
+    if (match) {
+      activeTab.value = match.id
         openGroup.value = group.group
         return
       }
@@ -635,13 +635,13 @@ onBeforeUnmount(() => {
 <template>
   <div class="flex flex-col md:flex-row gap-8 max-w-7xl mx-auto px-4 py-8">
     <!-- Sidebar -->
-    <aside class="w-full md:w-72 flex-shrink-0 md:sticky md:top-16 md:self-start md:z-0">
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 md:max-h-[calc(100vh-4rem)] md:overflow-y-auto">
+    <aside class="w-full md:w-72 flex-shrink-0 md:sticky md:top-0 md:self-start md:z-10">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 md:h-screen md:overflow-y-auto">
         <nav class="space-y-4">
           <!-- Groups -->
           <div v-for="group in projectGroups" :key="group.group">
             <!-- Group header button -->
-            <button
+        <button
               @click="() => { openGroup = openGroup === group.group ? null : group.group; if (group.id) { activeTab = group.id; history.replaceState(null, '', `#${group.id}`) } }"
               :class="[
                 'w-full text-left p-4 rounded-lg transition-all duration-200 group flex items-center justify-between',
@@ -653,16 +653,16 @@ onBeforeUnmount(() => {
                 <span class="font-semibold">{{ group.group }}</span>
               </span>
               <svg class="w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': openGroup === group.group }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-            </button>
+        </button>
 
             <!-- Group items: flat list (Government Funded) -->
             <div v-if="group.items && openGroup === group.group" class="mt-2">
               <ul class="space-y-2">
-                <li v-for="item in group.items" :key="item.id">
-                  <a
-                    :href="`#${item.id}`"
-                    @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
-                    :class="[
+            <li v-for="item in group.items" :key="item.id">
+              <a
+                :href="`#${item.id}`"
+                @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
+                :class="[
                       'block p-3 rounded-lg transition-all duration-200 group',
                       activeTab === item.id ? 'bg-emerald-50 border-2 border-emerald-200 text-emerald-700' : 'hover:bg-gray-50 border-2 border-transparent text-gray-700 hover:text-gray-900'
                     ]"
@@ -710,10 +710,10 @@ onBeforeUnmount(() => {
                           <svg :class="[ 'w-4 h-4 transition-colors', activeTab === item.id ? 'text-emerald-600' : 'text-gray-400 group-hover:text-gray-600' ]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="2" stroke-width="2"/></svg>
                           <span class="text-sm font-medium">{{ item.title }}</span>
                         </div>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
               </div>
             </div>
 
