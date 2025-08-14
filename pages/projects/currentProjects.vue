@@ -31,7 +31,7 @@ const projectGroups = [
         items: [
           { id: 'ssrlp_overview', title: 'Overview' },
           { id: 'SCTP', title: 'Social Cash Transfer' },
-          { id: 'publicWorks', title: 'Public Works' },
+          { id: 'publicWorks', title: 'Climate Smart Public Works' },
           { id: 'livelihoods', title: 'Livelihoods Support' },
           { id: 'scalable', title: 'Scalable Social Safety Nets' },
           { id: 'cerp', title: 'Contigency Emergency Response' }
