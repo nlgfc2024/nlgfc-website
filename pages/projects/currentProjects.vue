@@ -1,7 +1,5 @@
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
-// Import GeneralSidebar component
-import GeneralSidebar from '../../components/GeneralSidebar.vue'; // Adjust path as necessary
+import { ref, onMounted, watch, computed, provide } from 'vue';
 
 definePageMeta({ title: 'Current Projects' })
 
@@ -412,24 +410,26 @@ watch(activeTab, () => {
   currentPage.value = 1
 })
 
+// Provide activeTab to layout for sidebar communication
+const sidebarDataValue = {
+  sidebarType: 'projects',
+  sectionsData: projectGroups,
+  sidebarTitle: 'Current Projects',
+  activeId: activeTab,
+  onUpdateActiveId: (newId) => {
+    activeTab.value = newId
+  }
+};
+
+provide('sidebarData', sidebarDataValue);
+
 
 </script>
 
 
 
 <template>
-  <div class="flex flex-col md:flex-row gap-8 max-w-7xl mx-auto px-4 py-8">
-    <!-- Sidebar -->
-    <aside class="w-full md:w-72 flex-shrink-0">
-      <GeneralSidebar
-        sidebarType="projects"
-        :sectionsData="projectGroups"
-        :activeId="activeTab"
-        sidebarTitle="Current Projects"
-        @update:activeId="activeTab = $event"
-      />
-    </aside>
-
+  <div class="max-w-7xl mx-auto px-4 py-8">
     <!-- Main Content Area -->
     <main class="flex-1 min-w-0">
       <div v-if="projectContent[activeTab]" class="bg-white rounded-xl shadow-sm overflow-hidden">
