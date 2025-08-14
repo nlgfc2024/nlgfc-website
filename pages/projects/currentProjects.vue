@@ -1,4 +1,8 @@
 <script setup>
+// Nuxt 3 auto-imports definePageMeta and useRoute.
+// Vue composition API imports:
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+
 definePageMeta({ title: 'Current Projects' })
 
 const route = useRoute()
@@ -26,31 +30,31 @@ const projectGroups = [
         id: 'ssrlp_news',
         items: [
           { id: 'ssrlp_overview', title: 'Overview' },
-      { id: 'SCTP', title: 'SCTP' },
-      { id: 'publicWorks', title: 'Public Works' },
-      { id: 'emergency', title: 'Scalable Social Safety Nets' },
-      { id: 'livelihoods', title: 'Livelihoods Support' }
-    ]
-  },
-  {
+          { id: 'SCTP', title: 'SCTP' },
+          { id: 'publicWorks', title: 'Public Works' },
+          { id: 'emergency', title: 'Scalable Social Safety Nets' },
+          { id: 'livelihoods', title: 'Livelihoods Support' }
+        ]
+      },
+      {
         subgroup: 'GESD',
         id: 'gesd_news',
-    items: [
+        items: [
           { id: 'gesd_overview', title: 'Overview' },
-      { id: 'pbf', title: 'Performance-Based Financing' },
-      { id: 'ias', title: 'Intergovernmental Accountability Systems' },
-      { id: 'lgpi', title: 'Local Government Performance Improvement' },
-      { id: 'adaptive', title: 'Adaptive Management and Innovation' }
-    ]
-  },
-  {
+          { id: 'pbf', title: 'Performance-Based Financing' },
+          { id: 'ias', title: 'Intergovernmental Accountability Systems' },
+          { id: 'lgpi', title: 'Local Government Performance Improvement' },
+          { id: 'adaptive', title: 'Adaptive Management and Innovation' }
+        ]
+      },
+      {
         subgroup: 'RCRP 2',
         id: 'rcrp2_news',
-    items: [
+        items: [
           { id: 'rcrp_overview', title: 'Overview' },
-      { id: 'drb', title: 'District-Led Resilience Building' },
-      { id: 'usr', title: 'Urban Malawi Social Registry' },
-      { id: 'upw', title: 'Urban Climate Smart Public Works Program' }
+          { id: 'drb', title: 'District-Led Resilience Building' },
+          { id: 'usr', title: 'Urban Malawi Social Registry' },
+          { id: 'upw', title: 'Urban Climate Smart Public Works Program' }
         ]
       }
     ]
@@ -60,7 +64,6 @@ const projectGroups = [
 // Collapsible state
 const openGroup = ref(projectGroups[0].group)
 const openSubgroup = ref(null)
-
 
 const projectContent = {
   // Group and subgroup landing content
@@ -316,6 +319,7 @@ const projectContent = {
     `
   }
 }
+
 const projectUpdates = {
   // Sub-group landing news feeds
   ssrlp_news: [
@@ -334,7 +338,7 @@ const projectUpdates = {
     { date: '2024-05-10', title: 'Hydro-meteorological stations upgraded', tags: ['infrastructure'], summary: 'Upgrades will improve early warning systems and data accuracy.', link: '#' },
     { date: '2024-04-19', title: 'Catchment rehabilitation plan approved', tags: ['resilience'], summary: 'Plan targets priority basins for ecosystem restoration.', link: '#' }
   ],
- 
+
   SCTP: [
     {
       date: '2024-05-05',
@@ -487,9 +491,9 @@ function updateActiveTabFromHash(hash) {
     }
     // Flat items (government group)
     if (group.items) {
-    const match = group.items.find(item => item.id === hash)
-    if (match) {
-      activeTab.value = match.id
+      const match = group.items.find(item => item.id === hash)
+      if (match) {
+        activeTab.value = match.id
         openGroup.value = group.group
         return
       }
@@ -515,13 +519,10 @@ function updateActiveTabFromHash(hash) {
   }
 }
 
-
-
 // Optional: scroll to top on tab change
 watch(activeTab, () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 })
-// Removed legacy pagination for Latest Updates section
 
 // News landing configuration (hero + featured grid + stats)
 const newsLandingTabs = ['ssrlp_news', 'gesd_news', 'rcrp2_news']
@@ -619,21 +620,18 @@ onMounted(() => {
 onBeforeUnmount(() => {
   clearInterval(autoplayTimer)
 })
-
 </script>
-
-
 
 <template>
   <div class="flex flex-col md:flex-row gap-8 max-w-7xl mx-auto px-4 py-8">
     <!-- Sidebar -->
-    <aside class="w-full md:w-72 flex-shrink-0">
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <aside class="w-full md:w-72 flex-shrink-0 md:sticky md:top-16 md:self-start md:z-0">
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 md:max-h-[calc(100vh-4rem)] md:overflow-y-auto">
         <nav class="space-y-4">
           <!-- Groups -->
-          <div v-for="group in projectGroups" :key="group.group" class="">
+          <div v-for="group in projectGroups" :key="group.group">
             <!-- Group header button -->
-        <button
+            <button
               @click="() => { openGroup = openGroup === group.group ? null : group.group; if (group.id) { activeTab = group.id; history.replaceState(null, '', `#${group.id}`) } }"
               :class="[
                 'w-full text-left p-4 rounded-lg transition-all duration-200 group flex items-center justify-between',
@@ -645,16 +643,16 @@ onBeforeUnmount(() => {
                 <span class="font-semibold">{{ group.group }}</span>
               </span>
               <svg class="w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': openGroup === group.group }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-        </button>
+            </button>
 
             <!-- Group items: flat list (Government Funded) -->
             <div v-if="group.items && openGroup === group.group" class="mt-2">
               <ul class="space-y-2">
-            <li v-for="item in group.items" :key="item.id">
-              <a
-                :href="`#${item.id}`"
-                @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
-                :class="[
+                <li v-for="item in group.items" :key="item.id">
+                  <a
+                    :href="`#${item.id}`"
+                    @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
+                    :class="[
                       'block p-3 rounded-lg transition-all duration-200 group',
                       activeTab === item.id ? 'bg-emerald-50 border-2 border-emerald-200 text-emerald-700' : 'hover:bg-gray-50 border-2 border-transparent text-gray-700 hover:text-gray-900'
                     ]"
@@ -670,7 +668,7 @@ onBeforeUnmount(() => {
 
             <!-- Donor subgroups -->
             <div v-if="group.subgroups && openGroup === group.group" class="mt-2 space-y-2">
-              <div v-for="sg in group.subgroups" :key="sg.subgroup" class="">
+              <div v-for="sg in group.subgroups" :key="sg.subgroup">
                 <!-- Subgroup header: clicking shows news landing -->
                 <button
                   @click="() => { openSubgroup = openSubgroup === sg.subgroup ? null : sg.subgroup; activeTab = sg.id; history.replaceState(null, '', `#${sg.id}`) }"
@@ -702,10 +700,10 @@ onBeforeUnmount(() => {
                           <svg :class="[ 'w-4 h-4 transition-colors', activeTab === item.id ? 'text-emerald-600' : 'text-gray-400 group-hover:text-gray-600' ]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="2" stroke-width="2"/></svg>
                           <span class="text-sm font-medium">{{ item.title }}</span>
                         </div>
-              </a>
-            </li>
-          </ul>
-        </div>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
 
@@ -716,77 +714,77 @@ onBeforeUnmount(() => {
     </aside>
 
     <!-- Main Content Area -->
-    <main class="flex-1 min-w-0">
-      <!-- News Landing: Sliding Hero + Related News + Stats (replaces the default header/intro for news tabs) -->
+    <main class="flex-1 min-w-0 relative md:z-10">
+      <!-- News Landing: Sliding Hero + Related News + Stats -->
       <div v-if="isNewsLanding" class="space-y-10">
-        <!-- Sliding Hero (multiple news items) -->
-       <section class="relative overflow-hidden rounded-xl shadow-2xl h-[360px] md:h-[420px]">
-  <div 
-    v-for="(item, index) in slidesForActive" 
-    :key="index" 
-    class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
-    :class="{ 'opacity-100 z-10': currentSlide === index, 'opacity-0 z-0': currentSlide !== index }"
-  >
-    <!-- Background image with overlay -->
-    <div class="absolute inset-0">
-      <img :src="newsImages[index % newsImages.length]" :alt="item.title" class="w-full h-full object-cover" />
-      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-    </div>
-    <!-- Content -->
-    <div class="relative h-full flex flex-col justify-end z-10 pb-12">
-      <div class="px-6">
-        <div class="mb-3">
-          <span class="inline-block px-3 py-1 text-xs font-semibold tracking-wider text-white uppercase bg-blue-600 rounded-full">
-            {{ (activeTab.split('_')[0] || 'Project').toUpperCase() }} News
-          </span>
-        </div>
-        <div class="max-w-3xl">
-          <h2 class="text-3xl md:text-4xl font-bold text-white mb-3 leading-tight">{{ item.title }}</h2>
-          <p class="text-white/90">{{ item.summary }}</p>
-        </div>
-        <div class="mt-5" v-if="item.link">
-          <a :href="item.link" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
-            Read More
-            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
+        <!-- Sliding Hero -->
+        <section class="relative overflow-hidden rounded-xl shadow-2xl h-[360px] md:h-[420px]">
+          <div
+            v-for="(item, index) in slidesForActive"
+            :key="index"
+            class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+            :class="{ 'opacity-100 z-10': currentSlide === index, 'opacity-0 z-0': currentSlide !== index }"
+          >
+            <!-- Background image with overlay -->
+            <div class="absolute inset-0">
+              <img :src="newsImages[index % newsImages.length]" :alt="item.title" class="w-full h-full object-cover" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+            </div>
+            <!-- Content -->
+            <div class="relative h-full flex flex-col justify-end z-10 pb-12">
+              <div class="px-6">
+                <div class="mb-3">
+                  <span class="inline-block px-3 py-1 text-xs font-semibold tracking-wider text-white uppercase bg-blue-600 rounded-full">
+                    {{ (activeTab.split('_')[0] || 'Project').toUpperCase() }} News
+                  </span>
+                </div>
+                <div class="max-w-3xl">
+                  <h2 class="text-3xl md:text-4xl font-bold text-white mb-3 leading-tight">{{ item.title }}</h2>
+                  <p class="text-white/90">{{ item.summary }}</p>
+                </div>
+                <div class="mt-5" v-if="item.link">
+                  <a :href="item.link" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
+                    Read More
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
 
-  <!-- Controls -->
-  <div class="absolute bottom-2 left-0 right-0 z-20 pt-5">
-    <div class="px-6 flex items-center justify-between">
-      <!-- Indicators -->
-      <div class="flex space-x-2">
-        <button
-          v-for="(item, idx) in slidesForActive"
-          :key="'ind-' + idx"
-          @click="goToSlide(idx)"
-          class="w-3 h-3 rounded-full transition-all duration-300"
-          :class="{ 'w-8 bg-white': currentSlide === idx, 'w-3 bg-white/30 hover:bg-white/50': currentSlide !== idx }"
-        ></button>
-      </div>
-      <!-- Arrows + autoplay -->
-      <div class="flex items-center space-x-4">
-        <button @click="toggleAutoplay" class="p-2 text-white/70 hover:text-white transition">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path v-if="autoplay" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-          </svg>
-        </button>
-        <button @click="prevSlide" class="p-2 text-white/70 hover:text-white transition">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-        </button>
-        <button @click="nextSlide" class="p-2 text-white/70 hover:text-white transition">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
+          <!-- Controls -->
+          <div class="absolute bottom-2 left-0 right-0 z-20 pt-5">
+            <div class="px-6 flex items-center justify-between">
+              <!-- Indicators -->
+              <div class="flex space-x-2">
+                <button
+                  v-for="(item, idx) in slidesForActive"
+                  :key="'ind-' + idx"
+                  @click="goToSlide(idx)"
+                  class="w-3 h-3 rounded-full transition-all duration-300"
+                  :class="{ 'w-8 bg-white': currentSlide === idx, 'w-3 bg-white/30 hover:bg-white/50': currentSlide !== idx }"
+                ></button>
+              </div>
+              <!-- Arrows + autoplay -->
+              <div class="flex items-center space-x-4">
+                <button @click="toggleAutoplay" class="p-2 text-white/70 hover:text-white transition">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path v-if="autoplay" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                  </svg>
+                </button>
+                <button @click="prevSlide" class="p-2 text-white/70 hover:text-white transition">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button @click="nextSlide" class="p-2 text-white/70 hover:text-white transition">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <!-- Related News (Featured Articles Grid style) -->
+        <!-- Related News -->
         <section v-if="slidesForActive.length" class="px-1">
           <div class="grid md:grid-cols-3 gap-6">
             <article
@@ -797,14 +795,14 @@ onBeforeUnmount(() => {
               <div class="flex h-full">
                 <!-- Image on left -->
                 <div class="w-1/3 relative overflow-hidden">
-                  <img 
-                    :src="newsImages[nIdx % newsImages.length]" 
+                  <img
+                    :src="newsImages[nIdx % newsImages.length]"
                     alt="Article image"
                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
                   >
                 </div>
-                
+
                 <!-- Content on right -->
                 <div class="w-2/3 p-5 flex flex-col">
                   <span class="text-xs font-medium text-gray-500 mb-1 flex items-center">
@@ -837,6 +835,8 @@ onBeforeUnmount(() => {
           </div>
         </section>
       </div>
+
+      <!-- Standard Project Content -->
       <div v-if="projectContent[activeTab] && !isNewsLanding" class="bg-white rounded-xl shadow-sm overflow-hidden">
         <!-- Project Header -->
         <div class="bg-gradient-to-r from-blue-50 to-blue-100 px-6 py-5 border-b border-blue-200">
@@ -856,17 +856,6 @@ onBeforeUnmount(() => {
           <div v-html="projectContent[activeTab].body"></div>
         </div>
       </div>
-
-      <!-- <div v-else class="bg-white rounded-lg shadow p-6 text-center">
-        <div class="text-gray-400 mb-4">
-          <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-        </div>
-        <p class="text-gray-500 italic">No content available for this project.</p>
-      </div> -->
-      
-      <!-- Latest Updates Section removed entirely -->
     </main>
   </div>
 </template>
@@ -922,5 +911,19 @@ onBeforeUnmount(() => {
 
 .prose a:hover {
   color: #1e40af;
+}
+
+/* Optional: nicer thin scrollbars only for WebKit (sidebar) */
+@media (min-width: 768px) {
+  .md\:overflow-y-auto::-webkit-scrollbar {
+    width: 8px;
+  }
+  .md\:overflow-y-auto::-webkit-scrollbar-thumb {
+    background: #e5e7eb;
+    border-radius: 8px;
+  }
+  .md\:overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: #d1d5db;
+  }
 }
 </style>
