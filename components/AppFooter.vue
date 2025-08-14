@@ -47,8 +47,8 @@
         <!-- Column 2: Quick Links -->
         <div>
           <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-          <ul class="space-y-3">
-              <li><NuxtLink to="/" class="text-gray-400 hover:text-white transition text-sm">Home</NuxtLink></li>
+          <ul class="space-y-1">
+            <li><NuxtLink to="/" class="text-gray-400 hover:text-white transition text-sm">Home</NuxtLink></li>
             <li><NuxtLink to="/about" class="text-gray-400 hover:text-white transition text-sm">About Us</NuxtLink></li>
             <li><NuxtLink to="/projects/currentProjects" class="text-gray-400 hover:text-white transition text-sm">Projects</NuxtLink></li>
             <li><NuxtLink to="/localAuthorities/alldistricts" class="text-gray-400 hover:text-white transition text-sm">Local Councils</NuxtLink></li>
