@@ -282,7 +282,7 @@ const dynamicSidebarStyle = computed(() => {
   <div>
     <div
       :class="[
-        'fixed left-0 w-72 bg-white rounded-lg shadow-sm border border-gray-200 p-6 z-10 flex flex-col',
+        'fixed left-0 w-80 bg-white rounded-lg shadow-sm border border-gray-200 p-6 z-10 flex flex-col',
         isSidebarOpen ? 'translate-x-0' : '-translate-x-full',
       ]"
       :style="dynamicSidebarStyle" >
@@ -520,7 +520,7 @@ const dynamicSidebarStyle = computed(() => {
       @click="toggleSidebarVisibility"
       :class="[
         'fixed top-1/2 -translate-y-1/2 p-2 rounded-full shadow-md z-20',
-        isSidebarOpen ? 'left-72 -ml-4' : 'left-0',
+        isSidebarOpen ? 'left-80 -ml-4' : 'left-0',
         'bg-emerald-500 text-white hover:bg-emerald-600 transition-all duration-300 ease-in-out'
       ]"
     >
