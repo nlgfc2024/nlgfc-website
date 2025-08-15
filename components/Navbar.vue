@@ -329,7 +329,7 @@
                 <div class="mt-10 md:mt-0">
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
                   <ul class="space-y-2">
-<li><NuxtLink to="/deliverySystems/deliverySystems#comsip" class="text-gray-600 hover:text-blue-600">COMSIP Integrated MIS</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#comsip" class="text-gray-600 hover:text-blue-600">Community Savings and Investment Promotion</NuxtLink></li>
 <li><NuxtLink to="/deliverySystems/deliverySystems#dgrm" class="text-gray-600 hover:text-blue-600">Digital Grievance Redress Mechanism MIS</NuxtLink></li>
 <li><NuxtLink to="/deliverySystems/deliverySystems#e-payments" class="text-gray-600 hover:text-blue-600">E-Payments</NuxtLink></li>
 <li><NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600">Local Authority IFMIS</NuxtLink></li>
