@@ -8,45 +8,54 @@ const activeTab = ref('msr') // Default active tab - starts with Malawi Social R
 
 // Configuration for delivery system categories and items
 // This array defines the sidebar navigation structure with descriptions
-const projectGroups = [
-  {
-    group: 'Delivery Systems', // Main category name
-    items: [
-      // Each item represents a different delivery system with unique ID, title and description
-{ 
-  id: 'comsip', 
-  title: 'Community Savings & Investment'
+// Delivery systems data for the GeneralSidebar component
+const deliverySystemsData = [
+  
+// Each delivery system item contains an id, title, and description
+ { 
+    id: 'comsip', 
+    title: 'Community Savings & Investment',
 },
 { 
-  id: 'dgrm', 
-  title: 'Digital Grievance Redress'
+    id: 'dgrm', 
+    title: 'Digital Grievance Redress',
 },
 { 
-  id: 'e-payments', 
-  title: 'E-Payment Systems'
+    id: 'e-payments', 
+    title: 'E-Payment Systems',
 },
 { 
-  id: 'laifmis', 
-  title: 'Local Authorities IFMIS'
+    id: 'laifmis', 
+    title: 'Local Authorities IFMIS'
+},
+{ 
+    id: 'lapas', 
+    title: 'Local Athourities Performance Assessment System'
 },
 {  
-  id: 'msr', 
-  title: 'Malawi Social Registry'
+    id: 'msr', 
+    title: 'Malawi Social Registry'
 },
 { 
-  id: 'lapas', 
-  title: 'Performance Assessment System'
+    id: 'pmis', 
+    title: 'Project Monitoring System'
 },
 { 
-  id: 'pmis', 
-  title: 'Project Monitoring System'
+    id: 'publicworks', 
+    title: 'Public Works MIS'
 },
 { 
-  id: 'publicworks', 
-  title: 'Public Works MIS'
+    id: 'sctpmis', 
+    title: 'Social Cash Transfer Programme MIS'
 }
 
-    ]
+]
+
+// Keep original structure for backward compatibility with existing template code
+const projectGroups = [
+  {
+    group: 'Delivery Systems',
+    items: deliverySystemsData
   }
 ]
 
