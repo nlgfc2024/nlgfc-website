@@ -193,50 +193,18 @@ const exportToCSV = () => {
   document.body.removeChild(link);
 }
 
-// Method to export data to PDF
+// Method to export data to PDF (removed due to library dependency)
 const exportToPDF = async () => {
   try {
     // Show loading state
     isLoading.value = true;
     
-    // Dynamically import jsPDF to avoid SSR issues
-    const jsPDF = await import('jspdf');
-    const autoTable = await import('jspdf-autotable');
+    // Create a simple CSV export instead
+    exportToCSV();
     
-    const doc = new jsPDF.default();
-    
-    // Add title
-    doc.setFontSize(18);
-    doc.text('Malawi Districts Report', 14, 20);
-    
-    // Add date
-    doc.setFontSize(12);
-    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
-    
-    // Add table
-    autoTable.default(doc, {
-      startY: 40,
-      head: [['Name', 'Region', 'Capital', 'Population', 'Area']],
-      body: searchedDistricts.value.map(district => [
-        district.name,
-        district.region,
-        district.capital || '',
-        district.population || '',
-        district.area || ''
-      ]),
-      styles: {
-        fontSize: 8
-      },
-      headStyles: {
-        fillColor: [0, 50, 13]
-      }
-    });
-    
-    // Save the PDF
-    doc.save('malawi_districts.pdf');
+    console.log('PDF functionality removed - using CSV export instead');
   } catch (error) {
-    console.error('Error exporting to PDF:', error);
-    // Handle error (show notification to user)
+    console.error('Error exporting data:', error);
   } finally {
     isLoading.value = false;
   }
