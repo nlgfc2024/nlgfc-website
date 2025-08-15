@@ -193,18 +193,67 @@ const exportToCSV = () => {
   document.body.removeChild(link);
 }
 
-// Method to export data to PDF (removed due to library dependency)
+// Method to export data to PDF
 const exportToPDF = async () => {
   try {
     // Show loading state
     isLoading.value = true;
     
-    // Create a simple CSV export instead
-    exportToCSV();
+    // Try to dynamically import jsPDF
+    const jsPDF = await import('jspdf');
+    const autoTable = await import('jspdf-autotable');
     
-    console.log('PDF functionality removed - using CSV export instead');
+    const doc = new jsPDF.default();
+    
+    // Add title
+    doc.setFontSize(18);
+    doc.text('Malawi Districts Report', 14, 20);
+    
+    // Add date
+    doc.setFontSize(12);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+    
+    // Add table
+    autoTable.default(doc, {
+      startY: 40,
+      head: [['Name', 'Region', 'Capital', 'Population', 'Area']],
+      body: searchedDistricts.value.map(district => [
+        district.name,
+        district.region,
+        district.capital || '',
+        district.population || '',
+        district.area || ''
+      ]),
+      styles: {
+        fontSize: 8
+      },
+      headStyles: {
+        fillColor: [0, 50, 13]
+      }
+    });
+    
+    // Save the PDF
+    doc.save('malawi_districts.pdf');
   } catch (error) {
-    console.error('Error exporting data:', error);
+    console.error('Error exporting to PDF:', error);
+    
+    // Show user-friendly message about missing dependencies
+    alert(`PDF export requires additional libraries to be installed.
+    
+Please install the required dependencies:
+
+npm install jspdf jspdf-autotable
+
+or
+
+yarn add jspdf jspdf-autotable
+
+After installation, refresh the page and try again.
+
+For now, you can use CSV export as an alternative.`);
+    
+    // Fallback to CSV export
+    exportToCSV();
   } finally {
     isLoading.value = false;
   }
