@@ -1,24 +1,57 @@
 <script setup>
+// Page metadata configuration
 definePageMeta({ title: 'Delivery Systems' })
 
+// Vue composition API imports and reactive state
 const route = useRoute()
-const activeTab = ref('msr') // Default tab
+const activeTab = ref('msr') // Default active tab - starts with Malawi Social Registry
 
+// Configuration for delivery system categories and items
+// This array defines the sidebar navigation structure with descriptions
 const projectGroups = [
   {
-    group: 'Delivery Systems',
+    group: 'Delivery Systems', // Main category name
     items: [
-      { id: 'comsip', title: 'Community Savings and Investment Promotion' },
-{ id: 'dgrm', title: 'Digital Grievance Redress Mechanism' },
-{ id: 'e-payments', title: 'E-Payment' },
- { id: 'laifmis', title: 'Local Authorities IFMIS' },
-{ id: 'lapas', title: 'Local Authority Performance Assessment System' },
-{ id: 'msr', title: 'Malawi Social Registry' },
-{ id: 'pmis', title: 'Project Monitoring Information System' },
-{ id: 'publicworks', title: 'Public Works MIS' }
+      // Each item represents a different delivery system with unique ID, title and description
+{ 
+  id: 'comsip', 
+  title: 'Community Savings & Investment'
+},
+{ 
+  id: 'dgrm', 
+  title: 'Digital Grievance Redress'
+},
+{ 
+  id: 'e-payments', 
+  title: 'E-Payment Systems'
+},
+{ 
+  id: 'laifmis', 
+  title: 'Local Authorities IFMIS'
+},
+{  
+  id: 'msr', 
+  title: 'Malawi Social Registry'
+},
+{ 
+  id: 'lapas', 
+  title: 'Performance Assessment System'
+},
+{ 
+  id: 'pmis', 
+  title: 'Project Monitoring System'
+},
+{ 
+  id: 'publicworks', 
+  title: 'Public Works MIS'
+}
+
     ]
   }
 ]
+
+// Partner logos configuration for E-Payment systems carousel
+// Used in the E-Payment section to display financial service providers
 const partnerLogos = [
   { src: "/images/deliverySystems/Airtel _money.png", alt: "Airtel Money" },
   { src: "/images/deliverySystems/mpamba_logo.png", alt: "TNM Mpamba Logo" },
@@ -28,19 +61,23 @@ const partnerLogos = [
   { src: "/images/deliverySystems/kaku_pay.jpeg", alt: "Kaku Pay" }
 ]
 
+// Component props definition with validation
+// These props control the partner logos carousel behavior
 const props = defineProps({
   partnerLogos: {
     type: Array,
     required: true,
+    // Validator ensures each logo has both src and alt properties
     validator: (logos) => logos.every(logo => logo.src && logo.alt)
   },
   scrollDuration: {
     type: Number,
-    default: 20
+    default: 20 // Default animation duration in seconds
   }
 })
-// Sample story data for LAIFMIS
-const grm= [
+
+// Sample data for LAIFMIS section stories/case studies
+const grm = [
   {
     id: 1,
     title: "Transforming Local Government Finance",
@@ -49,7 +86,8 @@ const grm= [
   }
 ]
 
-// Sample story data for E-Payments
+// Sample data for E-Payments section - financial service providers
+// This array contains information about different payment providers used in Malawi
 const ePaymentsStories = [
   {
     id: 1,
@@ -89,19 +127,25 @@ const ePaymentsStories = [
   }
 ]
 
-// Update tab based on route hash
+// Route handling and tab management
+// Updates the active tab based on URL hash changes
 onMounted(() => {
+  // On component mount, check if there's a hash in the URL and set active tab
   if (route.hash) {
     updateActiveTabFromHash(route.hash.replace('#', ''))
   }
 })
 
+// Watch for hash changes in the URL and update active tab accordingly
+// This allows for direct linking to specific delivery systems
 watch(() => route.hash, (newHash) => {
   if (newHash) {
     updateActiveTabFromHash(newHash.replace('#', ''))
   }
 })
 
+// Helper function to update active tab based on URL hash
+// Searches through project groups to find matching delivery system ID
 function updateActiveTabFromHash(hash) {
   for (const group of projectGroups) {
     const match = group.items.find(item => item.id === hash)
@@ -116,41 +160,80 @@ function updateActiveTabFromHash(hash) {
 </script>
 
 <template>
+  <!-- Main container with white background -->
   <div class="bg-white">
+    <!-- Responsive container with sidebar and main content layout -->
     <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
       
-      <!-- Sidebar -->
-      <aside class="w-full md:w-64 border-r pr-4">
-        <div v-for="group in projectGroups" :key="group.group" class="mb-4">
-          <details open class="border border-gray-200 rounded">
-            <summary class="cursor-pointer px-4 py-2 font-semibold bg-gray-100">
-              {{ group.group }}
-            </summary>
-            <ul class="space-y-1 px-4 py-2">
-              <li v-for="item in group.items" :key="item.id">
+      <!-- Sidebar Navigation -->
+      <!-- Delivery Systems section styled like opportunities page -->
+      <aside class="w-full md:w-80">
+        <div v-for="group in projectGroups" :key="group.group">
+          <!-- Single Card Container for all Delivery Systems -->
+          <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+            <!-- Main heading inside container -->
+            <h2 class="text-xl font-semibold text-gray-900 mb-6">{{ group.group }}</h2>
+            <div class="space-y-1">
+              <div v-for="(item, index) in group.items" :key="item.id">
+                <!-- Individual delivery system link -->
                 <a
                   :href="`#${item.id}`"
                   @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
                   :class="[
-                    'block px-3 py-2 rounded text-sm cursor-pointer',
-                    item.id === activeTab ? 'bg-blue-100 font-medium text-blue-900' : 'hover:bg-gray-100'
+                    'block p-4 rounded-lg cursor-pointer transition-all duration-200',
+                    // Conditional styling based on active state - green for active
+                    item.id === activeTab 
+                      ? 'bg-green-50 text-green-800' 
+                      : 'hover:bg-gray-50'
                   ]"
                 >
-                  {{ item.title }}
+                  <div class="flex items-start">
+                    <!-- System icon -->
+                    <div class="flex-shrink-0 mr-3 mt-0.5">
+                      <Icon 
+                        :name="item.id === activeTab ? 'heroicons:check-circle' : 'heroicons:document-text'" 
+                        :class="[
+                          'w-5 h-5',
+                          item.id === activeTab ? 'text-green-600' : 'text-gray-400'
+                        ]" 
+                      />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <!-- System title -->
+                      <h3 :class="[
+                        'font-medium text-sm mb-1',
+                        item.id === activeTab ? 'text-green-900' : 'text-gray-900'
+                      ]">
+                        {{ item.title }}
+                      </h3>
+                      <!-- System description -->
+                      <p :class="[
+                        'text-xs leading-relaxed',
+                        item.id === activeTab ? 'text-green-700' : 'text-gray-600'
+                      ]">
+                        {{ item.description }}
+                      </p>
+                    </div>
+                  </div>
                 </a>
-              </li>
-            </ul>
-          </details>
+                
+                <!-- Breaking line between items (except last item) -->
+                <hr v-if="index < group.items.length - 1" class="my-3 border-gray-200">
+              </div>
+            </div>
+          </div>
         </div>
       </aside>
 
-      <!-- Main Content -->
+      <!-- Main Content Area -->
+      <!-- Displays the selected delivery system information -->
       <main class="flex-1 min-w-0">
+        <!-- Dynamic content rendering based on active tab -->
         <div v-for="group in projectGroups" :key="group.group">
           <div v-for="item in group.items" :key="item.id" v-show="activeTab === item.id" class="prose max-w-none">
             
   
-<!-- MSR Section -->
+<!-- MSR Section - Malawi Social Registry Information -->
 <div v-if="item.id === 'msr'" class="prose max-w-none">
   <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Malawi Social Registry (MSR)
@@ -164,7 +247,7 @@ function updateActiveTabFromHash(hash) {
       of Malawi in 2016 through the Department of Economic Planning and Development (EP&D). It collects, stores, 
       accesses, and shares socioeconomic and demographic data about households across the country to support 
       the implementation of social support programs and ensure assistance reaches those who need it most.
-    <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
+    <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">Vist</a>
 
     </p>
     
@@ -421,7 +504,7 @@ function updateActiveTabFromHash(hash) {
   </div>
 </div>
 
-           <!-- LAIFMIS -->
+           <!-- LAIFMIS Section - Local Authorities Integrated Financial Management Information System -->
 <div v-else-if="item.id === 'laifmis'" class="prose max-w-none">
   <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Integrated Financial Management Information System (IFMIS)
@@ -630,7 +713,7 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
 
             
             
-            <!-- Electronic Payment Systems -->
+            <!-- Electronic Payment Systems Section -->
 <div v-else-if="item.id === 'e-payments'" class="prose max-w-none">
   <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Electronic Payment Systems
@@ -815,28 +898,31 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
     </div>
   </div>
   <!-- E-Payment Service Providers Section -->
+  <!-- Displays carousel of financial service providers -->
   <div class="mt-8">
     <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">E-Payment Service Providers</h3>
     
-    <!-- Slider Container -->
+    <!-- Slider Container with auto-scrolling logos -->
     <div class="relative overflow-hidden bg-white rounded-lg shadow-sm" aria-label="Partner logos carousel">
       <!-- Gradient Overlays -->
       <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
       <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
       
       <!-- Slider Track -->
+      <!-- Contains the scrolling animation for partner logos -->
       <div class="overflow-hidden py-6 px-4">
         <div 
           class="flex gap-6 animate-scroll hover:pause"
           :style="`--scroll-duration: ${scrollDuration}s`"
         >
-          <!-- Two copies for seamless scrolling -->
+          <!-- Two copies for seamless infinite scrolling -->
           <template v-for="repeat in 2" :key="repeat">
             <div 
               v-for="(logo, index) in partnerLogos"
               :key="`${repeat}-${index}`"
               class="flex-shrink-0"
             >
+              <!-- Individual logo container with hover effects -->
               <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-center h-24 w-40 sm:h-32 sm:w-48 transition-all hover:scale-105 hover:shadow-xl border border-gray-100">
                 <img
                   :src="logo.src"
@@ -1989,41 +2075,46 @@ initiatives.
 </template>
 
 <style scoped>
+/* Custom animations and styles for delivery systems page */
 
+/* Keyframe animation for horizontal scrolling logos */
 @keyframes scroll {
   0% {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translateX(-50%); /* Move left by 50% to create seamless loop */
   }
 }
 
+/* Main animation class for partner logos carousel */
 .animate-scroll {
   animation: scroll var(--scroll-duration, 20s) linear infinite;
   display: flex;
   min-width: fit-content; /* Better for dynamic content */
-  will-change: transform; /* Optimize for animation */
+  will-change: transform; /* Optimize for animation performance */
 }
 
+/* Pause animation on hover, focus, or active states for better UX */
 .hover\:pause:hover,
 .animate-scroll:focus-within,
 .animate-scroll:active {
   animation-play-state: paused;
 }
 
-/* Reduced motion preference */
+/* Accessibility: Respect user's motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .animate-scroll {
-    animation: none;
+    animation: none; /* Disable animation for users who prefer reduced motion */
     justify-content: center;
     min-width: auto;
-    overflow-x: auto;
-    scrollbar-width: none; /* Firefox */
+    overflow-x: auto; /* Allow manual scrolling instead */
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
   }
   
+  /* Hide scrollbar in Chrome/Safari */
   .animate-scroll::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+    display: none;
   }
 }
 

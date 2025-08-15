@@ -1,6 +1,5 @@
 <template>
   <div class="relative">
-    <!-- Background with enhanced overlay -->
     <div class="absolute inset-0 z-0">
       <img 
         :src="backgroundImage" 
@@ -53,7 +52,7 @@
         
         <p 
           v-if="description" 
-          class="max-w-2xl md:max-w-3xl mx-auto text-sm md:text-base text-gray-100/90 leading-snug"
+          class="max-w-2xl md:max-w-3xl mx-auto text-xs md:text-sm text-gray-100/90 leading-snug"
         >
           {{ description }}
         </p> 
