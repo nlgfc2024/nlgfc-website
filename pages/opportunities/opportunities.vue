@@ -1,22 +1,34 @@
 <script setup>
+import { ref, onMounted, watch, computed } from 'vue';
+// Import GeneralSidebar component
+import GeneralSidebar from '../components/GeneralSidebar.vue'; // Adjusted path as needed
+
 // Meta information
 definePageMeta({
   title: 'Opportunities'
 })
 
-const menuItems = [
-    { 
-        items: [
-          { id: 'jobs', title: 'Jobs Listing' },
-          { id: 'procurement', title: 'Procurement notices' },
-          { id: 'jobport', title: 'Jobs Portal' },
-          { id: 'supplyport', title: 'Procurement Portal' },
-        ]
-    }
-  ]
+// Define the sections for the GeneralSidebar, matching the 'opportunities' type structure
+const opportunitySections = [
+  {
+    id: 'procurement',
+    name: 'Procurement Portal',
+    icon: 'heroicons:document-text', // Icon name for GeneralSidebar's getIconPath
+    description: 'Tenders, RFQs, and procurement notices'
+  },
+  {
+    id: 'jobs',
+    name: 'Job Opportunities',
+    icon: 'heroicons:briefcase', // Icon name
+    description: 'Current job openings and career opportunities'
+  }
+  // If 'jobport' and 'supplyport' represent distinct content sections within this page,
+  // they would also be added here as separate objects. For now, assuming they refer
+  // to the primary 'jobs' and 'procurement' content.
+]
 
 // Reactive data
-const activeTab = ref('procurement')
+const activeTab = ref('procurement') // Controls which main content section is displayed
 const searchQuery = ref('')
 const selectedFilters = ref({
   type: '',
@@ -28,6 +40,9 @@ const selectedFilters = ref({
 // Pagination state
 const currentPage = ref(1)
 const itemsPerPage = ref(5)
+
+// State for sidebar visibility (controlled by GeneralSidebar and passed via prop)
+const isSidebarOpen = ref(true); // Default to open
 
 // Get section from query params
 const route = useRoute()
@@ -42,7 +57,6 @@ const handleHashChange = () => {
     activeTab.value = 'procurement'
   }
 }
-
 
 onMounted(() => {
   // Handle initial route params
@@ -110,7 +124,7 @@ const switchTab = (tab) => {
   })
 }
 
-// Navigation helper functions for external use
+// Navigation helper functions for external use (if this component is exposed)
 const navigateToJobs = () => {
   router.push({
     path: '/opportunities',
@@ -127,7 +141,7 @@ const navigateToProcurement = () => {
   })
 }
 
-// Expose navigation functions globally for navbar usage
+// Expose navigation functions globally for navbar usage (if this is relevant for your app structure)
 defineExpose({
   navigateToJobs,
   navigateToProcurement,
@@ -143,7 +157,7 @@ const getStatus = (expiryDate) => {
   return isExpired(expiryDate) ? 'expired' : 'active'
 }
 
-// Sample data for procurement notices (same as before)
+// Sample data for procurement notices
 const procurementNotices = ref([
   {
     id: 1,
@@ -189,7 +203,7 @@ const procurementNotices = ref([
   }
 ])
 
-// Sample data for job opportunities (same as before)
+// Sample data for job opportunities
 const jobOpportunities = ref([
   {
     id: 1,
@@ -392,409 +406,398 @@ const downloadDocument = (url, filename) => {
       </div>
     </div>
 
-    <div class="container mx-auto px-4 py-8">
-      <!-- Tab Navigation -->
-      <div class="mb-8">
-        <div class="border-b border-gray-200">
-          <nav class="-mb-px flex space-x-8">
-            <button
-                @click="activeTab = 'procurement'"
-                :class="[
-                'py-2 px-1 border-b-2 font-medium text-sm',
-                activeTab === 'procurement'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              ]"
-            >
-              <Icon name="heroicons:document-text" class="w-5 h-5 inline mr-2" />
-              Procurement Portal
-            </button>
-            <button
-                @click="activeTab = 'jobs'"
-                :class="[
-                'py-2 px-1 border-b-2 font-medium text-sm',
-                activeTab === 'jobs'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              ]"
-            >
-              <Icon name="heroicons:briefcase" class="w-5 h-5 inline mr-2" />
-              Job Opportunities
-            </button>
-          </nav>
-        </div>
-      </div>
+    <!-- Main Content Wrapper with Sidebar and content area -->
+    <div class="flex flex-col md:flex-row gap-8 max-w-7xl mx-auto px-4 py-8">
+      <!-- General Sidebar Component -->
+      <GeneralSidebar
+        sidebarType="opportunities"
+        :sectionsData="opportunitySections"
+        :activeId="activeTab"
+        sidebarTitle="Browse Opportunities"
+        :sidebarOpen="isSidebarOpen"
+        @update:activeId="activeTab = $event"
+        @update:sidebarOpen="isSidebarOpen = $event"
+      />
 
-      <!-- Search and Filters -->
-      <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-          <!-- Search -->
-          <div class="lg:col-span-2">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
-            <div class="relative">
-              <input
-                  v-model="searchQuery"
-                  type="text"
-                  placeholder="Search opportunities..."
-                  class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+      <!-- Main content area -->
+      <main
+        id="opportunities-content"
+        :class="[
+          'flex-1 min-w-0 transition-all duration-300 ease-in-out',
+          isSidebarOpen ? 'md:ml-72' : 'md:ml-12' // Adjust ml-12 if your toggle button is narrower
+        ]"
+      >
+        <!-- Search and Filters (Moved inside main content) -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            <!-- Search -->
+            <div class="lg:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
+              <div class="relative">
+                <input
+                    v-model="searchQuery"
+                    type="text"
+                    placeholder="Search opportunities..."
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                >
+                <Icon name="heroicons:magnifying-glass" class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+              </div>
+            </div>
+
+            <!-- Type Filter -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                {{ activeTab === 'procurement' ? 'Type' : 'Employment Type' }}
+              </label>
+              <select
+                  v-model="selectedFilters.type"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
               >
-              <Icon name="heroicons:magnifying-glass" class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                <option value="">All Types</option>
+                <template v-if="activeTab === 'procurement'">
+                  <option value="RFQ">RFQ</option>
+                  <option value="RFP">RFP</option>
+                  <option value="Tender">Tender</option>
+                </template>
+                <template v-else>
+                  <option value="Permanent">Permanent</option>
+                  <option value="Contract">Contract</option>
+                  <option value="Temporary">Temporary</option>
+                </template>
+              </select>
+            </div>
+
+            <!-- Status Filter -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              <select
+                  v-model="selectedFilters.status"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="expired">Expired</option>
+                <option value="pending">Pending</option>
+              </select>
             </div>
           </div>
 
-          <!-- Type Filter -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              {{ activeTab === 'procurement' ? 'Type' : 'Employment Type' }}
-            </label>
-            <select
-                v-model="selectedFilters.type"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">All Types</option>
-              <template v-if="activeTab === 'procurement'">
-                <option value="RFQ">RFQ</option>
-                <option value="RFP">RFP</option>
-                <option value="Tender">Tender</option>
-              </template>
-              <template v-else>
-                <option value="Permanent">Permanent</option>
-                <option value="Contract">Contract</option>
-                <option value="Temporary">Temporary</option>
-              </template>
-            </select>
-          </div>
-
-          <!-- Status Filter -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-            <select
-                v-model="selectedFilters.status"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">All Status</option>
-              <option value="active">Active</option>
-              <option value="expired">Expired</option>
-              <option value="pending">Pending</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Department Filter -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Department</label>
-            <select
-                v-model="selectedFilters.department"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">All Departments</option>
-              <option value="Administration">Administration</option>
-              <option value="Finance">Finance</option>
-              <option value="ICT">ICT</option>
-              <option value="Projects">Projects</option>
-              <option value="Infrastructure">Infrastructure</option>
-            </select>
-          </div>
-
-          <!-- Location Filter (Jobs only) -->
-          <div v-if="activeTab === 'jobs'">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
-            <select
-                v-model="selectedFilters.location"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">All Locations</option>
-              <option value="Lilongwe">Lilongwe</option>
-              <option value="Blantyre">Blantyre</option>
-              <option value="Mzuzu">Mzuzu</option>
-              <option value="Zomba">Zomba</option>
-            </select>
-          </div>
-
-          <!-- Clear Filters -->
-          <div class="flex items-end">
-            <button
-                @click="clearFilters"
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              Clear Filters
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Results Header -->
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h2 class="text-xl font-semibold text-gray-900">
-              {{ activeTab === 'procurement' ? 'Procurement Notices' : 'Job Opportunities' }}
-            </h2>
-            <p class="text-sm text-gray-600 mt-1">
-              {{ currentItems.length }} {{ currentItems.length === 1 ? 'opportunity' : 'opportunities' }} found
-            </p>
-          </div>
-
-          <!-- Quick Stats -->
-          <div class="flex items-center space-x-4 text-sm">
-            <div class="flex items-center space-x-1">
-              <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span class="text-gray-600">
-                {{ currentItems.filter(item => item.status === 'active').length }} Active
-              </span>
-            </div>
-            <div class="flex items-center space-x-1">
-              <div class="w-2 h-2 bg-red-500 rounded-full"></div>
-              <span class="text-gray-600">
-                {{ currentItems.filter(item => item.status === 'expired').length }} Expired
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Procurement notices Content -->
-      <div v-if="activeTab === 'procurement'">
-        <div class="space-y-6">
-          <div
-              v-for="notice in paginatedItems"
-              :key="notice.id"
-              class="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
-          >
-            <div class="flex justify-between items-start mb-4">
-              <div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ notice.title }}</h3>
-                <div class="flex items-center space-x-4 text-sm text-gray-600">
-                  <span class="flex items-center">
-                    <Icon name="heroicons:building-office" class="w-4 h-4 mr-1" />
-                    {{ notice.department }}
-                  </span>
-                  <span class="flex items-center">
-                    <Icon name="heroicons:currency-dollar" class="w-4 h-4 mr-1" />
-                    {{ notice.estimatedValue }}
-                  </span>
-                  <span class="flex items-center">
-                    <Icon name="heroicons:calendar" class="w-4 h-4 mr-1" />
-                    Published: {{ formatDate(notice.publishDate) }}
-                  </span>
-                </div>
-              </div>
-              <div class="flex items-center space-x-3">
-                <span
-                    :class="[
-                    'px-3 py-1 rounded-full text-xs font-medium',
-                    getStatusColor(notice.status)
-                  ]"
-                >
-                  {{ notice.status.charAt(0).toUpperCase() + notice.status.slice(1) }}
-                </span>
-                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
-                  {{ notice.type }}
-                </span>
-              </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Department Filter -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Department</label>
+              <select
+                  v-model="selectedFilters.department"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">All Departments</option>
+                <option value="Administration">Administration</option>
+                <option value="Finance">Finance</option>
+                <option value="ICT">ICT</option>
+                <option value="Projects">Projects</option>
+                <option value="Infrastructure">Infrastructure</option>
+              </select>
             </div>
 
-            <p class="text-gray-700 mb-4">{{ notice.description }}</p>
-
-            <div class="flex justify-between items-center">
-              <div class="flex items-center space-x-4">
-                <span class="text-sm text-gray-600">
-                  <Icon name="heroicons:clock" class="w-4 h-4 inline mr-1" />
-                  Expires: {{ formatDate(notice.expiryDate) }}
-                </span>
-                <div class="flex items-center space-x-2">
-                  <Icon name="heroicons:document-arrow-down" class="w-4 h-4 text-gray-500" />
-                  <span class="text-sm text-gray-600">{{ notice.documents.length }} Documents</span>
-                </div>
-              </div>
-              <div class="flex space-x-2">
-                <button
-                    v-for="doc in notice.documents"
-                    :key="doc.name"
-                    @click="downloadDocument(doc.url, doc.name)"
-                    class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <Icon name="heroicons:arrow-down-tray" class="w-4 h-4 inline mr-1" />
-                  {{ doc.name }}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- No results message for procurement -->
-          <div v-if="filteredProcurement.length === 0" class="text-center py-12">
-            <Icon name="heroicons:document-magnifying-glass" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No procurement notices found</h3>
-            <p class="text-gray-600">Try adjusting your search criteria or check back later for new opportunities.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Job Listings Content -->
-      <div v-if="activeTab === 'jobs'">
-        <div class="space-y-6">
-          <div
-              v-for="job in paginatedItems"
-              :key="job.id"
-              class="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
-          >
-            <div class="flex justify-between items-start mb-4">
-              <div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ job.title }}</h3>
-                <div class="flex items-center space-x-4 text-sm text-gray-600">
-                  <span class="flex items-center">
-                    <Icon name="heroicons:building-office" class="w-4 h-4 mr-1" />
-                    {{ job.department }}
-                  </span>
-                  <span class="flex items-center">
-                    <Icon name="heroicons:map-pin" class="w-4 h-4 mr-1" />
-                    {{ job.location }}
-                  </span>
-                  <span class="flex items-center">
-                    <Icon name="heroicons:currency-dollar" class="w-4 h-4 mr-1" />
-                    {{ job.salary }}
-                  </span>
-                </div>
-              </div>
-              <div class="flex items-center space-x-3">
-                <span
-                    :class="[
-                    'px-3 py-1 rounded-full text-xs font-medium',
-                    getStatusColor(job.status)
-                  ]"
-                >
-                  {{ job.status.charAt(0).toUpperCase() + job.status.slice(1) }}
-                </span>
-                <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium">
-                  {{ job.type }}
-                </span>
-              </div>
+            <!-- Location Filter (Jobs only) -->
+            <div v-if="activeTab === 'jobs'">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+              <select
+                  v-model="selectedFilters.location"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">All Locations</option>
+                <option value="Lilongwe">Lilongwe</option>
+                <option value="Blantyre">Blantyre</option>
+                <option value="Mzuzu">Mzuzu</option>
+                <option value="Zomba">Zomba</option>
+              </select>
             </div>
 
-            <p class="text-gray-700 mb-4">{{ job.description }}</p>
-
-            <!-- Job Details Accordion -->
-            <div class="border-t border-gray-200 pt-4">
-              <details class="group">
-                <summary class="flex items-center justify-between cursor-pointer text-sm font-medium text-gray-700 hover:text-gray-900">
-                  <span>View Job Details</span>
-                  <Icon name="heroicons:chevron-down" class="w-4 h-4 group-open:rotate-180 transition-transform" />
-                </summary>
-                <div class="mt-4 space-y-4">
-                  <div>
-                    <h4 class="font-medium text-gray-900 mb-2">Key Responsibilities:</h4>
-                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">
-                      <li v-for="responsibility in job.responsibilities" :key="responsibility">
-                        {{ responsibility }}
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 class="font-medium text-gray-900 mb-2">Requirements:</h4>
-                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">
-                      <li v-for="requirement in job.requirements" :key="requirement">
-                        {{ requirement }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </details>
-            </div>
-
-            <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-200">
-              <div class="flex items-center space-x-4">
-                <span class="text-sm text-gray-600">
-                  <Icon name="heroicons:calendar" class="w-4 h-4 inline mr-1" />
-                  Published: {{ formatDate(job.publishDate) }}
-                </span>
-                <span class="text-sm text-gray-600">
-                  <Icon name="heroicons:clock" class="w-4 h-4 inline mr-1" />
-                  Expires: {{ formatDate(job.expiryDate) }}
-                </span>
-              </div>
+            <!-- Clear Filters -->
+            <div class="flex items-end">
               <button
-                  v-if="job.status === 'active'"
-                  class="px-6 py-2 bg-emerald-600 text-white font-medium rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  @click="clearFilters"
+                  class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <Icon name="heroicons:paper-airplane" class="w-4 h-4 inline mr-2" />
-                Apply Now
+                Clear Filters
               </button>
-              <span
-                  v-else
-                  class="px-6 py-2 bg-gray-300 text-gray-500 font-medium rounded-md cursor-not-allowed"
-              >
-                Application Closed
-              </span>
-            </div>
-          </div>
-
-          <!-- No results message for jobs -->
-          <div v-if="filteredJobs.length === 0" class="text-center py-12">
-            <Icon name="heroicons:briefcase" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No job opportunities found</h3>
-            <p class="text-gray-600">Try adjusting your search criteria or check back later for new positions.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pagination -->
-      <div v-if="currentItems.length > 0" class="mt-8">
-        <Pagination
-            v-model:current-page="currentPage"
-            v-model:items-per-page="itemsPerPage"
-            :total-items="currentItems.length"
-        />
-      </div>
-
-      <!-- Information Section -->
-      <div class="mt-12 bg-blue-50 rounded-lg p-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div v-if="activeTab === 'procurement'">
-            <h3 class="text-xl font-semibold text-blue-900 mb-4">Procurement Information</h3>
-            <div class="space-y-3 text-sm text-blue-800">
-              <p><strong>Submission Guidelines:</strong></p>
-              <ul class="list-disc list-inside space-y-1 ml-4">
-                <li>All submissions must be received before the specified deadline</li>
-                <li>Late submissions will not be considered</li>
-                <li>Ensure all required documents are included</li>
-                <li>Submissions should be sealed and clearly marked</li>
-              </ul>
-            </div>
-          </div>
-          <div v-else>
-            <h3 class="text-xl font-semibold text-blue-900 mb-4">Application Information</h3>
-            <div class="space-y-3 text-sm text-blue-800">
-              <p><strong>How to Apply:</strong></p>
-              <ul class="list-disc list-inside space-y-1 ml-4">
-                <li>Submit your CV and cover letter</li>
-                <li>Include copies of relevant certificates</li>
-                <li>Provide contact details for three references</li>
-                <li>Applications must be received before the deadline</li>
-              </ul>
-            </div>
-          </div>
-
-          <div>
-            <h3 class="text-xl font-semibold text-blue-900 mb-4">Contact Information</h3>
-            <div class="space-y-2 text-sm text-blue-800">
-              <p class="flex items-center">
-                <Icon name="heroicons:envelope" class="w-4 h-4 mr-2" />
-                <span v-if="activeTab === 'procurement'">procurement@nlgfc.gov.mw</span>
-                <span v-else>hr@nlgfc.gov.mw</span>
-              </p>
-              <p class="flex items-center">
-                <Icon name="heroicons:phone" class="w-4 h-4 mr-2" />
-                +265 1 770 244
-              </p>
-              <p class="flex items-center">
-                <Icon name="heroicons:map-pin" class="w-4 h-4 mr-2" />
-                NLGFC Offices, Capital Hill, Lilongwe
-              </p>
             </div>
           </div>
         </div>
-      </div>
+
+        <!-- Results Header -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-semibold text-gray-900">
+                {{ activeTab === 'procurement' ? 'Procurement Notices' : 'Job Opportunities' }}
+              </h2>
+              <p class="text-sm text-gray-600 mt-1">
+                {{ currentItems.length }} {{ currentItems.length === 1 ? 'opportunity' : 'opportunities' }} found
+              </p>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="flex items-center space-x-4 text-sm">
+              <div class="flex items-center space-x-1">
+                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span class="text-gray-600">
+                  {{ currentItems.filter(item => item.status === 'active').length }} Active
+                </span>
+              </div>
+              <div class="flex items-center space-x-1">
+                <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                <span class="text-gray-600">
+                  {{ currentItems.filter(item => item.status === 'expired').length }} Expired
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Procurement notices Content -->
+        <div v-if="activeTab === 'procurement'">
+          <div class="space-y-6">
+            <div
+                v-for="notice in paginatedItems"
+                :key="notice.id"
+                class="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ notice.title }}</h3>
+                  <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <span class="flex items-center">
+                      <Icon name="heroicons:building-office" class="w-4 h-4 mr-1" />
+                      {{ notice.department }}
+                    </span>
+                    <span class="flex items-center">
+                      <Icon name="heroicons:currency-dollar" class="w-4 h-4 mr-1" />
+                      {{ notice.estimatedValue }}
+                    </span>
+                    <span class="flex items-center">
+                      <Icon name="heroicons:calendar" class="w-4 h-4 mr-1" />
+                      Published: {{ formatDate(notice.publishDate) }}
+                    </span>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <span
+                      :class="[
+                      'px-3 py-1 rounded-full text-xs font-medium',
+                      getStatusColor(notice.status)
+                    ]"
+                  >
+                    {{ notice.status.charAt(0).toUpperCase() + notice.status.slice(1) }}
+                  </span>
+                  <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                    {{ notice.type }}
+                  </span>
+                </div>
+              </div>
+
+              <p class="text-gray-700 mb-4">{{ notice.description }}</p>
+
+              <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                  <span class="text-sm text-gray-600">
+                    <Icon name="heroicons:clock" class="w-4 h-4 inline mr-1" />
+                    Expires: {{ formatDate(notice.expiryDate) }}
+                  </span>
+                  <div class="flex items-center space-x-2">
+                    <Icon name="heroicons:document-arrow-down" class="w-4 h-4 text-gray-500" />
+                    <span class="text-sm text-gray-600">{{ notice.documents.length }} Documents</span>
+                  </div>
+                </div>
+                <div class="flex space-x-2">
+                  <button
+                      v-for="doc in notice.documents"
+                      :key="doc.name"
+                      @click="downloadDocument(doc.url, doc.name)"
+                      class="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <Icon name="heroicons:arrow-down-tray" class="w-4 h-4 inline mr-1" />
+                    {{ doc.name }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- No results message for procurement -->
+            <div v-if="filteredProcurement.length === 0" class="text-center py-12">
+              <Icon name="heroicons:document-magnifying-glass" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 class="text-lg font-medium text-gray-900 mb-2">No procurement notices found</h3>
+              <p class="text-gray-600">Try adjusting your search criteria or check back later for new opportunities.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Job Listings Content -->
+        <div v-if="activeTab === 'jobs'">
+          <div class="space-y-6">
+            <div
+                v-for="job in paginatedItems"
+                :key="job.id"
+                class="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ job.title }}</h3>
+                  <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <span class="flex items-center">
+                      <Icon name="heroicons:building-office" class="w-4 h-4 mr-1" />
+                      {{ job.department }}
+                    </span>
+                    <span class="flex items-center">
+                      <Icon name="heroicons:map-pin" class="w-4 h-4 mr-1" />
+                      {{ job.location }}
+                    </span>
+                    <span class="flex items-center">
+                      <Icon name="heroicons:currency-dollar" class="w-4 h-4 mr-1" />
+                      {{ job.salary }}
+                    </span>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <span
+                      :class="[
+                      'px-3 py-1 rounded-full text-xs font-medium',
+                      getStatusColor(job.status)
+                    ]"
+                  >
+                    {{ job.status.charAt(0).toUpperCase() + job.status.slice(1) }}
+                  </span>
+                  <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium">
+                    {{ job.type }}
+                  </span>
+                </div>
+              </div>
+
+              <p class="text-gray-700 mb-4">{{ job.description }}</p>
+
+              <!-- Job Details Accordion -->
+              <div class="border-t border-gray-200 pt-4">
+                <details class="group">
+                  <summary class="flex items-center justify-between cursor-pointer text-sm font-medium text-gray-700 hover:text-gray-900">
+                    <span>View Job Details</span>
+                    <Icon name="heroicons:chevron-down" class="w-4 h-4 group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <div class="mt-4 space-y-4">
+                    <div>
+                      <h4 class="font-medium text-gray-900 mb-2">Key Responsibilities:</h4>
+                      <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">
+                        <li v-for="responsibility in job.responsibilities" :key="responsibility">
+                          {{ responsibility }}
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-gray-900 mb-2">Requirements:</h4>
+                      <ul class="list-disc list-inside space-y-1 text-sm text-gray-700">
+                        <li v-for="requirement in job.requirements" :key="requirement">
+                          {{ requirement }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </details>
+              </div>
+
+              <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-200">
+                <div class="flex items-center space-x-4">
+                  <span class="text-sm text-gray-600">
+                    <Icon name="heroicons:calendar" class="w-4 h-4 inline mr-1" />
+                    Published: {{ formatDate(job.publishDate) }}
+                  </span>
+                  <span class="text-sm text-gray-600">
+                    <Icon name="heroicons:clock" class="w-4 h-4 inline mr-1" />
+                    Expires: {{ formatDate(job.expiryDate) }}
+                  </span>
+                </div>
+                <button
+                    v-if="job.status === 'active'"
+                    class="px-6 py-2 bg-emerald-600 text-white font-medium rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <Icon name="heroicons:paper-airplane" class="w-4 h-4 inline mr-2" />
+                  Apply Now
+                </button>
+                <span
+                    v-else
+                    class="px-6 py-2 bg-gray-300 text-gray-500 font-medium rounded-md cursor-not-allowed"
+                >
+                  Application Closed
+                </span>
+              </div>
+            </div>
+
+            <!-- No results message for jobs -->
+            <div v-if="filteredJobs.length === 0" class="text-center py-12">
+              <Icon name="heroicons:briefcase" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 class="text-lg font-medium text-gray-900 mb-2">No job opportunities found</h3>
+              <p class="text-gray-600">Try adjusting your search criteria or check back later for new positions.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div v-if="currentItems.length > 0" class="mt-8">
+          <Pagination
+              v-model:current-page="currentPage"
+              v-model:items-per-page="itemsPerPage"
+              :total-items="currentItems.length"
+          />
+        </div>
+
+        <!-- Information Section -->
+        <div class="mt-12 bg-blue-50 rounded-lg p-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div v-if="activeTab === 'procurement'">
+              <h3 class="text-xl font-semibold text-blue-900 mb-4">Procurement Information</h3>
+              <div class="space-y-3 text-sm text-blue-800">
+                <p><strong>Submission Guidelines:</strong></p>
+                <ul class="list-disc list-inside space-y-1 ml-4">
+                  <li>All submissions must be received before the specified deadline</li>
+                  <li>Late submissions will not be considered</li>
+                  <li>Ensure all required documents are included</li>
+                  <li>Submissions should be sealed and clearly marked</li>
+                </ul>
+              </div>
+            </div>
+            <div v-else>
+              <h3 class="text-xl font-semibold text-blue-900 mb-4">Application Information</h3>
+              <div class="space-y-3 text-sm text-blue-800">
+                <p><strong>How to Apply:</strong></p>
+                <ul class="list-disc list-inside space-y-1 ml-4">
+                  <li>Submit your CV and cover letter</li>
+                  <li>Include copies of relevant certificates</li>
+                  <li>Provide contact details for three references</li>
+                  <li>Applications must be received before the deadline</li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-xl font-semibold text-blue-900 mb-4">Contact Information</h3>
+              <div class="space-y-2 text-sm text-blue-800">
+                <p class="flex items-center">
+                  <Icon name="heroicons:envelope" class="w-4 h-4 mr-2" />
+                  <span v-if="activeTab === 'procurement'">procurement@nlgfc.gov.mw</span>
+                  <span v-else>hr@nlgfc.gov.mw</span>
+                </p>
+                <p class="flex items-center">
+                  <Icon name="heroicons:phone" class="w-4 h-4 mr-2" />
+                  +265 1 770 244
+                </p>
+                <p class="flex items-center">
+                  <Icon name="heroicons:map-pin" class="w-4 h-4 mr-2" />
+                  NLGFC Offices, Capital Hill, Lilongwe
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   </div>
 </template>

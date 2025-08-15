@@ -47,8 +47,8 @@
         <!-- Column 2: Quick Links -->
         <div>
           <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-          <ul class="space-y-3">
-              <li><NuxtLink to="/" class="text-gray-400 hover:text-white transition text-sm">Home</NuxtLink></li>
+          <ul class="space-y-1">
+            <li><NuxtLink to="/" class="text-gray-400 hover:text-white transition text-sm">Home</NuxtLink></li>
             <li><NuxtLink to="/about" class="text-gray-400 hover:text-white transition text-sm">About Us</NuxtLink></li>
             <li><NuxtLink to="/projects/currentProjects" class="text-gray-400 hover:text-white transition text-sm">Projects</NuxtLink></li>
             <li><NuxtLink to="/localAuthorities/alldistricts" class="text-gray-400 hover:text-white transition text-sm">Local Councils</NuxtLink></li>
@@ -110,7 +110,7 @@
       </div>
 
       <!-- Copyright -->
-      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-xs">
+      <div class="border-t border-gray-800 mt-4 pt-4 text-center text-gray-500 text-xs">
         <p>&copy; NLGFC 2025. All rights reserved. | <a href="#" class="hover:text-white transition">Privacy Policy</a> | <a href="#" class="hover:text-white transition">Terms of Use</a></p>
       </div>
     </div>
