@@ -329,16 +329,17 @@
                 <div class="mt-10 md:mt-0">
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
                   <ul class="space-y-2">
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#msr" class="text-gray-600 hover:text-blue-600">Malawi Social Registry</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#e-payments" class="text-gray-600 hover:text-blue-600">E-Payments</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#publicworks" class="text-gray-600 hover:text-blue-600">Public Works MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#grm" class="text-gray-600 hover:text-blue-600">Digital Grievance Redress Mechanism MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#sctmis" class="text-gray-600 hover:text-blue-600">Social Cash Transfer Programme MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#lapas" class="text-gray-600 hover:text-blue-600">Local Authority Perfomance Assesment MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#cimis" class="text-gray-600 hover:text-blue-600">COMSIP Integrated MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#pmis" class="text-gray-600 hover:text-blue-600">Projects Monitoring Information System</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600">Local Authority IFMIS</NuxtLink></li>
-                  </ul>
+<li><NuxtLink to="/deliverySystems/deliverySystems#comsip" class="text-gray-600 hover:text-blue-600">COMSIP Integrated MIS</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#dgrm" class="text-gray-600 hover:text-blue-600">Digital Grievance Redress Mechanism MIS</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#e-payments" class="text-gray-600 hover:text-blue-600">E-Payments</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600">Local Authority IFMIS</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#lapas" class="text-gray-600 hover:text-blue-600">Local Authority Perfomance Assesment MIS</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#msr" class="text-gray-600 hover:text-blue-600">Malawi Social Registry</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#pmis" class="text-gray-600 hover:text-blue-600">Projects Monitoring Information System</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#publicworks" class="text-gray-600 hover:text-blue-600">Public Works MIS</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#sctpmis" class="text-gray-600 hover:text-blue-600">Social Cash Transfer Programme MIS</NuxtLink></li>
+
+                      </ul>
                 </div>
               </div>
             </div>
