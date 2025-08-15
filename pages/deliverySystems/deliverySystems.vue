@@ -14,7 +14,7 @@ const deliverySystemsData = [
 // Each delivery system item contains an id, title, and description
  { 
     id: 'comsip', 
-    title: 'Community Savings & Investment',
+    title: 'Community Savings and Investment Promotion',
 },
 { 
     id: 'dgrm', 
@@ -26,7 +26,7 @@ const deliverySystemsData = [
 },
 { 
     id: 'laifmis', 
-    title: 'Local Authorities IFMIS'
+    title: 'Local Authorities Integrated Financial Management Information System'
 },
 { 
     id: 'lapas', 
