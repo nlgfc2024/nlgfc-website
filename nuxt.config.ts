@@ -1,8 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
-
+  
   modules: [
     '@nuxt/content',
     '@nuxt/fonts',
@@ -11,8 +12,11 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/tailwindcss'
   ],
+
+  // Configuration for subdirectory deployment and app settings
   app: {
-    // pageTransition: { name: 'page', mode: 'out-in' },
+    baseURL: '/nlgfc-website/',
+    buildAssetsDir: '/_nuxt/',
     head: {
       title: 'National Local Government Finance Committee',
       charset: 'utf-16',
@@ -21,7 +25,15 @@ export default defineNuxtConfig({
         lang: 'en',
       },
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/NLGFC-Logo.png' },
+        { rel: 'icon', type: 'image/x-icon', href: '/nlgfc-website/images/logo/NLGFC-Logo.png' },
+      ],
+      // ✅ Add reCAPTCHA v2 script here
+      script: [
+        {
+          src: 'https://www.google.com/recaptcha/api.js',
+          async: true,
+          defer: true
+        }
       ]
     }
   }

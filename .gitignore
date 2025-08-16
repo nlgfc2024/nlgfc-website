@@ -6,15 +6,28 @@ yarn-error.log*
 # Dependencies
 node_modules/
 
-# Nuxt build & cache
-.nuxt/
-dist/
-.cache/
-output/
+# Nuxt dev/build outputs
+.output
+.data
+.data/content/contents.sqlite
+.nuxt
+.nitro
+.cache
+.dist
 
-# OS files
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
 .DS_Store
+.fleet
+.idea
 
-# Environment files
+# Local env files
 .env
 .env.*
+!.env.example
