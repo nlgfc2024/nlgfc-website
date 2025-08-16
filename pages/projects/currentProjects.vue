@@ -331,7 +331,7 @@ const projectContent = {
 }
 
 const projectUpdates = {
-  // Sub-group landing news feeds
+  // Sub-group landing news feeds (existing)
   ssrlp_news: [
     { date: '2024-06-20', title: 'SSRLP mid-year review completed', tags: ['ssrlp','review'], summary: 'Key milestones achieved across all pillars; detailed report forthcoming.', link: '#' },
     { date: '2024-05-14', title: 'Additional livelihood grants disbursed', tags: ['livelihoods'], summary: 'Disbursements reached 3,000 households in priority districts.', link: '#' },
@@ -349,133 +349,58 @@ const projectUpdates = {
     { date: '2024-04-19', title: 'Catchment rehabilitation plan approved', tags: ['resilience'], summary: 'Plan targets priority basins for ecosystem restoration.', link: '#' }
   ],
 
-  SCTP: [
-    {
-      date: '2024-05-05',
-      title: 'SCTP expands to new councils',
-      tags: ['sctp', 'expansion'],
-      summary: 'The program now includes 3 additional local councils targeting ultra-poor households...',
-      link: '#'
-    },
-    {
-      date: '2024-03-10',
-      title: 'RCRP kickstarts pilot catchment projects',
-      tags: ['climate', 'catchments'],
-      summary: 'Initial catchment restoration pilots are underway in 4 districts...',
-      link: '#'
-    },
-    {
-      date: '2024-04-20',
-      title: 'New LAPA scoring framework released',
-      tags: ['performance', 'governance'],
-      summary: 'The Ministry of Local Government has published an updated scoring method...',
-      link: '#'
-    }, {
-      date: '2024-06-01',
-      title: 'Districts roll out improved targeting system',
-      tags: ['sctp', 'targeting'],
-      summary: 'Local councils have begun testing a new beneficiary targeting system...',
-      link: '#'
-    },
-    {
-      date: '2024-05-15',
-      title: 'Climate-smart public works expand to 10 new sites',
-      tags: ['publicWorks', 'environment'],
-      summary: 'Environmental restoration works have been launched in 10 districts...',
-      link: '#'
-    }
+  // NEW: Government-funded components
+  cdf: [
+    { date: '2025-07-22', title: 'CDF Phase II micro-projects cleared', tags: ['cdf','community'], summary: 'Additional 312 micro-projects approved focusing on classrooms, clinics and bridges.', link: '#' },
+    { date: '2025-06-11', title: 'Community oversight committees trained', tags: ['capacity','governance'], summary: 'Training completed in 28 councils to strengthen community procurement oversight.', link: '#' },
+    { date: '2025-04-29', title: 'Material deliveries reach 85% of sites', tags: ['implementation'], summary: 'Most projects now have core materials on site—construction ramping up this quarter.', link: '#' }
   ],
-  publicWorks: [
-    {
-      date: '2024-04-22',
-      title: 'Public works teams trained in new environmental practices',
-      tags: ['training', 'publicWorks'],
-      summary: 'Field staff completed training on climate-resilient techniques for micro catchment projects...',
-      link: '#'
-    }
+  ddf: [
+    { date: '2025-08-05', title: 'DDF pipeline aligned to updated DDPs', tags: ['ddf','planning'], summary: 'Councils finalized alignment of DDF investments with District Development Plans.', link: '#' },
+    { date: '2025-06-18', title: 'Quarterly disbursements released to councils', tags: ['finance'], summary: 'Treasury released Q4 tranches; councils to accelerate works completion.', link: '#' },
+    { date: '2025-05-03', title: 'School blocks and boreholes prioritized', tags: ['education','water'], summary: 'Majority of DDF envelopes directed to education and water access gaps.', link: '#' }
   ],
-  emergency: [
-    {
-      date: '2024-03-30',
-      title: 'Emergency cash transfers activated in response to flooding',
-      tags: ['emergency', 'flood'],
-      summary: 'Flood-affected households in Nsanje and Chikwawa received emergency cash support...',
-      link: '#'
-    }
+  idf: [
+    { date: '2025-07-14', title: 'IDF urban market upgrades commence', tags: ['idf','infrastructure'], summary: 'Urban markets in Mzuzu and Lilongwe begin rehabilitation under IDF.', link: '#' },
+    { date: '2025-06-02', title: 'Design reviews completed for public buildings', tags: ['design','qa'], summary: 'Independent design checks completed to ensure safety and value for money.', link: '#' }
   ],
-  livelihoods: [
-    {
-      date: '2024-06-12',
-      title: 'COMSIP launches new youth skills program',
-      tags: ['livelihoods', 'youth'],
-      summary: '3,000 youths across 6 districts have begun livelihood training under a new initiative...',
-      link: '#'
-    }
+  rrf: [
+    { date: '2025-07-30', title: 'Spot regravelling and drainage clearing underway', tags: ['rrf','roads'], summary: 'Maintenance teams deployed on feeder roads ahead of rainy season.', link: '#' },
+    { date: '2025-05-20', title: 'Bridge approaches stabilized in priority corridors', tags: ['maintenance','resilience'], summary: 'Critical spots reinforced to reduce washouts during peak flows.', link: '#' }
   ],
-  pbf: [
-    {
-      date: '2024-05-18',
-      title: 'Top performing councils awarded bonus grants',
-      tags: ['pbf', 'funding'],
-      summary: 'Six councils scored above 85% in LAPA and received additional grant allocations...',
-      link: '#'
-    }
+  wsf: [
+    { date: '2025-08-08', title: 'New borehole drillings confirmed in 9 TAs', tags: ['wsf','water'], summary: 'Contractors mobilized; quality testing and community WASH committees in place.', link: '#' },
+    { date: '2025-06-25', title: 'Piped scheme rehabilitation achieves 60% progress', tags: ['rehab'], summary: 'Pump replacements and leak repairs improving uptime across schemes.', link: '#' }
   ],
-  ias: [
-    {
-      date: '2024-04-10',
-      title: 'Audit tool updates shared with finance teams',
-      tags: ['accountability', 'finance'],
-      summary: 'New tools for tracking and reporting intergovernmental transfers were rolled out in workshops...',
-      link: '#'
-    }
+  health_rehab: [
+    { date: '2025-07-19', title: 'Maternity wing refurbishments 70% complete', tags: ['health','rehabilitation'], summary: 'Works focus on roofing, solar backup and sanitation blocks.', link: '#' },
+    { date: '2025-05-27', title: 'Equipment delivery schedule finalized', tags: ['procurement'], summary: 'Oxygen concentrators and cold-chain fridges slated for next quarter.', link: '#' }
   ],
-  lgpi: [
-    {
-      date: '2024-02-28',
-      title: 'LA staff capacity assessment completed',
-      tags: ['staffing', 'capacity'],
-      summary: 'Baseline capacity data will inform future staffing plans and citizen engagement strategies...',
-      link: '#'
-    }
-  ],
-  adaptive: [
-    {
-      date: '2024-06-05',
-      title: 'Adaptive management pilots launched in 3 districts',
-      tags: ['innovation', 'monitoring'],
-      summary: 'Feedback loops and real-time tracking have been integrated into district plans...',
-      link: '#'
-    }
-  ],
-  drb: [
-    {
-      date: '2024-03-01',
-      title: 'Nature-based infrastructure under construction',
-      tags: ['resilience', 'infrastructure'],
-      summary: 'Districts began works on check dams and terracing in flood-prone areas...',
-      link: '#'
-    }
-  ],
-  usr: [
-    {
-      date: '2024-05-09',
-      title: 'Urban social registry mapping starts',
-      tags: ['registry', 'urban'],
-      summary: 'Enumerators have begun household data collection in Lilongwe and Blantyre...',
-      link: '#'
-    }
-  ],
-  upw: [
-    {
-      date: '2024-04-25',
-      title: 'Urban public works sites launched',
-      tags: ['urban', 'climate'],
-      summary: 'Waste management and tree planting have started in city wards under the pilot phase...',
-      link: '#'
-    }
-  ]
 }
+
+// --- Pagination state for any news list ---
+const pageSize = ref(6)           // cards per page
+const currentPage = ref(1)
+
+const newsListForActive = computed(() => projectUpdates[activeTab.value] || [])
+const totalPages = computed(() => Math.max(1, Math.ceil(newsListForActive.value.length / pageSize.value)))
+const paginatedNews = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value
+  return newsListForActive.value.slice(start, start + pageSize.value)
+})
+
+function goToPage(n) {
+  if (n >= 1 && n <= totalPages.value) {
+    currentPage.value = n
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+}
+function nextPage() { if (currentPage.value < totalPages.value) goToPage(currentPage.value + 1) }
+function prevPage() { if (currentPage.value > 1) goToPage(currentPage.value - 1) }
+
+// Reset page when switching tabs
+watch(activeTab, () => { currentPage.value = 1 })
+
 
 // Set from initial hash on load
 onMounted(() => {
@@ -794,48 +719,83 @@ onBeforeUnmount(() => {
           </div>
         </section>
 
-        <!-- Related News -->
-        <section v-if="slidesForActive.length" class="px-1">
-          <div class="grid md:grid-cols-3 gap-6">
-            <article
-              v-for="(news, nIdx) in slidesForActive"
-              :key="'rel-'+nIdx"
-              class="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
-            >
-              <div class="flex h-full">
-                <!-- Image on left -->
-                <div class="w-1/3 relative overflow-hidden">
-                  <img
-                    :src="newsImages[nIdx % newsImages.length]"
-                    alt="Article image"
-                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
+                    <!-- Related News -->
+              <section v-if="slidesForActive.length" class="px-1">
+                <div class="grid md:grid-cols-3 gap-6">
+                  <article
+                    v-for="(news, nIdx) in paginatedNews"
+                    :key="'rel-'+nIdx"
+                    class="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
                   >
+                    <div class="flex h-full">
+                      <!-- Image on left -->
+                      <div class="w-1/3 relative overflow-hidden">
+                        <img
+                          :src="newsImages[nIdx % newsImages.length]"
+                          alt="Article image"
+                          class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
+                        >
+                      </div>
+
+                      <!-- Content on right -->
+                      <div class="w-2/3 p-5 flex flex-col">
+                        <span class="text-xs font-medium text-gray-500 mb-1 flex items-center">
+                          <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                          </svg>
+                          {{ new Date(news.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}
+                        </span>
+                        <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                          <a :href="news.link">{{ news.title }}</a>
+                        </h3>
+                        <p class="text-sm text-gray-600 line-clamp-2">{{ news.summary }}</p>
+                        <a :href="news.link" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          Read more
+                          <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                          </svg>
+                        </a>
+                      </div>
+                    </div>
+                  </article>
                 </div>
 
-                <!-- Content on right -->
-                <div class="w-2/3 p-5 flex flex-col">
-                  <span class="text-xs font-medium text-gray-500 mb-1 flex items-center">
-                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
-                    {{ new Date(news.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}
-                  </span>
-                  <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-                    <a :href="news.link">{{ news.title }}</a>
-                  </h3>
-                  <p class="text-sm text-gray-600 line-clamp-2">{{ news.summary }}</p>
-                  <a :href="news.link" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    Read more
-                    <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                    </svg>
-                  </a>
+                <!-- Pagination controls -->
+                <div v-if="totalPages > 1" class="mt-6 flex items-center justify-between">
+                  <button
+                    @click="prevSlide(); prevPage()"
+                    :disabled="currentPage === 1"
+                    class="px-3 py-2 text-sm rounded-lg border"
+                    :class="currentPage === 1 ? 'text-gray-400 border-gray-200 cursor-not-allowed' : 'text-gray-700 border-gray-300 hover:bg-gray-50'"
+                  >
+                    Previous
+                  </button>
+
+                  <div class="space-x-2">
+                    <button
+                      v-for="p in totalPages"
+                      :key="'p-'+p"
+                      @click="goToPage(p)"
+                      class="px-3 py-2 text-sm rounded-lg border"
+                      :class="p === currentPage ? 'bg-blue-600 text-white border-blue-600' : 'text-gray-700 border-gray-300 hover:bg-gray-50'"
+                    >
+                      {{ p }}
+                    </button>
+                  </div>
+
+                  <button
+                    @click="nextSlide(); nextPage()"
+                    :disabled="currentPage === totalPages"
+                    class="px-3 py-2 text-sm rounded-lg border"
+                    :class="currentPage === totalPages ? 'text-gray-400 border-gray-200 cursor-not-allowed' : 'text-gray-700 border-gray-300 hover:bg-gray-50'"
+                  >
+                    Next
+                  </button>
                 </div>
-              </div>
-            </article>
-          </div>
-        </section>
+              </section>
+
 
         <!-- Project Statistics -->
         <section class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -866,6 +826,73 @@ onBeforeUnmount(() => {
           <div v-html="projectContent[activeTab].body"></div>
         </div>
       </div>
+                    <!-- Latest Updates for this tab -->
+            <section v-if="projectUpdates[activeTab] && projectUpdates[activeTab].length && !isNewsLanding" class="mt-8">
+              <h3 class="text-xl font-semibold text-gray-900 mb-4">Latest Updates</h3>
+
+              <div class="grid md:grid-cols-3 gap-6">
+                <article
+                  v-for="(news, nIdx) in paginatedNews"
+                  :key="'proj-'+nIdx"
+                  class="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
+                >
+                  <div class="flex h-full">
+                    <div class="w-1/3 relative overflow-hidden">
+                      <img
+                        :src="newsImages[nIdx % newsImages.length]"
+                        alt="Article image"
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      >
+                    </div>
+                    <div class="w-2/3 p-5 flex flex-col">
+                      <span class="text-xs font-medium text-gray-500 mb-1">
+                        {{ new Date(news.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}
+                      </span>
+                      <h4 class="text-base font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                        <a :href="news.link">{{ news.title }}</a>
+                      </h4>
+                      <p class="text-sm text-gray-600 line-clamp-2">{{ news.summary }}</p>
+                    </div>
+                  </div>
+                </article>
+              </div>
+
+              <!-- Pagination controls -->
+              <div v-if="totalPages > 1" class="mt-6 flex items-center justify-between">
+                <button
+                  @click="prevPage()"
+                  :disabled="currentPage === 1"
+                  class="px-3 py-2 text-sm rounded-lg border"
+                  :class="currentPage === 1 ? 'text-gray-400 border-gray-200 cursor-not-allowed' : 'text-gray-700 border-gray-300 hover:bg-gray-50'"
+                >
+                  Previous
+                </button>
+
+                <div class="space-x-2">
+                  <button
+                    v-for="p in totalPages"
+                    :key="'pp-'+p"
+                    @click="goToPage(p)"
+                    class="px-3 py-2 text-sm rounded-lg border"
+                    :class="p === currentPage ? 'bg-blue-600 text-white border-blue-600' : 'text-gray-700 border-gray-300 hover:bg-gray-50'"
+                  >
+                    {{ p }}
+                  </button>
+                </div>
+
+                <button
+                  @click="nextPage()"
+                  :disabled="currentPage === totalPages"
+                  class="px-3 py-2 text-sm rounded-lg border"
+                  :class="currentPage === totalPages ? 'text-gray-400 border-gray-200 cursor-not-allowed' : 'text-gray-700 border-gray-300 hover:bg-gray-50'"
+                >
+                  Next
+                </button>
+              </div>
+            </section>
+
+
     </main>
   </div>
 </template>
