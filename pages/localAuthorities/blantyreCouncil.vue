@@ -255,6 +255,7 @@ const news = [
         </nav>
       </div>
 
+      <!-- Main Content Area -->
       <!-- Main Content Area with Transition Container -->
       <div class="flex-1 min-w-0 relative overflow-hidden">
         <div class="transition-container">
