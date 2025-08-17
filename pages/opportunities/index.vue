@@ -1,4 +1,5 @@
 <script setup>
+
 // Meta information
 definePageMeta({
   title: 'Opportunities'
