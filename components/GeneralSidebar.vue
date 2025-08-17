@@ -359,7 +359,7 @@ const dynamicSidebarStyle = computed(() => {
                   activeId === section.id ? 'text-emerald-600' : 'text-gray-400 group-hover:text-gray-600'
                 ]"
               >
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <svg v-if="section.icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getIconPath(section.icon)"></path>
                   </svg>
               </span>
@@ -520,25 +520,31 @@ const dynamicSidebarStyle = computed(() => {
                         : 'text-gray-400 group-hover:text-gray-600'
                     ]"
                   >
-                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getIconPath(group.groupIcon)"></path>
+                      <svg 
+                        :class="['h-5 w-5 transform transition-colors duration-200', { 'text-emerald-500': openGroup === group.group.id, 'text-transparent': openGroup !== group.group }]" 
+                        fill="currentColor" viewBox="0 0 30 30"
+                      >
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                       </svg>
                   </span>
                 <span class="font-medium">{{ group.group }}</span>
               </div>
-              <svg class="w-4 h-4 transform transition-transform duration-200" :class="{ 'rotate-180': openGroup === group.group }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              <svg
+                :class="['h-6 w-6 transform transition-transform duration-200', { 'rotate-180': openGroup === group.group }]"
+                fill="currentColor" viewBox="0 0 20 20"
+              >
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </button>
             <div v-show="openGroup === group.group" class="bg-white" >
-              <ul class="py-2">
+              <ul class="py-4">
                 <li v-if="group.subgroups && group.subgroups.length > 0">
                   <li v-for="subgroup in group.subgroups" :key="subgroup.id">
                     <NuxtLink
                       :to="`#${subgroup.id}`"
                       @click.prevent="toggleSubgroup(subgroup.id)"
                       :class="[
-                        'flex items-center justify-between w-full px-4 py-2 rounded-lg text-left cursor-pointer transition-all duration-200 ease-in-out',
+                        'flex items-center justify-between w-full px-4 py-3 rounded-lg text-left cursor-pointer transition-all duration-200 ease-in-out',
                         'hover:bg-gray-100',
                         {
                           'bg-emerald-50 text-emerald-800 font-semibold': activeSubgroup === subgroup.id || openSubgroup === subgroup.id
