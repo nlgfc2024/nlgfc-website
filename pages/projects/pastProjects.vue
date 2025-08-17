@@ -1,4 +1,7 @@
 <script setup>
+import GeneralSidebar from '../../components/GeneralSidebar.vue';
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+
 definePageMeta({ title: 'Past Projects' })
 
 const route = useRoute()
@@ -135,6 +138,13 @@ const projectContent = {
   }
 }
 
+const { projectGroups: sharedProjectGroups, projectContent: sharedProjectContent } = useGeneralSidebar();
+
+watchEffect(() => {
+  sharedProjectGroups.value = projectGroups;
+  sharedProjectContent.value = projectContent;
+});
+
 // Set from initial hash on load
 onMounted(() => {
   if (route.hash) {
@@ -159,6 +169,8 @@ function updateActiveTabFromHash(hash) {
     }
   }
 }
+
+provide('projectContent', projectContent);
 </script>
 
 <template>
