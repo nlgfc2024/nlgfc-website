@@ -1,5 +1,9 @@
 <script setup>
-// Meta information
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
+// Import FAQ modal
+import OpportunitiesFaqGuidelines from '../components/OpportunitiesFaqGuidelines.vue';
+
+// Meta information for the page
 definePageMeta({
   title: 'Opportunities'
 })

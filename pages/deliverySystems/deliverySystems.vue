@@ -1,4 +1,6 @@
 <script setup>
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+
 // Page metadata configuration
 definePageMeta({ title: 'Delivery Systems' })
 
@@ -10,41 +12,41 @@ const projectGroups = [
     group: 'Delivery Systems',
     items: [
       // Each item represents a different delivery system with unique ID, title and description
-{ 
-  id: 'comsip', 
-  title: 'Community Savings & Investment'
-},
-{ 
-  id: 'dgrm', 
-  title: 'Digital Grievance Redress'
-},
-{ 
-  id: 'e-payments', 
-  title: 'E-Payment Systems'
-},
-{ 
-  id: 'laifmis', 
-  title: 'Local Authorities IFMIS'
-},
-{  
-  id: 'msr', 
-  title: 'Malawi Social Registry'
-},
-{ 
-  id: 'lapas', 
-  title: 'Performance Assessment System'
-},
-{ 
-  id: 'pmis', 
-  title: 'Project Monitoring System'
-},
-{ 
-  id: 'publicworks', 
-  title: 'Public Works MIS'
-}
+        { 
+          id: 'comsip', 
+          title: 'Community Savings & Investment'
+        },
+        { 
+          id: 'dgrm', 
+          title: 'Digital Grievance Redress'
+        },
+        { 
+          id: 'e-payments', 
+          title: 'E-Payment Systems'
+        },
+        { 
+          id: 'laifmis', 
+          title: 'Local Authorities IFMIS'
+        },
+        {  
+          id: 'msr', 
+          title: 'Malawi Social Registry'
+        },
+        { 
+          id: 'lapas', 
+          title: 'Performance Assessment System'
+        },
+        { 
+          id: 'pmis', 
+          title: 'Project Monitoring System'
+        },
+        { 
+          id: 'publicworks', 
+          title: 'Public Works MIS'
+        }
 
-    ]
-  }
+      ]
+    }
 ]
 const partnerLogos = [
   { src: "/images/deliverySystems/Airtel _money.png", alt: "Airtel Money" },
@@ -129,6 +131,8 @@ watchEffect(() => {
   //sharedProjectContent.value = projectContent;
 });
 
+// Watch for hash changes in the URL and update active tab accordingly
+// This allows for direct linking to specific delivery systems
 watch(() => route.hash, (newHash) => {
   if (newHash) {
     updateActiveTabFromHash(newHash.replace('#', ''))
@@ -154,64 +158,6 @@ function updateActiveTabFromHash(hash) {
     <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
       
       <!-- Sidebar Navigation -->
-      <!-- Delivery Systems section styled like opportunities page -->
-      <aside class="w-full md:w-80">
-        <div v-for="group in projectGroups" :key="group.group">
-          <!-- Single Card Container for all Delivery Systems -->
-          <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
-            <!-- Main heading inside container -->
-            <h2 class="text-xl font-semibold text-gray-900 mb-6">{{ group.group }}</h2>
-            <div class="space-y-1">
-              <div v-for="(item, index) in group.items" :key="item.id">
-                <!-- Individual delivery system link -->
-                <a
-                  :href="`#${item.id}`"
-                  @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
-                  :class="[
-                    'block p-4 rounded-lg cursor-pointer transition-all duration-200',
-                    // Conditional styling based on active state - green for active
-                    item.id === activeTab 
-                      ? 'bg-green-50 text-green-800' 
-                      : 'hover:bg-gray-50'
-                  ]"
-                >
-                  <div class="flex items-start">
-                    <!-- System icon -->
-                    <div class="flex-shrink-0 mr-3 mt-0.5">
-                      <Icon 
-                        :name="item.id === activeTab ? 'heroicons:check-circle' : 'heroicons:document-text'" 
-                        :class="[
-                          'w-5 h-5',
-                          item.id === activeTab ? 'text-green-600' : 'text-gray-400'
-                        ]" 
-                      />
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <!-- System title -->
-                      <h3 :class="[
-                        'font-medium text-sm mb-1',
-                        item.id === activeTab ? 'text-green-900' : 'text-gray-900'
-                      ]">
-                        {{ item.title }}
-                      </h3>
-                      <!-- System description -->
-                      <p :class="[
-                        'text-xs leading-relaxed',
-                        item.id === activeTab ? 'text-green-700' : 'text-gray-600'
-                      ]">
-                        {{ item.description }}
-                      </p>
-                    </div>
-                  </div>
-                </a>
-                
-                <!-- Breaking line between items (except last item) -->
-                <hr v-if="index < group.items.length - 1" class="my-3 border-gray-200">
-              </div>
-            </div>
-          </div>
-        </div>
-      </aside>
 
       <!-- Main Content -->
       <main class="flex-1 min-w-0">

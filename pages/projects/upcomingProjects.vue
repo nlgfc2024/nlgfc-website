@@ -1,7 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-// Import GeneralSidebar component
-import GeneralSidebar from '../../components/GeneralSidebar.vue'; // Adjust path as necessary
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
 
 definePageMeta({ title: 'Upcoming Projects' })
 

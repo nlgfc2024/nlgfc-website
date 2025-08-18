@@ -11,6 +11,11 @@ const route = useRoute(); // <-- ADDED this line
 const activeTab = ref('profile') // Default active tab
 const isTransitioning = ref(false) // For managing transition state
 
+// Modal state
+const showModal = ref(false)
+const activeModal = ref('')
+const modalTitle = ref('')
+
 const tabs = ref([
   { id: 'profile', title: 'Profile' },
   { id: 'projects', title: 'Projects' },
@@ -70,12 +75,8 @@ const switchTab = (tabId) => {
 
 // Set active tab from route hash if present
 onMounted(() => {
-  if (window.location.hash) {
-    const hash = window.location.hash.replace('#', '')
-    
-    if (tabs.some(tab => tab.id === hash)) {
-      activeTab.value = hash
-    }
+  if (route.hash) { // <-- CORRECTED to use route.hash
+    updateActiveTabFromHash(route.hash.replace('#', ''));
   }
 })
 

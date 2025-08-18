@@ -334,7 +334,7 @@ const dynamicSidebarStyle = computed(() => {
       v-if="isSidebarOpen"
       :class="[
         'fixed left-0 w-80 bg-white rounded-lg shadow-sm border border-gray-200 p-6 z-10 flex flex-col',
-        isSidebarOpen ? 'translate-x-0' : '-translate-x-full',
+        'translate-x-0', // Always visible when this block is rendered
       ]"
       :style="dynamicSidebarStyle" >
       <h3 v-if="sidebarTitle" class="text-lg font-semibold text-gray-900 mb-4">{{ sidebarTitle }}</h3>
@@ -603,8 +603,8 @@ const dynamicSidebarStyle = computed(() => {
       @click="toggleSidebarVisibility"
       :class="[
         'fixed top-1/2 -translate-y-1/2 p-2 rounded-full shadow-md z-20',
-        isSidebarOpen ? 'left-80 -ml-4' : 'left-0',
-        'bg-emerald-500 text-white hover:bg-emerald-600 transition-all duration-300 ease-in-out'
+        'bg-emerald-500 text-white hover:bg-emerald-600 transition-all duration-300 ease-in-out',
+        isSidebarOpen ? 'left-80 -ml-4' : 'left-0'
       ]"
     >
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
