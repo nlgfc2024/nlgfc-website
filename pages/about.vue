@@ -212,60 +212,60 @@ const downloadImage = () => {
 
 <template>
   <div class="min-h-[calc(100vh-120px)] bg-white">
-    <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
+    <div class="container mx-auto px-2 py-3 flex flex-col md:flex-row gap-8 max-w-6xl">
       <!-- Sidebar Navigation -->
-    <nav class="w-full md:w-64 flex-shrink-0 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-    <h2 class="text-lg font-semibold text-gray-900 mb-4 pl-2 border-gray-600">About NLGFC</h2>
+        <!--<nav class="w-full md:w-64 flex-shrink-0 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4 pl-2 border-gray-600">About NLGFC</h2>
 
-    <div class="space-y-6">
-        <div v-for="(group, groupIndex) in menuItems" :key="groupIndex">
-        <ul class="space-y-1">
-            <li v-for="item in group.items" :key="item.id">
-            <NuxtLink
-                :to="`#${item.id}`"
-                @click="activeTab = item.id"
-                class="flex items-center justify-between px-4 py-3 rounded transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                :class="{
-                'bg-emerald-50 text-emerald-700 font-medium border-2 border-emerald-200': activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab))
-                }"
-            >
-                <span>{{ item.title }}</span>
-                <svg 
-                v-if="item.subItems" 
-                class="w-4 h-4 ml-2 transition-transform duration-200"
-                :class="{ 'rotate-90': openSubMenu === item.id, 'text-emerald-600': activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab)), 'group-hover:text-gray-600': !(activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab))) }"
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-                >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </NuxtLink>
-
-            <ul 
-                v-if="item.subItems"
-                class="ml-4 pl-4 border-l border-gray-200 space-y-1 mt-1"
-                :class="{ 'hidden': openSubMenu !== item.id }"
-            >
-                <li v-for="subItem in item.subItems" :key="subItem.id">
+        <div class="space-y-6">
+            <div v-for="(group, groupIndex) in menuItems" :key="groupIndex">
+            <ul class="space-y-1">
+                <li v-for="item in group.items" :key="item.id">
                 <NuxtLink
-                    :to="`#${subItem.id}`"
-                    @click="activeTab = subItem.id"
-                    class="block px-3 py-2 rounded text-gray-600 hover:bg-gray-50 hover:text-gray-900 text-sm"
+                    :to="`#${item.id}`"
+                    @click="activeTab = item.id"
+                    class="flex items-center justify-between px-4 py-3 rounded transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                     :class="{
-                    'bg-emerald-50 text-emerald-700 font-medium border-2 border-emerald-200': activeTab === subItem.id
+                    'bg-emerald-50 text-emerald-700 font-medium border-2 border-emerald-200': activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab))
                     }"
                 >
-                    {{ subItem.title }}
+                    <span>{{ item.title }}</span>
+                    <svg 
+                    v-if="item.subItems" 
+                    class="w-4 h-4 ml-2 transition-transform duration-200"
+                    :class="{ 'rotate-90': openSubMenu === item.id, 'text-emerald-600': activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab)), 'group-hover:text-gray-600': !(activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab))) }"
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                    >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
                 </NuxtLink>
+
+                <ul 
+                    v-if="item.subItems"
+                    class="ml-4 pl-4 border-l border-gray-200 space-y-1 mt-1"
+                    :class="{ 'hidden': openSubMenu !== item.id }"
+                >
+                    <li v-for="subItem in item.subItems" :key="subItem.id">
+                    <NuxtLink
+                        :to="`#${subItem.id}`"
+                        @click="activeTab = subItem.id"
+                        class="block px-3 py-2 rounded text-gray-600 hover:bg-gray-50 hover:text-gray-900 text-sm"
+                        :class="{
+                        'bg-emerald-50 text-emerald-700 font-medium border-2 border-emerald-200': activeTab === subItem.id
+                        }"
+                    >
+                        {{ subItem.title }}
+                    </NuxtLink>
+                    </li>
+                </ul>
                 </li>
             </ul>
-            </li>
-        </ul>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-200"></div>
         </div>
-        <div class="mt-6 pt-6 border-t border-gray-200"></div>
-    </div>
-    </nav>
+        </nav>-->
       <!-- Main Content -->
       <main class="flex-1 min-w-0">
         <!-- Mission, Vision, Core Values -->

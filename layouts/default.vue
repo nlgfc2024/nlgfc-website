@@ -329,7 +329,7 @@ watch(() => route.hash, (newHash) => {
     <Navbar class="navbar" />
     <PageHeader v-if="shouldShowHeader" :title="route.meta.title" class="page-header" /> 
     <main class="flex-grow flex">
-      <aside v-if="sidebarProps" :class="['w-full md:w-72 flex-shrink-0']">
+      <aside v-if="sidebarProps" :class="['w-full md:w-80 flex-shrink-0']">
         <slot name="sidebar">
           <GeneralSidebar
             :sidebarOpen="isSidebarOpen"
@@ -349,7 +349,7 @@ watch(() => route.hash, (newHash) => {
       </aside>
 
       <div
-        class="flex-1 p-4 md:p-8 transition-all duration-300 ease-in-out"
+        class="flex-1 p-px md:p-px transition-all duration-300 ease-in-out"
         :class="{
           'md:ml-5': isSidebarOpen && sidebarProps,
           'md:ml-0': !isSidebarOpen || !sidebarProps

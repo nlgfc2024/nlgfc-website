@@ -171,7 +171,7 @@ function updateActiveTabFromHash(hash) {
   <!-- Main container with white background -->
   <div class="bg-white">
     <!-- Responsive container with sidebar and main content layout -->
-    <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
+    <div class="container mx-auto py-0 flex flex-col md:flex-row gap-4 max-w-7xl">
       
       <!-- Sidebar Navigation -->
 

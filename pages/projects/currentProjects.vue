@@ -695,7 +695,7 @@ provide('projectContent', projectContent);
 </script>
 
 <template>
-  <div class="flex flex-col md:flex-row gap-8 max-w-7xl mx-auto px-4 py-8">
+  <div class="flex flex-col md:flex-row gap-8 max-w-7xl pr-30 py-3">
     <!-- Sidebar 
     <GeneralSidebar
       sidebarType="projects"

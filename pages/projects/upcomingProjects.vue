@@ -105,8 +105,8 @@ function updateActiveTabFromHash(hash) {
 </script>
 
 <template>
-  <div class="flex flex-col md:flex-row gap-8 max-w-7xl mx-auto px-4 py-8">
-    <!-- Sidebar -->
+  <div class="flex flex-col md:flex-row gap-8 max-w-7xl pr-30 py-3">
+    <!-- Sidebar 
     <aside class="w-full md:w-72 flex-shrink-0">
       <div
         v-for="group in projectGroups"
@@ -152,7 +152,7 @@ function updateActiveTabFromHash(hash) {
           </ul>
         </div>
       </div>
-    </aside>
+    </aside>-->
 
     <!-- Main Content Area -->
     <main class="flex-1 min-w-0">
