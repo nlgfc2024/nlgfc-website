@@ -1,26 +1,21 @@
 <script setup>
-<<<<<<< HEAD
-import { useDistrictPDF } from '~/composables/useDistrictPDF';
-=======
 import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
-import { ref, computed, watchEffect, watch, onMounted } from 'vue' 
-import { useRoute } from 'vue-router'; 
->>>>>>> 04c3dc1515d89a8677eef2578f42f0afb39fedf1
+import { ref, computed, watchEffect, watch, onMounted, onBeforeUnmount } from 'vue'
+import { useRoute } from 'vue-router';
+const route = useRoute();
 
 definePageMeta({
   title: 'Blantyre District Council'
 })
 
-const route = useRoute(); // <-- ADDED this line
-const activeTab = ref('profile') // Default active tab
-const isTransitioning = ref(false) // For managing transition state
+// Set the default active tab to 'landing_page'
+const activeTab = ref('landing_page')
+const selectedProject = ref(null);
+const isTransitioning = ref(false);
 
-// Modal state
-const showModal = ref(false)
-const activeModal = ref('')
-const modalTitle = ref('')
 
 const tabs = ref([
+    { id: 'landing_page', title: 'Blantyre district' },
   { id: 'profile', title: 'Profile' },
   { id: 'projects', title: 'Projects' },
   { id: 'reports', title: 'Reports' },
@@ -54,7 +49,7 @@ const updateActiveTabFromHash = (hash) => {
   }
 };
 
-// <-- ADDED watch block to react to URL hash changes
+// Watch block to react to URL hash changes
 watch(() => route.hash, (newHash) => {
   if (newHash) {
     updateActiveTabFromHash(newHash.replace('#', ''));
@@ -67,14 +62,14 @@ const switchTab = (tabId, event = null) => {
     event.preventDefault()
     event.stopPropagation()
   }
-  
+
   if (tabId === activeTab.value) return
-  
+
   isTransitioning.value = true
-  
+
   // Update the URL hash
   window.location.hash = tabId
-  
+
   // Small delay to allow fade out
   setTimeout(() => {
     activeTab.value = tabId
@@ -86,7 +81,7 @@ const switchTab = (tabId, event = null) => {
 const openModal = (type) => {
   activeModal.value = type;
   showModal.value = true;
-  
+
   // Set the modal title based on type
   switch(type) {
     case 'vision':
@@ -106,92 +101,51 @@ const closeModal = () => {
   activeModal.value = '';
 }
 
-// Handle card clicks without scrolling
-const handleCardClick = (event) => {
-  event.preventDefault()
-  event.stopPropagation()
-  // Add any card-specific logic here if needed
-}
-
 // Handle button clicks without scrolling
 const handleButtonClick = (event, action = null) => {
   event.preventDefault()
   event.stopPropagation()
-  
+
   if (action === 'download') {
     // Handle download logic here
     console.log('Download initiated')
-    
-    // Prepare district data for PDF generation
-    const districtData = {
-      profile: {
-        about: "Blantyre District covers an area of 1,785 square kilometres in the Southern Region of Malawi. The District has a total population of 451,220 people, of which 218,464 (48.4 %) are males and 232,756 (51.6 %) are females (Population& Housing Census 2018).",
-        vision: "A Council that can provide sustainable, quality socio-economic services adequately to its community.",
-        mission: "To provide timely, high-quality and equitable social services through the promotion of Local governance and popular participation of the communities for the attainment of sustainable socio-economic development of the District.",
-        values: [
-          "Integrity: We uphold the highest standards of honesty and ethical conduct",
-          "Transparency: We operate with openness and clarity in all our dealings",
-          "Accountability: We take responsibility for our actions and decisions",
-          "Innovation: We embrace creative solutions to community challenges",
-          "Teamwork: We collaborate effectively to achieve common goals",
-          "Professionalism: We maintain excellence in all our services"
-        ],
-        strategicObjectives: [
-          "To create a democratic environment for popular participation in governance and development at the local level.",
-          "To provide social-economic services, coordinate and guide development issues in the District",
-          "To improve access, quality, and utilisation of social services by communities",
-          "To enhance and improve revenue generation and human resource capacity for optimal operational performance",
-          "To reduce food security through diversification and commercialization of agricultural production.",
-          "To improve access of vulnerable children and people living with disability to essential quality services",
-          "To promote public employment services through strengthening the linkage between registered job seekers and potential employers"
-        ],
-        keyFunctions: [
-          "Local governance and administration",
-          "Development planning and implementation",
-          "Service delivery and infrastructure development",
-          "Revenue collection and financial management"
-        ],
-        additionalInfo: {
-          "Major Achievements": "Improved in LAPA scores for three consecutive years, hence more GESD funds for projects. The District is implementing the Kadidi project, which is one of the flagship projects under GESD funds. Under the project, there will be an OPD, staff house, incinerator, and maternity wing",
-          "Jurisdiction": "Covers 1,785 square kilometres in the Southern Region of Malawi",
-          "Population": "Blantyre District has a total population of 451,220 people, of which 218,464 (48.4 %) are males and 232,756 (51.6 %) are females (Population& Housing Census 2018).",
-          "Structure": "Comprised of elected councillors and appointed technical staff"
-        }
-      },
-      projects: projects,
-      reports: reports,
-      news: news
-    };
-    
-    // Generate PDF
-    const { generateDistrictPDF } = useDistrictPDF();
-    generateDistrictPDF(districtData, 'Blantyre District Council');
   } else if (action === 'readmore') {
     // Handle read more logic here
     console.log('Read more clicked')
   }
 }
 
-// Set active tab from route hash if present
-onMounted(() => {
-  if (route.hash) { // <-- CORRECTED to use route.hash
-    updateActiveTabFromHash(route.hash.replace('#', ''));
+// Function to show a specific project's details
+const showProjectDetails = (projectId) => {
+  const allProjects = [...projects, ...projectStats.value];
+  selectedProject.value = allProjects.find(p => p.id === projectId);
+  if (selectedProject.value) {
+    switchTab('projects');
   }
+};
+
+// Set active tab to 'landing_page' on page load, regardless of URL hash
+onMounted(() => {
+  // Explicitly set the active tab to 'landing_page' to make it the landing page
+  activeTab.value = 'landing_page';
 })
 
 const projects = [
   {
+    id: 'GESD',
     name: 'GESD',
     fullName: 'Governance to Enable Service Delivery',
-    description: 'Governance to Enable Service Delivery (GESD) project development objective is to strengthen Local Authorities\' institutional performance, responsiveness to citizens and management of resources for service delivery.',
+    description: 'Governance to Enable Service Delivery (GESD) project development objective is “to strengthen Local Authorities’ institutional performance, responsiveness to citizens and management of resources for service delivery.”',
     objectives: [
       'Strengthened institutional performance tracking of improvements in Local Authorities (LAs) institutional performance for service delivery',
       'Strengthened management of resources tracking of improvements in LAs management of financial and human resources in terms of their conversion into development assets in accordance with Annual Investment Plans',
-      'Strengthened management of resources tracking of improvements in LAs management of financial and human resources in terms of their conversion into development assets in accordance with Annual Investment Plans (AIPs)'
+      'Strengthened management of resources tracking of improvements in LAs management of financial and human resources in terms of their conversion into development assets in accordance with Annual Investment Plans (AIPs',
+
     ],
     status: 'Active'
   },
   {
+    id: 'SSRLP',
     name: 'SSRLP',
     fullName: 'Social Support and Resilience Livelihoods Program',
     description: 'A program designed to build community resilience and provide social support to vulnerable populations in Blantyre District.',
@@ -204,6 +158,7 @@ const projects = [
     status: 'Active'
   },
   {
+    id: 'MASAF',
     name: 'MASAF',
     fullName: 'Malawi Social Action Fund',
     description: 'A community-driven development program that supports infrastructure development and capacity building initiatives.',
@@ -214,6 +169,19 @@ const projects = [
       'Promote community participation in development'
     ],
     status: 'Not Active'
+  },
+  {
+    id: 'RCRP2',
+    name: 'RCRP2',
+    fullName: 'Resilient and Climate Ready Project Phase 2',
+    description: 'A climate change adaptation program focused on building resilience in vulnerable communities through various initiatives.',
+    objectives: [
+      'Increase community-level resilience to climate shocks',
+      'Promote climate-smart agricultural practices',
+      'Strengthen early warning systems and disaster preparedness',
+      'Integrate climate change adaptation into local development plans'
+    ],
+    status: 'Active'
   }
 ]
 
@@ -244,7 +212,7 @@ const reports = [
   }
 ]
 
-const news = [
+const landing_page = [
   {
     title: 'Blantyre District Council Launches New Water Project',
     date: '2024-12-10',
@@ -270,546 +238,484 @@ const news = [
     category: 'Youth'
   }
 ]
+
+// Static data for the projects statistics table
+const projectStats = ref([
+  {
+    id: 'SSRLP',
+    name: 'Social Support and Resilience Livelihoods Program',
+    stats: [
+      { label: 'Beneficiaries in CSEPW', value: '1,500' },
+      { label: 'Beneficiaries of Social Cash', value: '2,500' }
+    ],
+    logo: '/images/samples/SSRLP logo(1).jpg'
+  },
+  {
+    id: 'GESD',
+    name: 'Governance to Enable Service Delivery',
+    stats: [
+      { label: 'Active Projects', value: '7' },
+      { label: 'Wards Reached', value: '45' }
+    ],
+    logo: '/images/samples/RCRP LOGO- Final.png'
+  },
+  {
+    id: 'RCRP2',
+    name: 'Resilient and Climate Ready Project Phase 2',
+    stats: [
+      { label: 'Communities Served', value: '30' },
+      { label: 'Adaptation Plans Developed', value: '15' }
+    ],
+    logo: '/images/samples/RCRP LOGO- Final.png'
+  }
+]);
+
+// Slider state
+const currentSlide = ref(0)
+const autoplay = ref(true)
+const autoplayInterval = ref(5000)
+let autoplayTimer = null
+
+const slides = [
+  {
+    image: '/images/samples/btz.jpeg',
+    title: 'SSRLP mid-year review completed',
+    summary: 'Key milestones achieved across all pillars; detailed report forthcoming.',
+    date: '2024-06-20'
+  },
+  {
+    image: '/images/samples/BANK.jpg',
+    title: 'Additional livelihood grants disbursed',
+    summary: 'Disbursements reached 3,000 households in priority districts.',
+    date: '2024-05-14'
+  },
+  {
+    image: '/images/samples/SSRPLP.jpg',
+    title: 'Shock response window activated',
+    summary: 'Activation supports drought-affected households with temporary assistance.',
+    date: '2024-04-08'
+  },
+  {
+    image: '/images/samples/btz.jpEg',
+    title: 'CS-EPWP sites expanded',
+    summary: 'New catchment restoration sites opened across 5 districts.',
+    date: '2024-03-18'
+  }
+]
+
+function nextSlide() {
+  currentSlide.value = (currentSlide.value + 1) % slides.length
+  resetAutoplay()
+}
+
+function prevSlide() {
+  currentSlide.value = (currentSlide.value - 1 + slides.length) % slides.length
+  resetAutoplay()
+}
+
+function goToSlide(index) {
+  currentSlide.value = index
+  resetAutoplay()
+}
+
+function resetAutoplay() {
+  if (autoplay.value) {
+    clearInterval(autoplayTimer)
+    startAutoplay()
+  }
+}
+
+function startAutoplay() {
+  if (autoplay.value) {
+    clearInterval(autoplayTimer)
+    autoplayTimer = setInterval(() => {
+      nextSlide()
+    }, autoplayInterval.value)
+  }
+}
+
+function toggleAutoplay() {
+  autoplay.value = !autoplay.value
+  if (autoplay.value) startAutoplay()
+  else clearInterval(autoplayTimer)
+}
+
+onMounted(() => {
+  startAutoplay()
+})
+
+onBeforeUnmount(() => {
+  clearInterval(autoplayTimer)
+})
 </script>
 
 <template>
   <div class="about-page bg-white">
     <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
-      <!-- Government-style Sidebar -->
       <div class="w-full md:w-64 flex-shrink-0">
         <nav class="border-r border-gray-200 pr-4">
           <ul class="space-y-1">
             <li v-for="tab in tabs" :key="tab.id">
-              <button
-                @click="switchTab(tab.id, $event)"
-                class="w-full text-left block px-4 py-3 rounded transition-all duration-300 text-gray-700 hover:bg-blue-50 hover:text-gray-800 hover:shadow-sm transform hover:translate-x-1"
+              <NuxtLink
+                :to="`#${tab.id}`"
+                @click="switchTab(tab.id)"
+                class="block px-4 py-3 rounded transition-colors text-gray-700 hover:bg-blue-50 hover:text-gray-800"
                 :class="{
-                  'bg-blue-50 text-gray-800 font-medium border-l-4 border-gray-600 shadow-sm': activeTab === tab.id,
-                  'hover:scale-105': activeTab !== tab.id
+                  'bg-blue-50 text-gray-800 font-medium border-l-4 border-gray-600': activeTab === tab.id
                 }"
               >
                 {{ tab.title }}
-              </button>
+              </NuxtLink>
             </li>
           </ul>
         </nav>
       </div>
 
-      <!-- Main Content Area -->
-      <!-- Main Content Area with Transition Container -->
-      <div class="flex-1 min-w-0 relative overflow-hidden">
-        <div class="transition-container">
-          <!-- Council Profile Content -->
-          <Transition
-            name="fade-slide"
-            mode="out-in"
-          >
-            <div v-if="activeTab === 'profile'" key="profile" class="content-panel">
-               <div class="prose max-w-none">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Blantyre District Council Profile</h2>
-                <div class="space-y-6">
-                  
+      <div class="flex-1 min-w-0">
+        <div v-show="activeTab === 'profile'" class="prose max-w-none">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Blantyre District Council Profile</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="p-6 rounded-xl border emerald-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                About Blantyre District Council
+              </h3>
+              <p class="text-gray-700 leading-relaxed line-clamp-4">
+                Blantyre District is the largest district in the Central Region of Malawi. It is bordered by Dedza District to the East, Salima to the North East. Mchinji District marks the western boundary. Dowa District lies to the north of Blantyre with Kasungu to its North-western tip and the Republic of Mozambique to the South West. The total land area is 6,159 square kilometres, representing 6.5 % of Malawi’s total land area.
+              </p>
+              <button @click="handleButtonClick($event, 'readmore')" class="mt-4 text-blue-600 font-semibold hover:underline transition-colors">Read More</button>
+            </div>
 
-                 
+            <div class=" p-6 rounded-xl border border-emerald-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M17 16h.01" /></svg>
+                Mandate
+              </h3>
+              <ul class="space-y-2 text-gray-700">
+                <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
+                  <span>Policy making, coordination and supervision of development programs/projects...</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
+                  <span>Reviewing, approving or rejecting proposed projects identified by the community...</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
+                  <span>Making resolutions regarding implementation of management functions of the Secretariat...</span>
+                </li>
+              </ul>
+            </div>
 
+            <div class="p-6 rounded-xl border border-emerald-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                Vision
+              </h3>
+              <p class="text-gray-700 leading-relaxed font-medium line-clamp-2">
+                The vision of the district is “A self- reliant district with growing socio-economic development”.
+              </p>
+            </div>
 
-                  <!-- Vision, Mission, Core Values Section -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-  <!-- Vision Card -->
-  <div 
-    @click="openModal('vision')"
-    class="bg-b rounded-lg border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden group">
-    <!-- Purple top border -->
-    <div class="h-1 bg-gray-800"></div>
-    <div class="p-6">
-      <!-- Eye icon for Vision -->
-      <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-        </svg>
-      </div>
-      <h3 class="text-xl font-bold text-gray-900 mb-4">Vision</h3>
-      <p class="text-gray-600 leading-relaxed">A Council that can provide sustainable, quality socio-economic services adequately to its community.</p>
-      <div class="mt-4">
-        <button 
-          @click.stop="openModal('vision')"
-          class="text-purple-600 hover:text-purple-800 font-medium flex items-center group-hover:underline">
-          Read more
-          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Mission Card -->
-  <div 
-    @click="openModal('mission')"
-    class="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden group">
-    <!-- Blue top border -->
-    <div class="h-1 bg-gray-800"></div>
-    <div class="p-6">
-      <!-- Lightning/Energy icon for Mission -->
-      <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-        </svg>
-      </div>
-      <h3 class="text-xl font-bold text-gray-900 mb-4">Mission</h3>
-      <p class="text-gray-600 leading-relaxed">To provide timely, high-quality and equitable social services through the promotion of Local governance...</p>
-      <div class="mt-4">
-        <button 
-          @click.stop="openModal('mission')"
-          class="text-blue-600 hover:text-blue-800 font-medium flex items-center group-hover:underline">
-          Read more
-         
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Core Values Card -->
-  <div 
-    @click="openModal('values')"
-    class="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all duration-300 cursor-pointer overflow-hidden group">
-    <!-- Green top border -->
-    <div class="h-1 bg-gray-800"></div>
-    <div class="p-6">
-      <!-- Heart icon for Core Values -->
-      <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-        </svg>
-      </div>
-      <h3 class="text-xl font-bold text-gray-900 mb-4">Core Values</h3>
-      <div class="space-y-2">
-        <div class="flex items-center text-gray-600">
-          <span class="text-green-500 mr-2">✓</span>
-          <span>Integrity</span>
-          <span class="text-green-500 ml-auto mr-2">✓</span>
-          <span>Transparency</span>
-        </div>
-        <div class="flex items-center text-gray-600">
-          <span class="text-green-500 mr-2">✓</span>
-          <span>Accountability</span>
-          <span class="text-green-500 ml-auto mr-2">✓</span>
-          <span>Innovation</span>
-        </div>
-        <div class="flex items-center text-gray-600">
-          <span class="text-green-500 mr-2">✓</span>
-          <span>Teamwork</span>
-          <span class="text-green-500 ml-auto mr-2">✓</span>
-          <span>Professionalism</span>
-        </div>
-      </div>
-      <div class="mt-4">
-        <button 
-          @click.stop="openModal('values')"
-          class="text-green-600 hover:text-green-800 font-medium flex items-center group-hover:underline">
-          Read more
-          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal -->
-<div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" @click.self="closeModal">
-  <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-    <!-- Modal header with close button -->
-    <div class="flex justify-between items-center p-4 border-b">
-      <h3 class="text-xl font-bold text-gray-900">{{ modalTitle }}</h3>
-      <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-    </div>
-    
-    <!-- Modal content -->
-    <div class="p-6">
-      <div v-if="activeModal === 'vision'">
-        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-          <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-          </svg>
-        </div>
-        <p class="text-gray-600 leading-relaxed">A Council that can provide sustainable, quality socio-economic services adequately to its community.</p>
-        <div class="mt-6">
-          <h4 class="font-semibold text-gray-800 mb-2">Our Vision in Action:</h4>
-          <ul class="list-disc pl-5 space-y-2 text-gray-600">
-            <li>Sustainable development initiatives</li>
-            <li>Quality service delivery to all community members</li>
-            <li>Economic empowerment programs</li>
-            <li>Inclusive social services</li>
-          </ul>
-        </div>
-      </div>
-      
-      <div v-if="activeModal === 'mission'">
-        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-          <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-          </svg>
-        </div>
-        <p class="text-gray-600 leading-relaxed">To provide timely, high-quality and equitable social services through the promotion of Local governance and popular participation of the communities for the attainment of sustainable socio-economic development of the District.</p>
-        <div class="mt-6">
-          <h4 class="font-semibold text-gray-800 mb-2">How We Achieve Our Mission:</h4>
-          <ul class="list-disc pl-5 space-y-2 text-gray-600">
-            <li>Community engagement and participation</li>
-            <li>Efficient service delivery systems</li>
-            <li>Capacity building for local governance</li>
-            <li>Equitable resource distribution</li>
-            <li>Continuous improvement of service quality</li>
-          </ul>
-        </div>
-      </div>
-      
-      <div v-if="activeModal === 'values'">
-        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-          <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-          </svg>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-green-50 p-4 rounded-lg">
-            <h4 class="font-semibold text-green-800 mb-3">Our Core Values</h4>
-            <ul class="space-y-3">
-              <li class="flex items-start">
-                <span class="text-green-500 mr-2 mt-1">✓</span>
-                <span class="text-gray-700"><strong>Integrity:</strong> We uphold the highest standards of honesty and ethical conduct</span>
-              </li>
-              <li class="flex items-start">
-                <span class="text-green-500 mr-2 mt-1">✓</span>
-                <span class="text-gray-700"><strong>Transparency:</strong> We operate with openness and clarity in all our dealings</span>
-              </li>
-              <li class="flex items-start">
-                <span class="text-green-500 mr-2 mt-1">✓</span>
-                <span class="text-gray-700"><strong>Accountability:</strong> We take responsibility for our actions and decisions</span>
-              </li>
-              <li class="flex items-start">
-                <span class="text-green-500 mr-2 mt-1">✓</span>
-                <span class="text-gray-700"><strong>Innovation:</strong> We embrace creative solutions to community challenges</span>
-              </li>
-              <li class="flex items-start">
-                <span class="text-green-500 mr-2 mt-1">✓</span>
-                <span class="text-gray-700"><strong>Teamwork:</strong> We collaborate effectively to achieve common goals</span>
-              </li>
-              <li class="flex items-start">
-                <span class="text-green-500 mr-2 mt-1">✓</span>
-                <span class="text-gray-700"><strong>Professionalism:</strong> We maintain excellence in all our services</span>
-              </li>
-            </ul>
-          </div>
-          <div class="bg-green-50 p-4 rounded-lg">
-            <h4 class="font-semibold text-green-800 mb-3">Living Our Values</h4>
-            <p class="text-gray-600 mb-3">These core values guide our daily operations and decision-making processes:</p>
-            <ul class="list-disc pl-5 space-y-2 text-gray-600">
-              <li>Regular ethics training for all staff</li>
-              <li>Open forums for community feedback</li>
-              <li>Performance metrics aligned with our values</li>
-              <li>Recognition programs for value-driven service</li>
-            </ul>
+            <div class="p-6 rounded-xl border border-emerald-700 shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 14l9-5-9-5-9 5 9 5z" /><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /></svg>
+                Core Values
+              </h3>
+              <ul class="space-y-2 text-gray-700">
+                <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
+                  <span>Transparency and accountability: ...</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
+                  <span>Integrity: the council shall act with honesty...</span>
+                </li>
+                <li class="flex items-start">
+                  <span class="inline-block w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
+                  <span>Client focused: the client shall be served...</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  <div 
-                    @click="handleCardClick"
-                    class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300 cursor-pointer">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Strategic Objectives</h3>
-                    <ul class="space-y-2">
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To create a democratic environment for popular participation in governance and development at the local level.</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To provide social-economic services, coordinate and guide development issues in the District</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To improve access, quality, and utilisation of social services by communities</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To enhance and improve revenue generation and human resource capacity for optimal operational performance</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To reduce food security through diversification and commercialization of agricultural production.</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To improve access of vulnerable children and people living with disability to essential quality services</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>To promote public employment services through strengthening the linkage between registered job seekers and potential employers</span>
-                      </li>
-                    </ul>
+        <div v-show="activeTab === 'projects'" class="prose max-w-none">
+          <div v-if="selectedProject">
+            <button @click="selectedProject = null" class="mb-4 inline-flex items-center text-blue-600 hover:underline transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+              Back to All Projects
+            </button>
+            <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-lg">
+              <div class="flex justify-between items-start mb-4">
+                <div>
+                  <h2 class="text-2xl font-bold text-gray-900">{{ selectedProject.fullName }}</h2>
+                  <p class="text-gray-600 font-medium">{{ selectedProject.name }}</p>
+                </div>
+                <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
+                  {{ selectedProject.status }}
+                </span>
+              </div>
+              <p class="text-gray-700 mb-4">{{ selectedProject.description }}</p>
+              <div>
+                <h4 class="font-semibold text-gray-900 mb-2">Key Objectives:</h4>
+                <ul class="space-y-1">
+                  <li v-for="objective in selectedProject.objectives" :key="objective" class="flex items-start">
+                    <span class="inline-block w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></span>
+                    <span class="text-gray-700">{{ objective }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div
+                v-for="project in projectStats"
+                :key="project.id"
+                class="p-6 rounded-xl border border-emerald-700 shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer"
+                @click="showProjectDetails(project.id)"
+              >
+                <div class="flex items-center gap-4 mb-4">
+                  <img :src="project.logo" :alt="project.name + ' Logo'" class="w-12 h-12 flex-shrink-0" />
+                  <div>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-blue-600">{{ project.id }}</span>
+                    <p class="text-sm font-medium text-gray-700">{{ project.name }}</p>
                   </div>
-
-                  <div 
-                    @click="handleCardClick"
-                    class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300 cursor-pointer">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Functions</h3>
-                    <ul class="space-y-2">
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>Local governance and administration</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>Development planning and implementation</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>Service delivery and infrastructure development</span>
-                      </li>
-                      <li class="flex items-start">
-                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
-                        <span>Revenue collection and financial management</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div 
-                      @click="handleCardClick"
-                      class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105 cursor-pointer">
-                      <h4 class="font-semibold text-gray-900 mb-2">Major Achievements</h4>
-                      <p class="text-gray-700">Improved in LAPA scores for three consecutive years, hence more GESD funds for projects.</p>
-                      <p class="text-gray-700">The District is implementing the Kadidi project, which is one of the flagship projects under GESD funds. Under the project, there will be an OPD, staff house, incinerator, and maternity wing</p>
-                    </div>
-                    <div 
-                      @click="handleCardClick"
-                      class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105 cursor-pointer">
-                      <h4 class="font-semibold text-gray-900 mb-2">Jurisdiction</h4>
-                      <p class="text-gray-700">Covers 1,785 square kilometres in the Southern Region of Malawi</p>
-                    </div>
-                    <div 
-                      @click="handleCardClick"
-                      class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105 cursor-pointer">
-                      <h4 class="font-semibold text-gray-900 mb-2">Population</h4>
-                      <p class="text-gray-700">Blantyre District has a total population of 451,220 people, of which 218,464 (48.4 %) are males and 232,756 (51.6 %) are females (Population& Housing Census 2018).</p>
-                    </div>
-                    <div 
-                      @click="handleCardClick"
-                      class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105 cursor-pointer">
-                      <h4 class="font-semibold text-gray-900 mb-2">Structure</h4>
-                      <p class="text-gray-700">Comprised of elected councillors and appointed technical staff</p>
-                    </div>
+                </div>
+                <div class="space-y-3">
+                  <div
+                    v-for="stat in project.stats"
+                    :key="stat.label"
+                    class="flex justify-between items-center bg-white p-4 rounded-lg shadow-inner border border-blue-100"
+                  >
+                    <span class="text-sm font-semibold text-gray-600">{{ stat.label }}</span>
+                    <span class="text-lg font-bold text-blue-600">{{ stat.value }}</span>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
 
-            <!-- Projects Content -->
-            <div v-else-if="activeTab === 'projects'" key="projects" class="content-panel">
-              <div class="prose max-w-none">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Development Projects</h2>
-                <div class="space-y-8">
-                  <div v-for="(project, index) in projects" :key="project.name" 
-                       @click="handleCardClick"
-                       class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-105 cursor-pointer"
-                       :style="{ animationDelay: `${index * 100}ms` }">
-                    <div class="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 class="text-xl font-bold text-gray-900">{{ project.name }}</h3>
-                        <p class="text-gray-600 font-medium">{{ project.fullName }}</p>
+        <div v-show="activeTab === 'news'" class="prose max-w-none">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">News & Updates</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div v-for="news in landing_page" :key="news.title" class="bg-white rounded-xl border border-gray-200 p-6 shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 flex flex-col">
+              <div class="flex-grow">
+                <div class="flex justify-between items-start mb-2">
+                  <h3 class="text-lg font-semibold text-gray-900">{{ news.title }}</h3>
+                  <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded">
+                    {{ news.category }}
+                  </span>
+                </div>
+                <p class="text-gray-600 mb-2 line-clamp-3">{{ news.summary }}</p>
+              </div>
+              <div class="mt-4 flex justify-between items-center">
+                <span class="text-sm text-gray-500">Published: {{ new Date(news.date).toLocaleDateString() }}</span>
+                <button @click="handleButtonClick($event, 'readmore')"class="px-4 py-2  text-white text-sm rounded-lg hover:bg-emerald-700 transition-colors shadow-md">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                  Read More
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Additional News Section -->
+          <div class="mt-12">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Latest Announcements</h3>
+            <div class="space-y-4">
+              <div class="bg-gray-50 rounded-lg p-4 border-l-4 border-blue-600">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <h4 class="font-semibold text-gray-900">Council Budget Approval</h4>
+                    <p class="text-gray-600 text-sm mt-1">The 2024/2025 budget has been approved with focus on infrastructure development and service delivery.</p>
+                  </div>
+                  <span class="text-xs text-gray-500">2 days ago</span>
+                </div>
+              </div>
+              
+              <div class="bg-gray-50 rounded-lg p-4 border-l-4 border-green-600">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <h4 class="font-semibold text-gray-900">New Market Construction</h4>
+                    <p class="text-gray-600 text-sm mt-1">Construction of the new Limbe Market has commenced with completion expected in Q2 2025.</p>
+                  </div>
+                  <span class="text-xs text-gray-500">1 week ago</span>
+                </div>
+              </div>
+              
+              <div class="bg-gray-50 rounded-lg p-4 border-l-4 border-purple-600">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <h4 class="font-semibold text-gray-900">Youth Empowerment Program</h4>
+                    <p class="text-gray-600 text-sm mt-1">Applications are now open for the 2024 Youth Skills Development Program targeting 500 beneficiaries.</p>
+                  </div>
+                  <span class="text-xs text-gray-500">3 days ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-show="activeTab === 'reports'" class="prose max-w-none">
+          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Reports & Documents</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div v-for="report in reports" :key="report.title" class="bg-white rounded-xl border border-gray-200 p-6 shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 flex flex-col">
+              <div class="flex-grow">
+                <div class="flex justify-between items-start mb-2">
+                  <h3 class="text-lg font-semibold text-gray-900">{{ report.title }}</h3>
+                  <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
+                    {{ report.type }}
+                  </span>
+                </div>
+                <p class="text-gray-600 mb-2 line-clamp-3">{{ report.description }}</p>
+              </div>
+              <div class="mt-4 flex justify-between items-center">
+                <span class="text-sm text-gray-500">Published: {{ new Date(report.date).toLocaleDateString() }}</span>
+                <button @click="handleButtonClick($event, 'download')" class="px-4 py-2 bg-emerald-700 text-white text-sm rounded-lg hover:bg-gray-800 transition-colors shadow-md">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                  Download
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-show="activeTab === 'landing_page'" class="prose max-w-none">
+          <div class="max-w-7xl mx-auto px-4 py-8">
+            <div class="space-y-10">
+              <section class="relative overflow-hidden rounded-xl shadow-2xl h-[360px] md:h-[420px]">
+                <div
+                  v-for="(slide, index) in slides"
+                  :key="index"
+                  class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+                  :class="{ 'opacity-100 z-10': currentSlide === index, 'opacity-0 z-0': currentSlide !== index }"
+                >
+                  <div class="absolute inset-0">
+                    <img :src="slide.image" :alt="slide.title" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                  </div>
+                  <div class="relative h-full flex flex-col justify-end z-10 pb-12">
+                    <div class="px-6">
+                      <div class="mb-3">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold tracking-wider text-white uppercase bg-blue-600 rounded-full">
+                          SSRLP News
+                        </span>
                       </div>
-                      <span class="px-3 py-1 text-sm font-medium rounded-full transition-colors"
-                            :class="project.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
-                        {{ project.status }}
-                      </span>
-                    </div>
-                    <p class="text-gray-700 mb-4">{{ project.description }}</p>
-                    <div>
-                      <h4 class="font-semibold text-gray-900 mb-2">Key Objectives:</h4>
-                      <ul class="space-y-1">
-                        <li v-for="objective in project.objectives" :key="objective" class="flex items-start">
-                          <span class="inline-block w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></span>
-                          <span class="text-gray-700">{{ objective }}</span>
-                        </li>
-                      </ul>
+                      <div class="max-w-3xl">
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-3 leading-tight">{{ slide.title }}</h2>
+                        <p class="text-white/90">{{ slide.summary }}</p>
+                      </div>
+                      <div class="mt-5">
+                        <a href="#" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white rounded-lg hover:bg-gray-800 transition">
+                          Read More
+                          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <!-- Reports Content -->
-            <div v-else-if="activeTab === 'reports'" key="reports" class="content-panel">
-              <div class="prose max-w-none">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Reports & Documents</h2>
-                <div class="space-y-4">
-                  <div v-for="(report, index) in reports" :key="report.title" 
-                       @click="handleCardClick"
-                       class="border border-gray-200 rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-105 cursor-pointer"
-                       :style="{ animationDelay: `${index * 100}ms` }">
-                    <div class="flex justify-between items-start mb-2">
-                      <h3 class="text-lg font-semibold text-gray-900">{{ report.title }}</h3>
-                      <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
-                        {{ report.type }}
-                      </span>
+                <div class="absolute bottom-2 left-0 right-0 z-20 pt-5">
+                  <div class="px-6 flex items-center justify-between">
+                    <div class="flex space-x-2">
+                      <button
+                        v-for="(slide, idx) in slides"
+                        :key="'ind-' + idx"
+                        @click="goToSlide(idx)"
+                        class="w-3 h-3 rounded-full transition-all duration-300"
+                        :class="{ 'w-8 bg-white': currentSlide === idx, 'w-3 bg-white/30 hover:bg-white/50': currentSlide !== idx }"
+                      ></button>
                     </div>
-                    <p class="text-gray-600 mb-2">{{ report.description }}</p>
-                    <div class="flex justify-between items-center">
-                      <span class="text-sm text-gray-500">Published: {{ new Date(report.date).toLocaleDateString() }}</span>
-                      <button 
-                        @click="handleButtonClick($event, 'download')"
-                        class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-all duration-300 transform hover:scale-105">
-                        Download PDF
+                    <div class="flex items-center space-x-4">
+                      <button @click="toggleAutoplay" class="p-2 text-white/70 hover:text-white transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path v-if="autoplay" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                          <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                        </svg>
+                      </button>
+                      <button @click="prevSlide" class="p-2 text-white/70 hover:text-white transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                      </button>
+                      <button @click="nextSlide" class="p-2 text-white/70 hover:text-white transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                       </button>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </section>
 
-            <!-- News Content -->
-            <div v-else-if="activeTab === 'news'" key="news" class="content-panel">
-              <div class="prose max-w-none">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Latest News & Updates</h2>
-                <div class="space-y-6">
-                  <article v-for="(article, index) in news" :key="article.title" 
-                           @click="handleCardClick"
-                           class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-105 cursor-pointer"
-                           :style="{ animationDelay: `${index * 100}ms` }">
-                    <div class="flex justify-between items-start mb-3">
-                      <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded transition-colors hover:bg-gray-200">
-                        {{ article.category }}
-                      </span>
-                      <time class="text-sm text-gray-500">{{ new Date(article.date).toLocaleDateString() }}</time>
+              <section class="grid md:grid-cols-3 gap-6">
+                <article
+                  v-for="(slide, nIdx) in slides.slice(1)"
+                  :key="'rel-'+nIdx"
+                  class="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
+                >
+                  <div class="aspect-w-16 aspect-h-9">
+                    <img
+                      :src="slide.image"
+                      :alt="slide.title"
+                      class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    >
+                  </div>
+
+                  <div class="p-5">
+                    <span class="text-xs font-medium text-gray-500 mb-1 flex items-center">
+                      <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                      </svg>
+                      {{ new Date(slide.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}
+                    </span>
+                    <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                      <a href="#">{{ slide.title }}</a>
+                    </h3>
+                    <p class="text-sm text-gray-600 line-clamp-2">{{ slide.summary }}</p>
+                    <a href="#" class="mt-3 inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      Read more
+                      <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+              </section>
+
+              <section class="mt-10">
+                <h3 class="text-xl font-bold text-gray-900 mb-4">Ongoing Projects Key Statistics</h3>
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                  <div
+                    v-for="project in projectStats"
+                    :key="project.id"
+                    class="p-6 rounded-xl border border-emerald-700 shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 cursor-pointer"
+                    @click="showProjectDetails(project.id)"
+                  >
+                    <div class="flex items-center gap-4 mb-4">
+                      <img :src="project.logo" :alt="project.name + ' Logo'" class="w-12 h-12 flex-shrink-0" />
+                      <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-blue-600">{{ project.id }}</span>
+                        <p class="text-sm font-medium text-gray-700">{{ project.name }}</p>
+                      </div>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">{{ article.title }}</h3>
-                    <p class="text-gray-700 leading-relaxed">{{ article.summary }}</p>
-                    <div class="mt-4">
-                      <button 
-                        @click="handleButtonClick($event, 'readmore')"
-                        class="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors hover:underline">
-                        Read more →
-                      </button>
+                    <div class="space-y-3">
+                      <div
+                        v-for="stat in project.stats"
+                        :key="stat.label"
+                        class="flex justify-between items-center bg-white p-4 rounded-lg shadow-inner border border-blue-100"
+                      >
+                        <span class="text-sm font-semibold text-gray-600">{{ stat.label }}</span>
+                        <span class="text-lg font-bold text-blue-600">{{ stat.value }}</span>
+                      </div>
                     </div>
-                  </article>
+                  </div>
                 </div>
-              </div>
+              </section>
             </div>
-          </Transition>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Custom transition classes */
-.fade-slide-enter-active {
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.fade-slide-leave-active {
-  transition: all 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53);
-}
-
-.fade-slide-enter-from {
-  opacity: 0;
-  transform: translateX(20px) translateY(10px);
-}
-
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateX(-20px) translateY(-10px);
-}
-
-.content-panel {
-  animation: slideInUp 0.5s ease-out;
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Staggered animation for list items */
-.content-panel > div > div > div:nth-child(n) {
-  animation: fadeInUp 0.6s ease-out forwards;
-  opacity: 0;
-}
-
-.content-panel > div > div > div:nth-child(1) { animation-delay: 0.1s; }
-.content-panel > div > div > div:nth-child(2) { animation-delay: 0.2s; }
-.content-panel > div > div > div:nth-child(3) { animation-delay: 0.3s; }
-.content-panel > div > div > div:nth-child(4) { animation-delay: 0.4s; }
-.content-panel > div > div > div:nth-child(5) { animation-delay: 0.5s; }
-.content-panel > div > div > div:nth-child(6) { animation-delay: 0.6s; }
-.content-panel > div > div > div:nth-child(7) { animation-delay: 0.7s; }
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Transition container */
-.transition-container {
-  min-height: 400px;
-  position: relative;
-}
-
-/* Enhanced hover effects */
-.hover\:scale-105:hover {
-  transform: scale(1.05);
-}
-
-.hover\:translate-x-1:hover {
-  transform: translateX(0.25rem);
-}
-
-/* Prevent unwanted scrolling behavior */
-.cursor-pointer {
-  user-select: none;
-}
-
-/* Smooth scrolling behavior for the container */
-.transition-container {
-  scroll-behavior: smooth;
-}
-</style>
