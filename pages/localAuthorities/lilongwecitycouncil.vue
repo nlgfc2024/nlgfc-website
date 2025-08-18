@@ -1,24 +1,126 @@
 <script setup>
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+import { ref, computed, watchEffect, watch, onMounted } from 'vue' 
+import { useRoute } from 'vue-router'; 
+const route = useRoute();
+
 definePageMeta({
   title: 'Lilongwe District Council'
 })
 
 const activeTab = ref('profile') // Default active tab
 
-const tabs = [
+const tabs = ref([
   { id: 'profile', title: 'Profile' },
   { id: 'projects', title: 'Projects' },
   { id: 'reports', title: 'Reports' },
   { id: 'news', title: 'News' }
-]
+])
+
+// Map the 'tabs' data to the 'projectGroups' structure
+const mappedProjectGroups = computed(() => {
+  return [
+    {
+      group: 'Portfolio', // The desired group name
+      items: tabs.value // The original tabs become items under this group
+    }
+  ];
+});
+
+// Use the composable to share the data
+const { projectGroups } = useGeneralSidebar();
+projectGroups.value = mappedProjectGroups.value;
+
+// Use watchEffect to automatically update the shared state
+watchEffect(() => {
+  projectGroups.value = mappedProjectGroups.value;
+});
+
+// Function to update active tab based on URL hash
+const updateActiveTabFromHash = (hash) => {
+  const matchingTab = tabs.value.find(tab => tab.id === hash);
+  if (matchingTab) {
+    activeTab.value = matchingTab.id;
+  }
+};
+
+// <-- ADDED watch block to react to URL hash changes
+watch(() => route.hash, (newHash) => {
+  if (newHash) {
+    updateActiveTabFromHash(newHash.replace('#', ''));
+  }
+});
+
+// Enhanced tab switching with transition
+const switchTab = (tabId, event = null) => {
+  if (event) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+  
+  if (tabId === activeTab.value) return
+  
+  isTransitioning.value = true
+  
+  // Update the URL hash
+  window.location.hash = tabId
+  
+  // Small delay to allow fade out
+  setTimeout(() => {
+    activeTab.value = tabId
+    isTransitioning.value = false
+  }, 150)
+}
+
+// Modal functions
+const openModal = (type) => {
+  activeModal.value = type;
+  showModal.value = true;
+  
+  // Set the modal title based on type
+  switch(type) {
+    case 'vision':
+      modalTitle.value = 'Our Vision';
+      break;
+    case 'mission':
+      modalTitle.value = 'Our Mission';
+      break;
+    case 'values':
+      modalTitle.value = 'Our Core Values';
+      break;
+  }
+}
+
+const closeModal = () => {
+  showModal.value = false;
+  activeModal.value = '';
+}
+
+// Handle card clicks without scrolling
+const handleCardClick = (event) => {
+  event.preventDefault()
+  event.stopPropagation()
+  // Add any card-specific logic here if needed
+}
+
+// Handle button clicks without scrolling
+const handleButtonClick = (event, action = null) => {
+  event.preventDefault()
+  event.stopPropagation()
+  
+  if (action === 'download') {
+    // Handle download logic here
+    console.log('Download initiated')
+  } else if (action === 'readmore') {
+    // Handle read more logic here
+    console.log('Read more clicked')
+  }
+}
 
 // Set active tab from route hash if present
 onMounted(() => {
-  if (window.location.hash) {
-    const hash = window.location.hash.replace('#', '')
-    if (tabs.some(tab => tab.id === hash)) {
-      activeTab.value = hash
-    }
+  if (route.hash) { // <-- CORRECTED to use route.hash
+    updateActiveTabFromHash(route.hash.replace('#', ''));
   }
 })
 

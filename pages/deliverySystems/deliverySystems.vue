@@ -1,4 +1,5 @@
 <script setup>
+// Page metadata configuration
 definePageMeta({ title: 'Delivery Systems' })
 
 const route = useRoute()
@@ -8,14 +9,40 @@ const projectGroups = [
   {
     group: 'Delivery Systems',
     items: [
-      { id: 'comsip', title: 'Community Savings and Investment Promotion' },
-{ id: 'dgrm', title: 'Digital Grievance Redress Mechanism' },
-{ id: 'e-payments', title: 'E-Payment' },
- { id: 'laifmis', title: 'Local Authorities IFMIS' },
-{ id: 'lapas', title: 'Local Authority Performance Assessment System' },
-{ id: 'msr', title: 'Malawi Social Registry' },
-{ id: 'pmis', title: 'Project Monitoring Information System' },
-{ id: 'publicworks', title: 'Public Works MIS' }
+      // Each item represents a different delivery system with unique ID, title and description
+{ 
+  id: 'comsip', 
+  title: 'Community Savings & Investment'
+},
+{ 
+  id: 'dgrm', 
+  title: 'Digital Grievance Redress'
+},
+{ 
+  id: 'e-payments', 
+  title: 'E-Payment Systems'
+},
+{ 
+  id: 'laifmis', 
+  title: 'Local Authorities IFMIS'
+},
+{  
+  id: 'msr', 
+  title: 'Malawi Social Registry'
+},
+{ 
+  id: 'lapas', 
+  title: 'Performance Assessment System'
+},
+{ 
+  id: 'pmis', 
+  title: 'Project Monitoring System'
+},
+{ 
+  id: 'publicworks', 
+  title: 'Public Works MIS'
+}
+
     ]
   }
 ]
@@ -96,6 +123,12 @@ onMounted(() => {
   }
 })
 
+const { projectGroups: sharedProjectGroups, /*projectContent: sharedProjectContent */} = useGeneralSidebar();
+watchEffect(() => {
+  sharedProjectGroups.value = projectGroups;
+  //sharedProjectContent.value = projectContent;
+});
+
 watch(() => route.hash, (newHash) => {
   if (newHash) {
     updateActiveTabFromHash(newHash.replace('#', ''))
@@ -112,35 +145,71 @@ function updateActiveTabFromHash(hash) {
   }
 }
 
-
+//provide('projectContent', projectContent);
 </script>
 
 <template>
   <div class="bg-white">
+    <!-- Responsive container with sidebar and main content layout -->
     <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
       
-      <!-- Sidebar -->
-      <aside class="w-full md:w-64 border-r pr-4">
-        <div v-for="group in projectGroups" :key="group.group" class="mb-4">
-          <details open class="border border-gray-200 rounded">
-            <summary class="cursor-pointer px-4 py-2 font-semibold bg-gray-100">
-              {{ group.group }}
-            </summary>
-            <ul class="space-y-1 px-4 py-2">
-              <li v-for="item in group.items" :key="item.id">
+      <!-- Sidebar Navigation -->
+      <!-- Delivery Systems section styled like opportunities page -->
+      <aside class="w-full md:w-80">
+        <div v-for="group in projectGroups" :key="group.group">
+          <!-- Single Card Container for all Delivery Systems -->
+          <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+            <!-- Main heading inside container -->
+            <h2 class="text-xl font-semibold text-gray-900 mb-6">{{ group.group }}</h2>
+            <div class="space-y-1">
+              <div v-for="(item, index) in group.items" :key="item.id">
+                <!-- Individual delivery system link -->
                 <a
                   :href="`#${item.id}`"
                   @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
                   :class="[
-                    'block px-3 py-2 rounded text-sm cursor-pointer',
-                    item.id === activeTab ? 'bg-blue-100 font-medium text-blue-900' : 'hover:bg-gray-100'
+                    'block p-4 rounded-lg cursor-pointer transition-all duration-200',
+                    // Conditional styling based on active state - green for active
+                    item.id === activeTab 
+                      ? 'bg-green-50 text-green-800' 
+                      : 'hover:bg-gray-50'
                   ]"
                 >
-                  {{ item.title }}
+                  <div class="flex items-start">
+                    <!-- System icon -->
+                    <div class="flex-shrink-0 mr-3 mt-0.5">
+                      <Icon 
+                        :name="item.id === activeTab ? 'heroicons:check-circle' : 'heroicons:document-text'" 
+                        :class="[
+                          'w-5 h-5',
+                          item.id === activeTab ? 'text-green-600' : 'text-gray-400'
+                        ]" 
+                      />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <!-- System title -->
+                      <h3 :class="[
+                        'font-medium text-sm mb-1',
+                        item.id === activeTab ? 'text-green-900' : 'text-gray-900'
+                      ]">
+                        {{ item.title }}
+                      </h3>
+                      <!-- System description -->
+                      <p :class="[
+                        'text-xs leading-relaxed',
+                        item.id === activeTab ? 'text-green-700' : 'text-gray-600'
+                      ]">
+                        {{ item.description }}
+                      </p>
+                    </div>
+                  </div>
                 </a>
-              </li>
-            </ul>
-          </details>
+                
+                <!-- Breaking line between items (except last item) -->
+                <hr v-if="index < group.items.length - 1" class="my-3 border-gray-200">
+              </div>
+            </div>
+          </div>
         </div>
       </aside>
 
