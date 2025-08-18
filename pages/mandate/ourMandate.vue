@@ -1,4 +1,6 @@
 <script setup>
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+
 definePageMeta({
   title: 'Our Mandate'
 })
@@ -6,7 +8,7 @@ definePageMeta({
 const route = useRoute()
 const activeTab = ref('fiscalDecentralization')
 
-const tabGroups = [
+const tabGroups = ref([
   {
     group: 'Our Mandate',
     items: [
@@ -17,6 +19,7 @@ const tabGroups = [
           { id: 'igtfMonitoringDashboard', title: 'IGTF Monitoring Dashboard' }
         ]
       },
+      {id: 'igtfMonitoringDashboard', title: 'IGTF Monitoring Dashboard'},
       { id: 'financialManagement', title: 'Financial Management' },
       {
         id: 'localDevelopmentSupport',
@@ -24,7 +27,44 @@ const tabGroups = [
       }
     ]
   }
-]
+])
+
+// Map the 'tabGroups' data to the desired structure for the GeneralSidebar
+const mappedProjectGroups = computed(() => {
+  // Assuming there's only one main group, as per your data
+  const mainGroup = tabGroups.value[0];
+  
+  // Create the final array of items that will be rendered
+  const finalItems = [];
+  
+  // Iterate through the original items and transform them
+  mainGroup.items.forEach(item => {
+    if (item.children) {
+      // For items with children, add both the parent and children as a nested item
+      finalItems.push({
+        id: item.id,
+        title: item.title,
+        children: [
+          { id: item.id, title: item.title },
+          ...item.children
+        ]
+      });
+    } else {
+      // For regular items, add them directly
+      finalItems.push({
+        id: item.id,
+        title: item.title
+      });
+    }
+  });
+
+  return [
+    {
+      group: mainGroup.group,
+      items: finalItems
+    }
+  ];
+});
 
 onMounted(() => {
   if (route.hash) {
@@ -40,23 +80,63 @@ watch(() => route.hash, (newHash) => {
   }
 })
 
+
+// Function to handle hash changes
 function updateActiveTabFromHash(hash) {
-  for (const group of tabGroups) {
+  for (const group of tabGroups.value) {
     for (const item of group.items) {
       if (item.id === hash) {
-        activeTab.value = item.id
-        return
+        activeTab.value = item.id;
+        return;
       }
       if (item.children) {
-        const match = item.children.find(sub => sub.id === hash)
+        const match = item.children.find(child => child.id === hash);
         if (match) {
-          activeTab.value = match.id
-          return
+          activeTab.value = match.id;
+          return;
         }
       }
     }
   }
 }
+
+// Correctly map the data to the projectGroups structure
+/*const mappedProjectGroups = computed(() => {
+  const finalGroups = [];
+  tabGroups.value.forEach(group => {
+    // Add the main group
+    const mainGroup = {
+      group: group.group,
+      id: group.group.replace(/\s/g, ''),
+      items: []
+    };
+    finalGroups.push(mainGroup);
+
+    // Iterate through items
+    group.items.forEach(item => {
+      // If the item has children, create a new nested group
+      if (item.children && item.children.length > 0) {
+        finalGroups.push({
+          group: item.title,
+          id: item.id,
+          items: item.children
+        });
+      } else {
+        // Otherwise, add the item to the main group
+        mainGroup.items.push(item);
+      }
+    });
+  });
+  return finalGroups;
+});*/
+
+
+const { projectGroups: sharedProjectGroups } = useGeneralSidebar();
+
+watchEffect(() => {
+  sharedProjectGroups.value = mappedProjectGroups.value;
+});
+
 </script>
 
 <template>

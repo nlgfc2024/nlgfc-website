@@ -1,4 +1,6 @@
 "<script setup>
+    import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+
     definePageMeta({
     title: 'About Us'
     })
@@ -86,7 +88,7 @@
     }
     }
 
-    const menuItems = [
+    const menuItems = ref([
     { 
         items: [
         { id: 'mvc', title: 'Mission, Vision and Core Values' },
@@ -112,7 +114,7 @@
         }
         ]
     }
-    ]
+    ])
 
     const isActive = (tabId) => {
     return activeTab.value === tabId
@@ -132,8 +134,38 @@
     }
     })
 
+    // Map the 'menuItems' data to the 'projectGroups' structure
+    const mappedProjectGroups = computed(() => {
+        const flattenedGroups = menuItems.value.flatMap(section => {
+            return section.items.map(item => {
+                if (item.subItems && item.subItems.length > 0) {
+                    // If the item has sub-items, map them as a group
+                    return {
+                        group: item.title,
+                        id: item.id,
+                        items: item.subItems
+                    };
+                } else {
+                    // If no sub-items, create a group with a single item
+                    return {
+                        group: item.title,
+                        id: item.id,
+                        items: [{ id: item.id, title: item.title }]
+                    };
+                }
+            });
+        });
+        return flattenedGroups;
+    });
+
+// Use the composable to share the data
+const { projectGroups } = useGeneralSidebar();
+projectGroups.value = mappedProjectGroups.value;
+    
+
 function updateActiveTabFromHash(hash) {
-  for (const group of menuItems) {
+  // Correctly access the value of the ref before iterating
+  for (const group of menuItems.value) {
     for (const item of group.items) {
       if (item.id === hash) {
         if (!item.subItems) {

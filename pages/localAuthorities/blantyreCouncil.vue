@@ -1,23 +1,70 @@
 <script setup>
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+import { ref, computed, watchEffect, watch, onMounted } from 'vue' 
+import { useRoute } from 'vue-router'; 
+
 definePageMeta({
   title: 'Blantyre District Council'
 })
 
+const route = useRoute(); // <-- ADDED this line
 const activeTab = ref('profile') // Default active tab
 const isTransitioning = ref(false) // For managing transition state
 
-const tabs = [
+// Modal state
+const showModal = ref(false)
+const activeModal = ref('')
+const modalTitle = ref('')
+
+const tabs = ref([
   { id: 'profile', title: 'Profile' },
   { id: 'projects', title: 'Projects' },
   { id: 'reports', title: 'Reports' },
   { id: 'news', title: 'News' }
-]
+])
+
+// Map the 'tabs' data to the 'projectGroups' structure
+const mappedProjectGroups = computed(() => {
+  return [
+    {
+      group: 'Portfolio', // The desired group name
+      items: tabs.value // The original tabs become items under this group
+    }
+  ];
+});
+
+// Use the composable to share the data
+const { projectGroups } = useGeneralSidebar();
+projectGroups.value = mappedProjectGroups.value;
+
+// Use watchEffect to automatically update the shared state
+watchEffect(() => {
+  projectGroups.value = mappedProjectGroups.value;
+});
+
+// Function to update active tab based on URL hash
+const updateActiveTabFromHash = (hash) => {
+  const matchingTab = tabs.value.find(tab => tab.id === hash);
+  if (matchingTab) {
+    activeTab.value = matchingTab.id;
+  }
+};
+
+// <-- ADDED watch block to react to URL hash changes
+watch(() => route.hash, (newHash) => {
+  if (newHash) {
+    updateActiveTabFromHash(newHash.replace('#', ''));
+  }
+});
 
 // Enhanced tab switching with transition
 const switchTab = (tabId) => {
   if (tabId === activeTab.value) return
   
   isTransitioning.value = true
+  
+  // Update the URL hash
+  window.location.hash = tabId
   
   // Small delay to allow fade out
   setTimeout(() => {
@@ -28,11 +75,8 @@ const switchTab = (tabId) => {
 
 // Set active tab from route hash if present
 onMounted(() => {
-  if (window.location.hash) {
-    const hash = window.location.hash.replace('#', '')
-    if (tabs.some(tab => tab.id === hash)) {
-      activeTab.value = hash
-    }
+  if (route.hash) { // <-- CORRECTED to use route.hash
+    updateActiveTabFromHash(route.hash.replace('#', ''));
   }
 })
 

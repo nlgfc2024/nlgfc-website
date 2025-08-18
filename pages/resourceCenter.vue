@@ -1,21 +1,21 @@
 <template>
   <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
     <!-- Left Sidebar -->
-    <div class="w-64 bg-gradient-to-b from-slate-50 to-slate-100 border-r border-slate-200 shadow-sm">
-      <div class="p-6">
-        <h2 class="text-lg font-bold text-slate-800 mb-6">Resource Center</h2>
+    <div class="w-64 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div>
+        <h2 class="text-lg font-bold text-gray-800 mb-6">Resource Center</h2>
         <nav class="space-y-2">
           <div v-for="(tab, tabIndex) in tabs" :key="tabIndex" class="group">
             <div
                 @click="toggleTab(tabIndex)"
-                class="flex items-center justify-between w-full text-left py-3 px-4 font-medium text-slate-700 rounded-lg cursor-pointer transition-all duration-300 ease-in-out hover:bg-white hover:shadow-md hover:text-slate-900 hover:border-l-4 hover:border-blue-500"
+                class="flex items-center justify-between w-full text-left py-3 px-4 font-medium text-gray-700 rounded-lg cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-50 hover:text-gray-900"
                 :class="{
-                'bg-white shadow-md text-slate-900 border-l-4 border-blue-600': expandedTab === tabIndex,
+                'bg-emerald-50 border-2 border-emerald-200 text-emerald-700': expandedTab === tabIndex,
                 'hover:translate-x-1': expandedTab !== tabIndex
               }"
             >
               <span class="flex items-center">
-                <svg class="w-5 h-5 mr-3 text-slate-500" :class="{ 'text-blue-600': expandedTab === tabIndex }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5 mr-3 text-gray-500 group-hover:text-gray-600" :class="{ 'text-emerald-600': expandedTab === tabIndex }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path v-if="tab.name === 'Publications & Downloads'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                   <path v-else-if="tab.name === 'Project Documents'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                   <path v-else-if="tab.name === 'Reports'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a4 4 0 01-4-4V5a2 2 0 012-2h6l2 2h6a2 2 0 012 2v6a4 4 0 01-4 4z"></path>
@@ -24,8 +24,8 @@
                 {{ tab.name }}
               </span>
               <svg
-                  class="w-4 h-4 text-slate-400 transition-transform duration-300"
-                  :class="{ 'rotate-180 text-blue-600': expandedTab === tabIndex }"
+                  class="w-4 h-4 text-gray-400 transition-transform duration-300"
+                  :class="{ 'rotate-180 text-emerald-600': expandedTab === tabIndex }"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -42,15 +42,15 @@
                   v-for="(sub, subIndex) in tab.subcategories"
                   :key="subIndex"
                   @click="selectSub(tabIndex, subIndex)"
-                  class="flex items-center w-full text-left py-2 px-4 text-sm font-medium text-slate-600 rounded-md cursor-pointer transition-all duration-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-700 hover:translate-x-2 hover:border-l-3 hover:border-blue-400"
+                  class="flex items-center w-full text-left py-2 px-4 text-sm font-medium text-gray-600 rounded-md cursor-pointer transition-all duration-200 hover:bg-gray-50 hover:text-gray-900 hover:translate-x-2"
                   :class="{
-                  'bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-l-3 border-blue-500 shadow-sm': activeTab === tabIndex && activeSub === subIndex
+                  'bg-emerald-50 border-2 border-emerald-200 text-emerald-700 shadow-sm': activeTab === tabIndex && activeSub === subIndex
                 }"
               >
                 <div class="w-2 h-2 rounded-full mr-3 transition-colors duration-200"
                      :class="{
-                       'bg-blue-500': activeTab === tabIndex && activeSub === subIndex,
-                       'bg-slate-300': !(activeTab === tabIndex && activeSub === subIndex)
+                       'bg-emerald-600': activeTab === tabIndex && activeSub === subIndex,
+                       'bg-gray-300 group-hover:bg-gray-600': !(activeTab === tabIndex && activeSub === subIndex)
                      }">
                 </div>
                 {{ sub.name }}
@@ -58,6 +58,17 @@
             </div>
           </div>
         </nav>
+
+        <!-- Help Section with separator -->
+        <div class="mt-6 pt-6 border-t border-gray-200">
+          <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="text-sm font-semibold text-emerald-700 mb-2">Need Help?</h3>
+            <p class="text-xs text-gray-600 mb-3">Contact our support team for assistance with document access or technical issues.</p>
+            <button class="w-full text-xs bg-gray-800 hover:bg-gray-600 text-white rounded-md py-2 px-3 transition-colors duration-200">
+              Contact Support
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -65,6 +76,49 @@
     <div class="flex-1 p-4">
       <section v-if="displayedDocuments.length">
         <h3 class="font-bold text-gray-600 text-lg mb-6">{{ currentTitle }}</h3>
+        <!-- Search Bar Section -->
+        <div v-if="activeTab !== null && activeSub !== null" class="mb-8">
+            <div class="max-w-md mx-auto lg:max-w-lg">
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  </svg>
+                </div>
+                <input
+                    v-model="searchQuery"
+                    type="text"
+                    class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-gray-600 focus:border-gray-800 transition-colors duration-200"
+                    :placeholder="`Search in ${currentTitle}...`"
+                    @input="handleSearch"
+                />
+                <div v-if="searchQuery" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                  <button
+                      @click="clearSearch"
+                      class="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                  >
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Search Results Summary -->
+            <div v-if="searchQuery" class="mt-4 text-center">
+              <p class="text-sm text-gray-600">
+                <span v-if="filteredDocuments.length > 0">
+                  Found {{ filteredDocuments.length }} result{{ filteredDocuments.length !== 1 ? 's' : '' }} for "<span class="font-semibold text-emerald-600">{{ searchQuery }}</span>"
+                </span>
+                <span v-else class="text-red-600">
+                  No results found for "<span class="font-semibold">{{ searchQuery }}</span>"
+                </span>
+              </p>
+            </div>
+          </div>
+        
+        
 
         <!-- Video Grid Layout -->
         <transition-group
@@ -77,7 +131,7 @@
           <div
               v-for="(doc, index) in displayedDocuments"
               :key="doc.name"
-              class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105"
+              class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105"
               :style="{ animationDelay: `${index * 100}ms` }"
           >
             <div class="aspect-video">
@@ -93,9 +147,9 @@
               <h4 class="font-semibold text-gray-800 mb-2">{{ doc.name }}</h4>
               <p class="text-sm text-gray-600 mb-2">{{ doc.description }}</p>
               <a href="https://www.youtube.com/@nlgfcmalawi2455">
-                <p class="text-[12px] font-semibold text-gray-600 mb-2">Watch More on NLGFC YouTube Channel</p>
+                <p class="text-[12px] font-semibold text-emerald-600 hover:text-emerald-700 mb-2">Watch More on NLGFC YouTube Channel</p>
               </a>
-              <span class="inline-block text-xs bg-red-100 text-red-800 rounded px-2 py-1">
+              <span class="inline-block text-xs bg-red-100 text-red-600 rounded px-2 py-1">
                 {{ doc.type }}
               </span>
             </div>
@@ -106,17 +160,16 @@
         <div
             v-else-if="currentSubcategoryType === 'Image Gallery'"
             class="w-full">
-            <!--I removed index on the v-for loop since we're using iframe now -->
           <div
-              v-for="doc in displayedDocuments"
+              v-for="(doc, index) in displayedDocuments"
               :key="doc.name"
-              class="bg-white rounded-lg shadow-lg overflow-hidden mb-6 transition-all duration-300 hover:shadow-xl"
+              class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-6 transition-all duration-300 hover:shadow-lg"
           >
             <!-- Header with gallery info -->
-            <div class="bg-gradient-to-r from-gray-900 to-indigo-600 text-white p-4">
+            <div class="bg-gradient-to-r from-gray-900 to-emerald-600 text-white p-4">
               <h4 class="font-semibold text-lg mb-1">{{ doc.name }}</h4>
-              <p class="text-blue-100 text-sm">{{ doc.description }}</p>
-              <span class="inline-block text-xs bg-white bg-opacity-20 text-blue-500 rounded px-2 py-1 mt-2">
+              <p class="text-emerald-100 text-sm">{{ doc.description }}</p>
+              <span class="inline-block text-xs bg-white bg-opacity-20 text-emerald-200 rounded px-2 py-1 mt-2">
                 {{ doc.type }}
               </span>
             </div>
@@ -138,7 +191,7 @@
                   :class="['absolute inset-0 bg-gray-100 flex items-center justify-center transition-opacity duration-500', iframeLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100']"
               >
                 <div class="text-center">
-                  <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                  <div class="w-12 h-12 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mb-4"></div>
                   <p class="text-gray-600">Loading gallery...</p>
                 </div>
               </div>
@@ -150,7 +203,7 @@
               <a
                   :href="doc.link"
                   target="_blank"
-                  class="inline-flex items-center px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200"
+                  class="inline-flex items-center px-3 py-1 text-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded-md transition-colors duration-200"
                   title="Open in new tab"
               >
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,13 +226,13 @@
           <div
               v-for="(doc, index) in displayedDocuments"
               :key="doc.name"
-              class="relative bg-white rounded-2xl border-b-2 border-gray-400 shadow-sm hover:border-b-blue-500 transition-all duration-300 p-4 flex flex-col justify-between group hover:scale-105 hover:shadow-sm"
+              class="relative bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 p-4 flex flex-col justify-between group hover:scale-105"
               :style="{ animationDelay: `${index * 100}ms` }"
           >
             <a
                 :href="doc.link"
                 target="_blank"
-                class="absolute bottom-2 right-2 w-6 h-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md hover:shadow-lg"
+                class="absolute bottom-2 right-2 w-6 h-6 bg-gray-800 hover:bg-gray-600 text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md hover:shadow-lg"
                 title="Download / View"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none"
@@ -198,7 +251,7 @@
               />
               <div>
                 <h3 class="font-semibold text-gray-800 text-base">{{ doc.name }}</h3>
-                <span class="inline-block text-xs bg-gray-200 rounded px-2 py-0.5 mt-1 text-gray-700">
+                <span class="inline-block text-xs bg-gray-100 border border-gray-200 rounded px-2 py-0.5 mt-1 text-gray-700">
                   {{ doc.type }}
                 </span>
               </div>
@@ -207,7 +260,7 @@
             <p class="text-sm text-gray-600">
               {{ doc.description || 'No description available.' }}
             </p>
-            <p class="text-[12px] font-semibold text-blue-600">
+            <p class="text-[12px] font-semibold text-emerald-600">
               {{ doc.date || 'No date available.' }}
             </p>
           </div>
@@ -217,7 +270,7 @@
       <!-- Loading State -->
       <transition name="fade" mode="out-in">
         <div v-if="!displayedDocuments.length" class="flex flex-col items-center justify-center py-16">
-          <div class="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+          <div class="w-16 h-16 border-4 border-emerald-200 border-t-gray-600 rounded-full animate-spin mb-4"></div>
           <p class="text-gray-600 text-lg">Select a subcategory to view content</p>
         </div>
       </transition>
@@ -251,6 +304,8 @@
 </template>
 
 <script setup>
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+
 definePageMeta({
     title: 'Resource Center'
     })
@@ -818,6 +873,22 @@ function handleQueryParams() {
   }
 }
 
+// Map the 'tabs' data to the 'projectGroups' structure
+const mappedProjectGroups = computed(() => {
+  return tabs.value.map(tab => {
+    return {
+      group: tab.name,
+      items: tab.subcategories.map(subcategory => ({
+        id: subcategory.id,
+        title: subcategory.name
+      }))
+    };
+  });
+});
+
+const { projectGroups } = useGeneralSidebar();
+projectGroups.value = mappedProjectGroups.value;
+
 // Watch for route changes to handle navigation
 watch(() => route.query, (newQuery) => {
   handleQueryParams();
@@ -907,6 +978,12 @@ const currentSubcategoryType = computed(() => {
   }
   return '';
 });
+
+/*const { projectGroups: sharedProjectGroups } = useGeneralSidebar();
+
+watchEffect(() => {
+  sharedProjectGroups.value = projectGroups;
+});*/
 
 </script>
 
