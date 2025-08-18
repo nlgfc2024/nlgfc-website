@@ -6,12 +6,21 @@ import Navbar from '../components/Navbar.vue';
 import PageHeader from '../components/PageHeader.vue';
 import ChatWidget from '../components/ChatWidget.vue';
 import AppFooter from '../components/AppFooter.vue';
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
 
 const route = useRoute();
 
 // Inject sidebar data from pages (if available)
-const sidebarData = inject('sidebarData', null);
+// const sidebarData = inject('sidebarData', null);
 
+//shared content
+const { projectGroups, projectContent } = useGeneralSidebar();
+const activeTab = ref(route.hash.substring(1) || 'government_funded');
+
+// Watch for route hash changes to keep activeTab in sync
+watch(() => route.hash, (newHash) => {
+  activeTab.value = newHash.substring(1);
+});
 
 
 // Reactive state to control sidebar visibility
@@ -42,7 +51,7 @@ const opportunitySections = [
 const sidebarProps = computed(() => {
   // Define pages that should NOT have a sidebar
   const noSidebarPages = ['/', '/index2'];
-  const isLocalAuthoritiesPage = route.path.startsWith('/localAuthorities');
+  const isLocalAuthoritiesPage = route.path.startsWith('/localAuthorities/alldistricts');
   
   // Return null (no sidebar) for specific pages
   if (noSidebarPages.includes(route.path) || isLocalAuthoritiesPage) {
@@ -61,15 +70,13 @@ const sidebarProps = computed(() => {
   
   // Check for projects page - use sidebarData if available for projects
   if (route.path.includes('/projects')) {
-    if (sidebarData) {
+    if (projectGroups.value.length > 0) {
       return {
-        sidebarType: sidebarData.sidebarType,
-        sectionsData: sidebarData.sectionsData,
-        sidebarTitle: sidebarData.sidebarTitle,
-        activeId: sidebarData.activeId.value || sidebarData.activeId,
-        onUpdateActiveId: sidebarData.onUpdateActiveId
-      };
-    } else {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; } else {
       // Fallback for projects page when sidebarData is not yet available
       const fallbackProjectGroups = [
         {
@@ -111,9 +118,145 @@ const sidebarProps = computed(() => {
       };
     }
   }
+
+  if (route.path.includes('/about')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; } 
+  }
+
+  if (route.path.includes('mandate/ourMandate')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; } 
+  }
+
+  if (route.path.includes('/projects/pastProjects#masaf_overview')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; }    
+  } else if (route.path.includes('/projects/pastProjects#psn')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; }    
+  } else if (route.path.includes('/projects/pastProjects#scb')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; }    
+  } else if (route.path.includes('/projects/pastProjects#pm')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; }    
+  }
+
+  if (route.path.includes('/projects/currentProjects#miera_overview')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; } 
+  }
+
+  if (route.path.includes('/projects/currentProjects#ssrlp_news')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; } 
+  }
+
+  if (route.path.includes('/upcomingProjects#gesd2')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; } 
+  } else if (route.path.includes('/upcomingProjects#inspire')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; } 
+  } 
+
+  if (route.path.includes('/deliverySystems/deliverySystems')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; } 
+  }
+
+  if (route.path.includes('/localAuthorities/blantyreCouncil')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; } 
+  }
+
+  if (route.path.includes('/localAuthorities/lilongwecitycouncil')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; } 
+  }
+
+  if (route.path.includes('/resourceCenter')) {
+    if (projectGroups.value.length > 0) {
+      return {
+        sidebarType: 'projects',
+        sectionsData: projectGroups.value,
+        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        activeId: activeTab.value
+    }; } 
+  }
+
+  const handleActiveIdUpdate = (newId) => {
+    activeTab.value = newId;
+  };
   
   // If page provides sidebar data, use that
-  if (sidebarData) {
+  /*if (sidebarData) {
     return {
       sidebarType: sidebarData.sidebarType,
       sectionsData: sidebarData.sectionsData,
@@ -122,7 +265,7 @@ const sidebarProps = computed(() => {
       jobOpportunities: sidebarData.jobOpportunities,
       procurementNotices: sidebarData.procurementNotices
     };
-  }
+  }*/
   
   // Default: show sidebar for all other pages
   return {
@@ -199,17 +342,18 @@ watch(() => route.hash, (newHash) => {
             :headerHeight="headerHeight"
             :isHeaderVisible="isHeaderVisible"
             @update:sidebarOpen="isSidebarOpen = $event"
-            @update:activeId="sidebarProps.onUpdateActiveId || (sidebarData?.onUpdateActiveId || (() => {}))"
-            @openFaqModal="sidebarData?.onOpenFaqModal || (() => {})"
+            @update:activeId="handleActiveIdUpdate"
+            @openFaqModal="sidebarProps.onOpenFaqModal"
           />
         </slot>
       </aside>
 
       <div
-        :class="[
-          'flex-1 transition-all duration-300 ease-in-out',
-          !sidebarProps ? 'max-w-full' : ''
-        ]"
+        class="flex-1 p-4 md:p-8 transition-all duration-300 ease-in-out"
+        :class="{
+          'md:ml-5': isSidebarOpen && sidebarProps,
+          'md:ml-0': !isSidebarOpen || !sidebarProps
+        }"
       >
         <slot />
       </div>

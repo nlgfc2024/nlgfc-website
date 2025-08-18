@@ -2,11 +2,16 @@
 // Nuxt 3 auto-imports definePageMeta and useRoute.
 // Vue composition API imports:
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import GeneralSidebar from '../../components/GeneralSidebar.vue';
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+
 
 definePageMeta({ title: 'Current Projects' })
 
 const route = useRoute()
 const activeTab = ref('government_funded')
+const isSidebarOpen = ref(true);
+
 
 // Sidebar structure with groups and nested sub-groups
 const projectGroups = [
@@ -29,6 +34,7 @@ const projectGroups = [
         subgroup: 'SSRLP',
         id: 'ssrlp_news',
         items: [
+          { id: 'ssrlp_news', title: 'SSRLP NEWS' },
           { id: 'ssrlp_overview', title: 'Overview' },
           { id: 'SCTP', title: 'Social Cash Transfer' },
           { id: 'publicWorks', title: 'Climate Smart Public Works' },
@@ -40,7 +46,8 @@ const projectGroups = [
       {
         subgroup: 'GESD',
         id: 'gesd_news',
-    items: [
+        items: [
+          {id: 'gesd_news', title: 'GESD NEWs'},
           { id: 'gesd_overview', title: 'Overview' },
       { id: 'pbf', title: 'Performance-Based Financing' },
       { id: 'ias', title: 'Intergovernmental Accountability Systems' },
@@ -51,7 +58,8 @@ const projectGroups = [
   {
         subgroup: 'RCRP 2',
         id: 'rcrp2_news',
-    items: [
+        items: [
+          { id: 'rcrp2_news', title: 'RCRP2 NEWS' },
           { id: 'rcrp_overview', title: 'Overview' },
       { id: 'drb', title: 'District-Led Resilience Building' },
       { id: 'usr', title: 'Urban Malawi Social Registry' },
@@ -636,6 +644,60 @@ onMounted(() => {
 onBeforeUnmount(() => {
   clearInterval(autoplayTimer)
 })
+
+const { projectGroups: sharedProjectGroups, projectContent: sharedProjectContent } = useGeneralSidebar();
+
+watchEffect(() => {
+  sharedProjectGroups.value = projectGroups;
+  sharedProjectContent.value = projectContent;
+});
+
+function handleHashChange() {
+  const hash = window.location.hash.substring(1);
+  if (hash) {
+    activeTab.value = hash;
+  }
+}
+
+onMounted(() => {
+  handleHashChange();
+  window.addEventListener('hashchange', handleHashChange);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('hashchange', handleHashChange);
+});
+
+const activeProjectTitle = computed(() => {
+  const findItem = (groups) => {
+    for (const group of groups) {
+      if (group.id && group.id === activeTab.value) {
+        return group.group;
+      }
+      if (group.items) {
+        const item = group.items.find(i => i.id === activeTab.value);
+        if (item) {
+          return item.title;
+        }
+      }
+      if (group.subgroups) {
+        for (const sg of group.subgroups) {
+          if (sg.id === activeTab.value) {
+            return sg.subgroup;
+          }
+          const item = sg.items.find(i => i.id === activeTab.value);
+          if (item) {
+            return item.title;
+          }
+        }
+      }
+    }
+    return 'Project Overview';
+  };
+  return findItem(projectGroups);
+});
+
+provide('projectContent', projectContent);
 </script>
 
 <template>

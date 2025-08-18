@@ -1,4 +1,6 @@
 <script setup>
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+
 definePageMeta({ title: 'Upcoming Projects' })
 
 const route = useRoute()
@@ -75,6 +77,13 @@ onMounted(() => {
     updateActiveTabFromHash(route.hash.replace('#', ''))
   }
 })
+
+const { projectGroups: sharedProjectGroups, projectContent: sharedProjectContent } = useGeneralSidebar();
+
+watchEffect(() => {
+  sharedProjectGroups.value = projectGroups;
+  sharedProjectContent.value = projectContent;
+});
 
 // React to hash changes
 watch(() => route.hash, (newHash) => {
