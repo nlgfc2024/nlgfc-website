@@ -10,7 +10,6 @@ const props = defineProps<{
 
 /**
  * Minimal fallback component for unknown blocks.
- * (You can style this however you like.)
  */
 const UnknownBlock = {
   props: { type: { type: String, default: 'Unknown' } },
@@ -49,6 +48,7 @@ const lazyMap: Record<string, () => Promise<any>> = {
   ImageZoomableBlock: () => import('./blocks/ImageZoomableBlock.vue'),
   FunctionGroupBlock: () => import('./blocks/FunctionGroupBlock.vue'),
   ProjectContentBlock: () => import('./blocks/ProjectContentBlock.vue'),
+  FeaturesGridBlock: () => import('./blocks/FeaturesGridBlock.vue'),
 }
 
 /**
@@ -168,6 +168,22 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
         show_header: data.show_header ?? true,
         body: data.body ?? '',
       }
+
+    case 'FeaturesGridBlock': {
+      const features = Array.isArray(data.features) ? data.features : []
+      const mapped = features.map((f: any) => ({
+        title: f?.title ?? '',
+        icon: f?.icon ?? 'heroicon-o-sparkles',
+        icon_bg: f?.icon_bg ?? '#D1FAE5',
+        icon_color: f?.icon_color ?? '#059669',
+        items: Array.isArray(f?.items) ? f.items.map((it: any) => ({ label: typeof it === 'string' ? it : (it?.label ?? '') })) : [],
+      }))
+      return {
+        title: data.title ?? 'Key Features',
+        columns: data.columns ?? '2',
+        features: mapped,
+      }
+    }
 
     default:
       // Pass-through for unknown types so the fallback can display something
