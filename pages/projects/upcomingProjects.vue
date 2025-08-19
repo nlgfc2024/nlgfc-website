@@ -1,7 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
-// Import GeneralSidebar component
-import GeneralSidebar from '../../components/GeneralSidebar.vue'; // Adjust path as necessary
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
 
 definePageMeta({ title: 'Upcoming Projects' })
 
@@ -18,7 +16,7 @@ const projectGroups = [
   }
 ]
 
-// The openGroup state will now be managed internally by GeneralSidebar
+const openGroup = ref(projectGroups[0].group)
 
 const projectContent = {
   gesd2: {
@@ -80,6 +78,13 @@ onMounted(() => {
   }
 })
 
+const { projectGroups: sharedProjectGroups, projectContent: sharedProjectContent } = useGeneralSidebar();
+
+watchEffect(() => {
+  sharedProjectGroups.value = projectGroups;
+  sharedProjectContent.value = projectContent;
+});
+
 // React to hash changes
 watch(() => route.hash, (newHash) => {
   if (newHash) {
@@ -92,7 +97,7 @@ function updateActiveTabFromHash(hash) {
     const match = group.items.find(item => item.id === hash)
     if (match) {
       activeTab.value = match.id
-      // openGroup.value = group.group // GeneralSidebar will handle this based on activeId
+      openGroup.value = group.group
       break
     }
   }
@@ -100,8 +105,8 @@ function updateActiveTabFromHash(hash) {
 </script>
 
 <template>
-  <div class="flex flex-col md:flex-row gap-8 max-w-7xl mx-auto px-4 py-8">
-    <!-- Sidebar -->
+  <div class="flex flex-col md:flex-row gap-8 max-w-7xl pr-30 py-3">
+    <!-- Sidebar 
     <aside class="w-full md:w-72 flex-shrink-0">
       <GeneralSidebar
         sidebarType="projects"
@@ -111,7 +116,7 @@ function updateActiveTabFromHash(hash) {
         @update:activeId="activeTab = $event"
       />
     </aside>
-
+    -->
     <!-- Main Content Area -->
     <main class="flex-1 min-w-0">
       <div v-if="projectContent[activeTab]" class="bg-white rounded-xl shadow-sm overflow-hidden">
