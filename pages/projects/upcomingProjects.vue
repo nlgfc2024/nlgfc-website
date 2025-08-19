@@ -116,7 +116,7 @@ function updateActiveTabFromHash(hash) {
         @update:activeId="activeTab = $event"
       />
     </aside>
-
+    -->
     <!-- Main Content Area -->
     <main class="flex-1 min-w-0">
       <div v-if="projectContent[activeTab]" class="bg-white rounded-xl shadow-sm overflow-hidden">
