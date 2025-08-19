@@ -1,25 +1,33 @@
-import Database from 'better-sqlite3'
-import { join } from 'path'
+import pkg from 'pg'
+const { Pool } = pkg
 
-// Connect to the shared database
-const dbPath = join(process.cwd(), '..', 'nlgfc_cms', 'data', 'nlgfc_content.db')
-let db
+// PostgreSQL connection configuration (shared with CMS)
+const pool = new Pool({
+  user: process.env.POSTGRES_USER || 'nlgfc_user',
+  host: process.env.POSTGRES_HOST || 'localhost',
+  database: process.env.POSTGRES_DB || 'nlgfc_content',
+  password: process.env.POSTGRES_PASSWORD || 'nlgfc_password',
+  port: process.env.POSTGRES_PORT || 5432,
+})
 
 export default defineEventHandler(async (event) => {
+  let client
+  
   try {
-    // Initialize database connection if not exists
-    if (!db) {
-      db = new Database(dbPath, { readonly: true })
-    }
+    // Connect to PostgreSQL
+    client = await pool.connect()
 
     // Get contact information
-    const contactInfo = db.prepare('SELECT * FROM contact_info ORDER BY id DESC LIMIT 1').get()
+    const contactResult = await client.query('SELECT * FROM contact_info ORDER BY id DESC LIMIT 1')
+    const contactInfo = contactResult.rows[0]
     
     // Get active information officers
-    const officers = db.prepare('SELECT * FROM information_officers WHERE is_active = 1 ORDER BY sort_order ASC').all()
+    const officersResult = await client.query('SELECT * FROM information_officers WHERE is_active = true ORDER BY sort_order ASC')
+    const officers = officersResult.rows
     
     // Get ATI information
-    const atiInfo = db.prepare('SELECT * FROM ati_info ORDER BY id DESC LIMIT 1').get()
+    const atiResult = await client.query('SELECT * FROM ati_info ORDER BY id DESC LIMIT 1')
+    const atiInfo = atiResult.rows[0]
 
     return {
       success: true,
@@ -100,6 +108,11 @@ export default defineEventHandler(async (event) => {
           manual_url: '/documents/ati-2016.pdf'
         }
       }
+    }
+  } finally {
+    // Release database connection
+    if (client) {
+      client.release()
     }
   }
 })
