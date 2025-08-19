@@ -48,14 +48,18 @@ const lazyMap: Record<string, () => Promise<any>> = {
   ValuesGridBlock: () => import('./blocks/ValuesGridBlock.vue'),
   ImageZoomableBlock: () => import('./blocks/ImageZoomableBlock.vue'),
   FunctionGroupBlock: () => import('./blocks/FunctionGroupBlock.vue'),
+  ProjectContentBlock: () => import('./blocks/ProjectContentBlock.vue'),
 }
 
 /**
  * Build the live registry of async components.
  */
-const registry: Record<string, any> = Object.fromEntries(
-  Object.entries(lazyMap).map(([k, loader]) => [k, createLazy(loader)]),
-)
+const registry: Record<string, any> = {} as Record<string, any>
+for (const key in lazyMap) {
+  if (Object.prototype.hasOwnProperty.call(lazyMap, key)) {
+    registry[key] = createLazy(lazyMap[key])
+  }
+}
 
 /**
  * Make sure we’re resilient to different “type” shapes.
@@ -155,6 +159,15 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
         functions: mapped,
       }
     }
+
+    case 'ProjectContentBlock':
+      return {
+        title: data.title ?? '',
+        label: data.label ?? '',
+        theme: data.theme ?? 'blue',
+        show_header: data.show_header ?? true,
+        body: data.body ?? '',
+      }
 
     default:
       // Pass-through for unknown types so the fallback can display something
