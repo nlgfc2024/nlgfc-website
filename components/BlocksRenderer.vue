@@ -10,7 +10,6 @@ const props = defineProps<{
 
 /**
  * Minimal fallback component for unknown blocks.
- * (You can style this however you like.)
  */
 const UnknownBlock = {
   props: { type: { type: String, default: 'Unknown' } },
