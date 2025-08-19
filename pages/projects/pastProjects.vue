@@ -1,6 +1,5 @@
 <script setup>
 import GeneralSidebar from '../../components/GeneralSidebar.vue';
-import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
 
 definePageMeta({ title: 'Past Projects' })
 

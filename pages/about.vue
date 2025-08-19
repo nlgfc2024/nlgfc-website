@@ -1,5 +1,7 @@
 "<script setup>
     import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+    import BlocksRenderer from '~/components/BlocksRenderer.vue'
+    import { usePageBlocks } from '~/composables/usePageBlocks'
 
     definePageMeta({
     title: 'About Us'
@@ -161,7 +163,14 @@
 // Use the composable to share the data
 const { projectGroups } = useGeneralSidebar();
 projectGroups.value = mappedProjectGroups.value;
+
+// Page-builder: Mission, Vision, Core Values content
+// const { data: mvcPage, pending: mvcPending, error: mvcError } = usePageBlocks('mission-vision-core-values')
     
+const { data: pages, pending, error: PageError } = usePageBlocks([
+  'mission-vision-core-values','testing-page'
+])
+
 
 function updateActiveTabFromHash(hash) {
   // Correctly access the value of the ref before iterating
@@ -212,206 +221,69 @@ const downloadImage = () => {
 
 <template>
   <div class="min-h-[calc(100vh-120px)] bg-white">
-    <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
+    <div class="container mx-auto px-2 py-3 flex flex-col md:flex-row gap-8 max-w-6xl">
       <!-- Sidebar Navigation -->
-    <nav class="w-full md:w-64 flex-shrink-0 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-    <h2 class="text-lg font-semibold text-gray-900 mb-4 pl-2 border-gray-600">About NLGFC</h2>
+        <!--<nav class="w-full md:w-64 flex-shrink-0 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4 pl-2 border-gray-600">About NLGFC</h2>
 
-    <div class="space-y-6">
-        <div v-for="(group, groupIndex) in menuItems" :key="groupIndex">
-        <ul class="space-y-1">
-            <li v-for="item in group.items" :key="item.id">
-            <NuxtLink
-                :to="`#${item.id}`"
-                @click="activeTab = item.id"
-                class="flex items-center justify-between px-4 py-3 rounded transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                :class="{
-                'bg-emerald-50 text-emerald-700 font-medium border-2 border-emerald-200': activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab))
-                }"
-            >
-                <span>{{ item.title }}</span>
-                <svg 
-                v-if="item.subItems" 
-                class="w-4 h-4 ml-2 transition-transform duration-200"
-                :class="{ 'rotate-90': openSubMenu === item.id, 'text-emerald-600': activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab)), 'group-hover:text-gray-600': !(activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab))) }"
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-                >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </NuxtLink>
-
-            <ul 
-                v-if="item.subItems"
-                class="ml-4 pl-4 border-l border-gray-200 space-y-1 mt-1"
-                :class="{ 'hidden': openSubMenu !== item.id }"
-            >
-                <li v-for="subItem in item.subItems" :key="subItem.id">
+        <div class="space-y-6">
+            <div v-for="(group, groupIndex) in menuItems" :key="groupIndex">
+            <ul class="space-y-1">
+                <li v-for="item in group.items" :key="item.id">
                 <NuxtLink
-                    :to="`#${subItem.id}`"
-                    @click="activeTab = subItem.id"
-                    class="block px-3 py-2 rounded text-gray-600 hover:bg-gray-50 hover:text-gray-900 text-sm"
+                    :to="`#${item.id}`"
+                    @click="activeTab = item.id"
+                    class="flex items-center justify-between px-4 py-3 rounded transition-colors text-gray-700 hover:bg-gray-50 hover:text-gray-900"
                     :class="{
-                    'bg-emerald-50 text-emerald-700 font-medium border-2 border-emerald-200': activeTab === subItem.id
+                    'bg-emerald-50 text-emerald-700 font-medium border-2 border-emerald-200': activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab))
                     }"
                 >
-                    {{ subItem.title }}
+                    <span>{{ item.title }}</span>
+                    <svg 
+                    v-if="item.subItems" 
+                    class="w-4 h-4 ml-2 transition-transform duration-200"
+                    :class="{ 'rotate-90': openSubMenu === item.id, 'text-emerald-600': activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab)), 'group-hover:text-gray-600': !(activeTab === item.id || (item.subItems && item.subItems.some(sub => sub.id === activeTab))) }"
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                    >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
                 </NuxtLink>
+
+                <ul 
+                    v-if="item.subItems"
+                    class="ml-4 pl-4 border-l border-gray-200 space-y-1 mt-1"
+                    :class="{ 'hidden': openSubMenu !== item.id }"
+                >
+                    <li v-for="subItem in item.subItems" :key="subItem.id">
+                    <NuxtLink
+                        :to="`#${subItem.id}`"
+                        @click="activeTab = subItem.id"
+                        class="block px-3 py-2 rounded text-gray-600 hover:bg-gray-50 hover:text-gray-900 text-sm"
+                        :class="{
+                        'bg-emerald-50 text-emerald-700 font-medium border-2 border-emerald-200': activeTab === subItem.id
+                        }"
+                    >
+                        {{ subItem.title }}
+                    </NuxtLink>
+                    </li>
+                </ul>
                 </li>
             </ul>
-            </li>
-        </ul>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-200"></div>
         </div>
-        <div class="mt-6 pt-6 border-t border-gray-200"></div>
-    </div>
-    </nav>
+        </nav>-->
       <!-- Main Content -->
       <main class="flex-1 min-w-0">
         <!-- Mission, Vision, Core Values -->
         <div v-show="activeTab === 'mvc'" class="prose max-w-none">
-            <!-- Mission Section -->
-            <div class="bg-white rounded-xl shadow-sm p-8 mb-10 border border-gray-100">
-                <div class="flex items-center mb-6"> <!-- Changed from items-start to items-center -->
-                    <div class="bg-blue-100 p-3 rounded-lg mr-6">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900">Our Mission</h2> <!-- Removed mb-3 from here -->
-                </div>
-                <p class="text-gray-700 text-lg leading-relaxed pl-16"> <!-- Added pl-16 for proper indentation -->
-                    To provide efficient and effective technical, financial and economic management services for mobilization, 
-                    distribution and utilization of resources for quality service delivery by Local Governments
-                </p>
-            </div>
-
-            <!-- Vision Section -->
-            <div class="bg-white rounded-xl     shadow-sm p-8 mb-10 border border-gray-100">
-                <div class="flex items-center mb-6"> <!-- Changed to items-center for vertical alignment -->
-                    <div class="bg-purple-100 p-3 rounded-lg mr-6">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                        </svg>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900">Our Vision</h2> <!-- Removed mb-3 -->
-                </div>
-                <p class="text-gray-700 text-lg leading-relaxed pl-16"> <!-- Added pl-16 for indentation -->
-                    Delivering effective and responsive financing for Local Governments
-                </p>
-            </div>
-
-            <!-- Core Values Section -->
-            <div class="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
-                <div class="flex items-center mb-6">
-                    <div class="bg-green-100 p-3 rounded-lg mr-6">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-900">Our Core Values</h2>
-                        <p class="text-gray-600">
-                            The fundamental beliefs that guide our actions and decisions
-                        </p>
-                    </div>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-6">
-                    <!-- Professionalism -->
-                    <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 hover:border-blue-200 transition-colors">
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-900 mb-1">Professionalism</h3>
-                                <p class="text-gray-700 text-sm">Integrity, ethical and impartial conduct in all our operations.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Corruption-free -->
-                    <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 hover:border-blue-200 transition-colors">
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-900 mb-1">Corruption and fraud-free</h3>
-                                <p class="text-gray-700 text-sm">Upholding high moral standards in all our dealings.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Transparent and accountable -->
-                    <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 hover:border-blue-200 transition-colors">
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-900 mb-1">Transparent and accountable</h3>
-                                <p class="text-gray-700 text-sm">Maintaining openness and responsibility in all operations.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Innovation and learning -->
-                    <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 hover:border-blue-200 transition-colors">
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-900 mb-1">Innovation and learning</h3>
-                                <p class="text-gray-700 text-sm">Staying relevant in a changing environment through continuous improvement.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Customer focused -->
-                    <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 hover:border-blue-200 transition-colors">
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-900 mb-1">Customer focused</h3>
-                                <p class="text-gray-700 text-sm">Demand driven, equality and responsive to stakeholder needs.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Teamwork -->
-                    <div class="bg-gray-50 p-5 rounded-lg border border-gray-200 hover:border-blue-200 transition-colors">
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-gray-900 mb-1">Teamwork</h3>
-                                <p class="text-gray-700 text-sm">Unity of purpose and synergy in achieving our goals.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div v-if="PagePending">Loading...</div>
+            <div v-else-if="PageError">Failed to load content.</div>
+            <BlocksRenderer :blocks="pages?.['mission-vision-core-values']?.blocks || []" />
         </div>
-        <div v-show="activeTab === 'powers'" class="prose max-w-none">
+       <div v-show="activeTab === 'powers'" class="prose max-w-none">
             <!-- Header Section -->
             <div class="mb-10">
                 <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
