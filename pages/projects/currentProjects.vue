@@ -4,12 +4,14 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import GeneralSidebar from '../../components/GeneralSidebar.vue';
 import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+import { usePageBlocks } from '~/composables/usePageBlocks'
+import BlocksRenderer from '~/components/BlocksRenderer.vue'
 
 
 definePageMeta({ title: 'Current Projects' })
 
 const route = useRoute()
-const activeTab = ref('government_funded')
+const activeTab = ref('cdf')
 const isSidebarOpen = ref(true);
 
 
@@ -74,269 +76,74 @@ const projectGroups = [
 const openGroup = ref(projectGroups[0].group)
 const openSubgroup = ref(null)
 
-const projectContent = {
-  // Group and subgroup landing content
-  government_funded: {
-    title: 'Government Funded Projects',
-    body: `
-      <p>Explore government funded programs implemented through the National Local Government Finance Committee.</p>
-      <ul>
-        <li>Constituency Development Fund (CDF)</li>
-        <li>District Development Fund (DDF)</li>
-        <li>Water Structures Fund</li>
-        <li>Health Rehabilitation</li>
-        <li>Infrastructure Development Fund (IDF)</li>
-        <li>Road Rehabilitation Fund (RRF)</li>
-      </ul>
-    `
-  },
-  ssrlp_news: {
-    title: 'SSRLP News & Updates',
-    body: `
-      <p>Latest news, notices, and highlights from the Social Support for Resilient Livelihoods Project.</p>
-    `
-  },
-  gesd_news: {
-    title: 'GESD News & Updates',
-    body: `
-      <p>Latest news and announcements under the Governance to Enable Service Delivery project.</p>
-    `
-  },
-  rcrp2_news: {
-    title: 'RCRP 2 News & Updates',
-    body: `
-      <p>Latest updates for the Regional Climate Resilience Project Phase 2.</p>
-    `
-  },
-
-  // Government funded items
-  cdf: {
-    title: 'Constituency Development Fund',
-    body: `
-      <p>The purpose of this fund is to finance small-scale community projects at the constituency level. The aim is to improve local infrastructure, livelihoods, and social services. CDF is channelled through Members of Parliament (MPs) in consultation with local structures, and projects are selected by community demand.</p>
-    `
-  },
-  ddf: {
-    title: 'District Development Fund',
-    body: `
-      <p>District Development Fund supports locally prioritised development projects identified through District Development Plans (DDPs). The purpose of this fund is to enhance service delivery in sectors like education, health, agriculture, and local governance. The fund is allocated directly to District Councils based on approved budgets. Projects are implemented by councils in collaboration with communities.</p>
-    `
-  },
-  wsf: {
-    title: 'Water Structures Fund',
-    body: `
-      <p>The fund is for the construction and rehabilitation of water supply systems (boreholes, piped schemes, dams) and ensures sustainable access to clean water.</p>
-    `
-  },
-  health_rehab: {
-    title: 'Health Rehabilitation',
-    body: `
-      <p>Health Rehabilitation Fund is for rehabilitating and upgrading health facilities (clinics, hospitals, staff housing) to improve access to quality healthcare services.</p>
-    `
-  },
-  idf: {
-    title: 'Infrastructure Development Fund (IDF)',
-    body: `
-      <p>IDF supports the construction and rehabilitation of critical public infrastructure (schools, markets, government buildings) to enhance economic and social service delivery in urban councils in Malawi.</p>
-    `
-  },
-  rrf: {
-    title: 'Road Rehabilitation Fund (RRF)',
-    body: `
-      <p>Rural and urban councils are provided with funds for the maintenance and rehabilitation to improve transport connectivity for trade and mobility. The fund is managed by District Councils with technical support from the Roads Authority.</p>
-    `
-  },
-  ssrlp_overview: {
-    title: 'Social Support for Resilient Livelihoods Overview',
-    body: `
-      <p><strong>Social Support for Resilient Livelihoods Project (SSRLP)</strong> is a seven-year (2020–2027) initiative implemented by the Government of Malawi through the National Local Government Finance Committee (NLGFC) and Local Authorities, with funding from the World Bank and the Social Protection Multi-Donor Trust Fund (SP-MDTF), totaling $516 million.</p>
-
-      <p>The project aims to improve resilience among the poor and vulnerable while strengthening Malawi’s national platform for safety nets. It supports implementation of the Malawi National Social Support Programme II (MNSSP II) in line with the National Social Support Policy (NSSP).</p>
-
-      <p>SSRLP is structured around six pillars: <strong>Consumption Support</strong>, <strong>Resilient Livelihoods</strong>, <strong>Scalable Safety Nets</strong>, <strong>Linkages</strong>, <strong>Harmonized Systems</strong>, and <strong>Social Cash Transfer Programme (SCTP)</strong> as the anchor.</p>
-
-      <p>Key targets include:</p>
-      <ul>
-        <li>405,000 ultra-poor households with shock-responsive cash transfers annually</li>
-        <li>235,000 households for contingency cash transfers</li>
-        <li>520,000 households in the Climate Smart Enhanced Public Works Program (CS-EPWP)</li>
-        <li>590,000 households with livelihood interventions by 2027, focusing on women and youth</li>
-      </ul>
-
-      <p>SSRLP promotes <strong>food security, income generation, institutional strengthening</strong> (including a national social registry), and <strong>disaster risk financing mechanisms</strong> across 18 districts and 4 city councils.</p>
-    `
-  },
-
-  gesd_overview: {
-    title: 'Governance to Enable Service Delivery Overview',
-    body: `
-      <h3>1.0 Background</h3>
-      <p>The Governance to Enable Service Delivery (GESD) project seeks to strengthen Local Authorities' institutional performance, responsiveness, and resource management for improved service delivery in rural areas.</p>
-
-      <p>Lead partners include the Ministry of Finance, Ministry of Local Government, and NLGFC, with support from multiple government institutions and Local Authorities.</p>
-
-      <h3>2.0 Project Objectives</h3>
-      <ul>
-        <li><strong>Institutional Performance:</strong> Tracking Local Authorities’ (LAs) progress using the Local Authority Performance Assessment (LAPA).</li>
-        <li><strong>Resource Management:</strong> Monitoring the use of financial and human resources in delivering Annual Investment Plans (AIPs).</li>
-        <li><strong>Citizen Responsiveness:</strong> Measuring satisfaction with participation, efficiency, and transparency in AIPs implementation.</li>
-      </ul>
-
-      <h3>3.0 Expected Project Results</h3>
-      <ul>
-        <li>Improved adequacy and predictability of funding</li>
-        <li>Enhanced resource accountability</li>
-        <li>Strengthened LA staffing and performance</li>
-        <li>Increased citizen participation and satisfaction</li>
-        <li>Improved service delivery outcomes</li>
-      </ul>
-    `
-  },
-
-  rcrp_overview: {
-    title: 'Regional and Climate Resilience Overview',
-    body: `
-      <p><strong>Regional Climate Resilience Project (RCRP)</strong> is a five-year (2024–2029) initiative funded by the World Bank for US$240 million. Its goal is to strengthen resilience against water-related climate shocks in Malawi and the region.</p>
-
-      <h3>2.0 Project Development Objective</h3>
-      <p>To improve resilience to water-related climate shocks and respond promptly to emergencies.</p>
-
-      <h3>3.0 Key Indicators</h3>
-      <ul>
-        <li>Reduced vulnerability in selected basins</li>
-        <li>Increased flood protection</li>
-        <li>Access to early action systems</li>
-        <li>Restoration of infrastructure</li>
-        <li>Strengthened regional collaboration</li>
-      </ul>
-
-      <h3>4.0 Project Components</h3>
-      <ul>
-        <li><strong>Component 1:</strong> Risk Management & Climate Financing – $30M</li>
-        <li><strong>Component 2:</strong> Infrastructure & Asset Management – $180M</li>
-        <li><strong>Component 3:</strong> Adaptive Climate Services – $11.5M</li>
-        <li><strong>Component 4:</strong> Project Management – $15M</li>
-        <li><strong>Component 5:</strong> Contingent Emergency Response – $5M</li>
-      </ul>
-
-      <p>Implementing entities include the Ministry of Finance, Ministry of Water, DoDMA, Road Authority, and others.</p>
-    `
-  },
-
-  SCTP: {
-    title: 'Social Cash Transfer Programme (SCTP)',
-    body: `
-      <p><strong>SCTP (Mtukula Pakhomo)</strong> targets ultra-poor, labour-constrained households. Since 2021, it has reached 264,358 households.</p>
-
-      <p>The programme provides <strong>unconditional cash transfers</strong> in 21 districts with support from the World Bank and SP-MDTF. Its goal is to improve <strong>nutrition, health, education</strong>, and <strong>shelter</strong> among the most vulnerable.</p>
-
-      <p><strong>Eligibility:</strong> Households with no able-bodied members aged 19–64, or those with dependents and high dependency ratios.</p>
-
-      <p><strong>Primary Objectives:</strong></p>
-      <ul>
-        <li>Reduce hunger and starvation</li>
-        <li>Increase school enrolment</li>
-        <li>Enhance child health and nutrition</li>
-      </ul>
-    `
-  },
-
-  publicWorks: {
-    title: 'Climate Smart Enhanced Public Works Programme (Mbwezera Chilengedwe)',
-    body: `
-      <p>This programme aims to build <strong>resilient community assets</strong> to improve household resilience, income, and food security.</p>
-
-      <p>It has reached <strong>538,983 ultra-poor households</strong> and focuses on restoring micro catchments, degraded land, water, soil and trees across all 28 districts.</p>
-    `
-  },
-
-  livelihoods: {
-    title: 'Livelihoods Support',
-    body: `
-      <p>The Livelihoods Support Programme provides <strong>economic inclusion packages</strong> to SCTP and CS-EPWP households, implemented by COMSIP Cooperative Union Ltd.</p>
-
-      <p>Using a “<strong>cash-plus</strong>” model, it includes training, asset transfer, savings promotion, and graduation packages with a focus on women and youth.</p>
-
-      <p><strong>Achievements:</strong></p>
-      <ul>
-        <li>18,400 households supported with asset transfers</li>
-        <li>259,000 members empowered with enhanced livelihoods</li>
-        <li>3,500 out-of-school youth trained</li>
-        <li>443 clusters trained in cooperative development</li>
-        <li>25,250 members linked to market-based initiatives</li>
-      </ul>
-    `
-  },
-
-  scalable: {
-    title: 'Scalable Social Safety Nets',
-    body: `
-      <p>This component provides <strong>shock-responsive support</strong> to households affected by droughts, floods, and other disasters.</p>
-
-      <p>So far, <strong>515 households</strong> in 10 districts have benefited through additional support under SCTP and CS-EPWP during emergency periods.</p>
-    `
-  },
-
-  cerp: {
-    title: 'Contigency Emergency Response Programme (CERP)',
-    body: `
-      <p>Waiting for Data to be inserted here</p>
-
-      
-    `
-  },
-
-  pbf: {
-    title: 'Performance-Based Financing',
-    body: `
-      <p>Provides additional funding to Local Authorities based on their <strong>LAPA (Local Authority Performance Assessment)</strong> results, through a Performance-Based Grant (PBG).</p>
-    `
-  },
-
-  ias: {
-    title: 'Intergovernmental Accountability Systems',
-    body: `
-      <p>Supports <strong>fiscal decentralization</strong> by revamping the Intergovernmental Fiscal Transfer System and enhancing audit systems to ensure accountability for public funds.</p>
-    `
-  },
-
-  lgpi: {
-    title: 'Local Government Performance Improvement',
-    body: `
-      <p>Focuses on building Local Authorities’ capacity through <strong>human resource strengthening</strong>, core staffing, and enhanced citizen engagement mechanisms.</p>
-    `
-  },
-
-  adaptive: {
-    title: 'Adaptive Management and Innovation',
-    body: `
-      <p>Encourages continuous learning through adaptive management strategies, monitoring and evaluation, and innovative approaches to enhance implementation flexibility.</p>
-    `
-  },
-
-  drb: {
-    title: 'District-Led Resilience Building',
-    body: `
-      <p>This RCRP subcomponent finances <strong>Performance-Based Grants (PBGs)</strong> to support climate-resilient infrastructure, catchment management, and nature-based solutions in all 28 districts.</p>
-
-      <p>Eligible LAs must meet <strong>LAPA standards</strong> to receive both RCRP and GESD grants, aiming to protect communities from climate risks like floods and droughts.</p>
-    `
-  },
-
-  usr: {
-    title: 'Urban Malawi Social Registry',
-    body: `
-      <p>Expands the <strong>Malawi Social Registry (UBR)</strong> to urban councils to strengthen targeting and coordination of social protection programs in urban areas.</p>
-    `
-  },
-
-  upw: {
-    title: 'Urban Climate Smart Public Works Program',
-    body: `
-      <p>Pilots <strong>urban public works programs</strong> that are climate-smart, focusing on environmental restoration, waste management, and local employment creation in cities.</p>
-    `
-  }
+// Map tab ids to page slugs (adjust slugs to match your Pages table)
+const projectSlugByTab = {
+  // Government funded
+  cdf: 'cdf',
+  ddf: 'ddf',
+  idf: 'idf',
+  rrf: 'rrf',
+  wsf: 'wsf',
+  health_rehab: 'health-rehabilitation',
+  // Donor funded: SSRLP
+  ssrlp_news: 'ssrlp-news',
+  ssrlp_overview: 'ssrlp-overview',
+  SCTP: 'ssrlp-sctp',
+  publicWorks: 'ssrlp-public-works',
+  livelihoods: 'ssrlp-livelihoods',
+  scalable: 'ssrlp-scalable',
+  cerp: 'ssrlp-cerp',
+  // Donor funded: GESD
+  gesd_news: 'gesd-news',
+  gesd_overview: 'gesd-overview',
+  pbf: 'gesd-pbf',
+  ias: 'gesd-ias',
+  lgpi: 'gesd-lgpi',
+  adaptive: 'gesd-adaptive',
+  // Donor funded: RCRP2
+  rcrp2_news: 'rcrp2-news',
+  rcrp_overview: 'rcrp-overview',
+  drb: 'rcrp-drb',
+  usr: 'rcrp-usr',
+  upw: 'rcrp-upw',
 }
+
+// Inject slug onto each sidebar item so links can carry it via query
+const projectGroupsWithSlugs = computed(() => {
+  return projectGroups.map((group) => {
+    if (group.subgroups && Array.isArray(group.subgroups)) {
+      return {
+        ...group,
+        subgroups: group.subgroups.map((sg) => ({
+          ...sg,
+          items: (sg.items || []).map((it) => ({
+            ...it,
+            slug: projectSlugByTab[it.id] || undefined,
+          })),
+        })),
+      }
+    }
+    return {
+      ...group,
+      items: (group.items || []).map((it) => ({
+        ...it,
+        slug: projectSlugByTab[it.id] || undefined,
+      })),
+    }
+  })
+})
+
+// Active slug
+const activeSlug = computed(() => projectSlugByTab[activeTab.value] || '')
+
+// Fetch only the active slug reactively
+const config = useRuntimeConfig()
+const { data: activePage } = useAsyncData(
+  () => `page:${activeSlug.value}`,
+  () => $fetch(`${config.public.apiBase}/api/pages/${activeSlug.value}`),
+  { watch: [activeSlug], server: true }
+)
+// Rendering will use BlocksRenderer with all blocks from activePage
 
 const projectUpdates = {
   // Sub-group landing news feeds (existing)
@@ -415,8 +222,13 @@ onMounted(() => {
   if (route.hash) {
     updateActiveTabFromHash(route.hash.replace('#', ''))
   } else {
-    // Default to first item if no hash
-    activeTab.value = 'ssrlp_overview'
+    // No hash: derive from ?slug= or default to 'cdf'
+    const q = route.query?.slug
+    const slugFromQuery = Array.isArray(q) ? q[0] : q
+    const matchId = Object.keys(projectSlugByTab).find((k) => projectSlugByTab[k] === slugFromQuery)
+    activeTab.value = matchId || 'cdf'
+    // reflect in URL hash for sidebar highlighting
+    history.replaceState(null, '', `${route.path}#${activeTab.value}`)
   }
 })
 
@@ -424,9 +236,6 @@ onMounted(() => {
 watch(() => route.hash, (newHash) => {
   if (newHash) {
     updateActiveTabFromHash(newHash.replace('#', ''))
-  } else {
-    // If hash is cleared, go back to default
-    activeTab.value = 'ssrlp_overview'
   }
 })
 
@@ -570,11 +379,10 @@ onBeforeUnmount(() => {
   clearInterval(autoplayTimer)
 })
 
-const { projectGroups: sharedProjectGroups, projectContent: sharedProjectContent } = useGeneralSidebar();
+const { projectGroups: sharedProjectGroups } = useGeneralSidebar();
 
 watchEffect(() => {
-  sharedProjectGroups.value = projectGroups;
-  sharedProjectContent.value = projectContent;
+  sharedProjectGroups.value = projectGroupsWithSlugs.value;
 });
 
 function handleHashChange() {
@@ -622,7 +430,7 @@ const activeProjectTitle = computed(() => {
   return findItem(projectGroups);
 });
 
-provide('projectContent', projectContent);
+// removed sample projectContent provider
 </script>
 
 <template>
@@ -795,26 +603,13 @@ provide('projectContent', projectContent);
         </section>
       </div>
 
-      <!-- Standard Project Content -->
-      <div v-if="projectContent[activeTab] && !isNewsLanding" class="bg-white rounded-xl shadow-sm overflow-hidden">
-        <!-- Project Header -->
-        <div class="bg-gradient-to-r from-blue-50 to-blue-100 px-6 py-5 border-b border-blue-200">
-          <h2 class="text-3xl font-bold text-gray-900 mb-1">
-            {{ projectContent[activeTab].title }}
-          </h2>
-          <div class="flex items-center text-sm text-blue-600">
-            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-            </svg>
-            {{ activeTab.split('_')[0].toUpperCase() }} Project
-          </div>
-        </div>
-
-        <!-- Project Content -->
-        <div class="p-6 prose prose-blue max-w-none">
-          <div v-html="projectContent[activeTab].body"></div>
-        </div>
-      </div>
+      <!-- Standard Project Content (API ProjectContentBlock or fallback sample) -->
+      <Suspense v-if="!isNewsLanding && activePage">
+        <BlocksRenderer :blocks="activePage.blocks || []" />
+        <template #fallback>
+          <div class="animate-pulse h-24 bg-gray-100 rounded my-4" />
+        </template>
+      </Suspense>
                     <!-- Latest Updates for this tab -->
             <section v-if="projectUpdates[activeTab] && projectUpdates[activeTab].length && !isNewsLanding" class="mt-8">
               <h3 class="text-xl font-semibold text-gray-900 mb-4">Latest Updates</h3>

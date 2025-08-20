@@ -10,7 +10,6 @@ const props = defineProps<{
 
 /**
  * Minimal fallback component for unknown blocks.
- * (You can style this however you like.)
  */
 const UnknownBlock = {
   props: { type: { type: String, default: 'Unknown' } },
@@ -49,6 +48,10 @@ const lazyMap: Record<string, () => Promise<any>> = {
   ImageZoomableBlock: () => import('./blocks/ImageZoomableBlock.vue'),
   FunctionGroupBlock: () => import('./blocks/FunctionGroupBlock.vue'),
   ProjectContentBlock: () => import('./blocks/ProjectContentBlock.vue'),
+  FeaturesGridBlock: () => import('./blocks/FeaturesGridBlock.vue'),
+  CtaBlock: () => import('./blocks/CtaBlock.vue'),
+  IframeBlock: () => import('./blocks/IframeBlock.vue'),
+  ImageBlock: () => import('./blocks/ImageBlock.vue'),
 }
 
 /**
@@ -144,6 +147,32 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
         alt: data.alt ?? data.caption ?? '',
       }
 
+    case 'ImageBlock':
+      return {
+        src: data.src ?? data.image ?? data.image_url ?? '',
+        alt: data.alt ?? '',
+        fit: data.fit ?? 'contain',
+        height: data.height ?? 'h-80',
+      }
+
+    case 'IframeBlock':
+      return {
+        src: data.src ?? '',
+        height: Number(data.height ?? 600),
+        title: data.title ?? '',
+        allow_transparency: Boolean(data.allow_transparency ?? true),
+      }
+
+    case 'CtaBlock':
+      return {
+        title: data.title ?? '',
+        body: data.body ?? '',
+        link_label: data.link_label ?? 'See more',
+        link_url: data.link_url ?? '#',
+        link_external: Boolean(data.link_external ?? true),
+        tone: data.tone ?? 'blue',
+      }
+
     case 'FunctionGroupBlock': {
       const rows = Array.isArray(data.functions) ? data.functions : (Array.isArray(data.items) ? data.items : [])
       const mapped = rows.map((fn: any) => ({
@@ -168,6 +197,22 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
         show_header: data.show_header ?? true,
         body: data.body ?? '',
       }
+
+    case 'FeaturesGridBlock': {
+      const features = Array.isArray(data.features) ? data.features : []
+      const mapped = features.map((f: any) => ({
+        title: f?.title ?? '',
+        icon: f?.icon ?? 'heroicon-o-sparkles',
+        icon_bg: f?.icon_bg ?? '#D1FAE5',
+        icon_color: f?.icon_color ?? '#059669',
+        items: Array.isArray(f?.items) ? f.items.map((it: any) => ({ label: typeof it === 'string' ? it : (it?.label ?? '') })) : [],
+      }))
+      return {
+        title: data.title ?? 'Key Features',
+        columns: data.columns ?? '2',
+        features: mapped,
+      }
+    }
 
     default:
       // Pass-through for unknown types so the fallback can display something
