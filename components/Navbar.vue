@@ -434,19 +434,19 @@
 
                 <div>
                   <div>
-                    <NuxtLink to="/resourceCenter#knowledge-management"><h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Knowledge Management</h3></NuxtLink>
+                    <NuxtLink to="/resourceCenter#knowledge"><h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Knowledge Management</h3></NuxtLink>
                     <ul class="space-y-2">
-                      <li><NuxtLink to="/resourceCenter#knowledge-management-image-gallery" class="text-gray-700 hover:text-blue-700 transition">Image Galley</NuxtLink></li>
-                      <li><NuxtLink to="/resourceCenter#knowledge-management-video" class="text-gray-700 hover:text-blue-700 transition">Videos</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#knowledge-image-gallery" class="text-gray-700 hover:text-blue-700 transition">Image Galley</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#knowledge-video" class="text-gray-700 hover:text-blue-700 transition">Videos</NuxtLink></li>
                     </ul>
                   </div>
                   <br />
                   <div>
-                    <NuxtLink to="/resourceCenter#project-documents"><h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Project Documents</h3></NuxtLink>
+                    <NuxtLink to="/resourceCenter#projects"><h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Project Documents</h3></NuxtLink>
                     <ul class="space-y-2">
-                      <li><NuxtLink to="/resourceCenter#project-documents-ssrlp" class="text-gray-700 hover:text-blue-700 transition">SSRP</NuxtLink></li>
-                      <li><NuxtLink to="/resourceCenter#project-documents-gesd" class="text-gray-700 hover:text-blue-700 transition">GESD</NuxtLink></li>
-                      <li><NuxtLink to="/resourceCenter#project-documents-rcrp2" class="text-gray-700 hover:text-blue-700 transition">RCRP 2</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#projects-ssrlp" class="text-gray-700 hover:text-blue-700 transition">SSRP</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#projects-gesd" class="text-gray-700 hover:text-blue-700 transition">GESD</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#projects-rcrp2" class="text-gray-700 hover:text-blue-700 transition">RCRP 2</NuxtLink></li>
                     </ul>
                   </div>
                 </div>

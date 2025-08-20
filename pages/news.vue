@@ -1,11 +1,71 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Header Section -->
-    <section class="bg-gradient-to-r text-gray-600 py-4">
-      <div class="container mx-auto px-2">
-        <div class="max-w-2xl mx-auto text-center">
-          <h1 class="text-2xl md:text-5xl font-bold mb-4">Latest News & Updates</h1>
-          <p class="text-xl text-gray-600">Stay informed about the latest developments in local governance and community initiatives</p>
+    <!-- Hero Slider Section (New) -->
+    <section class="relative overflow-hidden h-[360px] md:h-[420px]">
+      <div
+        v-for="(article, index) in featuredArticles"
+        :key="index"
+        class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+        :class="{ 'opacity-100 z-10': currentSlide === index, 'opacity-0 z-0': currentSlide !== index }"
+      >
+        <!-- Background image with overlay -->
+        <div class="absolute inset-0">
+          <img :src="article.image || '/images/samples/news1.jpg'" :alt="article.title" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+        </div>
+        <!-- Content -->
+        <div class="relative h-full flex flex-col justify-end z-10 pb-12">
+          <div class="container mx-auto px-6">
+            <div class="mb-3">
+              <span class="inline-block px-3 py-1 text-xs font-semibold tracking-wider text-white uppercase bg-blue-600 rounded-full">
+                Latest News
+              </span>
+            </div>
+            <div class="max-w-3xl">
+              <h2 class="text-3xl md:text-4xl font-bold text-white mb-3 leading-tight">{{ article.title }}</h2>
+              <p class="text-white/90 text-lg">{{ article.summary }}</p>
+              <div class="flex items-center mt-4 text-white/80">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"></path>
+                </svg>
+                <span class="text-sm">{{ formatDate(article.date) }} • {{ article.source }}</span>
+              </div>
+            </div>
+            <div class="mt-5">
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="absolute bottom-2 left-0 right-0 z-20 pt-5">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+          <!-- Indicators -->
+          <div class="flex space-x-2">
+            <button
+              v-for="(article, idx) in featuredArticles"
+              :key="'ind-' + idx"
+              @click="goToSlide(idx)"
+              class="w-3 h-3 rounded-full transition-all duration-300"
+              :class="{ 'w-8 bg-white': currentSlide === idx, 'w-3 bg-white/30 hover:bg-white/50': currentSlide !== idx }"
+            ></button>
+          </div>
+          <!-- Arrows + autoplay -->
+          <div class="flex items-center space-x-4">
+            <button @click="toggleAutoplay" class="p-2 text-white/70 hover:text-white transition">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path v-if="autoplay" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+              </svg>
+            </button>
+            <button @click="prevSlide" class="p-2 text-white/70 hover:text-white transition">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button @click="nextSlide" class="p-2 text-white/70 hover:text-white transition">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -181,11 +241,18 @@
 definePageMeta({
     title: 'NLGFC - News & Updates',
     })
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+
+import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, watch } from 'vue'
 
 // Reactive data
 const selectedArticle = ref(null)
 const searchQuery = ref('')
+
+// Slider state
+const currentSlide = ref(0)
+const autoplay = ref(true)
+const autoplayInterval = ref(5000)
+let autoplayTimer = null
 
 // Sample news data
 const newsArticles = ref([
@@ -337,6 +404,50 @@ const filteredArticles = computed(() => {
   return filtered
 })
 
+// Get featured articles for slider (first 3 articles)
+const featuredArticles = computed(() => filteredArticles.value.slice(0, 3))
+
+// Slider methods
+const nextSlide = () => {
+  if (!featuredArticles.value.length) return
+  currentSlide.value = (currentSlide.value + 1) % featuredArticles.value.length
+  resetAutoplay()
+}
+
+const prevSlide = () => {
+  if (!featuredArticles.value.length) return
+  currentSlide.value = (currentSlide.value - 1 + featuredArticles.value.length) % featuredArticles.value.length
+  resetAutoplay()
+}
+
+const goToSlide = (index) => {
+  if (!featuredArticles.value.length) return
+  currentSlide.value = index
+  resetAutoplay()
+}
+
+const resetAutoplay = () => {
+  if (autoplay.value) {
+    clearInterval(autoplayTimer)
+    startAutoplay()
+  }
+}
+
+const startAutoplay = () => {
+  if (autoplay.value) {
+    clearInterval(autoplayTimer)
+    autoplayTimer = setInterval(() => {
+      nextSlide()
+    }, autoplayInterval.value)
+  }
+}
+
+const toggleAutoplay = () => {
+  autoplay.value = !autoplay.value
+  if (autoplay.value) startAutoplay()
+  else clearInterval(autoplayTimer)
+}
+
 // Methods
 const selectArticle = (article) => {
   selectedArticle.value = article
@@ -384,10 +495,30 @@ onMounted(() => {
   
   // Listen for hash changes
   window.addEventListener('hashchange', handleHashChange)
+  
+  // Start autoplay for slider
+  startAutoplay()
 })
 
 onUnmounted(() => {
   // Clean up event listener
   window.removeEventListener('hashchange', handleHashChange)
 })
+
+onBeforeUnmount(() => {
+  // Clean up autoplay timer
+  clearInterval(autoplayTimer)
+})
+
+// Watch for changes in selected article to stop/start autoplay
+watch(selectedArticle, (newVal) => {
+  if (newVal) {
+    // Stop autoplay when viewing an article
+    clearInterval(autoplayTimer)
+  } else {
+    // Restart autoplay when back to main view
+    startAutoplay()
+  }
+})
+
 </script>
