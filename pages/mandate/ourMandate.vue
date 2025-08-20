@@ -1,4 +1,6 @@
 <script setup>
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+
 definePageMeta({
   title: 'Our Mandate'
 })
@@ -6,7 +8,7 @@ definePageMeta({
 const route = useRoute()
 const activeTab = ref('fiscalDecentralization')
 
-const tabGroups = [
+const tabGroups = ref([
   {
     group: 'Our Mandate',
     items: [
@@ -17,6 +19,7 @@ const tabGroups = [
           { id: 'igtfMonitoringDashboard', title: 'IGTF Monitoring Dashboard' }
         ]
       },
+      {id: 'igtfMonitoringDashboard', title: 'IGTF Monitoring Dashboard'},
       { id: 'financialManagement', title: 'Financial Management' },
       {
         id: 'localDevelopmentSupport',
@@ -24,7 +27,44 @@ const tabGroups = [
       }
     ]
   }
-]
+])
+
+// Map the 'tabGroups' data to the desired structure for the GeneralSidebar
+const mappedProjectGroups = computed(() => {
+  // Assuming there's only one main group, as per your data
+  const mainGroup = tabGroups.value[0];
+  
+  // Create the final array of items that will be rendered
+  const finalItems = [];
+  
+  // Iterate through the original items and transform them
+  mainGroup.items.forEach(item => {
+    if (item.children) {
+      // For items with children, add both the parent and children as a nested item
+      finalItems.push({
+        id: item.id,
+        title: item.title,
+        children: [
+          { id: item.id, title: item.title },
+          ...item.children
+        ]
+      });
+    } else {
+      // For regular items, add them directly
+      finalItems.push({
+        id: item.id,
+        title: item.title
+      });
+    }
+  });
+
+  return [
+    {
+      group: mainGroup.group,
+      items: finalItems
+    }
+  ];
+});
 
 onMounted(() => {
   if (route.hash) {
@@ -40,23 +80,63 @@ watch(() => route.hash, (newHash) => {
   }
 })
 
+
+// Function to handle hash changes
 function updateActiveTabFromHash(hash) {
-  for (const group of tabGroups) {
+  for (const group of tabGroups.value) {
     for (const item of group.items) {
       if (item.id === hash) {
-        activeTab.value = item.id
-        return
+        activeTab.value = item.id;
+        return;
       }
       if (item.children) {
-        const match = item.children.find(sub => sub.id === hash)
+        const match = item.children.find(child => child.id === hash);
         if (match) {
-          activeTab.value = match.id
-          return
+          activeTab.value = match.id;
+          return;
         }
       }
     }
   }
 }
+
+// Correctly map the data to the projectGroups structure
+/*const mappedProjectGroups = computed(() => {
+  const finalGroups = [];
+  tabGroups.value.forEach(group => {
+    // Add the main group
+    const mainGroup = {
+      group: group.group,
+      id: group.group.replace(/\s/g, ''),
+      items: []
+    };
+    finalGroups.push(mainGroup);
+
+    // Iterate through items
+    group.items.forEach(item => {
+      // If the item has children, create a new nested group
+      if (item.children && item.children.length > 0) {
+        finalGroups.push({
+          group: item.title,
+          id: item.id,
+          items: item.children
+        });
+      } else {
+        // Otherwise, add the item to the main group
+        mainGroup.items.push(item);
+      }
+    });
+  });
+  return finalGroups;
+});*/
+
+
+const { projectGroups: sharedProjectGroups } = useGeneralSidebar();
+
+watchEffect(() => {
+  sharedProjectGroups.value = mappedProjectGroups.value;
+});
+
 </script>
 
 <template>
@@ -128,48 +208,52 @@ function updateActiveTabFromHash(hash) {
         </div>
 
         <!-- IGTF Explanation -->
-        <div class="mb-10 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col">
-          <div class="flex items-center mb-0"> <!-- Remove margin-bottom -->
-            <svg class="w-6 h-6 text-emerald-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-            <h3 class="text-2xl font-semibold text-gray-800 flex-1">Intergovernmental Fiscal Transfer Formula (IGTF)</h3>
+        <div class="bg-gradient-to-br from-emerald-50 to-gray-50 rounded-xl shadow-sm border border-gray-100 mb-10 flex flex-col">
+          <div class="flex items-center mb-0">
+            <div class="bg-emerald-50 p-3 rounded-lg mr-5 flex items-center justify-center">
+              <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-800 flex-1">Intergovernmental Fiscal Transfer Formula (IGTF)</h3>
           </div>
-          <p class="text-gray-700 mb-4">
+          <p class="text-gray-700 leading-relaxed pl-16 mt-2">
             The IGTF system enables the central government to allocate financial resources to Local Government Authorities (LGAs) to support decentralized service delivery, designed to promote:
           </p>
-          <div class="grid md:grid-cols-2 gap-4 mt-4">
-            <div class="flex items-center">
-              <div class="bg-emerald-50 p-1 rounded-full mr-3">
-                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
+          <div class="pl-16 mt-2">
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="flex items-center">
+                <div class="bg-emerald-50 p-1 rounded-full mr-3 flex items-center justify-center">
+                  <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span class="text-gray-700">Equity in resource distribution</span>
               </div>
-              <span class="text-gray-700">Equity in resource distribution</span>
-            </div>
-            <div class="flex items-center">
-              <div class="bg-emerald-50 p-1 rounded-full mr-3">
-                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
+              <div class="flex items-center">
+                <div class="bg-emerald-50 p-1 rounded-full mr-3 flex items-center justify-center">
+                  <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span class="text-gray-700">Transparency in allocations</span>
               </div>
-              <span class="text-gray-700">Transparency in allocations</span>
-            </div>
-            <div class="flex items-center">
-              <div class="bg-emerald-50 p-1 rounded-full mr-3">
-                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
+              <div class="flex items-center">
+                <div class="bg-emerald-50 p-1 rounded-full mr-3 flex items-center justify-center">
+                  <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span class="text-gray-700">Accountability mechanisms</span>
               </div>
-              <span class="text-gray-700">Accountability mechanisms</span>
-            </div>
-            <div class="flex items-center">
-              <div class="bg-emerald-50 p-1 rounded-full mr-3">
-                <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
+              <div class="flex items-center">
+                <div class="bg-emerald-50 p-1 rounded-full mr-3 flex items-center justify-center">
+                  <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span class="text-gray-700">Efficient utilization</span>
               </div>
-              <span class="text-gray-700">Efficient utilization</span>
             </div>
           </div>
         </div>

@@ -1,22 +1,62 @@
 <script setup>
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+
+// Page metadata configuration
 definePageMeta({ title: 'Delivery Systems' })
 
 const route = useRoute()
 const activeTab = ref('msr') // Default tab
 
+// Configuration for delivery system categories and items
+// This array defines the sidebar navigation structure with descriptions
+// Delivery systems data for the GeneralSidebar component
+const deliverySystemsData = [
+  
+// Each delivery system item contains an id, title, and description
+ { 
+    id: 'comsip', 
+    title: 'Community Savings and Investment Promotion',
+},
+{ 
+    id: 'dgrm', 
+    title: 'Digital Grievance Redress',
+},
+{ 
+    id: 'e-payments', 
+    title: 'E-Payment Systems',
+},
+{ 
+    id: 'laifmis', 
+    title: 'Local Authorities Integrated Financial Management Information System'
+},
+{ 
+    id: 'lapas', 
+    title: 'Local Athourities Performance Assessment System'
+},
+{  
+    id: 'msr', 
+    title: 'Malawi Social Registry'
+},
+{ 
+    id: 'pmis', 
+    title: 'Project Monitoring System'
+},
+{ 
+    id: 'publicworks', 
+    title: 'Public Works MIS'
+},
+{ 
+    id: 'sctpmis', 
+    title: 'Social Cash Transfer Programme MIS'
+}
+
+]
+
+// Keep original structure for backward compatibility with existing template code
 const projectGroups = [
   {
     group: 'Delivery Systems',
-    items: [
-      { id: 'comsip', title: 'Community Savings and Investment Promotion' },
-{ id: 'dgrm', title: 'Digital Grievance Redress Mechanism' },
-{ id: 'e-payments', title: 'E-Payment' },
- { id: 'laifmis', title: 'Local Authorities IFMIS' },
-{ id: 'lapas', title: 'Local Authority Performance Assessment System' },
-{ id: 'msr', title: 'Malawi Social Registry' },
-{ id: 'pmis', title: 'Project Monitoring Information System' },
-{ id: 'publicworks', title: 'Public Works MIS' }
-    ]
+    items: deliverySystemsData
   }
 ]
 const partnerLogos = [
@@ -96,6 +136,14 @@ onMounted(() => {
   }
 })
 
+const { projectGroups: sharedProjectGroups, /*projectContent: sharedProjectContent */} = useGeneralSidebar();
+watchEffect(() => {
+  sharedProjectGroups.value = projectGroups;
+  //sharedProjectContent.value = projectContent;
+});
+
+// Watch for hash changes in the URL and update active tab accordingly
+// This allows for direct linking to specific delivery systems
 watch(() => route.hash, (newHash) => {
   if (newHash) {
     updateActiveTabFromHash(newHash.replace('#', ''))
@@ -112,37 +160,15 @@ function updateActiveTabFromHash(hash) {
   }
 }
 
-
+//provide('projectContent', projectContent);
 </script>
 
 <template>
   <div class="bg-white">
+    <!-- Responsive container with sidebar and main content layout -->
     <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
       
-      <!-- Sidebar -->
-      <aside class="w-full md:w-64 border-r pr-4">
-        <div v-for="group in projectGroups" :key="group.group" class="mb-4">
-          <details open class="border border-gray-200 rounded">
-            <summary class="cursor-pointer px-4 py-2 font-semibold bg-gray-100">
-              {{ group.group }}
-            </summary>
-            <ul class="space-y-1 px-4 py-2">
-              <li v-for="item in group.items" :key="item.id">
-                <a
-                  :href="`#${item.id}`"
-                  @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
-                  :class="[
-                    'block px-3 py-2 rounded text-sm cursor-pointer',
-                    item.id === activeTab ? 'bg-blue-100 font-medium text-blue-900' : 'hover:bg-gray-100'
-                  ]"
-                >
-                  {{ item.title }}
-                </a>
-              </li>
-            </ul>
-          </details>
-        </div>
-      </aside>
+      <!-- Sidebar Navigation -->
 
       <!-- Main Content -->
       <main class="flex-1 min-w-0">

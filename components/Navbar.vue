@@ -264,51 +264,61 @@
                     <li><NuxtLink to="/projects/upcomingProjects#inspire" class="text-gray-600 hover:text-blue-600">Integrated Social Protection Inclusion and Resilience Project (INSPIRE-O)</NuxtLink></li>
                   </ul>
                 </div>
-                <div class="bg-blue-50 p-4 rounded-lg">
-                                <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
-                            <ul class="space-y-3">
-                <li>
-                  <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <li><NuxtLink to="/projects/currentProjects#publicWorks"  class="text-gray-600 hover:text-blue-600">Climate Smart Public Works</NuxtLink></li>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    <li><NuxtLink to="/projects/currentProjects#SCTP"  class="text-gray-600 hover:text-blue-600">Social Cash Transfer</NuxtLink></li>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                    </svg>
-                    <li><NuxtLink to="/projects/currentProjects#livelihoods"  class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                    </svg>
-                    <li><NuxtLink to="/projects/currentProjects#usr"  class="text-gray-600 hover:text-blue-600">Urban Malawi Social Registry</NuxtLink></li>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" class="flex items-center text-blue-700 hover:text-blue-900 transition">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                  <li><NuxtLink to="/projects/currentProjects#pbf"  class="text-gray-600 hover:text-blue-600">Performance Based Financing</NuxtLink></li>
-                  </a>
-                </li>
-              </ul>
-                </div>
+                                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
+                        <ul class="space-y-3">
+                          <li>
+                            <NuxtLink to="/projects/currentProjects#publicWorks" class="flex items-center text-gray-600 hover:text-blue-600 transition">
+                              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                              </svg>
+                              Climate Smart Public Works
+                            </NuxtLink>
+                          </li>
+
+                          <li>
+                            <NuxtLink to="/projects/currentProjects#SCTP" class="flex items-center text-gray-600 hover:text-blue-600 transition">
+                              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                              </svg>
+                              Social Cash Transfer
+                            </NuxtLink>
+                          </li>
+
+                          <li>
+                            <NuxtLink to="/projects/currentProjects#livelihoods" class="flex items-center text-gray-600 hover:text-blue-600 transition">
+                              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                              </svg>
+                              Livelihoods Support
+                            </NuxtLink>
+                          </li>
+
+                          <li>
+                            <NuxtLink to="/projects/currentProjects#usr" class="flex items-center text-gray-600 hover:text-blue-600 transition">
+                              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                              </svg>
+                              Urban Social Registry
+                            </NuxtLink>
+                          </li>
+
+                          <li>
+                            <NuxtLink to="/projects/currentProjects#pbf" class="flex items-center text-gray-600 hover:text-blue-600 transition">
+                              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                              </svg>
+                              Performance Based Financing
+                            </NuxtLink>
+                          </li>
+                        </ul>
+                      </div>
+
 
               </div>
             </div>
@@ -329,16 +339,17 @@
                 <div class="mt-10 md:mt-0">
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Delivery Systems</h3>
                   <ul class="space-y-2">
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#msr" class="text-gray-600 hover:text-blue-600">Malawi Social Registry</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#e-payments" class="text-gray-600 hover:text-blue-600">E-Payments</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#publicworks" class="text-gray-600 hover:text-blue-600">Public Works MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#grm" class="text-gray-600 hover:text-blue-600">Digital Grievance Redress Mechanism MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#sctmis" class="text-gray-600 hover:text-blue-600">Social Cash Transfer Programme MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#lapas" class="text-gray-600 hover:text-blue-600">Local Authority Perfomance Assesment MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#cimis" class="text-gray-600 hover:text-blue-600">COMSIP Integrated MIS</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#pmis" class="text-gray-600 hover:text-blue-600">Projects Monitoring Information System</NuxtLink></li>
-                    <li><NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600">Local Authority IFMIS</NuxtLink></li>
-                  </ul>
+<li><NuxtLink to="/deliverySystems/deliverySystems#comsip" class="text-gray-600 hover:text-blue-600">Community Savings and Investment Promotion</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#dgrm" class="text-gray-600 hover:text-blue-600">Digital Grievance Redress Mechanism MIS</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#e-payments" class="text-gray-600 hover:text-blue-600">E-Payments</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600">Local Authority IFMIS</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#lapas" class="text-gray-600 hover:text-blue-600">Local Authority Perfomance Assesment MIS</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#msr" class="text-gray-600 hover:text-blue-600">Malawi Social Registry</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#pmis" class="text-gray-600 hover:text-blue-600">Projects Monitoring Information System</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#publicworks" class="text-gray-600 hover:text-blue-600">Public Works MIS</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#sctpmis" class="text-gray-600 hover:text-blue-600">Social Cash Transfer Programme MIS</NuxtLink></li>
+
+                      </ul>
                 </div>
               </div>
             </div>
