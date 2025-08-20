@@ -1,6 +1,6 @@
 <script setup>
 import BlocksRenderer from '~/components/BlocksRenderer.vue'
-import GeneralSidebar from '../../components/GeneralSidebar.vue';
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar'
 
 definePageMeta({ title: 'Past Projects' })
 
@@ -43,7 +43,7 @@ const slugByTab = {
   led_overview: 'led-overview',
 }
 
-// Inject slug into sidebar items
+// Inject slug into items for sidebar link building (if used elsewhere)
 const projectGroupsWithSlugs = computed(() =>
   projectGroups.map(g => ({
     ...g,
@@ -61,7 +61,6 @@ const { data: activePage } = useAsyncData(
   () => $fetch(`${config.public.apiBase}/api/pages/${activeSlug.value}`),
   { watch: [activeSlug], server: true }
 )
-
 // Set from initial hash or ?slug on load
 onMounted(() => {
   if (route.hash) {
@@ -92,58 +91,16 @@ function updateActiveTabFromHash(hash) {
     }
   }
 }
+
+// Share groups with the global sidebar
+const { projectGroups: sharedProjectGroups } = useGeneralSidebar()
+watchEffect(() => {
+  sharedProjectGroups.value = projectGroupsWithSlugs.value
+})
 </script>
 
 <template>
-  <div class="flex flex-col md:flex-row gap-8 max-w-7xl mx-auto px-4 py-8">
-    <!-- Sidebar -->
-    <aside class="w-full md:w-72 flex-shrink-0">
-      <div
-        v-for="group in projectGroups"
-        :key="group.group"
-        class="mb-4 rounded-lg overflow-hidden shadow-sm"
-      >
-        <button
-          @click="openGroup = openGroup === group.group ? null : group.group"
-          class="w-full text-left px-5 py-3 font-semibold bg-gradient-to-r from-blue-900 to-blue-200 text-white hover:from-blue-400 hover:to-blue-300 transition-all duration-200 flex justify-between items-center"
-        >
-          <span>{{ group.group }}</span>
-          <svg
-            class="w-4 h-4 transform transition-transform duration-200"
-            :class="{ 'rotate-180': openGroup === group.group }"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-
-        <div
-          v-show="openGroup === group.group"
-          class="bg-white border border-gray-200 border-t-0 rounded-b-lg"
-        >
-          <ul class="py-2">
-            <li v-for="item in group.items" :key="item.id">
-              <a
-                :href="`#${item.id}`"
-                @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
-                :class="[
-                  'block px-5 py-2.5 text-sm transition-colors duration-150',
-                  item.id === activeTab
-                    ? 'bg-blue-50 text-blue-700 font-medium border-l-4 border-blue-600'
-                    : 'hover:bg-gray-50 text-gray-700'
-                ]"
-              >
-                {{ item.title }}
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </aside>
-
+  <div class="flex flex-col md:flex-row gap-8 max-w-7xl pr-30 py-3">
     <!-- Main Content Area -->
     <main class="flex-1 min-w-0">
       <Suspense v-if="activePage">
@@ -155,7 +112,6 @@ function updateActiveTabFromHash(hash) {
     </main>
   </div>
 </template>
-
 <style>
 /* Add custom prose styles for the content */
 .prose {
