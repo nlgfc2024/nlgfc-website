@@ -1,12 +1,32 @@
 <script setup>
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
+// Import FAQ modal
+import OpportunitiesFaqGuidelines from '../components/OpportunitiesFaqGuidelines.vue';
 
-// Meta information
+// Meta information for the page
 definePageMeta({
   title: 'Opportunities'
 })
 
-// Reactive data
-const activeSection = ref('jobs')
+// Define the sections for the GeneralSidebar, matching the 'opportunities' type structure.
+// This data feeds directly into the GeneralSidebar component.
+const opportunitySections = [
+  {
+    id: 'procurement',
+    name: 'Procurement Portal',
+    icon: 'heroicons:document-text', // Icon name for GeneralSidebar's getIconPath
+    description: 'Tenders, RFQs, and procurement notices'
+  },
+  {
+    id: 'jobs',
+    name: 'Job Opportunities',
+    icon: 'heroicons:briefcase', // Icon name
+    description: 'Current job openings and career opportunities'
+  }
+]
+
+// Reactive data for the main content's active section and filters
+const activeSection = ref('procurement') // Controls which main content section is displayed ('jobs' or 'procurement')
 const searchQuery = ref('')
 const selectedDepartment = ref('')
 const selectedStatus = ref('')
@@ -17,11 +37,15 @@ const selectedJobDetails = ref(null)
 const currentPage = ref(1)
 const itemsPerPage = ref(5)
 
-// Get section from query params
+// State for FAQ modal
+const showFaqModal = ref(false);
+
+// Get section from query params for initial load and react to changes
 const route = useRoute()
 const router = useRouter()
 
 onMounted(() => {
+  // Handle initial route query parameters for active section and pagination
   if (route.query.section) {
     activeSection.value = route.query.section
   }
@@ -31,19 +55,47 @@ onMounted(() => {
   if (route.query.limit) {
     itemsPerPage.value = parseInt(route.query.limit)
   }
+  
+  // Handle URL hash on mount to select the correct sidebar item
+  handleHashChange()
+  
+  // Listen for hash changes in the URL to update activeSection
+  window.addEventListener('hashchange', handleHashChange)
 })
 
-// Watch for changes and update URL
-watch([activeSection, currentPage, itemsPerPage], () => {
-  router.push({
-    query: {
-      ...route.query,
-      section: activeSection.value,
-      page: currentPage.value,
-      limit: itemsPerPage.value
-    }
-  })
+onUnmounted(() => {
+  // Clean up the event listener when the component is unmounted
+  window.removeEventListener('hashchange', handleHashChange)
 })
+
+// Function to update activeSection based on URL hash
+const handleHashChange = () => {
+  const hash = window.location.hash.replace('#', '')
+  if (hash === 'jobs' || hash === 'job-opportunities') {
+    activeSection.value = 'jobs'
+  } else if (hash === 'procurement' || hash === 'procurement-notices') {
+    activeSection.value = 'procurement'
+  }
+}
+
+// Watch for changes in activeSection, currentPage, and itemsPerPage to update the URL
+watch([activeSection, currentPage, itemsPerPage], ([newSection]) => {
+  const newQuery = {
+    ...route.query, // Preserve existing query parameters
+    section: newSection,
+    page: currentPage.value,
+    limit: itemsPerPage.value
+  }
+  
+  // Update URL hash based on the active section for consistent navigation
+  const hash = newSection === 'jobs' ? '#job-opportunities' : '#procurement-notices'
+  
+  // Use router.replace to avoid creating multiple history entries
+  router.replace({
+    query: newQuery,
+    hash: hash
+  })
+}, { immediate: false }) // immediate: false means it won't run on the very first watch instantiation
 
 // Sample data for job opportunities
 const jobOpportunities = ref([
@@ -306,7 +358,7 @@ const procurementNotices = ref([
     documents: [
       { name: 'RFQ Document', type: 'pdf', url: '/documents/rfq-vehicle-maintenance.pdf' },
       { name: 'Vehicle List', type: 'pdf', url: '/documents/vehicle-list.pdf' },
-      { name: 'Service Requirements', type: 'pdf', url: '/documents/service-requirements.pdf' }
+      { name: 'Service Requirements', type: 'pdf', url: '/documents/service-requirements.2.pdf' } // Corrected typo here
     ]
   },
   {
@@ -344,7 +396,7 @@ const departments = computed(() => {
   return [...new Set(allDepartments)].sort()
 })
 
-// Computed properties for filtering
+// Computed properties for filtering based on activeSection
 const filteredJobs = computed(() => {
   let filtered = jobOpportunities.value.map(job => ({
     ...job,
@@ -395,24 +447,24 @@ const filteredProcurement = computed(() => {
   return filtered
 })
 
-// Get current items based on active section
+// Get current items based on active section (for display)
 const currentItems = computed(() => {
   return activeSection.value === 'jobs' ? filteredJobs.value : filteredProcurement.value
 })
 
-// Paginated items
+// Paginated items for the current view
 const paginatedItems = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value
   const end = start + itemsPerPage.value
   return currentItems.value.slice(start, end)
 })
 
-// Reset pagination when filters change
+// Reset pagination when filters or active section change
 watch([searchQuery, selectedDepartment, selectedStatus, activeSection], () => {
   currentPage.value = 1
 })
 
-// Event handlers
+// Event handlers for job/procurement cards
 const handleViewJobDetails = (job) => {
   selectedJobDetails.value = job
   showJobModal.value = true
@@ -437,126 +489,119 @@ const closeJobModal = () => {
   showJobModal.value = false
   selectedJobDetails.value = null
 }
+
+// Handler for opening FAQ modal from GeneralSidebar
+const handleOpenFaqModal = () => {
+  showFaqModal.value = true;
+};
+
+const closeFaqModal = () => {
+  showFaqModal.value = false;
+};
+
+// Sidebar data is now handled by the layout based on route path
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div>
     <div class="container mx-auto px-4 py-8">
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <!-- Sidebar -->
-        <div class="lg:col-span-1">
-          <OpportunitiesSidebar
-              :active-section="activeSection"
-              :job-opportunities="jobOpportunities"
-              :procurement-notices="procurementNotices"
-              @update:active-section="activeSection = $event"
-          />
+        <OpportunityFilters
+            v-model:search-query="searchQuery"
+            v-model:selected-department="selectedDepartment"
+            v-model:selected-status="selectedStatus"
+            :departments="departments"
+            :active-section="activeSection"
+        />
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-semibold text-gray-900">
+                {{ activeSection === 'jobs' ? 'Job Opportunities' : 'Procurement Notices' }}
+              </h2>
+              <p class="text-sm text-gray-600 mt-1">
+                {{ currentItems.length }} {{ currentItems.length === 1 ? 'opportunity' : 'opportunities' }} found
+              </p>
+            </div>
+
+            <div class="flex items-center space-x-4 text-sm">
+              <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span class="text-gray-600">
+                {{ currentItems.filter(item => item.status === 'active').length }} Active
+              </span>
+              <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+              <span class="text-gray-600">
+                {{ currentItems.filter(item => item.status === 'expired').length }} Expired
+              </span>
+            </div>
+          </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="lg:col-span-3">
-          <!-- Filters -->
-          <OpportunityFilters
-              v-model:search-query="searchQuery"
-              v-model:selected-department="selectedDepartment"
-              v-model:selected-status="selectedStatus"
-              :departments="departments"
-              :active-section="activeSection"
-          />
-
-          <!-- Results Header -->
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <h2 class="text-xl font-semibold text-gray-900">
-                  {{ activeSection === 'jobs' ? 'Job Opportunities' : 'Procurement Notices' }}
-                </h2>
-                <p class="text-sm text-gray-600 mt-1">
-                  {{ currentItems.length }} {{ currentItems.length === 1 ? 'opportunity' : 'opportunities' }} found
-                </p>
-              </div>
-
-              <!-- Quick Stats -->
-              <div class="flex items-center space-x-4 text-sm">
-                <div class="flex items-center space-x-1">
-                  <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span class="text-gray-600">
-                    {{ currentItems.filter(item => item.status === 'active').length }} Active
-                  </span>
-                </div>
-                <div class="flex items-center space-x-1">
-                  <div class="w-2 h-2 bg-red-500 rounded-full"></div>
-                  <span class="text-gray-600">
-                    {{ currentItems.filter(item => item.status === 'expired').length }} Expired
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Content Cards -->
-          <div class="space-y-6">
-            <!-- Job Cards -->
-            <template v-if="activeSection === 'jobs'">
-              <JobCard
-                  v-for="job in paginatedItems"
-                  :key="job.id"
-                  :job="job"
-                  @view-details="handleViewJobDetails"
-                  @apply="handleApplyJob"
-              />
-            </template>
-
-            <!-- Procurement Cards -->
-            <template v-else>
-              <ProcurementCard
-                  v-for="notice in paginatedItems"
-                  :key="notice.id"
-                  :notice="notice"
-                  @express-interest="handleExpressInterest"
-                  @download="handleDownloadDocument"
-              />
-            </template>
-
-            <!-- No Results -->
-            <div v-if="currentItems.length === 0" class="text-center py-12">
-              <Icon
-                  :name="activeSection === 'jobs' ? 'heroicons:briefcase' : 'heroicons:document-text'"
-                  class="w-16 h-16 text-gray-400 mx-auto mb-4"
-              />
-              <h3 class="text-lg font-medium text-gray-900 mb-2">
-                No {{ activeSection === 'jobs' ? 'job opportunities' : 'procurement notices' }} found
-              </h3>
-              <p class="text-gray-600 mb-4">
-                Try adjusting your search criteria or check back later for new opportunities.
-              </p>
-              <button
-                  @click="searchQuery = ''; selectedDepartment = ''; selectedStatus = ''"
-                  class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Clear Filters
-              </button>
-            </div>
-          </div>
-
-          <!-- Pagination -->
-          <div v-if="currentItems.length > 0" class="mt-8">
-            <Pagination
-                v-model:current-page="currentPage"
-                v-model:items-per-page="itemsPerPage"
-                :total-items="currentItems.length"
+        <div class="space-y-6">
+          <template v-if="activeSection === 'jobs'">
+            <JobCard
+                v-for="job in paginatedItems"
+                :key="job.id"
+                :job="job"
+                @view-details="handleViewJobDetails"
+                @apply="handleApplyJob"
             />
+          </template>
+
+          <template v-else>
+            <ProcurementCard
+                v-for="notice in paginatedItems"
+                :key="notice.id"
+                :notice="notice"
+                @express-interest="handleExpressInterest"
+                @download="handleDownloadDocument"
+            />
+          </template>
+
+          <div v-if="currentItems.length === 0" class="text-center py-12">
+            <Icon
+                :name="activeSection === 'jobs' ? 'heroicons:briefcase' : 'heroicons:document-text'"
+                class="w-16 h-16 text-gray-400 mx-auto mb-4"
+            />
+            <h3 class="text-lg font-medium text-gray-900 mb-2">
+              No {{ activeSection === 'jobs' ? 'job opportunities' : 'procurement notices' }} found
+            </h3>
+            <p class="text-gray-600 mb-4">
+              Try adjusting your search criteria or check back later for new opportunities.
+            </p>
+            <button
+                @click="searchQuery = ''; selectedDepartment = ''; selectedStatus = ''"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              Clear Filters
+            </button>
           </div>
+        </div>
+
+        <div v-if="currentItems.length > 0" class="mt-8">
+          <Pagination
+              v-model:current-page="currentPage"
+              v-model:items-per-page="itemsPerPage"
+              :total-items="currentItems.length"
+          />
         </div>
       </div>
-    </div>
 
-    <!-- Job Details Modal -->
     <JobDetailsModal
         v-if="showJobModal && selectedJobDetails"
         :job="selectedJobDetails"
         @close="closeJobModal"
         @apply="handleApplyJob"
     />
+
+    <OpportunitiesFaqGuidelines
+        v-if="showFaqModal"
+        :active-section="activeSection"
+        @close="closeFaqModal"
+    />
   </div>
 </template>
+
+<style scoped>
+/* You can keep any custom styles for components not covered by Tailwind or GeneralSidebar */
+</style>

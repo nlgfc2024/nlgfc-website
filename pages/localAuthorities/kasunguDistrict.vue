@@ -1,4 +1,5 @@
 <script setup>
+<<<<<<< HEAD
 import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
 import { ref, computed, watchEffect, watch, onMounted, onBeforeUnmount, onUnmounted } from 'vue' // Added onUnmounted
 import { useRoute } from 'vue-router';
@@ -71,6 +72,28 @@ const switchTab = (tabId, event = null) => {
   // Update the URL hash
   window.location.hash = tabId
 
+=======
+definePageMeta({
+  title: 'Kasungu District Council'
+})
+
+const activeTab = ref('profile') // Default active tab
+const isTransitioning = ref(false) // For managing transition state
+
+const tabs = [
+  { id: 'profile', title: 'Profile' },
+  { id: 'projects', title: 'Projects' },
+  { id: 'reports', title: 'Reports' },
+  { id: 'news', title: 'News' }
+]
+
+// Enhanced tab switching with transition
+const switchTab = (tabId) => {
+  if (tabId === activeTab.value) return
+  
+  isTransitioning.value = true
+  
+>>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
   // Small delay to allow fade out
   setTimeout(() => {
     activeTab.value = tabId
@@ -78,6 +101,7 @@ const switchTab = (tabId, event = null) => {
   }, 150)
 }
 
+<<<<<<< HEAD
 // Modal functions (kept as-is, not directly related to news section)
 const openModal = (type) => {
   activeModal.value = type;
@@ -134,14 +158,41 @@ const projects = [
       'Strengthened management of resources tracking of improvements in LAs management of financial and human resources in terms of their conversion into development assets in accordance with Annual Investment Plans',
       'Strengthened management of resources tracking of improvements in LAs management of financial and human resources in terms of their conversion into development assets in accordance with Annual Investment Plans (AIPs',
 
+=======
+// Set active tab from route hash if present
+onMounted(() => {
+  if (window.location.hash) {
+    const hash = window.location.hash.replace('#', '')
+    if (tabs.some(tab => tab.id === hash)) {
+      activeTab.value = hash
+    }
+  }
+})
+
+const projects = [
+  {
+    name: 'GESD',
+    fullName: 'Governance to Enable Service Delivery',
+    description: 'Governance to Enable Service Delivery (GESD) project development objective is to strengthen Local Authorities\' institutional performance, responsiveness to citizens and management of resources for service delivery.',
+    objectives: [
+      'Strengthened institutional performance tracking of improvements in Local Authorities (LAs) institutional performance for service delivery',
+      'Strengthened management of resources tracking of improvements in LAs management of financial and human resources in terms of their conversion into development assets in accordance with Annual Investment Plans',
+      'Strengthened management of resources tracking of improvements in LAs management of financial and human resources in terms of their conversion into development assets in accordance with Annual Investment Plans (AIPs)'
+>>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
     ],
     status: 'Active'
   },
   {
+<<<<<<< HEAD
     id: 'SSRLP',
     name: 'SSRLP',
     fullName: 'Social Support and Resilience Livelihoods Program',
     description: 'A program designed to build community resilience and provide social support to vulnerable populations in Lilongwe District.',
+=======
+    name: 'SSRLP',
+    fullName: 'Social Support and Resilience Livelihoods Program',
+    description: 'A program designed to build community resilience and provide social support to vulnerable populations in Kasungu District.',
+>>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
     objectives: [
       'Improve household food security and nutrition',
       'Build community resilience to shocks and stresses',
@@ -151,7 +202,10 @@ const projects = [
     status: 'Active'
   },
   {
+<<<<<<< HEAD
     id: 'MASAF',
+=======
+>>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
     name: 'MASAF',
     fullName: 'Malawi Social Action Fund',
     description: 'A community-driven development program that supports infrastructure development and capacity building initiatives.',
@@ -162,6 +216,7 @@ const projects = [
       'Promote community participation in development'
     ],
     status: 'Not Active'
+<<<<<<< HEAD
   },
   {
     id: 'RCRP2',
@@ -175,6 +230,8 @@ const projects = [
       'Integrate climate change adaptation into local development plans'
     ],
     status: 'Active'
+=======
+>>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
   }
 ]
 
@@ -205,6 +262,7 @@ const reports = [
   }
 ]
 
+<<<<<<< HEAD
 // NEW: Comprehensive news articles data (replaces old landing_page data for news)
 const newsArticles = ref([
   {
@@ -513,15 +571,48 @@ watch(selectedArticle, (newVal) => {
   }
 })
 
+=======
+const news = [
+  {
+    title: 'Kasungu District Council Launches New Water Project',
+    date: '2024-12-10',
+    summary: 'The council has initiated a new water infrastructure project to improve access to clean water in rural areas.',
+    category: 'Development'
+  },
+  {
+    title: 'Community Participation in Governance Workshop',
+    date: '2024-12-05',
+    summary: 'A three-day workshop was conducted to enhance community participation in local governance and decision-making processes.',
+    category: 'Governance'
+  },
+  {
+    title: 'Agricultural Extension Services Expanded',
+    date: '2024-11-28',
+    summary: 'The district has expanded its agricultural extension services to reach more farmers in remote areas.',
+    category: 'Agriculture'
+  },
+  {
+    title: 'Youth Skills Development Program Graduation',
+    date: '2024-11-20',
+    summary: 'Over 200 youth graduated from various skills development programs including carpentry, tailoring, and entrepreneurship.',
+    category: 'Youth'
+  }
+]
+>>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
 </script>
 
 <template>
   <div class="about-page bg-white">
     <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
+<<<<<<< HEAD
+=======
+      <!-- Government-style Sidebar -->
+>>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
       <div class="w-full md:w-64 flex-shrink-0">
         <nav class="border-r border-gray-200 pr-4">
           <ul class="space-y-1">
             <li v-for="tab in tabs" :key="tab.id">
+<<<<<<< HEAD
               <NuxtLink
                 :to="`#${tab.id}`"
                 @click="switchTab(tab.id)"
@@ -532,11 +623,24 @@ watch(selectedArticle, (newVal) => {
               >
                 {{ tab.title }}
               </NuxtLink>
+=======
+              <button
+                @click="switchTab(tab.id)"
+                class="w-full text-left block px-4 py-3 rounded transition-all duration-300 text-gray-700 hover:bg-blue-50 hover:text-gray-800 hover:shadow-sm transform hover:translate-x-1"
+                :class="{
+                  'bg-blue-50 text-gray-800 font-medium border-l-4 border-gray-600 shadow-sm': activeTab === tab.id,
+                  'hover:scale-105': activeTab !== tab.id
+                }"
+              >
+                {{ tab.title }}
+              </button>
+>>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
             </li>
           </ul>
         </nav>
       </div>
 
+<<<<<<< HEAD
       <div class="flex-1 min-w-0">
         <div v-show="activeTab === 'profile'" class="prose max-w-none">
           <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Lilongwe District Council Profile</h2>
@@ -699,11 +803,160 @@ watch(selectedArticle, (newVal) => {
                       Read More
                       <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </a>
+=======
+      <!-- Main Content Area with Transition Container -->
+      <div class="flex-1 min-w-0 relative overflow-hidden">
+        <div class="transition-container">
+          <!-- Council Profile Content -->
+          <Transition
+            name="fade-slide"
+            mode="out-in"
+          >
+            <div v-if="activeTab === 'profile'" key="profile" class="content-panel">
+              <div class="prose max-w-none">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Kasungu District Council Profile</h2>
+                <div class="space-y-6">
+                  <div class="bg-blue-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">About Kasungu District Council</h3>
+                    <p class="text-gray-700 leading-relaxed">
+                      Karonga District Council is a statutory body established under the Local Government Act of 1998 cap. 22.02 of the Laws of Malawi. The District Council is composed of ten councilors, five Members of Parliament (MPs), six Traditional Authorities (TAs); Kyungu, Kilupula, Mwakaboko, Mwirang’ombe, Wasambo, and five appointed members from interest groups. The District Commissioner (DC) heads the Council Secretariat supported by professional heads of government departments.
+                       </p>
+                  </div>
+
+                  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mandate</h3>
+                    <ul class="space-y-2">
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>   //</span>  <!-- this is kovahiwa and ken we left these spaces so that we can the data for district in the spans elements-->
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>///</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>///</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>////// </span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Vision</h3>
+                    <p class="text-gray-700 leading-relaxed font-medium">..//.</p>
+                  </div>
+
+                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Mission</h3>
+                    <p class="text-gray-700 leading-relaxed font-medium">///</p>
+                  </div>
+
+                  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Strategic Objectives</h3>
+                    <ul class="space-y-2">
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>////</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>///</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>////</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>////</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>/////</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>///////</span>
+                      </li>
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>/////</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Key Functions</h3>
+                    <ul class="space-y-2">
+                      <li class="flex items-start">
+                        <span class="inline-block w-2 h-2 bg-gray-600 rounded-full mt-2 mr-3"></span>
+                        <span>/////</span>
+                      </li>
+                      
+                    </ul>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
+                      <h4 class="font-semibold text-gray-900 mb-2">Major Achievements</h4>
+                      <p class="text-gray-700">.....</p>
+                      <</div>
+                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
+                      <h4 class="font-semibold text-gray-900 mb-2">Jurisdiction</h4>
+                      <p class="text-gray-700">/////</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
+                      <h4 class="font-semibold text-gray-900 mb-2">Population</h4>
+                      <p class="text-gray-700">///////</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
+                      <h4 class="font-semibold text-gray-900 mb-2">Structure</h4>
+                      <p class="text-gray-700">////</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
+            <!-- Projects Content -->
+            <div v-else-if="activeTab === 'projects'" key="projects" class="content-panel">
+              <div class="prose max-w-none">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Development Projects</h2>
+                <div class="space-y-8">
+                  <div v-for="(project, index) in projects" :key="project.name" 
+                       class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                       :style="{ animationDelay: `${index * 100}ms` }">
+                    <div class="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 class="text-xl font-bold text-gray-900">{{ project.name }}</h3>
+                        <p class="text-gray-600 font-medium">{{ project.fullName }}</p>
+                      </div>
+                      <span class="px-3 py-1 text-sm font-medium rounded-full transition-colors"
+                            :class="project.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                        {{ project.status }}
+                      </span>
+                    </div>
+                    <p class="text-gray-700 mb-4">{{ project.description }}</p>
+                    <div>
+                      <h4 class="font-semibold text-gray-900 mb-2">Key Objectives:</h4>
+                      <ul class="space-y-1">
+                        <li v-for="objective in project.objectives" :key="objective" class="flex items-start">
+                          <span class="inline-block w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></span>
+                          <span class="text-gray-700">{{ objective }}</span>
+                        </li>
+                      </ul>
+                    </div>
+>>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
+                  </div>
+                </div>
+              </div>
+            </div>
+
+<<<<<<< HEAD
             <div class="absolute bottom-2 left-0 right-0 z-20 pt-5">
               <div class="container mx-auto px-6 flex items-center justify-between">
                 <div class="flex space-x-2">
@@ -1009,8 +1262,142 @@ watch(selectedArticle, (newVal) => {
               </section>
             </div>
           </div>
+=======
+            <!-- Reports Content -->
+            <div v-else-if="activeTab === 'reports'" key="reports" class="content-panel">
+              <div class="prose max-w-none">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Reports & Documents</h2>
+                <div class="space-y-4">
+                  <div v-for="(report, index) in reports" :key="report.title" 
+                       class="border border-gray-200 rounded-lg p-4"
+                       :style="{ animationDelay: `${index * 100}ms` }">
+                    <div class="flex justify-between items-start mb-2">
+                      <h3 class="text-lg font-semibold text-gray-900">{{ report.title }}</h3>
+                      <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded">
+                        {{ report.type }}
+                      </span>
+                    </div>
+                    <p class="text-gray-600 mb-2">{{ report.description }}</p>
+                    <div class="flex justify-between items-center">
+                      <span class="text-sm text-gray-500">Published: {{ new Date(report.date).toLocaleDateString() }}</span>
+                      <button class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-all duration-300 transform hover:scale-105">
+                        Download PDF
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- News Content -->
+            <div v-else-if="activeTab === 'news'" key="news" class="content-panel">
+              <div class="prose max-w-none">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Latest News & Updates</h2>
+                <div class="space-y-6">
+                  <article v-for="(article, index) in news" :key="article.title" 
+                           class="border border-gray-200 rounded-lg p-6 bg-white"
+                           :style="{ animationDelay: `${index * 100}ms` }">
+                    <div class="flex justify-between items-start mb-3">
+                      <span class="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded transition-colors hover:bg-gray-200">
+                        {{ article.category }}
+                      </span>
+                      <time class="text-sm text-gray-500">{{ new Date(article.date).toLocaleDateString() }}</time>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">{{ article.title }}</h3>
+                    <p class="text-gray-700 leading-relaxed">{{ article.summary }}</p>
+                    <div class="mt-4">
+                      <button class="text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors hover:underline">
+                        Read more →
+                      </button>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </Transition>
+>>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
         </div>
       </div>
     </div>
   </div>
+<<<<<<< HEAD
 </template>
+=======
+</template>
+
+<style scoped>
+/* Custom transition classes */
+.fade-slide-enter-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.fade-slide-leave-active {
+  transition: all 0.3s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+}
+
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateX(20px) translateY(10px);
+}
+
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-20px) translateY(-10px);
+}
+
+.content-panel {
+  animation: slideInUp 0.5s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered animation for list items */
+.content-panel > div > div > div:nth-child(n) {
+  animation: fadeInUp 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+.content-panel > div > div > div:nth-child(1) { animation-delay: 0.1s; }
+.content-panel > div > div > div:nth-child(2) { animation-delay: 0.2s; }
+.content-panel > div > div > div:nth-child(3) { animation-delay: 0.3s; }
+.content-panel > div > div > div:nth-child(4) { animation-delay: 0.4s; }
+.content-panel > div > div > div:nth-child(5) { animation-delay: 0.5s; }
+.content-panel > div > div > div:nth-child(6) { animation-delay: 0.6s; }
+.content-panel > div > div > div:nth-child(7) { animation-delay: 0.7s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Transition container */
+.transition-container {
+  min-height: 400px;
+  position: relative;
+}
+
+/* Enhanced hover effects */
+.hover\:scale-105:hover {
+  transform: scale(1.05);
+}
+
+.hover\:translate-x-1:hover {
+  transform: translateX(0.25rem);
+}
+</style>
+>>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3

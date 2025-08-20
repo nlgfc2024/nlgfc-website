@@ -333,7 +333,7 @@ const publications = ref([
         </div>
       </section>
     
-      <!-- Projects Section - Single Line Desktop / Stacked Mobile -->
+      <!-- Projects Section with Interactive Cards -->
       <section class="py-8 bg-gradient-to-b from-primary-50 to-white">
         <div class="container mx-auto px-4 sm:px-6">
           <div class="text-center mb-12 md:mb-16">
@@ -345,12 +345,11 @@ const publications = ref([
             </p>
           </div>
 
-          <!-- Flex container - row on desktop, column on mobile -->
-          <div class="flex flex-col sm:flex-row gap-6 px-4 sm:px-0">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-0">
             <div
               v-for="(project, index) in projects"
               :key="index"
-              class="group relative overflow-hidden rounded-2xl shadow-xl h-80 sm:h-64 w-full sm:w-56"
+              class="group relative overflow-hidden rounded-2xl shadow-xl h-80 min-w-0"
             >
               <img
                 :src="`https://picsum.photos/600/400?random=${index + 10}`"
@@ -360,7 +359,7 @@ const publications = ref([
               <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
               
               <div class="relative h-full flex flex-col justify-end p-6 text-white">
-                <div class="flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 mb-4 bg-white rounded-xl shadow-md p-1.5">
+                <div class="flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 mb-4 bg-white rounded-xl shadow-md p-2">
                   <img
                     v-if="project.imagePath"
                     :src="project.imagePath"
@@ -370,7 +369,7 @@ const publications = ref([
                   />
                   <svg
                     v-else
-                    class="w-6 h-6 sm:w-5 sm:h-5 text-primary-600"
+                    class="w-6 h-6 sm:w-8 sm:h-8 text-primary-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -384,8 +383,8 @@ const publications = ref([
                   </svg>
                 </div>
 
-                <h3 class="text-xl sm:text-lg font-bold mb-2 line-clamp-1">{{ project.title }}</h3>
-                <p class="text-white/90 mb-4 line-clamp-2 text-sm">{{ project.description }}</p>
+                <h3 class="text-xl sm:text-2xl font-bold mb-2">{{ project.title }}</h3>
+                <p class="text-white/90 mb-4 line-clamp-2 text-sm sm:text-base">{{ project.description }}</p>
                 <a
                   :href="project.url"
                   class="inline-flex items-center text-sm font-medium text-white group-hover:text-primary-300 transition"
@@ -638,25 +637,6 @@ const publications = ref([
   .animate-scroll::-webkit-scrollbar {
     display: none; /* Chrome/Safari */
   }
-}
-
-/* Projects Section */
-.custom-scrollbar::-webkit-scrollbar {
-  height: 8px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
 }
 
 </style>

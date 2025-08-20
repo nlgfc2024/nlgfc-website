@@ -4,11 +4,11 @@
     <button
       v-if="!isOpen"
       @click="toggleChat"
-      class="fixed right-6 bottom-6 z-50 bg-gradient-to-br from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 text-white p-4 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-gray-400/30 group"
+      class="fixed right-6 bottom-6 z-50 bg-gradient-to-br from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white p-4 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 active:scale-95 focus:outline-none focus:ring-4 focus:ring-blue-400/30 group"
       aria-label="Open NLGFC Assistant"
     >
       <div class="relative">
-        <Icon name="heroicons:chat-bubble-bottom-center-text" class="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+        <Icon name="heroicons:envelope" class="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
         <span 
           v-if="hasNewMessage"
           class="absolute -top-1 -right-1 bg-rose-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-ping"
@@ -23,21 +23,21 @@
       :class="{
         'scale-100 opacity-100': isOpen,
         'scale-95 opacity-0 pointer-events-none': !isOpen,
-        'ring-2 ring-gray-400/50': isTyping
+        'ring-2 ring-blue-400/50': isTyping
       }"
     >
       <!-- Header with NLGFC Branding -->
-      <div class="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-4 flex justify-between items-center rounded-t-2xl">
+      <div class="bg-gradient-to-r from-blue-700 to-blue-800 text-white p-4 flex justify-between items-center rounded-t-2xl">
         <div class="flex items-center space-x-3">
           <div class="relative">
-            <div class="w-10 h-10 bg-gradient-to-br from-gray-600 to-gray-800 rounded-full flex items-center justify-center">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
               <Icon name="heroicons:shield-check" class="w-5 h-5 text-white" />
             </div>
-            <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-gray-800"></span>
+            <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-blue-800"></span>
           </div>
           <div>
             <h3 class="font-bold text-lg">NLGFC Assistant</h3>
-            <p class="text-gray-100 text-xs flex items-center">
+            <p class="text-blue-100 text-xs flex items-center">
               <span class="w-2 h-2 bg-green-400 rounded-full mr-1.5 animate-pulse"></span>
               {{ isTyping ? 'Researching...' : 'Official Government Service' }}
             </p>
@@ -79,7 +79,7 @@
               :class="[
                 'max-w-[85%] p-3 rounded-2xl shadow-sm transition-all duration-200 hover:shadow-md relative',
                 message.sender === 'user'
-                  ? 'bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-br-sm'
+                  ? 'bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-br-sm'
                   : 'bg-white border border-gray-200/80 text-gray-800 rounded-bl-sm'
               ]"
             >
@@ -88,7 +88,7 @@
                 v-if="message.sender === 'user'"
                 class="absolute -right-1 bottom-0 w-3 h-3 overflow-hidden"
               >
-                <div class="w-3 h-3 bg-gray-800 rotate-45 transform origin-bottom-left"></div>
+                <div class="w-3 h-3 bg-blue-600 rotate-45 transform origin-bottom-left"></div>
               </div>
               <div
                 v-else
@@ -104,10 +104,10 @@
                   <Icon
                     name="heroicons:check"
                     class="w-3 h-3"
-                    :class="{ 'text-gray-300': !message.read, 'text-green-300': message.read }"
+                    :class="{ 'text-blue-300': !message.read, 'text-green-300': message.read }"
                   />
                 </div>
-                <div v-else class="text-gray-600 font-medium">
+                <div v-else class="text-blue-600 font-medium">
                   NLGFC Official
                 </div>
               </div>
@@ -144,7 +144,7 @@
               @input="adjustTextareaHeight"
               placeholder="Ask about NLGFC powers, budgets, or local government finance..."
               rows="1"
-              class="w-full p-3 pr-10 border border-gray-300/80 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-gray-500/30 focus:border-gray-500 transition-all duration-200 max-h-32 bg-white/90 backdrop-blur-sm custom-scrollbar"
+              class="w-full p-3 pr-10 border border-gray-300/80 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500 transition-all duration-200 max-h-32 bg-white/90 backdrop-blur-sm custom-scrollbar"
               :disabled="isLoading"
               style="min-height: 44px;"
             ></textarea>
@@ -152,7 +152,7 @@
               <button
                 type="button"
                 @click="showNLGFCFunctions"
-                class="text-gray-600 hover:text-gray-800 transition-colors p-1.5 rounded-full hover:bg-gray-100"
+                class="text-blue-500 hover:text-blue-600 transition-colors p-1.5 rounded-full hover:bg-blue-100"
                 title="NLGFC Functions"
               >
                 <Icon name="heroicons:information-circle" class="w-4 h-4" />
@@ -160,7 +160,7 @@
               <button
                 type="submit"
                 :disabled="!userInput.trim() || isLoading"
-                class="text-gray-600 hover:text-gray-800 transition-colors p-1.5 rounded-full hover:bg-gray-100 disabled:text-gray-400 disabled:hover:bg-transparent"
+                class="text-blue-500 hover:text-blue-600 transition-colors p-1.5 rounded-full hover:bg-blue-100 disabled:text-gray-400 disabled:hover:bg-transparent"
                 title="Send message"
               >
                 <Icon name="heroicons:paper-airplane" class="w-4 h-4" />
@@ -170,7 +170,6 @@
         </form>
         <p class="text-xs text-gray-500 mt-2">
           The NLGFC Assistant provides information based on the Constitution of Malawi and Local Government Act.
-          <a :href="whatsappLink" target="_blank" class="text-gray-700 font-medium hover:underline">Contact us on WhatsApp</a> for direct assistance.
         </p>
       </div>
     </div>
@@ -179,10 +178,6 @@
 
 <script setup>
 import { ref, nextTick, onMounted, watch } from 'vue'
-
-// WhatsApp configuration
-const whatsappNumber = '265996483422' // Replace with official NLGFC number
-const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hello NLGFC Team, I have an inquiry:')}`
 
 // NLGFC Institutional Knowledge Base
 const nlgfcKnowledge = {
@@ -199,26 +194,6 @@ const nlgfcKnowledge = {
   fundingPrinciples: "Fund distribution varies by economic, geographic and demographic variables as the sole consideration"
 }
 
-// General knowledge base for common questions
-const generalKnowledge = [
-  {
-    q: ['what is nlgfc', 'about nlgfc', 'nlgfc role', 'mandate'],
-    a: 'NLGFC is a Government of Malawi agency responsible for intergovernmental fiscal transfers, financing District Councils, and monitoring their performance and compliance.'
-  },
-  {
-    q: ['funding process', 'how funding works', 'grants'],
-    a: 'Funding is allocated to councils based on approved budgets, fiscal frameworks, and performance benchmarks. Disbursements are monitored to ensure compliance.'
-  },
-  {
-    q: ['contact', 'phone', 'email', 'whatsapp'],
-    a: `For direct assistance, you can reach us via <a href="${whatsappLink}" target="_blank" class="underline">WhatsApp</a>.`
-  },
-  {
-    q: ['reports', 'publications', 'documents'],
-    a: 'Key reports and publications are available on the Publications page. You can browse annual reports, grant guidelines, and monitoring dashboards.'
-  }
-]
-
 // Reactive state
 const isOpen = ref(false)
 const messages = ref([])
@@ -233,7 +208,7 @@ const messageInput = ref(null)
 onMounted(() => {
   messages.value.push({
     id: Date.now(),
-    text: `Welcome to the <strong>NLGFC Assistant</strong>.<br><br>I can provide information about:<br>- NLGFC powers and functions<br>- Budget preparation processes<br>- Local government fund distribution<br><br>For direct assistance, <a href="${whatsappLink}" target="_blank" class="underline">contact us on WhatsApp</a>.`,
+    text: "Welcome to the **NLGFC Assistant**.\n\nI can provide information about the National Local Government Finance Committee's powers and functions as established by:\n\n- *Section 149 of the 1994 Constitution*\n- *Local Government Act (1998)*\n\nHow may I assist you with local government finance matters today?",
     sender: 'bot',
     timestamp: new Date(),
     read: false
@@ -284,26 +259,12 @@ const showNLGFCFunctions = () => {
   const functionList = nlgfcKnowledge.powers.map(power => `• ${power}`).join('\n')
   messages.value.push({
     id: Date.now(),
-    text: `<strong>NLGFC Key Powers and Functions</strong>:<br><br>${functionList}<br><br><em>As established by ${nlgfcKnowledge.establishment} and ${nlgfcKnowledge.legalBasis}</em>`,
+    text: `**NLGFC Key Powers and Functions**:\n\n${functionList}\n\n*As established by ${nlgfcKnowledge.establishment} and ${nlgfcKnowledge.legalBasis}*`,
     sender: 'bot',
     timestamp: new Date(),
     read: false
   })
   scrollToBottom()
-}
-
-// Normalize query for matching
-const normalize = (s) => s.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim()
-
-// Process general queries
-const processGeneralQuery = (query) => {
-  const nq = normalize(query)
-  for (const item of generalKnowledge) {
-    if (item.q.some(key => nq.includes(normalize(key)))) {
-      return item.a
-    }
-  }
-  return null
 }
 
 // Process NLGFC-specific queries
@@ -355,45 +316,31 @@ const sendMessage = async () => {
     // Simulate research delay
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000))
     
-    // Check if query matches general knowledge
-    const generalResponse = processGeneralQuery(message)
+    // Check if query matches NLGFC knowledge
+    const institutionalResponse = processNLGFCQuery(message)
     
-    if (generalResponse) {
+    if (institutionalResponse) {
+      // Format array responses
+      const responseText = Array.isArray(institutionalResponse) 
+        ? `**NLGFC Authority**:\n\n${institutionalResponse.map(item => `• ${item}`).join('\n')}`
+        : institutionalResponse
+
       messages.value.push({
         id: Date.now() + 1,
-        text: generalResponse,
+        text: responseText,
         sender: 'bot',
         timestamp: new Date(),
         read: false
       })
-    } 
-    // Check if query matches NLGFC knowledge
-    else {
-      const institutionalResponse = processNLGFCQuery(message)
-      
-      if (institutionalResponse) {
-        // Format array responses
-        const responseText = Array.isArray(institutionalResponse) 
-          ? `<strong>NLGFC Authority</strong>:<br><br>${institutionalResponse.map(item => `• ${item}`).join('<br>')}`
-          : institutionalResponse
-
-        messages.value.push({
-          id: Date.now() + 1,
-          text: responseText,
-          sender: 'bot',
-          timestamp: new Date(),
-          read: false
-        })
-      } else {
-        // Fallback for unknown queries
-        messages.value.push({
-          id: Date.now() + 1,
-          text: `I couldn't find specific information about that. For direct assistance, please <a href="${whatsappLink}" target="_blank" class="underline">contact us on WhatsApp</a> and our team will assist you.`,
-          sender: 'bot',
-          timestamp: new Date(),
-          read: false
-        })
-      }
+    } else {
+      // Fallback for general queries
+      messages.value.push({
+        id: Date.now() + 1,
+        text: "For specific NLGFC inquiries, please contact our offices directly. I can provide information about:\n\n- NLGFC powers and functions\n- Budget preparation processes\n- Local government fund distribution\n\nTry asking about our constitutional mandate or financial oversight role.",
+        sender: 'bot',
+        timestamp: new Date(),
+        read: false
+      })
     }
 
     if (!isOpen.value) {
@@ -404,7 +351,7 @@ const sendMessage = async () => {
     console.error('Chat error:', error)
     messages.value.push({
       id: Date.now() + 1,
-      text: `I'm unable to access the NLGFC policy database at this time. For official information, please <a href="${whatsappLink}" target="_blank" class="underline">contact us on WhatsApp</a>.`,
+      text: "I'm unable to access the NLGFC policy database at this time. For official information, please visit our offices or consult the Local Government Act.",
       sender: 'bot',
       timestamp: new Date(),
       read: false
@@ -436,10 +383,10 @@ const formatTime = (timestamp) => {
 const formatMessage = (text) => {
   // Enhanced markdown formatting for official documents
   return text
-    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-gray-700">$1</strong>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-blue-700">$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
     .replace(/`(.*?)`/g, '<code class="bg-gray-100/80 px-1 py-0.5 rounded text-xs font-mono">$1</code>')
-    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-gray-600 hover:underline font-medium" target="_blank">$1</a>')
+    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-blue-600 hover:underline font-medium" target="_blank">$1</a>')
     .replace(/\n/g, '<br>')
     .replace(/•/g, '•')
 }
