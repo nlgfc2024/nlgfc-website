@@ -10,6 +10,7 @@ const activeTab = ref('msr') // Default active tab - starts with Malawi Social R
 
 // Configuration for delivery system categories and items
 // This array defines the sidebar navigation structure with descriptions
+<<<<<<< HEAD
 const projectGroups = [
   {
     group: 'Delivery Systems', // Main category name
@@ -50,6 +51,57 @@ const projectGroups = [
 
       ]
     }
+=======
+// Delivery systems data for the GeneralSidebar component
+const deliverySystemsData = [
+  
+// Each delivery system item contains an id, title, and description
+ { 
+    id: 'comsip', 
+    title: 'Community Savings and Investment Promotion',
+},
+{ 
+    id: 'dgrm', 
+    title: 'Digital Grievance Redress',
+},
+{ 
+    id: 'e-payments', 
+    title: 'E-Payment Systems',
+},
+{ 
+    id: 'laifmis', 
+    title: 'Local Authorities Integrated Financial Management Information System'
+},
+{ 
+    id: 'lapas', 
+    title: 'Local Athourities Performance Assessment System'
+},
+{  
+    id: 'msr', 
+    title: 'Malawi Social Registry'
+},
+{ 
+    id: 'pmis', 
+    title: 'Project Monitoring System'
+},
+{ 
+    id: 'publicworks', 
+    title: 'Public Works MIS'
+},
+{ 
+    id: 'sctpmis', 
+    title: 'Social Cash Transfer Programme MIS'
+}
+
+]
+
+// Keep original structure for backward compatibility with existing template code
+const projectGroups = [
+  {
+    group: 'Delivery Systems',
+    items: deliverySystemsData
+  }
+>>>>>>> 4acd2192c45ab59093d85a53ccb94d41caa6266d
 ]
 
 // Partner logos configuration for E-Payment systems carousel
