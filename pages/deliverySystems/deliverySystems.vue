@@ -7,46 +7,57 @@ definePageMeta({ title: 'Delivery Systems' })
 const route = useRoute()
 const activeTab = ref('msr') // Default tab
 
+// Configuration for delivery system categories and items
+// This array defines the sidebar navigation structure with descriptions
+// Delivery systems data for the GeneralSidebar component
+const deliverySystemsData = [
+  
+// Each delivery system item contains an id, title, and description
+ { 
+    id: 'comsip', 
+    title: 'Community Savings and Investment Promotion',
+},
+{ 
+    id: 'dgrm', 
+    title: 'Digital Grievance Redress',
+},
+{ 
+    id: 'e-payments', 
+    title: 'E-Payment Systems',
+},
+{ 
+    id: 'laifmis', 
+    title: 'Local Authorities Integrated Financial Management Information System'
+},
+{ 
+    id: 'lapas', 
+    title: 'Local Athourities Performance Assessment System'
+},
+{  
+    id: 'msr', 
+    title: 'Malawi Social Registry'
+},
+{ 
+    id: 'pmis', 
+    title: 'Project Monitoring System'
+},
+{ 
+    id: 'publicworks', 
+    title: 'Public Works MIS'
+},
+{ 
+    id: 'sctpmis', 
+    title: 'Social Cash Transfer Programme MIS'
+}
+
+]
+
+// Keep original structure for backward compatibility with existing template code
 const projectGroups = [
   {
     group: 'Delivery Systems',
-    items: [
-      // Each item represents a different delivery system with unique ID, title and description
-        { 
-          id: 'comsip', 
-          title: 'Community Savings & Investment'
-        },
-        { 
-          id: 'dgrm', 
-          title: 'Digital Grievance Redress'
-        },
-        { 
-          id: 'e-payments', 
-          title: 'E-Payment Systems'
-        },
-        { 
-          id: 'laifmis', 
-          title: 'Local Authorities IFMIS'
-        },
-        {  
-          id: 'msr', 
-          title: 'Malawi Social Registry'
-        },
-        { 
-          id: 'lapas', 
-          title: 'Performance Assessment System'
-        },
-        { 
-          id: 'pmis', 
-          title: 'Project Monitoring System'
-        },
-        { 
-          id: 'publicworks', 
-          title: 'Public Works MIS'
-        }
-
-      ]
-    }
+    items: deliverySystemsData
+  }
 ]
 const partnerLogos = [
   { src: "/images/deliverySystems/Airtel _money.png", alt: "Airtel Money" },
