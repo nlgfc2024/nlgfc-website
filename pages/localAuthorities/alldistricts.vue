@@ -1223,7 +1223,7 @@ const districts = [
                             </div>
                         </div>
                     </div>
-                </div>
+                
                 
                 <!-- Map Info -->
                 <transition name="fade-slide-up">
@@ -1259,9 +1259,7 @@ const districts = [
                         </div>
                     </div>
                 </transition>
-            </div>
-        </div>
-    </div>
+       
 </template>
 
 <style>
