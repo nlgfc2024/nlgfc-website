@@ -9,6 +9,7 @@ defineProps<{
     | 'blue-gray' | 'emerald' | 'indigo' | 'purple' | 'orange' | 'rose'
   show_header?: boolean
   body?: string
+  heading_level?: 'h1'|'h2'|'h3'|'h4'|'h5'|'h6'
 }>()
 
 const themeToHeader = (theme?: string) => {
@@ -63,7 +64,17 @@ const themeTextColor = (theme?: string) => {
       class="px-6 py-5 bg-gradient-to-r"
       :class="[themeToHeader(theme), themeTextColor(theme)]"
     >
-      <h2 class="text-3xl font-bold mb-1">{{ title }}</h2>
+      <component :is="heading_level || 'h3'" class="font-semibold text-gray-800 flex-1"
+                 :class="{
+                   'text-3xl': heading_level === 'h1',
+                   'text-2xl': heading_level === 'h2',
+                   'text-xl': !heading_level || heading_level === 'h3',
+                   'text-lg': heading_level === 'h4',
+                   'text-base': heading_level === 'h5',
+                   'text-sm': heading_level === 'h6',
+                 }">
+        {{ title }}
+      </component>
       <div v-if="label" class="flex items-center text-sm opacity-90">
         <svg
           class="w-4 h-4 mr-1"
