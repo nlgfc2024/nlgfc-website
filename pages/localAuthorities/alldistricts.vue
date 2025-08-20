@@ -1,20 +1,95 @@
 <script setup>
+import { useDistrictPDF } from '~/composables/useDistrictPDF';
+
 definePageMeta({
-    title: 'For all local authorities' 
+    title: 'For all local authorities'
 })
+
 
 // Reactive variables
 const selectedDistrict = ref('')
 const selectedRegion = ref('')
 const showRegionFilter = ref(false)
+const searchQuery = ref('')
+const sortCriteria = ref('name')
+const sortDirection = ref('asc')
 const activeContent = ref([])
 const isLoading = ref(false)
 const transitionName = ref('fade')
+const hoveredDistrict = ref('')
+// District ID mapping for SVG paths
+const districtIdMap = {
+  'Chitipa': 'MWCT',
+  'Karonga': 'MWKR',
+  'Likoma': 'MWLK',
+  'Mmbelwa': 'MWMZ',
+  'Nkhata Bay': 'MWNB',
+  'Rumphi': 'MWRU',
+  'Dedza': 'MWDE',
+  'Dowa': 'MWDO',
+  'Kasungu': 'MWKS',
+  'Lilongwe': 'MWLI',
+  'Lilongwe city': 'MWLI',
+  'Mchinji': 'MWMC',
+  'Nkhotakota': 'MWNK',
+  'Ntcheu': 'MWNU',
+  'Ntchisi': 'MWNI',
+  'Salima': 'MWSA',
+  'Balaka': 'MWBA',
+  'Blantyre': 'MWBL',
+  'Chikwawa': 'MWCK',
+  'Chiradzulu': 'MWCR',
+  'Machinga': 'MWMH',
+  'Mangochi': 'MWMG',
+  'Mwanza': 'MWMW',
+  'Nsanje': 'MWNS',
+  'Neno': 'MWNE',
+  'Phalombe': 'MWPH',
+  'Thyolo': 'MWTH',
+  'Mulanje': 'MWMU',
+  'Zomba': 'MWZO'
+}
+
+// Ref for SVG element
+const svgRef = ref(null)
 
 // Computed property to filter districts by region
 const filteredDistricts = computed(() => {
     if (!selectedRegion.value) return districts
     return districts.filter(district => district.region === selectedRegion.value)
+})
+
+// Computed property to filter districts by search query
+const searchedDistricts = computed(() => {
+    let result = filteredDistricts.value
+    
+    // Apply search filter
+    if (searchQuery.value) {
+        const query = searchQuery.value.toLowerCase().trim()
+        result = result.filter(district =>
+            district.name.toLowerCase().includes(query) ||
+            district.region.toLowerCase().includes(query) ||
+            district.description.toLowerCase().includes(query) ||
+            district.population.toLowerCase().includes(query) ||
+            district.area.toLowerCase().includes(query) ||
+            district.capital.toLowerCase().includes(query)
+        )
+    }
+    
+    // Apply sorting
+    return [...result].sort((a, b) => {
+        let aValue, bValue
+        
+        // Only sort by name since other options were removed
+        aValue = a.name
+        bValue = b.name
+        
+        if (sortDirection.value === 'asc') {
+            return aValue > bValue ? 1 : aValue < bValue ? -1 : 0
+        } else {
+            return aValue < bValue ? 1 : aValue > bValue ? -1 : 0
+        }
+    })
 })
 
 // Unique regions for the region filter
@@ -87,11 +162,316 @@ const clearFilters = () => {
     selectedRegion.value = ''
 }
 
+// Method to export data to CSV
+const exportToCSV = () => {
+  // Create CSV content
+  const headers = ['Name', 'Region', 'Capital', 'Population', 'Area', 'Description', 'Phone', 'Email', 'Private Bag'];
+  const csvContent = [
+    headers.join(','),
+    ...searchedDistricts.value.map(district => [
+      district.name,
+      district.region,
+      district.capital || '',
+      district.population || '',
+      district.area || '',
+      district.description || '',
+      district.Phone || '',
+      district.email || '',
+      district.PrivateBag || ''
+    ].map(field => `"${field}"`).join(','))
+  ].join('\n');
+
+  // Create download link
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', 'malawi_districts.csv');
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Method to export data to PDF
+const exportToPDF = async () => {
+  try {
+    // Show loading state
+    isLoading.value = true;
+    
+    // Try to dynamically import jsPDF
+    const jsPDF = await import('jspdf');
+    const autoTable = await import('jspdf-autotable');
+    
+    const doc = new jsPDF.default();
+    
+    // Add title
+    doc.setFontSize(18);
+    doc.text('Malawi Districts Report', 14, 20);
+    
+    // Add date
+    doc.setFontSize(12);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+    
+    // Add table
+    autoTable.default(doc, {
+      startY: 40,
+      head: [['Name', 'Region', 'Capital', 'Population', 'Area']],
+      body: searchedDistricts.value.map(district => [
+        district.name,
+        district.region,
+        district.capital || '',
+        district.population || '',
+        district.area || ''
+      ]),
+      styles: {
+        fontSize: 8
+      },
+      headStyles: {
+        fillColor: [0, 50, 13]
+      }
+    });
+    
+    // Save the PDF
+    doc.save('malawi_districts.pdf');
+  } catch (error) {
+    console.error('Error exporting to PDF:', error);
+    
+    // Show user-friendly message about missing dependencies
+    alert(`PDF export requires additional libraries to be installed.
+    
+Please install the required dependencies:
+
+npm install jspdf jspdf-autotable
+
+or
+
+yarn add jspdf jspdf-autotable
+
+After installation, refresh the page and try again.
+
+For now, you can use CSV export as an alternative.`);
+    
+    // Fallback to CSV export
+    exportToCSV();
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+// Method to dynamically import district page data
+const getDistrictPageData = async (pageSlug) => {
+  try {
+    // Dynamically import the district page component
+    const districtModule = await import(`./${pageSlug}.vue`);
+    
+    // If the component has a default export with setup function
+    if (districtModule && districtModule.default) {
+      return districtModule.default;
+    }
+    
+    return null;
+  } catch (error) {
+    console.warn(`Could not load district page data for ${pageSlug}:`, error);
+    return null;
+  }
+};
+
+// Method to extract detailed district data from page
+const extractDistrictData = (district, pageData) => {
+  // If we have detailed page data, use it; otherwise fall back to basic data
+  if (pageData && pageData.data) {
+    // This would be used if the page data was structured in a specific way
+    // For now, we'll use the basic district data and enhance it where possible
+  }
+  
+  // Prepare comprehensive district data for PDF generation
+  const districtData = {
+    profile: {
+      about: district.description || 'No description available',
+      vision: district.vision || "Not specified",
+      mission: district.mission || "Not specified",
+      values: district.values || [
+        "Transparency and accountability: council shall discharge its duties in an open and reliable manner",
+        "Integrity: the council shall act with honesty and without compromising the truth",
+        "Client focused: the client shall be served in an efficient and effective manner",
+        "Collaboration: council shall enhance interaction with all relevant stakeholders",
+        "Open communication: the council shall enhance inter and intra communication",
+        "Responsiveness: council shall provide services that are demand driven without discrimination"
+      ],
+      strategicObjectives: district.strategicObjectives || [
+        "Not specified"
+      ],
+      keyFunctions: district.keyFunctions || [
+        "Local governance and administration",
+        "Development planning and implementation",
+        "Service delivery and infrastructure development",
+        "Revenue collection and financial management"
+      ],
+      additionalInfo: {
+        "Major Achievements": district.majorAchievements || "Not specified",
+        "Jurisdiction": district.jurisdiction || `Located in ${district.region} Region of Malawi`,
+        "Population": district.population || 'Not specified',
+        "Structure": district.structure || "Comprised of elected councillors and appointed technical staff"
+      }
+    },
+    projects: district.projects || [
+      {
+        name: 'SSRLP,GESD,SEP',
+        fullName: '2025',
+        description: 'This is a sample project description for districts that do not have detailed project information.',
+        objectives: [
+          'Sample objective 1',
+          'Sample objective 2'
+        ],
+        status: 'Not Active'
+      }
+    ],
+    reports: district.reports || [],
+    news: district.news || []
+  };
+  
+  return districtData;
+};
+
+// Method to export district information to PDF
+const exportDistrictInfoToPDF = async () => {
+  // Check if a district is selected
+  if (!selectedDistrict.value) {
+    console.warn('No district selected for PDF export');
+    return;
+  }
+  
+  // Get the selected district details
+  const district = selectedDistrictDetails.value;
+  
+  // Try to get detailed data from the district page
+  let districtData;
+  
+  if (district.pageSlug) {
+    try {
+      // Try to import the district page to get detailed data
+      const pageData = await getDistrictPageData(district.pageSlug);
+      districtData = extractDistrictData(district, pageData);
+    } catch (error) {
+      console.warn('Could not load detailed district data, using basic data:', error);
+      // Fallback to basic data extraction
+      districtData = extractDistrictData(district, null);
+    }
+  } else {
+    // Fallback to basic data extraction
+    districtData = extractDistrictData(district, null);
+  }
+  
+  // Call the useDistrictPDF composable to generate the PDF
+  const { generateDistrictPDF } = useDistrictPDF();
+  generateDistrictPDF(districtData, district.name);
+}
+
 // Method to select popular district
 const selectPopularDistrict = (districtName) => {
     transitionName.value = 'slide-up'
     selectedDistrict.value = districtName
 }
+
+// Method to highlight selected district on map
+const highlightSelectedDistrict = (districtName) => {
+  if (!svgRef.value || !districtName) return
+  
+  const districtId = districtIdMap[districtName]
+  if (!districtId) {
+    console.warn(`District ID not found for: ${districtName}`)
+    return
+  }
+  
+  const svg = svgRef.value
+  const districtPath = svg.querySelector(`#${districtId}`)
+  if (!districtPath) {
+    console.warn(`District path not found for ID: ${districtId}`)
+    return
+  }
+  
+  // Remove highlight from all districts first
+  svg.querySelectorAll('path').forEach(path => {
+    path.style.fill = '#6f9c76' // Default green color
+    path.style.stroke = '#ffffff'
+    path.style.strokeWidth = '1px'
+    path.classList.remove('highlighted')
+    path.style.filter = 'none'
+  })
+  
+  // Highlight the selected district
+  districtPath.style.fill = '#1f2937' // Gray-800 highlight
+  districtPath.style.stroke = '#111827' // Gray-900 border
+  districtPath.style.strokeWidth = '3px'
+  districtPath.classList.add('highlighted')
+  districtPath.style.filter = 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
+  
+  // Smooth animation
+  districtPath.style.transition = 'all 0.3s ease'
+}
+
+// Add this function to handle mouseover events
+const handleDistrictHover = (districtName) => {
+  hoveredDistrict.value = districtName
+}
+
+// Add this function to handle mouseout events
+const handleDistrictLeave = () => {
+  hoveredDistrict.value = ''
+}
+
+// Add this function to handle district clicks on the map
+const handleDistrictClick = (districtName) => {
+  console.log('District clicked:', districtName)
+  selectedDistrict.value = districtName
+  
+  // Optional: Show a brief notification
+  if (process.client) {
+    const event = new CustomEvent('district-selected', { 
+      detail: { districtName } 
+    })
+    window.dispatchEvent(event)
+  }
+}
+
+// Method to reset map highlighting
+const resetMapHighlighting = () => {
+  if (!svgRef.value) return
+  
+  const svg = svgRef.value
+  // Reset all district colors and styles
+  svg.querySelectorAll('path').forEach(path => {
+    path.style.fill = '#6f9c76' // Default green
+    path.style.stroke = '#ffffff'
+    path.style.strokeWidth = '1px'
+    path.classList.remove('highlighted')
+    path.style.filter = 'none'
+    path.style.transition = 'all 0.3s ease'
+  })
+}
+
+// Watch for selectedDistrict changes
+watch(selectedDistrict, (newDistrict) => {
+  if (newDistrict) {
+    highlightSelectedDistrict(newDistrict)
+  } else {
+    resetMapHighlighting()
+  }
+})
+
+// Initialize map on component mount
+onMounted(() => {
+  // Initialize map highlighting
+  nextTick(() => {
+    resetMapHighlighting()
+    
+    // Test function - you can remove this in production
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Map initialized. Available districts:', Object.keys(districtIdMap))
+    }
+  })
+})
 
 
    
@@ -456,17 +836,18 @@ const districts = [
 </script>
 
 <template>
-    <div class="p-6 max-w-4xl mx-auto">
+    <div class="p-6 max-w-6xl mx-auto">
         <h1 class="text-3xl font-bold text-gray-800 mb-6">Malawi Districts</h1>
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Left side - Controls -->
             <div class="space-y-6">
+              
                 <!-- Region Filter Toggle -->
                 <div class="flex items-center space-x-3">
-                    <input 
-                        type="checkbox" 
-                        id="regionFilter" 
+                    <input
+                        type="checkbox"
+                        id="regionFilter"
                         v-model="showRegionFilter"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                     >
@@ -505,9 +886,9 @@ const districts = [
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                         <option value="">Choose a district...</option>
-                        <option 
-                            v-for="district in filteredDistricts" 
-                            :key="district.name" 
+                        <option
+                            v-for="district in searchedDistricts"
+                            :key="district.name"
                             :value="district.name"
                         >
                             {{ district.name }} ({{ district.region }})
@@ -516,14 +897,17 @@ const districts = [
                 </div>
 
                 <!-- Clear Button -->
-                <button 
-                    @click="clearFilters"
-                    class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
-                    :class="{ 'opacity-50': !selectedDistrict && !selectedRegion }"
-                    :disabled="!selectedDistrict && !selectedRegion"
-                >
-                    Clear Selection
-                </button>
+                                 <button
+                                     @click="clearFilters"
+                                     class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+                                     :class="{ 'opacity-50': !selectedDistrict && !selectedRegion }"
+                                     :disabled="!selectedDistrict && !selectedRegion"
+                                 >
+                                     Clear Selection
+                                 </button>
+                
+                                 <!-- Export Buttons -->
+                                
 
                 <!-- Transition wrapper for content -->
                 <transition :name="transitionName" mode="out-in">
@@ -631,7 +1015,7 @@ const districts = [
                             
                             <!-- Action Buttons -->
                             <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
-                                <button 
+                                <button
                                     @click="handleDistrictLinkClick(selectedDistrictDetails)"
                                     class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm font-medium flex items-center justify-center"
                                 >
@@ -640,7 +1024,16 @@ const districts = [
                                     </svg>
                                     View {{ selectedDistrictDetails.name }} Details
                                 </button>
-                                <a 
+                                <button
+                                    @click="exportDistrictInfoToPDF"
+                                    class="flex-1 bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-sm font-medium flex items-center justify-center"
+                                >
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    Export District Info to PDF
+                                </button>
+                                <a
                                     :href="selectedDistrictDetails.slug"
                                     target="_blank"
                                     class="flex-1 bg-gray-100 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 text-sm font-medium text-center flex items-center justify-center"
@@ -684,33 +1077,150 @@ const districts = [
                 </transition>
             </div>
 
-            <!-- Right side - SVG Map -->
-            <div class="space-y-4">
-                <h3 class="text-lg font-semibold text-gray-800">Map of Malawi</h3>
+            <!-- Right side - SVG Map come here when you want to tamper with the map -->
+                                    <div class="space-y-4">
+                                        <h3 class="text-lg font-semibold text-gray-800">Map of Malawi</h3>
+                                        
+                                        <!-- SVG Map Container -->
+                                        <div class="border border-gray-300 rounded-lg p-4 shadow-sm transition-all duration-6000 hover:shadow-md">
+                                            <div class="w-full max-w-4xl mx-auto">
+                                                <!-- SVG Map -->
+                                                <svg
+                                                    ref="svgRef"
+                                                    viewBox="0 0 1000 1000"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    class="w-full h-auto transition-all duration-500"
+                                                    :class="{
+                                                        'opacity-190': !selectedDistrict,
+                                                        'scale-105': selectedDistrict
+                                                    }"
+                                                >
+                                                    <g id="features">
+                                                       
+                                                         <path d="M488.8 184.7l-0.1 0-1.5-0.2-2.5-0.9-1.1 0-1.1 0.3-1.4 0.5-0.7 0-2.5-1.5-16.1-13.6-26.1-40.8-1.3-2.7-0.8-1.1-0.8-0.3-4.1 0.4-2.6 0-1.1-0.4-1.5-0.8-3.9-3.3-0.9-0.5-0.4-0.1-1.6-0.2-1.2-0.2-1.2-0.7-0.9-0.9-0.9-1.3-0.6-0.7-0.7-0.6-0.8-0.4-1.4-1-0.5-0.8-0.3-1 0.1-1.4 0.2-0.5 0.5-0.3 2.9-0.9 5.5-3.5 0.6-0.5 0.7-1 0.4-0.4 1.4-0.3 0.9-0.3 1.6-1.4 0.7-0.9 0.8-1.2 1-2.3 0.4-0.5 1.2-1 1.5-1.5 0.7-0.6 0.7-0.4 0.8-0.3 2-0.4 0.4-0.7 0.1-1.2-0.8-2-0.2-1.2-0.2-2.1-0.4-1.1-0.8-1.3-0.4-1.1 0-0.8 0.3-2 0.1-1.3-0.5-1-0.5-0.5-2.2-4.1 0.1 0 1.4-0.2 0 0.1 0.1 0 0.2 0 0.3 0 0.2-0.1 0-0.1 0.7-0.1 2.3-1.3 0.1 0.1 0 0.1 0 0.1 0 0.1-0.1 0.2 0 0.1 0 0.1 0 0.1 0 0.2-0.1 0.1 0 0.1-0.1 0.1 0 0.2 0.3 0.3 0.1 0.1 0.2 0.1 0.1-0.1 0.2-0.1 0-0.1 0.1-0.2 0.1-0.1 0.1-0.1 0.1 0 0.1 0 0.1 0.1 0.1 0.1 0.1-0.1 0-0.2 0.2-0.3 0-0.2 0-0.2 0.1-0.2 0.1 0 0.1-0.1 0.2 0 0.1-0.1 0-0.1 0-0.1 0-0.1-0.3-0.1 0-0.1 0-0.1 0.1 0 0.1 0 0.1 0 0.1 0 0.2-0.1 0.2-0.1 0.1 0 0-0.1 0-0.1 0.1 0-0.1-0.2 0.4-0.1 0.1 0 0.1 0.1 0.1-0.1 0-0.1 0.1 0 0.4-0.2 0 0.1 0.1 0.1 0.1 0 0.1 0 0.1 0 0.1 0 0.1 0 0 0.1 0.2 0 2.6 1.6 2.9 3 3 1.9 2.6 1.1 3.3 2 1.7 1.4 0 0.1 0.1 0.1 0.1 0 0.8 0.7 1.3 2.3 1.3 0.9-0.9 0.9-0.5 3.8 0.9 8 2.7 6.3 0.8 0.5 0.9 0.1 0.7 0.3 0.3 1.1 0 4 1.3 7.9 3.3 7.8 9.4 13.6 6.4 6.4 3.5 2.7 1.9 1.6 0.8 1.7 0.5 1.7 1.2 1.8 4.1 4.7 0.9 1.6 1.2 4 1.3 2.9 0.2 0.4-0.7 1.2-0.7 0.1-0.8-0.1-0.9 0.3-1.9 1.7-0.7 1 0.2 3.7 0.3 1 0.4 0.9 0.1 0.8-0.8 0.9-2.7 1.6-0.8 0.8-1 2 0.3 0.8z" id="MWKR" name="Karonga" @mouseover="handleDistrictHover('Karonga')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Karonga')"
+  </path>
+  <path d="M461.8 169.3l16.1 13.6 2.5 1.5 0.7 0 1.4-0.5 1.1-0.3 1.1 0 2.5 0.9 1.5 0.2 0.1 0 0.4 1 1.3 1.8 1 1.9-0.1 1.4-0.7 4 0 1.8 1.6 6.3 1.9 22.3-0.1 4-4.3 3.3-15.7 9.3-1.6-3-1.4-2.1-1.6-1.9-7.4-5.9-0.8-0.2-0.4 0.6-0.2 0.8-0.8 5-1 0.7-1.6 0.2-10.8-1.5-3.5 0.4-4.1 1.1-0.6 0.4-0.2 0.7 0.2 0.7 0.4 0.7 0.3 0.5 0.1 0.5-0.1 0.7-0.3 0.8-0.7 0.8-0.8 0.6-0.9 0.3-0.9 0.1-1.1 0-1-0.7-0.6-0.8-0.9-1.9-0.7-0.6-1-0.1-4.4 0.6-1.2 0-1.4-0.2-1.5-0.9-1.2-0.9-1.2-1.1-1.1-0.9-1.2-0.3-1.5 0.3-0.9 0.6-0.6 0.8-1.4 2.5-0.7 0.8-1.7 1.8-2 1.7-2.3 1.7-1 0.3-0.9-0.3-0.4-1.1 0.1-1 0.4-0.9 0.4-0.9 0.2-1.1 0-1.2-0.3-2-0.5-2-0.6-0.7-0.9-0.4-3.9-0.2-4.2-0.7-5.2-2.1-2.2-0.9-0.4-3.5-0.8-3.7-1.7-1.4-1.6 0.2-1.4 0-0.9-0.6 0.1-1.7 1-2 1.1-0.4 1.2 0.3 1.4 0.1 1.7-1.1 2.1-3.2 1.4-1.2 1.5-0.6 2.9-0.5 1.6-0.7 1.6-0.2 3.7 0.7 1.8 0.1 1.5-0.7 2.1-2.1 1.7-0.3 2.3-1.4 1.3-2 1.8-4.7 5.6-6.3 1.5-1 1.5-0.6 4.4-3.3 1.8-1.6 1.9-2.8-0.1-0.5 3.3-1.3 28.1-12.7z" id="MWRU" name="Rumphi" @mouseover="handleDistrictHover('Rumphi')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Rumphi')"
+  </path>
+  <path d="M569.6 278.9l0.5 0.9 2.1 1.8-2.2-1.8-0.4-0.9z m-95.5-37.1l15.7-9.3 4.3-3.3-0.3 10.7 0.7 3.8 1.6 2.2-3.1 5.6-0.8 3 1.2 3 0.7 1.1 0 1.2-0.3 2.9 0.3 1.8 0.8 1 1.1 0.7 1 1.2 2.3 6.6 0.7 14.5 2.3 8.3-0.1 3.4 0.6 1.2 0.7 1.1 0.6 1.7 0.6 3.1-0.1 3.8-1 2.3-4.6 4.5-1.3 0.7-0.7 0.7-0.5 0.7-0.4 1.5-0.4 0.6-1.2 1-2.7 1.5-1.1 1.1-1.3 2.6-0.9 3.5 0 3.4 1.4 2.4-13 10-1.4 1.9-0.7 2-0.6 4.5-1.4 5.8-0.4 3.7-1.3 5.7 0 1.9-0.2 0-8.4-2-4.6-2-1.5-1-2.5-2.2-1.1-0.4-1 0-2.1 0.5-6.8 0-1-0.2-0.7-0.5-0.6-0.6-0.6-0.9-0.5-0.6-0.7-0.4-1.9-0.7-0.9-0.5-0.7-0.6-0.1-1 0.3-1.1 1.1-1.9 1.1-1.3 1.1-0.8 1.2-0.4 1.2-0.1 1.3-0.3 1.1-0.6 0.9-0.9 2.3-3.1 0.4-1.1-0.3-1.4-0.4-1.1-0.5-1.5-0.1-1.6 0-2.3-0.2-1.8-0.7-2.7 0.1-1.1 0.3-1 1-1.6 0.5-2.4 0.7-2.1 0-1.9-0.4-1-1.6-1.4-0.5-0.7-0.3-0.8-0.1-0.7-0.3-0.6-0.4-0.3-1.3-1.2-0.7-0.9-0.5-1.2-0.2-1.2-0.1-1.2 0-1.4 0.3-2.4 1.3-6.4 0.5-1.3 0.9-1.2 1.6-2 1.3-1 1.1-0.7 0.7-0.3 0.7-0.4 2.4-2.4 0.9-0.5 0.9-0.3 0.9 0 0.6 0.1 4.5 1.3 0.8 0.1 0.9-0.1 1.1-0.3 1-0.6 0.9-1.2 0.9-1.6 1.3-3.2 1.1-1.4 1.2-0.8 1.7-0.1 0.6 0.1 0.7 0.1 1.2 0.6 0.5 0.2 0.4-0.2 1.6-0.8 2.1-0.5 1-0.5 0.5-1 0.1-2-1.4-4.3-1.6-1.8-0.4-0.7-2.7-10.5-0.6-0.9-0.8-0.6-1.7-0.9-0.3-1.4 0.2-2.1 2.8-9.3 1.2-8.3z" id="MWNB" name="Nkhata Bay" @mouseover="handleDistrictHover('Nkhata Bay')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Nkhata Bay')"
+  </path>
+  <path d="M548.7 357l0.9-3.2 1.2-1 3.2 1.6-1.9 1 0 1.3 0.4 1.4-0.5 1.5-1.2 0.6-1.3-0.4-1.1-0.8-0.7-0.7 1-1.3z" id="MWLK" name="Likoma" @mouseover="handleDistrictHover('Likoma')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Likoma')"
+  </path>
+  <path d="M427.7 71.9l2.2 4.1 0.5 0.5 0.5 1-0.1 1.3-0.3 2 0 0.8 0.4 1.1 0.8 1.3 0.4 1.1 0.2 2.1 0.2 1.2 0.8 2-0.1 1.2-0.4 0.7-2 0.4-0.8 0.3-0.7 0.4-0.7 0.6-1.5 1.5-1.2 1-0.4 0.5-1 2.3-0.8 1.2-0.7 0.9-1.6 1.4-0.9 0.3-1.4 0.3-0.4 0.4-0.7 1-0.6 0.5-5.5 3.5-2.9 0.9-0.5 0.3-0.2 0.5-0.1 1.4 0.3 1 0.5 0.8 1.4 1 0.8 0.4 0.7 0.6 0.6 0.7 0.9 1.3 0.9 0.9 1.2 0.7 1.2 0.2 1.6 0.2 0.4 0.1 0.9 0.5 3.9 3.3 1.5 0.8 1.1 0.4 2.6 0 4.1-0.4 0.8 0.3 0.8 1.1 1.3 2.7 26.1 40.8-28.1 12.7-3.3 1.3 0-0.4-0.1-1.2-0.8-2.1 0-3-3.1-0.4-1.8-2.1-2.2-5.2-0.9-1-3.2-2.8-0.9-1.4-3-7.1-0.4-2.8 0.7-6.5-0.3-3.6-1.6-1.9-2.3-1.6-2.1-2.8-3-1-2-1.8-1.9-2-2.4-2-9.3-4.2-1.5-2.1 0-3 0.6-2.9 2.2-5.5 3.4-5.3 0.8-2.4-0.7-3.2-1.8-4.6-0.8-0.9-4.2-1.6-1.4-0.7-1.4-1.2-0.9-1.4-1.7-3.2-1.2-1.3-2.9-1.8-1.1-1.6-0.3-1.7 0.4-1.1 0.6-1 0.3-1.2-0.2-1.8-0.5-1.5-1.6-2.9-2.3-1.6-6.1-0.4-2.7-1.2-0.6 3-0.4 3.4-1 2.1-2.5-0.9-0.7-1.1-0.2-1.4-0.5-1.2-1.2-0.6-1.6 0.4-1.2 0.8-1.3 0.6-1.5-0.5-1.4-3.1 2-8.4 0-3.1-1-0.5-1.7-1.6-0.7-0.4-1.4 0-0.7 0.6-0.7 0.2-1.1-0.9-0.6-1.6-0.2-6.7 0.8-0.8 0.2 0 0.5 0 1-0.2 1.1-0.2 0.3 0 0.2-0.1 0.3-0.1 0.2-0.3 0.4-0.2 0.7-0.5 0.4-0.3 0.3-0.2 1.7 1 5.7 5.7 7 5.4 1.1 0.5 3.1 0.6 3.3 1.4 0.4 0.2 1.1-0.3 1.3-1.1-0.1 0.1 0.1 0.1 0.1 0.1 0.1 0 0.1 0.1 0.1 0 0.1 0.1 0.1 0 0.2 0.1 0.2 0 0.1 0 0.1 0 0-0.1 0.1 0.1 0.1 0 0.1 0 0.1 0 0.1 0.1 0.1 0 0 0.1 0.1 0.1 0.1 0.1 0.1 0 0.1 0 0-0.1 0-0.1 0-0.1 0-0.1 0.1-0.1 0.1-0.1 0-0.1 0.1 0 0-0.1 0-0.1 0.1 0.1 0-0.1 0.1 0 0-0.1 0.1 0.1 0 0.1 0.1 0 0.1-0.1 0-0.1 0.1 0 0.1 0 0.1-0.1 0-0.2 0.1-0.1 1.5 0.5 1.4 0.1 1-0.3 0.6-0.4 0 0.1 0.1 0.1 0 0.1 0.1 0 0.1-0.1 0-0.1 0.1 0 0-0.1 0.2 0 0.1 0 0 0.1 0 0.1 0.1 0.1 0.1 0.1 0 0.1 0.1 0 0.1 0 0.1 0 0-0.1 0.1-0.1 0.1 0.1 0.1 0 0.1 0.1 0.1-0.1 0.1 0 0.1 0 0.1-0.1 0.1-0.1-0.1-0.2 0.1-0.1 0.1 0 0.1-0.2 0.1 0 0.1 0 0.1 0 0.1 0 0.1 0 0.1 0 0-0.1-0.1 0-0.1 0 0-0.1 0-0.1-0.1-0.1 0.1 0 0.1-0.1 0.4 0.2 0.1 0 0.9 0.3 6.5 4.6 2.1 2 1.9 4.3 1.4 2.2 1.8 1.2 2.2 0.7 4.7 0.3 2.3-0.5 0.1 0.1 0.2 0 0.2 0 0 0.1 0.1 0.1 0.1 0.1 0.1 0.1 0.1-0.1 0.1 0.1 0.2-0.1 0.1-0.1 0.1 0 0.2 0 0.1-0.1 0.1-0.1 0-0.1 0.1 0 0.1-0.1 0.1 0 0.1 0.1 0.1 0 0.1 0 0.1-0.1 0-0.1 0-0.1 0.2-0.1 0.2 0 0.1-0.2 0.1 0 0.1 0 0.1-0.1 0.2 0 0-0.1 0.1-0.2 0.1-0.1 0.2 0.1 0.2 0 0-0.1 0.1-0.1 0-0.1 0.1 0 0.3-0.1 0.1-0.1 0-0.3 0.1-0.1 0.1-0.1 0-0.2 0-0.1 1.8-0.8 3.9 0.4 3.4 1.1 3 0.6z" id="MWCT" name="Chitipa" @mouseover="handleDistrictHover('Chitipa')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Chitipa')"
+  </path>
+  <path d="M386.8 230l2.2 0.9 5.2 2.1 4.2 0.7 3.9 0.2 0.9 0.4 0.6 0.7 0.5 2 0.3 2 0 1.2-0.2 1.1-0.4 0.9-0.4 0.9-0.1 1 0.4 1.1 0.9 0.3 1-0.3 2.3-1.7 2-1.7 1.7-1.8 0.7-0.8 1.4-2.5 0.6-0.8 0.9-0.6 1.5-0.3 1.2 0.3 1.1 0.9 1.2 1.1 1.2 0.9 1.5 0.9 1.4 0.2 1.2 0 4.4-0.6 1 0.1 0.7 0.6 0.9 1.9 0.6 0.8 1 0.7 1.1 0 0.9-0.1 0.9-0.3 0.8-0.6 0.7-0.8 0.3-0.8 0.1-0.7-0.1-0.5-0.3-0.5-0.4-0.7-0.2-0.7 0.2-0.7 0.6-0.4 4.1-1.1 3.5-0.4 10.8 1.5 1.6-0.2 1-0.7 0.8-5 0.2-0.8 0.4-0.6 0.8 0.2 7.4 5.9 1.6 1.9 1.4 2.1 1.6 3-1.2 8.3-2.8 9.3-0.2 2.1 0.3 1.4 1.7 0.9 0.8 0.6 0.6 0.9 2.7 10.5 0.4 0.7 1.6 1.8 1.4 4.3-0.1 2-0.5 1-1 0.5-2.1 0.5-1.6 0.8-0.4 0.2-0.5-0.2-1.2-0.6-0.7-0.1-0.6-0.1-1.7 0.1-1.2 0.8-1.1 1.4-1.3 3.2-0.9 1.6-0.9 1.2-1 0.6-1.1 0.3-0.9 0.1-0.8-0.1-4.5-1.3-0.6-0.1-0.9 0-0.9 0.3-0.9 0.5-2.4 2.4-0.7 0.4-0.7 0.3-1.1 0.7-1.3 1-1.6 2-0.9 1.2-0.5 1.3-1.3 6.4-0.3 2.4 0 1.4 0.1 1.2 0.2 1.2 0.5 1.2 0.7 0.9 1.3 1.2 0.4 0.3 0.3 0.6 0.1 0.7 0.3 0.8 0.5 0.7 1.6 1.4 0.4 1 0 1.9-0.7 2.1-0.5 2.4-1 1.6-0.3 1-0.1 1.1 0.7 2.7 0.2 1.8 0 2.3 0.1 1.6 0.5 1.5 0.4 1.1 0.3 1.4-0.4 1.1-2.3 3.1-0.9 0.9-1.1 0.6-1.3 0.3-1.2 0.1-1.2 0.4-1.1 0.8-1.1 1.3-1.1 1.9-0.3 1.1 0.1 1 0.7 0.6 0.9 0.5 1.9 0.7 0.7 0.4 0.5 0.6 0.6 0.9 0.6 0.6 0.7 0.5 1 0.2 6.8 0-7.4 6.2-2 3.2 0 1 0.5 3.3 0.4 1.3 1 1 1.3 0.5 3.6 0.3 1.6 1 1.5 1.5 1.7 3.6 1.2 1.7 2.1 2.4 0.4 1.8 0.2 2.6 0.6 1.7 0.7 1.4 0.9 1.2 1 1.1 1.1 0.6 3-0.1 1.5 0.2 4.2 2.1 1.3 0.5 1.4 0.3 1.4 0.2 1.4-0.1 2.7-0.7 1 0 1.2 0.6 0.3 0.5 0.1 0.4-0.1 0.3-0.2 0.3-1.8 1.6-0.9 1.2-0.9 2.6-0.3 0.9-0.6 0.6-0.6 0.3-2.2 0.3-2.4 0.6-1 0.4-0.9 0.5-1.9 1.5-1.2 0.8-3.7 1.3-3.4 0.5-0.9 0.4-0.8 0.6-0.7 0.6-0.6 0.7-3.1 5.3-2.6 3.5-0.9 0.3-1 0.5-0.4 0.4-0.4 0.2-0.5 0-0.7-0.4-2.5-2.2-1-0.6-0.8-0.2-0.6 0.1-1.3 0.1-0.5 0.2-0.5 0.3-0.4 0.3-0.9 0.7-0.5 0.3-1.2 0.4-0.6 0.1-0.7 0-1.6-0.1-1.5-0.2-1.3-0.4-0.5-0.3-0.6-0.3-0.6-0.6-1.3-1.4-2-3-0.7-0.8-0.5-0.3-0.6-0.3-0.8-0.1-0.7 0-1.4 0.1-0.5-0.5-0.4-1.3 0.1-3.4 0.3-1.4 0.5-0.9 0.4-0.4 0.4-0.4 0.2-0.5 0-0.9-0.3-0.9-0.8-1.5-1.4-1.8-0.3-0.8-0.2-1.3-0.1-6.3 0.3-1.4 0.2-0.6 0.3-0.6 0.4-0.4 1.1-1.3 0.3-0.5 0.3-0.6 0.2-0.6 0.1-0.8-0.6-0.8-0.8-0.6-5.1-1.1-1.7-0.4 0.5-0.3 1-1.9-0.2-2.3-1.3-0.5-1.9 0-4.4-1.5-8.4 2.5-4-1.4-2.3-3.5-2-8.1-1.4-3.8-1.3-1.6-3.2-3.1-0.9-1.9-0.1-3.9 0.4-3.9 4.5-10.6 1-6 0.7-1.8 0.4-1.9-0.5-1.6-1.3-2.6 0-1.8 1.5-4.4 0.4-4.3-1-14.9-0.3-4-0.7-1.9-1.5-1.8-1.9-0.3-2 0.3-1.9 0-1.9-0.8-0.4-0.9 1.7-3.6 0.8-2.2 0.1-1.4-0.5-9.9 1-1.6 2.9 2.4 1-1.6 0-1.5-0.2-1.5 0.2-1.7 0.5-0.6 1.8-0.7 0.6-0.6 0.1-0.7-0.4-1.3 0.2-0.8 8-12.3 1.6-3.3 1-3.5-3.7-6.4-2.5-2.6-2.1-2.9-1.7-3.2-1.1-3.5-0.3-3.4z" id="MWMZ" name="Mzimba" @mouseover="handleDistrictHover('Mzimba')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Mzimba')"
+  </path>
+  <path d="M412.2 392.9l1.7 0.4 5.1 1.1 0.8 0.6 0.6 0.8-0.1 0.8-0.2 0.6-0.3 0.6-0.3 0.5-1.1 1.3-0.4 0.4-0.3 0.6-0.2 0.6-0.3 1.4 0.1 6.3 0.2 1.3 0.3 0.8 1.4 1.8 0.8 1.5 0.3 0.9 0 0.9-0.2 0.5-0.4 0.4-0.4 0.4-0.5 0.9-0.3 1.4-0.1 3.4 0.4 1.3 0.5 0.5 1.4-0.1 0.7 0 0.8 0.1 0.6 0.3 0.5 0.3 0.7 0.8 2 3 1.3 1.4 0.6 0.6 0.6 0.3 0.5 0.3 1.3 0.4 1.5 0.2 1.6 0.1 0.7 0 0.6-0.1 1.2-0.4 0.5-0.3 0.9-0.7 0.4-0.3 0.5-0.3 0.5-0.2 1.3-0.1 0.6-0.1 0.8 0.2 1 0.6 2.5 2.2 0.7 0.4 0.5 0 0.4-0.2 0.4-0.4 1-0.5 0.9-0.3-1.5 9.2-0.1 3.7 0.3 1.1 0.5 1.3 0.6 0.6 0.8 0.4 0.9 0 6.5-0.8 0.9 0 1 0.2 1.1 0.3 1.4 0.9 1 1.3 1.2 2 3.8 4.4 0.5 1.5 0.2 0.7-0.2 0.3-1.2 0.6-4.5 3.7-0.3 0.4-0.5 0.8-0.8 2.2-0.3 0.4-1.5 1.4-8.3 4.1-0.9 0.8-1.1 1.1-0.2 0.9-0.6 1.3-0.7 0.6-1.1 0.7-1.7 0.7-1.5 1.2-0.7 0.8-1.4 2.7-2.3 2.6-1.3 1.1-1.1 0.6-0.8 0.4-0.4 0.6-0.3 0.8-0.4 0.5-0.5 0.3-2 0.3-1.9 0.7-1.7 1-1.8 0.8-1.7 0.2-1.8 1.8-1 2.5-0.4 0.9-0.5 0.6-1 0.7-1.7 0.9-0.5 0.4-1.2 2.4-0.9 0.7-0.9 1.2-0.7 0.5-0.7 0.2-0.7 0-0.7-0.1-0.5-0.2-0.4-0.1-0.4-0.3-0.8-0.7-0.4-0.4-0.5-0.4-0.7-0.2-1 0-0.5 0.4-0.4 0.5 0 0.7 0.2 0.5 0.3 0.5 0.6 1 0.3 0.5 0.2 0.6 0 0.7-0.1 0.6-0.9 2.7-0.4 0.7-1.4 2.3-0.8 2.7-2.1 4-1 1.3-0.6 0.3-1.1 0.3-0.7 0.5-1 2.4-0.2 0.9 0.2 0.6 0.3 0.5 0.3 0.8 0 1.1-0.2 1.9-0.4 1-0.4 0.7-3.3 2.8-2.1 2.3-4.6-5.2-3.1-1.9-1.2-1.1-1.6-1.9-4-3.8-1.4-1.8-1-1.9-1.3-3.3-1.8-4-0.6-1.4-0.1-1.5 0.5-2.4 0-1.2-0.6-1.7-0.6-0.8-0.7-0.3-25.1 1.5-1.6 0.2 1.6-6.6 2.1-4.6 2.8-3.6 3.5-1 0.6-1.6-0.4-1.4-1.8-2.7-0.9-2-0.5-1.9-0.1-2.1 1.8-12.9 3.1-7.2 0.5-3.2-0.9-2.9-2.8-2.6-3.1-1.9-0.7-1.3-0.7-8.6 0.4-2 1.5-3.2 4.1-6.1 3.5-7 1.2-1.6 1.6-1.5 1-0.4 0.8 0.2 0.6 0.7 0.5 0.9 0.8 0.7 1-0.4 1-0.9 0.9-0.5 1.8-0.5 0.9-0.1 1.1 0.3 0.8 0.8 1.3 2.6 0.5 0.6 1.2-0.1 0.5-0.6 0.4-0.8 0.7-0.6 0.5-0.4 0.5-0.5 0.7-0.4 1.2-0.4 1.6-1.1 1.9-4 1.3-1.5 0.9-0.4 3-0.5 1.5 0.1 1.1 0.6 0.9 0.6 0.9 0.3 2.6-0.6 2.6-1.6 2.3-2.4 1.8-2.7 1.3-1.2 3.4-1.4 1.1-1.4 0-2.9 0.6-0.8 1.7-0.3 0.8-2 3-1.8z" id="MWKS" name="Kasungu" @mouseover="handleDistrictHover('Kasungu')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Kasungu')"
+  </path>
+  <path d="M342.8 507.2l1.6-0.2 25.1-1.5 0.7 0.3 0.6 0.8 0.6 1.7 0 1.2-0.5 2.4 0.1 1.5 0.6 1.4 1.8 4 1.3 3.3 1 1.9 1.4 1.8 4 3.8 1.6 1.9 1.2 1.1 3.1 1.9 4.6 5.2-0.7 1.7-0.8 1-0.4 0.4-0.7 1-0.5 1.1-0.4 1.4-0.2 0.5-1.6 1.8-0.3 0.5-0.2 0.5 0 0.7 0.3 0.9 0.1 0.9-0.2 1.3-0.4 0.8-0.4 0.7-0.7 0.9-0.2 0.6-0.2 0.8-0.2 3-0.2 1-0.3 0.7-0.8 0.9-0.2 0.8 0.2 1 1.1 2.3 1 1.3 1 1 0.9 0.7 0.7 0.9 0.5 0.8 1.7 4.4 2.3 3.5 0.5 1.2 0.2 1.4-0.2 1.6-0.4 0.9-0.1 0.8 0 1.1 0.8 3.6-0.2 1.8-0.9 2.7-0.2 1.4 0.2 1.6 1.8 4.8 1.3 5.9-0.3 2.1-0.3-0.6-0.8-0.7-1-0.4-1.7-1.1-0.9-1.1-2.9-4.7-0.5-2.1 0.6-5.9-1.2-3.3-2.6-2-6.3-3.5-1.9-2.4-3.6-6.7-1.6-1.4-1.1 0.7-1.1 3-1.1 1-3.9 1.1-1.6 0.9-1.6 1.7-3.5 5.9-2.1 0.5-2.7-3.5-0.6-1.8 0.4-5.9 0.2-0.7 0-0.6-0.7-1-0.9-0.5-2 0.2-1-0.8-0.7-1.9-0.2-1.7-0.5-1.8-5.7-7-1.6-1.5-3.5-1.3-4.2-0.9-3.3-1.4-0.7-3.2 1.3-1.3 4.1-2 1-1.3-0.6-1.4-4.3-6.1-3.1-1.4-4.1 0-3.7-0.8-1.3-3.8 0.5-2.4 1.1-0.9 1.6 0.1 2.2 0.8 1.4-0.3 3.1-2.6 1.5-1 4.2-0.6 1.5-1.1 0.5-2.6-0.1-2.1 0.3-1.9 0.9-1.3 2.1-0.3 3.3-1.7 2-4.5 1.5-6.3z" id="MWMC" name="Mchinji" @mouseover="handleDistrictHover('Mchinji')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Mchinji')"
+  </path>
+  <path d="M449.7 366l2.1-0.5 1 0 1.1 0.4 2.5 2.2 1.5 1 4.6 2 8.4 2 0.2 0 0 0.1 1 7.6 2.1 5.6 0.2 1.1 0 1.3 0.4 1.1 2 0.8 0.6 0.9 0.2 1.1-0.2 0.9 2.6 0.6 2.2-0.3 2.3 0 2.6 1.7 3.6 10.4 0.4 2.6-0.1 1.1-0.7 1.1-1.1 1.2-0.5 1.1-0.3 2.9 0 2.8 0.5 3 1.8 5.4 2.4 4.3 1.7 2 4.3 1.9 0.1 2.5-1.5 5.7 0.7 2.5 3.5 3.1 1.2 2 0.1 1.5-0.7 2.8 0.3 1.4 0.8 0.8 0.9-0.7 0.6-1.4 0.3-1.1 0.3 1.6-0.8 3.5-0.2 2 1.3 5.9 0.2 19 1.1 8.1-0.5 3.3-2.5 3.5-1.4 3.3 0.4 3.9 1.4 3.8 0.6 1-0.3 0-9.8 5.6-4.7 2.1-2.8 0.5-1.4 0.2-3.4 1.6-1-15.5-2.4-9 0.2-1.8 0.4-1.5 0.5-1.1 0.1-0.9-1-6.2-0.3-1.2-0.6-0.9-1.3-0.2-1.1 0-0.9-0.2-0.7-0.5-0.4-1.1-0.1-1.2 0.2-1 0.3-1 0.2-0.9-0.3-0.6-0.5-0.1-4.8 1.5-0.5 0.3-0.2 0.5-0.8 2.9-0.4 1-0.5 0.6-0.8 0.7-0.9 0.2-0.9-0.3-1-0.7-0.8-0.8-0.6-0.7 0.1-2-0.1-1.1-1.3-2.3-0.6-0.9-0.6-0.6-0.8-2.3-0.1-5.8 1.5-1.4 0.3-0.4 0.8-2.2 0.5-0.8 0.3-0.4 4.5-3.7 1.2-0.6 0.2-0.3-0.2-0.7-0.5-1.5-3.8-4.4-1.2-2-1-1.3-1.4-0.9-1.1-0.3-1-0.2-0.9 0-6.5 0.8-0.9 0-0.8-0.4-0.6-0.6-0.5-1.3-0.3-1.1 0.1-3.7 1.5-9.2 2.6-3.5 3.1-5.3 0.6-0.7 0.7-0.6 0.8-0.6 0.9-0.4 3.4-0.5 3.7-1.3 1.2-0.8 1.9-1.5 0.9-0.5 1-0.4 2.4-0.6 2.2-0.3 0.6-0.3 0.6-0.6 0.3-0.9 0.9-2.6 0.9-1.2 1.8-1.6 0.2-0.3 0.1-0.3-0.1-0.4-0.3-0.5-1.2-0.6-1 0-2.7 0.7-1.4 0.1-1.4-0.2-1.4-0.3-1.3-0.5-4.2-2.1-1.5-0.2-3 0.1-1.1-0.6-1-1.1-0.9-1.2-0.7-1.4-0.6-1.7-0.2-2.6-0.4-1.8-2.1-2.4-1.2-1.7-1.7-3.6-1.5-1.5-1.6-1-3.6-0.3-1.3-0.5-1-1-0.4-1.3-0.5-3.3 0-1 2-3.2 7.4-6.2z" id="MWNK" name="Nkhotakota" @mouseover="handleDistrictHover('Nkhotakota')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Nkhotakota')"
+  </path>
+  <path d="M566.2 526.5l-1.1 4.8-0.2-2.3 0.2-1.8 0.3-1 0.7 0.3 0.1 0z m-83.3-3.1l3.4-1.6 1.4-0.2 2.8-0.5 4.7-2.1 9.8-5.6 0.3 0 5.6 9.3 2.4 5.4 2.2 2.6 1 1.5 1.1 1.1 1.6 0.5 2.1-0.4 3.5-1.3 1.8 0.2 1.5 1 0.9 1.4 1.5 3.3 1.5 1.7 3.4 3 0.7 1.7 0.8 1.2 1.8 1.3 1.3 1.6-0.5 1.9-1.3 2.1 0 1.7 0.4 1.6-0.2 2.2-0.6 0.9-1.9 1.5-0.7 0.9-0.1 1.1 0.8 2 0.2 0.9-2 5.5-0.8 1.3-2.9 3.2-1.9 2.5-0.5 3 1.9 10.2 0.3 0.9-0.6 0.3-0.5 0.3-0.6 0.4-0.8 0.6-2.4 2.6-0.6 0.5-0.5 0.2-1.3-0.9-1.9-1.9-3.6-5.4-3.8-6.9-1.6-1.9-7-6.9-5-7.1-1.2-0.4-1.4 0-0.9 0.2-0.9 0.3-4 2-1.1 0.4-1-0.1-0.6-0.5-0.2-0.8 0.1-0.7 0.5-0.9 0.7-0.9 1.5-1 3.2-1.3 1.3-1.3 0.2-3.3 0.5-0.5 0.1-0.1 0.2-0.2 0.5-0.3 0.7-0.3 1.1-0.2 1.7-0.6 0.5-0.3 0.6-0.4 0.3-0.5 0.2-0.6 0.1-0.8-0.1-0.4-0.5-0.6-1-0.5-0.7-0.7-0.3-1 0-0.7 0.1-1.1 0-1.3-0.3-1.1-0.8-0.6-0.7-0.1-0.7 0.3-4.1 2.2-1.1 0.2-1 0-0.8-0.2-1-0.6-0.9-0.8-5.2-5.1-0.7-0.6-1.4-0.8-0.1-0.4 0.4-0.8 0.6-1 0.3-1.8 0-1.4-1.8-8.6 2-1.8z" id="MWSA" name="Salima" @mouseover="handleDistrictHover('Salima')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Salima')"
+  </path>
+  <path d="M566.2 526.5l3.4 2.2 11.7 10.7 10 9.2 9.9 11.9 12.3 14.7 10.4 12.5 9.7 11.7 7.7 14.8 9.9 12.6 11.9 15.2 4.2 5.2-0.1 0.1-3.1 2.5-2.6 1-3.4 0.1-2.8 0.4-5.6 1.3-2.5 1-1.6 1-1.7 1.9-0.3 0.6 0 0.8 0.5 4-0.1 1.6-0.5 1.6-1.2 1.6-1.2 0.6-1.2 0.5-1.7 0.9-3 3.2-1.6 0.8-1.8 0.4-1.7-0.4-5.8-2-1.3-0.2-0.8-0.4-0.7-0.6-1.2-2-1.3-1.4-1.9-1.7-0.7-0.5-0.6-0.3-0.5-0.2-0.8-0.1-0.3 0.2-0.3 0.5-0.2 1.2-0.2 0.5-0.6 0.9-0.4 1.1 0 0.7 0 0.6 0.1 0.6 0.5 1.5 0.1 0.3-0.2 0.9-31.3 0-1.1 0-3.9-2.9-3.4-1.6-1.5-1.4-13.3-17.8-3.1-9.4-1.7-8.3-0.7-11.9 0-4.9 0-0.2 1-0.3 1.7-0.3 2-0.8 1.8-1.2 0.8-1.3 0.1-1 0.5-0.6 1.3-0.8 0.2-1-0.7-1.2-0.9-1.2-0.5-1.1 1.1-3.1 2.6-2.9 2-2.8-0.7-2.8-1.8-3.3 0.4-3.1 2.2-1.5 3.4 1 1.5 1.2 2.5 2.7 1.6 0.9-1 4.1 0.9 4.8 2.6 3.3 3.7-0.9 0.5 0.6 1.4 1.2 0.5 0.6 2.6-0.4 2.8 2.5 2.2 3.8 0.9 3.4 0.7 1.1 2.8 3.4 0.4 0.7 2 0.7 1.3 1.6 2.2 3.4 5.5 4.8 0.2 0.5 0.3 0.7 0.4 0.8 0.6 0.4 1-0.1 1.7-1.2 0.9-0.3 0.8-0.8 0.9-2 0.6-2 0-1.2-1.8-2.8-4.7-9.6-1.2-3.6-0.4-4.2-3.6-5.6-1-2 0.1-1.9 0.4-2 0.1-1.8-1.3-3.1-4.1-6.4-0.9-3.3-0.2-4.1-0.4-2.2-0.8-2.7-0.1-2-0.4-0.7-1.4-1.7-1.3-1.9-1.4-4.1-0.6-3.3-1.6-2.2-4.3-0.9-11.8 0.4-1.7-0.2-2.1-1-2.6-2.7-0.6-3.1 0.8-7.5-0.5-5.4 1.1-4.8z" id="MWMG" name="Mangochi" @mouseover="handleDistrictHover('Mangochi')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Mangochi')"
+  </path>
+  <path d="M667.3 647.2l4.1 5.3 5.6 5.7 1.3 1.7 0.6 2 1.2 24.7 0.8 1 1.4 0.2 2.5 0-4.3 10.1-3.1 7.5-5.5 13.1-0.8 2.9 0 2.8 0.5 1.9-29.4-0.5-0.3 0.2-0.5 0.3-0.2 0.3-1.1 0.9-1.2 0.8-1.5 0.6-2.4 0.8-1.5 0.2-1.3 0-2.1-0.7-5.8-2.4-2.3-0.5-1.3 0.1-1.3 0.4-0.7 0.5-2.2 2.3-1.1 0.7-1.1 0-1.4-0.2-1.9-0.7-1.9-0.4-1.1 0.2-0.9 0.7-1 1-1.4 0.9-1.1 0-0.8-0.6-0.5-0.7-0.9-2 0.9-0.9 0.9-1.9 0.4-2.5 1.6-4.4 0.7-3.1 2-4.2 0.3-1.1 0.1-1.9 0.3-1 0.8-1.4 3.4-5.5 1.7-1.2 1.2-1 0.8-2.6 1.1-9.5-0.2-5.6-1.3-5.1-2.7-2.9-0.4-0.2 0.2-0.9-0.1-0.3-0.5-1.5-0.1-0.6 0-0.6 0-0.7 0.4-1.1 0.6-0.9 0.2-0.5 0.2-1.2 0.3-0.5 0.3-0.2 0.8 0.1 0.5 0.2 0.6 0.3 0.7 0.5 1.9 1.7 1.3 1.4 1.2 2 0.7 0.6 0.8 0.4 1.3 0.2 5.8 2 1.7 0.4 1.8-0.4 1.6-0.8 3-3.2 1.7-0.9 1.2-0.5 1.2-0.6 1.2-1.6 0.5-1.6 0.1-1.6-0.5-4 0-0.8 0.3-0.6 1.7-1.9 1.6-1 2.5-1 5.6-1.3 2.8-0.4 3.4-0.1 2.6-1 3.1-2.5 0.1-0.1z" id="MWMH" name="Machinga"> @mouseover="handleDistrictHover(name)" @mouseout="handleDistrictLeave()" @click="handleDistrictClick(name)"
+  </path>
+  <path d="M511 632l-0.9-1.4-3.2-1.7-1 0.2-0.9 0.5-0.8 0.7-0.9 0.6-0.9 0.2-1.8-0.2-0.9 0.1-11.3 4-8.3 0.3-3.6 1.5-0.9 1.2-1.3 3-0.9 0.6-12-1.6-3.3 0-3.1 0.8-6.7 4-3.2 1.2-3.2-0.3-6.1-4.8-2.5 0.8-1.7 2.7-1 3.4 0 4.1-0.3 2.1-1.2 0.8-2-0.7-1.3-1.2-1-1.5-0.7-2 2-1 1-1.6 1.2-0.7 1-0.9 2.5-4 0.4-1.3 0.3-5.1 0.4-1.8 0.5-1.7 0.9-1.4 1-1.2 1.5-0.9 7.9-3.8 1.3-1 1.3-1.4 2.4-1.7 1.4-0.5 2.1 0.2 1.1-0.3 2.7-1.1 1.1-0.2 1 0 1-0.5 0.9-1 0.6-1.9 0.5-5.5 0.5-1.6 0.9-1.2 1.6-0.9 4.4-0.5 1.2-0.6 1.4-1.2 1.4-1.5 1.3-1.9 1.7-1.3 1.8-1.8 1.1-3.3 0.7-1.4 1-1.5 1.7-1.9 1.4-2.1 1.7-1.6 1-1.5 3.1-5.9 0.5-1.4 0.5-1.2 0.6-0.8 1.4-0.7 2.9-2.1 2.1-2 2-3.4 5 7.1 7 6.9 1.6 1.9 3.8 6.9 3.6 5.4 1.9 1.9 1.3 0.9 0.5-0.2 0.6-0.5 2.4-2.6 0.8-0.6 0.6-0.4 0.5-0.3 0.6-0.3 0.3 0.7 4 4.8 0.7 1.2 0.3 1.6 0.7 1.9 0.9 1.8 0.9 1.2 2 1.5 1.6 0.5 1.8 0.1 2 0.8 1.9 1.7-0.1 1.5-0.6 1.5 0.3 1.8 1.6 1.1 1.8-0.4 1.9-1 0.8-0.3 0 0.2 0 4.9-9.3 5.7-8.5 6.4-6.5 2.7-1.8 0.4-1.2-0.1-1.3-1.2-1.9-0.8-0.8-0.6-0.7-0.5-0.8-0.3-1-0.3-1.7-0.2-2.7-0.5-0.6 0-0.6 0.2-1.2 0.9-1.4 1.2z" id="MWDE" name="Dedza"> @mouseover="handleDistrictHover(name)" @mouseout="handleDistrictLeave()" @click="handleDistrictClick(name)"
+  </path>
+  <path d="M391.6 539.7l2.1-2.3 3.3-2.8 0.4-0.7 0.4-1 0.2-1.9 0-1.1-0.3-0.8-0.3-0.5-0.2-0.6 0.2-0.9 1-2.4 0.7-0.5 1.1-0.3 0.6-0.3 1-1.3 2.1 1.5 0.6 0.5 0.5 0.9 0 0.9-0.7 4.1 0 1.8 1.9 8.7 0.2 1.6 0.5 1.7 1.1 1.7 5.3 2.7 6.7 0.1 18-5 1.1-0.1 0.6 0.3 0.2 1 0.1 1.1 0.3 1.1 0.7 2.6 0.4 2.8 0.5 1.5 1.4 1.1 2 0.7 4.1-0.1 5.4-0.8 1.6-0.1 1.8 0.1 2.7 0.7 3.4 1.4 2.3 0.6 0.7 0.3 1.4 0.9 0.9 0.8 0.4 0.4 0.6 0.9 1 1 1.7 0.9 5.9-0.7 2.3-0.5 2.1-0.9 1.4-0.8 1.3-0.6 1.5-0.3 4.1 0.5 1.1 0 3.2-1.8-0.2 3.3-1.3 1.3-3.2 1.3-1.5 1-0.7 0.9-0.5 0.9-0.1 0.7 0.2 0.8 0.6 0.5 1 0.1 1.1-0.4 4-2 0.9-0.3 0.9-0.2 1.4 0 1.2 0.4-2 3.4-2.1 2-2.9 2.1-1.4 0.7-0.6 0.8-0.5 1.2-0.5 1.4-3.1 5.9-1 1.5-1.7 1.6-1.4 2.1-1.7 1.9-1 1.5-0.7 1.4-1.1 3.3-1.8 1.8-1.7 1.3-1.3 1.9-1.4 1.5-1.4 1.2-1.2 0.6-4.4 0.5-1.6 0.9-0.9 1.2-0.5 1.6-0.5 5.5-0.6 1.9-0.9 1-1 0.5-1 0-1.1 0.2-2.7 1.1-1.1 0.3-2.1-0.2-1.4 0.5-2.4 1.7-1.3 1.4-1.3 1-7.9 3.8-1.5 0.9-1 1.2-0.9 1.4-0.5 1.7-0.4 1.8-0.3 5.1-0.4 1.3-2.5 4-1 0.9-1.2 0.7-1 1.6-2 1-1.6-4.4-1-1.5-1.3-1-3-1.5-1.3-1-1-1.5-0.6-1.5-0.7-1.4-1.6-1.3-4.8-2.2-1.4-1.2-2.1-2.8-5.8-11.8-2-2.8-1.6-3.1 0.3-2.1-1.3-5.9-1.8-4.8-0.2-1.6 0.2-1.4 0.9-2.7 0.2-1.8-0.8-3.6 0-1.1 0.1-0.8 0.4-0.9 0.2-1.6-0.2-1.4-0.5-1.2-2.3-3.5-1.7-4.4-0.5-0.8-0.7-0.9-0.9-0.7-1-1-1-1.3-1.1-2.3-0.2-1 0.2-0.8 0.8-0.9 0.3-0.7 0.2-1 0.2-3 0.2-0.8 0.2-0.6 0.7-0.9 0.4-0.7 0.4-0.8 0.2-1.3-0.1-0.9-0.3-0.9 0-0.7 0.2-0.5 0.3-0.5 1.6-1.8 0.2-0.5 0.4-1.4 0.5-1.1 0.7-1 0.4-0.4 0.8-1 0.7-1.7z" id="MWLI" name="Lilongwe" @mouseover="handleDistrictHover('Lilongwe')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Lilongwe')"
+  </path>
+  <path d="M568.7 902.8l0.8-1.3 0.1 0 2.4-3.8 1.9-1.8 2.1-1.3 1.4-0.6 0.6-0.7 0.1-0.7-0.3-0.9-0.1-1.3 0.6-2 0.7-1.3 6.2-6.9 2.2-2.1 0.8-0.5 0.4-0.5 0.3-0.8 3.7-17.5 6.4 7 0.9 0.4 1.1 0.2 0.4-0.8 2-0.4 5.3 1.6 0 0.1-0.4 1.6 0 4.7-0.6 2.1-1.6 1.7-7.9 5.3-1.5 1 1.9 5.3 1.8 3 0.5 1.2 0.7 1 1.2 0.4 1.1 0.2 2.5 1 0.7 0.4 0.5 0.5 0.6 1.3 0.5 0.6 0.3 0.2 1 0.5 0.3 0.2 2.7 3 0.4 0.6 0.3 7.9 0.5 2.4 2.3 4.6 0.5 3-2.8 2.4-0.3 2.5 0.3 4.6-0.4 0.5-0.7 0.5-0.5 0.7 0 0.7 0.5 0.6 3.7 2.2 0.7 1-0.6 1.5-1.2 2.2-0.1 1.9 1 4.5 0.1 2.4-0.3 2-0.6 1.7-0.8 1.3-0.1 0-6.5 0.7-11.5-0.3-6-1-1.7-1.7 0.4-3.1-3.8-5.7 0.9-3.7 2.5-2.1 2.9-1.4 2.5-1.8 1.3-3.3 0.4-3.8-0.1-4.4-1-3.7-2.6-1.9-3.8-0.1-3.4 0.3-3.2-0.5-3.4-2.7-2.1-2.8-0.9-1.1-1.6-1.1-0.8-0.3-1.7-0.3-0.8-0.5-0.5-0.9-0.4-2.3-0.5-1-0.8-0.5z" id="MWNS" name="Nsanje" @mouseover="handleDistrictHover('Nsanje')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Nsanje')"
+  </path>
+  <path d="M568.7 902.8l-1-0.8-2-0.9-1.7-1-1.2-1.8-0.8-2.6-0.9-1.6-5.3-4.6-1.2-1.6-2-3.9-1.5-1.7-7.2-3.8-0.9-0.4-0.7-0.5-1.4-3.5-0.6-1.1-0.7-0.9-3.7-2.8-1.5-1.4-1.2-1.8-3.2-8.3-2.5-2.6-5.1-0.8-3.9-0.1-2.2-2.3-4.7-10.4 0.4-4 2.3-7.7-0.5-3.3-2-2.7-9.5-10.1-1.6-1-3.8-1.9-1.4-1.2-1.3-3.3-0.2-4.2 0.6-4.2 1.2-2.9 3.3-3.6 2-1.5 1.9-1 2.4-0.7 1.2-0.7 0.1-0.1 1.6 0.7 16.1 6.9 4.5 1.5 24.2 0.6 11.6 1.1 1.4 0.3 0.5 0.4 0.2 0.5 0.6 1.6 0.3 0.6 0.2 0.6 0 0.8-0.4 1-1.3 2.4-0.4 1.2 0.2 2.3-0.1 1-1.8 3.3 0 1.4 0.5 0.5 1.1 0 1.2-0.1 1.2 0.3 0.4 0.6-0.1 0.6-0.8 1.2-0.1 0.7 0 1 0.4 1.8 0.4 0.7 0.3 0.2 0.7-0.6 6.5 10.6 15.3 17.6 0.1 0.9 0.1 1.2-0.2 0.9 1.5 5-3.7 17.5-0.3 0.8-0.4 0.5-0.8 0.5-2.2 2.1-6.2 6.9-0.7 1.3-0.6 2 0.1 1.3 0.3 0.9-0.1 0.7-0.6 0.7-1.4 0.6-2.1 1.3-1.9 1.8-2.4 3.8-0.1 0-0.8 1.3z" id="MWCK" name="Chikwawa" @mouseover="handleDistrictHover('Chikwawa')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Chikwawa')"
+  </path>
+  <path d="M506.7 787.5l7-9.9 1.4-3.8 0.3-4.7 13.5 1.5 13.5 1.4 12.2 1.3 0.3 7.4-0.2 0.8-0.6 0.9-0.7 0.8-1.8 1 0 1.5 0.8 2.7 0.7 8.8-24.2-0.6-4.5-1.5-16.1-6.9-1.6-0.7z" id="MWMW" name="Mwanza" @mouseover="handleDistrictHover('Mwanza')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Mwanza')"
+  </path>
+  <path d="M515.4 769.1l-1-7.1 0-4 1.4-2 2.1-1 2.2-3.7 2.3-1.4 0.8-1.5 0.5-2.9 0.6-1.5 1.3-1.8 1.4-0.9 1.5-0.8 1.5-1.2 2.1-3.1 0.4-3-1.1-8.4 1.6 0.1 5.3 1.1 6.8 2.1 0.5 0 1.9-0.3 0.9 0.1 0.9 0.2 1.6 0.6 4.5 0.8 1.7 0.6 1.4 0.6 0.9 0.8 1 1 0.5 1.6 0.3 1.3 0.1 1.2-0.1 0.7-0.3 1.2 0.1 0.6 0.2 0.4 0.8 0.2 0.5 0 1.3-1.5 24.1 1.3-5 3.1-0.3 0.2-2.1 1-3.6 0.4-1.1 0.4-3.2 2.7-1.1 0.5-1.8 2.8-4.2 12.3-1.7 2.7-2 0.8-5.6 3.6-1.3 1.3-0.3 2-12.2-1.3-13.5-1.4-13.5-1.5z" id="MWNE" name="Neno" @mouseover="handleDistrictHover('Neno')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Neno')"
+  </path>
+  <path d="M531.4 724.8l-1.2-9.1 0.2-2 1.1-1.3-0.3-1.3-0.7-1.5-0.3-1.7 0.7-1.6 2.3-3.3 0.8-1.7 0.3-2-0.9-1.8-1.2-1.8-1-1.9-0.7-2.3-0.3-2 0-8.7-0.7-3.7-1.2-3.5-1.9-3.8-1.1-4 1.6-7-0.2-4-1.8-3.7-6-5.9-2.6-3.3-3.8-7.7-1.5-2.2 1.4-1.2 1.2-0.9 0.6-0.2 0.6 0 2.7 0.5 1.7 0.2 1 0.3 0.8 0.3 0.7 0.5 0.8 0.6 1.9 0.8 1.3 1.2 1.2 0.1 1.8-0.4 6.5-2.7 8.5-6.4 9.3-5.7 0.7 11.9 1.7 8.3 3.1 9.4 13.3 17.8 1.5 1.4 3.4 1.6 3.9 2.9-0.6 1.4 0.2 1.8 0.5 1.9 0 1.2-0.2 1.5-1.9 6.8-0.5 1-5.8 8.1-0.3 0.8-0.2 0.5 0.4 1.1 0.1 0.8 0 1-8.5 38-1.3 1.5-0.5 0-0.8-0.2-0.2-0.4-0.1-0.6 0.3-1.2 0.1-0.7-0.1-1.2-0.3-1.3-0.5-1.6-1-1-0.9-0.8-1.4-0.6-1.7-0.6-4.5-0.8-1.6-0.6-0.9-0.2-0.9-0.1-1.9 0.3-0.5 0-6.8-2.1-5.3-1.1-1.6-0.1z" id="MWNU" name="Ntcheu" @mouseover="handleDistrictHover('Ntcheu')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Ntcheu')"
+  </path>
+  <path d="M671.6 726.1l2.7 11 3.2 13.3-0.3 4.9 0 0.1-0.1 0-13 0.5-4.3 1.3-2.8 1.3-1.6 1.8-2.7 2.5-6 4-1.3 0.6-1.3 0.9-0.9 0.9-1.5 3.7-2.7 2-0.9 0.7-3.4 4-0.9 0.3-1.4 0.2-4.8 0.2-1.4 0.3-1.6 0.7-0.9 0.4-3.2 0.2-5.1-1.8-1.3-0.8-1.4-1.2-1.6-2.4-0.8-1.6-0.9-2.6-0.8-1.1-1-0.8-1.8-0.8-1.2-0.8-0.8-1.2-0.1-1.2 0.2-1.7-0.2-0.7-0.6-0.2-1.3 0.7-0.8 0.5-0.7 0.4-0.8-0.3-1.6 0.3-1.5 0.1-0.6-0.1-0.7-0.3-0.5-0.6-0.1-0.9 0.2-0.8 0.4-0.7 2.3-2.8 0.3-0.7-0.1-0.4-0.8-0.2-2 0-0.9-0.2-1.1-0.9-1.1-1.2-3.8-5.7-2.6-2.2-2.4-4.4 5-3.1 4.6-1.2 1.4-1.4 2.3-3.7 5.2-4.9 0.9 2 0.5 0.7 0.8 0.6 1.1 0 1.4-0.9 1-1 0.9-0.7 1.1-0.2 1.9 0.4 1.9 0.7 1.4 0.2 1.1 0 1.1-0.7 2.2-2.3 0.7-0.5 1.3-0.4 1.3-0.1 2.3 0.5 5.8 2.4 2.1 0.7 1.3 0 1.5-0.2 2.4-0.8 1.5-0.6 1.2-0.8 1.1-0.9 0.2-0.3 0.5-0.3 0.3-0.2 29.4 0.5z" id="MWZO" name="Zomba"> @mouseover="handleDistrictHover(name)" @mouseout="handleDistrictLeave()" @click="handleDistrictClick(name)"
+  </path>
+  <path d="M641.7 772.9l1.5-3.7 0.9-0.9 1.3-0.9 1.3-0.6 6-4 2.7-2.5 1.6-1.8 2.8-1.3 4.3-1.3 13-0.5 0.1 0-0.7 9.4-1 14.8-0.7 10.5-1.1 17-1.2 4.4 0 0.1-0.1 0-0.1 0-0.1-0.1-0.2-0.1-0.1 0-0.3 0-0.1 0-0.2-0.1-0.5-0.4-0.2 0-0.2 0-0.2 0.1-0.1 0-0.3 0-0.1 0-0.2 0-0.4 0.2-0.3 0.1-0.1 0.1-0.1 0.1-0.2 0.1-0.5 0.3-0.1 0.1-0.2 0-0.1 0-0.1 0.1-0.3 0.1-0.2 0.1-0.1 0.1-0.1 0.1-0.2 0.2-0.1 0.1-0.2 0-0.1 0.1-0.2 0-0.5-0.2-0.4-0.1-0.2-0.2-0.9-0.8-0.8-0.4-2-1.6-1.7-1.7-1.4-1-0.5-0.1-2.8 1-4.5 4-0.6-0.7-3.3-9.2-0.2-0.5-0.2-0.1-0.1-0.1-0.1 0-0.1 0-0.2 0.1-0.2 0.1-0.1 0-0.1 0-0.1-0.1-0.1 0-0.1-0.1-0.1-0.1-0.1-0.2-0.2-0.2-0.1-0.1 0-0.2-0.2-0.1-0.2-0.3-0.1-0.1-0.1 0-0.1 0.1-0.1 0 0-0.1-0.2-0.1-0.1-0.1-0.1 0-0.1-0.1-0.2-0.2-0.2-0.1-0.2-0.2-0.2-0.4-0.6-1.8-0.4-2.3-0.8-10.9 0-0.1-0.1-0.1-0.1-0.1-0.2-0.1-0.2-0.1-0.1 0-0.3-0.1-0.1-0.1-0.1 0-0.4 0-0.1 0-0.1 0-0.1 0-0.1-0.2 0.1-0.6 0.2-0.7 1.3-2.2 0.3-0.4 0.1-0.1 0-0.1 0.2-0.2 0.1-0.3 0.6-1.1 0.1-0.1 0.2 0 0.1-0.1 0.1-0.1 0.1-0.1 0.2-0.3 0-0.1 0.1-0.2 0.4-1.2 0.2-0.6 0-0.2-0.1-0.2-0.9-1z" id="MWPH" name="Phalombe"> @mouseover="handleDistrictHover(name)" @mouseout="handleDistrictLeave()" @click="handleDistrictClick(name)"
+  </path>
+  <path d="M620.5 781.9l3.2-0.2 0.9-0.4 1.6-0.7 1.4-0.3 4.8-0.2 1.4-0.2 0.9-0.3 3.4-4 0.9-0.7 2.7-2 0.9 1 0.1 0.2 0 0.2-0.2 0.6-0.4 1.2-0.1 0.2 0 0.1-0.2 0.3-0.1 0.1-0.1 0.1-0.1 0.1-0.2 0-0.1 0.1-0.6 1.1-0.1 0.3-0.2 0.2 0 0.1-0.1 0.1-0.3 0.4-1.3 2.2-0.2 0.7-0.1 0.6 0.1 0.2 0.1 0 0.1 0 0.1 0 0.4 0 0.1 0 0.1 0.1 0.3 0.1 0.1 0 0.2 0.1 0.2 0.1 0.1 0.1 0.1 0.1 0 0.1 0.8 10.9 0.4 2.3 0.6 1.8 0.2 0.4 0.2 0.2 0.2 0.1 0.2 0.2 0.1 0.1 0.1 0 0.1 0.1 0.2 0.1 0 0.1 0.1 0 0.1-0.1 0.1 0 0.1 0.1 0.2 0.3 0.2 0.1 0 0.2 0.1 0.1 0.2 0.2 0.1 0.2 0.1 0.1 0.1 0.1 0.1 0 0.1 0.1 0.1 0 0.1 0 0.2-0.1 0.2-0.1 0.1 0 0.1 0 0.1 0.1 0.2 0.1 0.2 0.5 3.3 9.2 0.6 0.7 4.5-4 2.8-1 0.5 0.1 1.4 1 1.7 1.7 2 1.6 0.8 0.4 0.9 0.8 0.2 0.2 0.4 0.1 0.5 0.2 0.2 0 0.1-0.1 0.2 0 0.1-0.1 0.2-0.2 0.1-0.1 0.1-0.1 0.2-0.1 0.3-0.1 0.1-0.1 0.1 0 0.2 0 0.1-0.1 0.5-0.3 0.2-0.1 0.1-0.1 0.1-0.1 0.3-0.1 0.4-0.2 0.2 0 0.1 0 0.3 0 0.1 0 0.2-0.1 0.2 0 0.2 0 0.5 0.4 0.2 0.1 0.1 0 0.3 0 0.1 0 0.2 0.1 0.1 0.1 0.1 0 0.1 0 0-0.1-0.8 3.1 0.1 1.8 0.6 3.7-0.1 1.8-1.1 2.6-1.7 1.9-8.3 5.8-1.2 0.6-1 0.1-2.2-0.4-1.2 0.1-10.8 3.3-2.8 0.3-0.6 0.7-0.3 1.8-0.7 1.1-1.5-0.1-1.5-0.7-1-0.9-0.8-2-1.9-1.3-2.3-0.6-2.3-0.2-2.6 0.7-2.1 1.5-8 7.2-0.6 0.8-1.3-1.3-0.4-0.6-0.1-1.1 0.2-1.2 0.8-2.1 0.7-1.2 0.7-0.8 0.6-0.5 1-1.1 0.5-3.4-1.4-10.8 1.5-3.8 0.5-0.6 0.6-1.3 0.1-1.7-1.6-19.7 0.1-4.4 2.2-6.7z" id="MWMU" name="Mulanje"> @mouseover="handleDistrictHover(name)" @mouseout="handleDistrictLeave()" @click="handleDistrictClick(name)"
+  </path>
+  <path d="M608.7 866.9l0-0.1-5.3-1.6-2 0.4-0.4 0.8-1.1-0.2-0.9-0.4-6.4-7-1.5-5 0.2-0.9-0.1-1.2-0.1-0.9-15.3-17.6-6.5-10.6 3.1-0.8 0.9-0.6 2.9-2.6 1.1-1.4 2.1-4 0.8-1 0.8-0.8 0.6-0.3 0.7-0.2 2.2-0.1 1.6-0.4 12.3-7.4 4.2 0 1.1 0.3 0.7 0.6 0.8 1.1 0.8 1 4.1 3.8 0.7 1.1 0.6 1.7 0.6 2.5 0.5 1.1 0.9 1.2 1.4 1.4 2.3 1.3 1.4 10.8-0.5 3.4-1 1.1-0.6 0.5-0.7 0.8-0.7 1.2-0.8 2.1-0.2 1.2 0.1 1.1 0.4 0.6 1.3 1.3-2.5 3-2.1 4.5-0.8 5.5 0.3 1.3 1.3 3.3-0.4 1.2-2.7 3.3-0.2 0.6z" id="MWTH" name="Thyolo"> @mouseover="handleDistrictHover(name)" @mouseout="handleDistrictLeave()" @click="handleDistrictClick(name)"
+  </path>
+  <path d="M401.8 522.3l2.1-4 0.8-2.7 1.4-2.3 0.4-0.7 0.9-2.7 0.1-0.6 0-0.7-0.2-0.6-0.3-0.5-0.6-1-0.3-0.5-0.2-0.5 0-0.7 0.4-0.5 0.5-0.4 1 0 0.7 0.2 0.5 0.4 0.4 0.4 0.8 0.7 0.4 0.3 0.4 0.1 0.5 0.2 0.7 0.1 0.7 0 0.7-0.2 0.7-0.5 0.9-1.2 0.9-0.7 1.2-2.4 0.5-0.4 1.7-0.9 1-0.7 0.5-0.6 0.4-0.9 1-2.5 1.8-1.8 0.9 4.1 0.5 0.5 0.9 0.7 1.3 0.7 1.6 1.2 3.1 3.1 1.6 2.3 1.3 2.4 2.5 6.5 0.3 1.6 0.3 5.2 0.4 2.1 0.6 0.9 0.6 0.4 0.8 0.1 5.9 0.1 6.3-2.1 1.2-0.3 1.8 0 1.8 0.4 2.9 1.1 1.6 0.3 3.2-0.2 1.8 0 6.5 2.4 1.1 0.2 1 0 0.7-0.1 3.2-1.4 1-0.5 1.8 8.6 0 1.4-0.3 1.8-0.6 1-0.4 0.8 0.1 0.4 1.4 0.8 0.7 0.6 5.2 5.1 0.9 0.8 1 0.6 0.8 0.2 1 0 1.1-0.2 4.1-2.2 0.7-0.3 0.7 0.1 0.8 0.6 0.3 1.1 0 1.3-0.1 1.1 0 0.7 0.3 1 0.7 0.7 1 0.5 0.5 0.6 0.1 0.4-0.1 0.8-0.2 0.6-0.3 0.5-0.6 0.4-0.5 0.3-1.7 0.6-1.1 0.2-0.7 0.3-0.5 0.3-0.2 0.2-0.1 0.1-0.5 0.5-3.2 1.8-1.1 0-4.1-0.5-1.5 0.3-1.3 0.6-1.4 0.8-2.1 0.9-2.3 0.5-5.9 0.7-1.7-0.9-1-1-0.6-0.9-0.4-0.4-0.9-0.8-1.4-0.9-0.7-0.3-2.3-0.6-3.4-1.4-2.7-0.7-1.8-0.1-1.6 0.1-5.4 0.8-4.1 0.1-2-0.7-1.4-1.1-0.5-1.5-0.4-2.8-0.7-2.6-0.3-1.1-0.1-1.1-0.2-1-0.6-0.3-1.1 0.1-18 5-6.7-0.1-5.3-2.7-1.1-1.7-0.5-1.7-0.2-1.6-1.9-8.7 0-1.8 0.7-4.1 0-0.9-0.5-0.9-0.6-0.5-2.1-1.5z" id="MWDO" name="Dowa" @mouseover="handleDistrictHover('Dowa')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Dowa')"
+  </path>
+  <path d="M580.6 672.3l1.1 0 31.3 0 0.4 0.2 2.7 2.9 1.3 5.1 0.2 5.6-1.1 9.5-0.8 2.6-1.2 1-1.7 1.2-3.4 5.5-0.8 1.4-0.3 1-0.1 1.9-0.3 1.1-2 4.2-0.7 3.1-1.6 4.4-0.4 2.5-0.9 1.9-0.9 0.9-5.2 4.9-2.3 3.7-1.4 1.4-4.6 1.2-24.1-1.3 8.5-38 0-1-0.1-0.8-0.4-1.1 0.2-0.5 0.3-0.8 5.8-8.1 0.5-1 1.9-6.8 0.2-1.5 0-1.2-0.5-1.9-0.2-1.8 0.6-1.4z" id="MWBA" name="Balaka" @mouseover="handleDistrictHover('Balaka')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Balaka')"
+  </path>
+  <path d="M597.9 764.6l1.6-0.3 0.8 0.3 0.7-0.4 0.8-0.5 1.3-0.7 0.6 0.2 0.2 0.7-0.2 1.7 0.1 1.2 0.8 1.2 1.2 0.8 1.8 0.8 1 0.8 0.8 1.1 0.9 2.6 0.8 1.6 1.6 2.4 1.4 1.2 1.3 0.8 5.1 1.8-2.2 6.7-0.1 4.4 1.6 19.7-0.1 1.7-0.6 1.3-0.5 0.6-1.5 3.8-2.3-1.3-1.4-1.4-0.9-1.2-0.5-1.1-0.6-2.5-0.6-1.7-0.7-1.1-4.1-3.8-0.8-1-0.8-1.1-0.7-0.6-1.1-0.3-4.2 0-2.6-4.9-0.7-2.1-0.2-2.4 0.3-11.5-0.3-3.4-0.5-2.2-0.7-0.9-0.2-1.7 0.1-1.3 4.3-8z" id="MWCR" name="Chiradzulu" @mouseover="handleDistrictHover('Chiradzulu')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Chiradzulu')"
+  </path>
+  <path d="M569.3 822.6l-0.7 0.6-0.3-0.2-0.4-0.7-0.4-1.8 0-1 0.1-0.7 0.8-1.2 0.1-0.6-0.4-0.6-1.2-0.3-1.2 0.1-1.1 0-0.5-0.5 0-1.4 1.8-3.3 0.1-1-0.2-2.3 0.4-1.2 1.3-2.4 0.4-1 0-0.8-0.2-0.6-0.3-0.6-0.6-1.6-0.2-0.5-0.5-0.4-1.4-0.3-11.6-1.1-0.7-8.8-0.8-2.7 0-1.5 1.8-1 0.7-0.8 0.6-0.9 0.2-0.8-0.3-7.4 0.3-2 1.3-1.3 5.6-3.6 2-0.8 1.7-2.7 4.2-12.3 1.8-2.8 1.1-0.5 3.2-2.7 1.1-0.4 3.6-0.4 2.1-1 0.3-0.2 2.4 4.4 2.6 2.2 3.8 5.7 1.1 1.2 1.1 0.9 0.9 0.2 2 0 0.8 0.2 0.1 0.4-0.3 0.7-2.3 2.8-0.4 0.7-0.2 0.8 0.1 0.9 0.5 0.6 0.7 0.3 0.6 0.1 1.5-0.1-4.3 8-0.1 1.3 0.2 1.7 0.7 0.9 0.5 2.2 0.3 3.4-0.3 11.5 0.2 2.4 0.7 2.1 2.6 4.9-12.3 7.4-1.6 0.4-2.2 0.1-0.7 0.2-0.6 0.3-0.8 0.8-0.8 1-2.1 4-1.1 1.4-2.9 2.6-0.9 0.6-3.1 0.8z" id="MWBL" name="Blantyre" @mouseover="handleDistrictHover('Blantyre')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Blantyre')"
+  </path>
+  <path d="M424.2 493.5l1.7-0.2 1.8-0.8 1.7-1 1.9-0.7 2-0.3 0.5-0.3 0.4-0.5 0.3-0.8 0.4-0.6 0.8-0.4 1.1-0.6 1.3-1.1 2.3-2.6 1.4-2.7 0.7-0.8 1.5-1.2 1.7-0.7 1.1-0.7 0.7-0.6 0.6-1.3 0.2-0.9 1.1-1.1 0.9-0.8 8.3-4.1 0.1 5.8 0.8 2.3 0.6 0.6 0.6 0.9 1.3 2.3 0.1 1.1-0.1 2 0.6 0.7 0.8 0.8 1 0.7 0.9 0.3 0.9-0.2 0.8-0.7 0.5-0.6 0.4-1 0.8-2.9 0.2-0.5 0.5-0.3 4.8-1.5 0.5 0.1 0.3 0.6-0.2 0.9-0.3 1-0.2 1 0.1 1.2 0.4 1.1 0.7 0.5 0.9 0.2 1.1 0 1.3 0.2 0.6 0.9 0.3 1.2 1 6.2-0.1 0.9-0.5 1.1-0.4 1.5-0.2 1.8 2.4 9 1 15.5-2 1.8-1 0.5-3.2 1.4-0.7 0.1-1 0-1.1-0.2-6.5-2.4-1.8 0-3.2 0.2-1.6-0.3-2.9-1.1-1.8-0.4-1.8 0-1.2 0.3-6.3 2.1-5.9-0.1-0.8-0.1-0.6-0.4-0.6-0.9-0.4-2.1-0.3-5.2-0.3-1.6-2.5-6.5-1.3-2.4-1.6-2.3-3.1-3.1-1.6-1.2-1.3-0.7-0.9-0.7-0.5-0.5-0.9-4.1z" id="MWNI" name="Ntchisi" @mouseover="handleDistrictHover('Ntchisi')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Ntchisi')"
+  </path>
+                                                    
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                            
+                                            <!-- Map Legend -->
+                                            <div class="mt-4 text-sm transition-colors duration-300"
+                                            :class="selectedDistrict ? 'text-gray-700 font-medium' : 'text-gray-600'">
+                                            <div class="flex items-center justify-between">
+                                            <span>Map of Malawi</span>
+                                            <span v-if="selectedDistrict" class="flex items-center">
+                                            <span class="w-2 h-2 bg-gray-700 rounded-full mr-2 animate-pulse"></span>
+                                                {{ selectedDistrict }} selected
+                                                </span>
+                                                </div>
+                                </div>
+                                        </div>
                 
-                <!-- SVG Map Container -->
-                <div class="border border-gray-300 rounded-lg p-4 bg-white shadow-sm transition-all duration-300 hover:shadow-md">
-                    <div class="w-full max-w-md mx-auto">
-                        <!-- SVG Map -->
-                        <img 
-                            src="./malawi.svg" 
-                            alt="Map of Malawi showing all districts"
-                            class="w-full h-auto transition-all duration-500"
-                            :class="{ 
-                                'opacity-50': !selectedDistrict,
-                                'scale-105': selectedDistrict
-                            }"
-                        />
-                    </div>
-                    
-                    <!-- Map Legend -->
-                    <div class="mt-4 text-sm text-gray-600 transition-colors duration-300"
-                         :class="{ 'text-blue-600 font-medium': selectedDistrict }">
-                        <div class="flex items-center justify-between">
-                            <span>Map of Malawi</span>
-                            <span v-if="selectedDistrict">
-                                {{ selectedDistrict }} highlighted
-                            </span>
+                <!-- Map Info -->
+                                <transition name="fade-slide-up">
+                                    <div v-if="selectedDistrictDetails" class="text-sm text-gray-900 bg-emerald-800 border border-blue-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
+                                        <div class="font-medium text-gray-900 mb-2">Currently viewing Details for {{ selectedDistrictDetails.name }}</div>
+                                        <ul class="space-y-2">
+                                            <li class="flex items-start">
+                                                <svg class="h-5 w-5 text-gray-800 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                </svg>
+                                                <span>Phone: {{ selectedDistrictDetails.Phone }}</span>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <svg class="h-5 w-5  text-gray-800 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                                </svg>
+                                                <span>Email: {{ selectedDistrictDetails.email }}</span>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <svg class="h-5 w-5  text-gray-800 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                                </svg>
+                                                <span>Private Bag: {{ selectedDistrictDetails.PrivateBag }}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div v-else class="text-sm text-gray-800 bg-emerald-700 border border-gray-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
+                                        <div class="flex items-center">
+                                            <svg class="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span>Select a district from the dropdown to highlight it and see all details</span>
+                                        </div>
+                                    </div>
+                                </transition>
+                                
+                                <!-- Hover display for district names -->
+                                <transition name="fade">
+                                    <div v-if="hoveredDistrict && hoveredDistrict !== selectedDistrict" 
+                                         class="mt-2 text-center text-sm font-medium text-gray-700 bg-gray-100 p-2 rounded border-l-4 border-gray-400 shadow-sm">
+                                        <div class="flex items-center justify-center">
+                                            <svg class="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            </svg>
+                                            <span>{{ hoveredDistrict }}</span>
+                                        </div>
+                                        <div class="text-xs text-gray-500 mt-1">Click to select</div>
+                                    </div>
+                                </transition>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -825,4 +1335,52 @@ const districts = [
   opacity: 0;
   transform: translateY(10px);
 }
+
+/* SVG district styling and highlighting */
+path {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  stroke: #ffffff;
+  stroke-width: 1px;
+  fill: #6f9c76; /* Default green color */
+}
+
+path:hover:not(.highlighted) {
+  fill: #059669 !important; /* Hover green - slightly darker */
+  stroke: #ffffff;
+  stroke-width: 2px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  transform: scale(1.02);
+}
+
+path.highlighted {
+  fill: #1f2937 !important; /* Selected gray-800 */
+  stroke: #111827 !important;
+  stroke-width: 3px !important;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)) !important;
+  z-index: 10;
+}
+
+/* Animation for smooth highlighting */
+path.highlighted {
+  animation: pulse 2s ease-in-out;
+}
+
+@keyframes pulse {
+  0% { fill: #6f9c76; }
+  50% { fill: #374151; }
+  100% { fill: #1f2937; }
+}
+
+/* Fade transition for hover display */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+
+
 </style>
