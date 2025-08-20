@@ -1,34 +1,13 @@
 <template>
   <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-screen-2xl">
     <!-- Left Sidebar -->
-<<<<<<< HEAD
-    <div class="w-64 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <div>
-        <h2 class="text-lg font-bold text-gray-800 mb-6">Resource Center</h2>
-=======
     <div class="w-full md:w-80 bg-white rounded-lg shadow-sm border border-gray-200 p-6 self-start">
       <div>
         <h2 class="text-xl font-bold text-gray-800 mb-6">Resource Center</h2>
->>>>>>> 489d1ae5e5201968ec3030ccea3ea231a8648a26
         <nav class="space-y-2">
           <!-- Loop through main groups -->
           <div v-for="(groupItem, groupIndex) in resourceGroups" :key="groupIndex" class="group">
             <div
-<<<<<<< HEAD
-                @click="toggleTab(tabIndex)"
-                class="flex items-center justify-between w-full text-left py-3 px-4 font-medium text-gray-700 rounded-lg cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-50 hover:text-gray-900"
-                :class="{
-                'bg-emerald-50 border-2 border-emerald-200 text-emerald-700': expandedTab === tabIndex,
-                'hover:translate-x-1': expandedTab !== tabIndex
-              }"
-            >
-              <span class="flex items-center">
-                <svg class="w-5 h-5 mr-3 text-gray-500 group-hover:text-gray-600" :class="{ 'text-emerald-600': expandedTab === tabIndex }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path v-if="tab.name === 'Publications & Downloads'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                  <path v-else-if="tab.name === 'Project Documents'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                  <path v-else-if="tab.name === 'Reports'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a4 4 0 01-4-4V5a2 2 0 012-2h6l2 2h6a2 2 0 012 2v6a4 4 0 01-4 4z"></path>
-                  <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-=======
               @click="handleGroupClick(groupIndex)"
               class="flex items-center justify-between w-full text-left py-3 px-4 font-medium text-gray-700 rounded-lg cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-50 hover:text-gray-900"
               :class="{
@@ -41,28 +20,17 @@
                 <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500" fill="none" stroke="currentColor" stroke-width="2"
                      viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
->>>>>>> 489d1ae5e5201968ec3030ccea3ea231a8648a26
                 </svg>
                 {{ groupItem.group }}
               </span>
                <!-- Chevron icon for expanding/collapsing, shown only if there are subgroups -->
               <svg
-<<<<<<< HEAD
-                  class="w-4 h-4 text-gray-400 transition-transform duration-300"
-                  :class="{ 'rotate-180 text-emerald-600': expandedTab === tabIndex }"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-=======
                 v-if="groupItem.subgroups"
                 :class="{ 'rotate-90': expandedGroup === groupIndex }"
                 class="w-4 h-4 text-gray-400 transition-transform duration-300 ease-in-out"
                 fill="none" stroke="currentColor" stroke-width="2"
                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
->>>>>>> 489d1ae5e5201968ec3030ccea3ea231a8648a26
               </svg>
             </div>
             <!-- Subgroups container -->
@@ -70,28 +38,16 @@
               <a
                   v-for="(subgroup, subIndex) in groupItem.subgroups"
                   :key="subIndex"
-<<<<<<< HEAD
-                  @click="selectSub(tabIndex, subIndex)"
-                  class="flex items-center w-full text-left py-2 px-4 text-sm font-medium text-gray-600 rounded-md cursor-pointer transition-all duration-200 hover:bg-gray-50 hover:text-gray-900 hover:translate-x-2"
-                  :class="{
-                  'bg-emerald-50 border-2 border-emerald-200 text-emerald-700 shadow-sm': activeTab === tabIndex && activeSub === subIndex
-=======
                   @click.stop="selectSubgroup(groupIndex, subIndex)"
                   class="flex items-center w-full text-left py-2 px-4 text-sm font-medium text-gray-600 rounded-md cursor-pointer transition-all duration-200 hover:bg-gray-50 hover:text-gray-900 hover:translate-x-2"
                   :class="{
                   'bg-emerald-50 border-2 border-emerald-200 text-emerald-700 shadow-sm': activeGroup === groupIndex && activeSubgroup === subIndex
->>>>>>> 489d1ae5e5201968ec3030ccea3ea231a8648a26
                 }"
               >
                 <div class="w-2 h-2 rounded-full mr-3 transition-colors duration-200"
                      :class="{
-<<<<<<< HEAD
-                       'bg-emerald-600': activeTab === tabIndex && activeSub === subIndex,
-                       'bg-gray-300 group-hover:bg-gray-600': !(activeTab === tabIndex && activeSub === subIndex)
-=======
                        'bg-emerald-600': activeGroup === groupIndex && activeSubgroup === subIndex,
                        'bg-gray-300 group-hover:bg-gray-600': !(activeGroup === groupIndex && activeSubgroup === subIndex)
->>>>>>> 489d1ae5e5201968ec3030ccea3ea231a8648a26
                      }">
                 </div>
                 {{ subgroup.subgroup }}
@@ -99,12 +55,7 @@
             </div>
           </div>
         </nav>
-<<<<<<< HEAD
-
-        <!-- Help Section with separator -->
-=======
          <!-- Help Section -->
->>>>>>> 489d1ae5e5201968ec3030ccea3ea231a8648a26
         <div class="mt-6 pt-6 border-t border-gray-200">
           <div class="bg-gray-50 rounded-lg p-4">
             <h3 class="text-sm font-semibold text-emerald-700 mb-2">Need Help?</h3>
@@ -161,11 +112,6 @@
                 </span>
               </p>
             </div>
-<<<<<<< HEAD
-          </div>
-        
-        
-=======
         </div>
         
         <!-- News Layout - Simple List Similar to news.vue -->
@@ -213,7 +159,6 @@
           </div>
         </div>
 
->>>>>>> 489d1ae5e5201968ec3030ccea3ea231a8648a26
 
         <!-- Video Grid Layout -->
         <transition-group
@@ -279,35 +224,6 @@
                   allowfullscreen
                   loading="lazy"
               ></iframe>
-<<<<<<< HEAD
-
-              <!-- Loading overlay -->
-              <div
-                  :class="['absolute inset-0 bg-gray-100 flex items-center justify-center transition-opacity duration-500', iframeLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100']"
-              >
-                <div class="text-center">
-                  <div class="w-12 h-12 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mb-4"></div>
-                  <p class="text-gray-600">Loading gallery...</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Footer with external link -->
-            <div class="bg-gray-50 p-3 flex justify-between items-center">
-              <span class="text-sm text-gray-600">External Gallery Content</span>
-              <a
-                  :href="doc.link"
-                  target="_blank"
-                  class="inline-flex items-center px-3 py-1 text-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded-md transition-colors duration-200"
-                  title="Open in new tab"
-              >
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                </svg>
-                Open Gallery
-              </a>
-=======
->>>>>>> 489d1ae5e5201968ec3030ccea3ea231a8648a26
             </div>
           </div>
         </div>
@@ -329,11 +245,7 @@
             <a
                 :href="doc.link"
                 target="_blank"
-<<<<<<< HEAD
-                class="absolute bottom-2 right-2 w-6 h-6 bg-gray-800 hover:bg-gray-600 text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md hover:shadow-lg"
-=======
                 class="absolute bottom-2 right-2 w-8 h-8 bg-gray-800 hover:bg-gray-600 text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md hover:shadow-lg"
->>>>>>> 489d1ae5e5201968ec3030ccea3ea231a8648a26
                 title="Download / View"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
@@ -356,11 +268,7 @@
             <p class="text-sm text-gray-600 flex-grow">
               {{ doc.description || 'No description available.' }}
             </p>
-<<<<<<< HEAD
-            <p class="text-[12px] font-semibold text-emerald-600">
-=======
             <p class="text-[12px] font-semibold text-emerald-600 mt-3">
->>>>>>> 489d1ae5e5201968ec3030ccea3ea231a8648a26
               {{ doc.date || 'No date available.' }}
             </p>
           </div>
@@ -369,16 +277,10 @@
 
       <!-- Loading/Welcome State -->
       <transition name="fade" mode="out-in">
-<<<<<<< HEAD
-        <div v-if="!displayedDocuments.length" class="flex flex-col items-center justify-center py-16">
-          <div class="w-16 h-16 border-4 border-emerald-200 border-t-gray-600 rounded-full animate-spin mb-4"></div>
-          <p class="text-gray-600 text-lg">Select a subcategory to view content</p>
-=======
         <div v-if="activeGroup === null" class="flex flex-col items-center justify-center py-16 text-center">
           <svg class="w-16 h-16 text-emerald-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
           <h3 class="text-xl font-semibold text-gray-700">Welcome to the Resource Center</h3>
           <p class="text-gray-500 mt-2">Please select a category from the left menu to view available documents and resources.</p>
->>>>>>> 489d1ae5e5201968ec3030ccea3ea231a8648a26
         </div>
       </transition>
     </div>
@@ -386,8 +288,6 @@
 </template>
 
 <script setup>
-import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
-
 definePageMeta({
     title: 'NLGFC - Resource Center',
     })
@@ -620,28 +520,6 @@ const selectSubgroup = (groupIndex, subIndex) => {
   activeSubgroup.value = subIndex;
 }
 
-<<<<<<< HEAD
-// Map the 'tabs' data to the 'projectGroups' structure
-const mappedProjectGroups = computed(() => {
-  return tabs.value.map(tab => {
-    return {
-      group: tab.name,
-      items: tab.subcategories.map(subcategory => ({
-        id: subcategory.id,
-        title: subcategory.name
-      }))
-    };
-  });
-});
-
-const { projectGroups } = useGeneralSidebar();
-projectGroups.value = mappedProjectGroups.value;
-
-// Watch for route changes to handle navigation
-watch(() => route.query, (newQuery) => {
-  handleQueryParams();
-}, { immediate: true });
-=======
 /**
  * Search functionality
  */
@@ -649,7 +527,6 @@ const handleSearch = () => {
   // This would typically trigger filtering of displayedDocuments
   // Implementation depends on your specific search requirements
 };
->>>>>>> 489d1ae5e5201968ec3030ccea3ea231a8648a26
 
 const clearSearch = () => {
   searchQuery.value = '';
@@ -748,15 +625,6 @@ watch([activeGroup, activeSubgroup], () => {
   updateUrlHash();
 });
 
-<<<<<<< HEAD
-/*const { projectGroups: sharedProjectGroups } = useGeneralSidebar();
-
-watchEffect(() => {
-  sharedProjectGroups.value = projectGroups;
-});*/
-
-</script>
-=======
 // Lifecycle hooks
 onMounted(() => {
   // Handle initial hash on page load
@@ -767,7 +635,6 @@ onMounted(() => {
   // Listen for hash changes (back/forward navigation)
   window.addEventListener('hashchange', handleHashChange);
 });
->>>>>>> 489d1ae5e5201968ec3030ccea3ea231a8648a26
 
 // Watch route changes to handle navigation from other pages
 watch(() => route.hash, (newHash) => {
