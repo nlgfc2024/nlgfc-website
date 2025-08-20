@@ -52,6 +52,7 @@ const lazyMap: Record<string, () => Promise<any>> = {
   CtaBlock: () => import('./blocks/CtaBlock.vue'),
   IframeBlock: () => import('./blocks/IframeBlock.vue'),
   ImageBlock: () => import('./blocks/ImageBlock.vue'),
+  MandatePanelBlock: () => import('./blocks/MandatePanelBlock.vue'),
 }
 
 /**
@@ -196,6 +197,16 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
         theme: data.theme ?? 'blue',
         show_header: data.show_header ?? true,
         body: data.body ?? '',
+        heading_level: data.heading_level ?? 'h2',
+      }
+
+    case 'MandatePanelBlock':
+      return {
+        icon: data.icon ?? 'heroicon-o-rectangle-stack',
+        heading: data.heading ?? '',
+        body: data.body ?? '',
+        theme: data.theme ?? 'emerald',
+        heading_level: data.heading_level ?? 'h3',
       }
 
     case 'FeaturesGridBlock': {
@@ -293,12 +304,14 @@ const renderItems = computed<RenderItem[]>(() => {
       </div>
 
       <!-- single -->
-      <Suspense v-else>
-        <component :is="registry[item.type] || UnknownBlock" v-bind="item.props" :type="item.type" />
-        <template #fallback>
-          <div class="animate-pulse h-24 bg-gray-100 rounded my-4" />
-        </template>
-      </Suspense>
+      <div v-else class="mb-10 last:mb-0">
+        <Suspense>
+          <component :is="registry[item.type] || UnknownBlock" v-bind="item.props" :type="item.type" />
+          <template #fallback>
+            <div class="animate-pulse h-24 bg-gray-100 rounded my-4" />
+          </template>
+        </Suspense>
+      </div>
     </template>
   </div>
 </template>

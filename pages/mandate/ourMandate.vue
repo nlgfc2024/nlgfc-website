@@ -1,5 +1,7 @@
 <script setup>
 import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+import BlocksRenderer from '~/components/BlocksRenderer.vue'
+import { usePageBlocks } from '~/composables/usePageBlocks'
 
 definePageMeta({
   title: 'Our Mandate'
@@ -130,7 +132,9 @@ function updateActiveTabFromHash(hash) {
   return finalGroups;
 });*/
 
-
+const { data: pages, pending, error: PageError } = usePageBlocks([
+  'fiscal-decentralization'
+])
 const { projectGroups: sharedProjectGroups } = useGeneralSidebar();
 
 watchEffect(() => {
@@ -141,214 +145,15 @@ watchEffect(() => {
 
 <template>
   <div class="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto px-4 py-8">
-    <!-- Sidebar Navigation -->
-    <aside class="w-full md:w-64 flex-shrink-0 md:sticky md:top-4 md:max-h-[calc(100vh-1rem)] md:overflow-y-auto self-start">
-      <div v-for="group in tabGroups" :key="group.group" class="mb-6">
-        <div class="border-r border-gray-200 pr-4">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4 pl-2 border-l-4 border-gray-600">{{ group.group }}</h2>
-          <ul class="space-y-1">
-            <li v-for="item in group.items" :key="item.id">
-              <NuxtLink
-                :to="`#${item.id}`"
-                @click="activeTab = item.id"
-                class="block px-4 py-3 rounded transition-colors text-gray-700 hover:bg-emerald-100 hover:text-gray-800"
-                :class="{
-                  'bg-emerald-50 text-gray-800 font-medium border-l-4 border-gray-600': activeTab === item.id || (item.children && item.children.some(child => child.id === activeTab))
-                }"
-              >
-                {{ item.title }}
-              </NuxtLink>
-              <ul v-if="item.children" class="ml-4 pl-4 border-l border-gray-300 space-y-1 mt-1">
-                <li v-for="child in item.children" :key="child.id">
-                  <NuxtLink
-                    :to="`#${child.id}`"
-                    @click="activeTab = child.id"
-                    class="block px-3 py-2 rounded text-sm transition-colors text-gray-600 hover:bg-emerald-50 hover:text-gray-700"
-                    :class="{
-                      'bg-emerald-100 text-gray-800 font-medium': activeTab === child.id
-                    }"
-                  >
-                    {{ child.title }}
-                  </NuxtLink>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </aside>
+    
 
     <!-- Main Content Area -->
     <main class="flex-1 min-w-0 space-y-6">
       <!-- Fiscal Decentralization -->
       <div v-show="activeTab === 'fiscalDecentralization'" class="prose max-w-none">
         <!-- Header Section -->
-        <div class="mb-10">
-          <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-emerald-100">
-            Fiscal Decentralization
-          </h2>
-          <p class="text-lg text-gray-600">
-            Managing intergovernmental fiscal transfers to empower local service delivery
-          </p>
-        </div>
-
-        <!-- Overview Section -->
-        <div class="bg-gradient-to-br from-emerald-50 to-gray-50  rounded-xl shadow-sm border border-gray-100 mb-10 flex flex-col">
-          <div class="flex items-center mb-0"> <!-- Remove margin-bottom -->
-            <div class="bg-emerald-50 rounded-lg mr-5">
-              <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-800 flex-1">Constitutional Mandate</h3>
-          </div>
-          <p class="text-gray-700 leading-relaxed pl-16 mt-2">
-            NLGFC is constitutionally mandated to facilitate fiscal decentralization and serves as the central mechanism for managing fiscal transfers to Local Authorities through the Intergovernmental Fiscal Transfer Formula (IGTF), promoting equitable resource allocation across Malawi.
-          </p>
-        </div>
-
-        <!-- IGTF Explanation -->
-        <div class="bg-gradient-to-br from-emerald-50 to-gray-50 rounded-xl shadow-sm border border-gray-100 mb-10 flex flex-col">
-          <div class="flex items-center mb-0">
-            <div class="bg-emerald-50 p-3 rounded-lg mr-5 flex items-center justify-center">
-              <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-800 flex-1">Intergovernmental Fiscal Transfer Formula (IGTF)</h3>
-          </div>
-          <p class="text-gray-700 leading-relaxed pl-16 mt-2">
-            The IGTF system enables the central government to allocate financial resources to Local Government Authorities (LGAs) to support decentralized service delivery, designed to promote:
-          </p>
-          <div class="pl-16 mt-2">
-            <div class="grid md:grid-cols-2 gap-4">
-              <div class="flex items-center">
-                <div class="bg-emerald-50 p-1 rounded-full mr-3 flex items-center justify-center">
-                  <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <span class="text-gray-700">Equity in resource distribution</span>
-              </div>
-              <div class="flex items-center">
-                <div class="bg-emerald-50 p-1 rounded-full mr-3 flex items-center justify-center">
-                  <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <span class="text-gray-700">Transparency in allocations</span>
-              </div>
-              <div class="flex items-center">
-                <div class="bg-emerald-50 p-1 rounded-full mr-3 flex items-center justify-center">
-                  <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <span class="text-gray-700">Accountability mechanisms</span>
-              </div>
-              <div class="flex items-center">
-                <div class="bg-emerald-50 p-1 rounded-full mr-3 flex items-center justify-center">
-                  <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <span class="text-gray-700">Efficient utilization</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Key Features Sections -->
-        <div class="space-y-8">
-          <!-- Types of Transfers -->
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">A. Types of Fiscal Transfers</h4>
-                        </div>
-            <div class="p-6">
-              <ol class="list-decimal space-y-4 pl-5">
-                <li class="pl-2">
-                  <span class="font-medium text-gray-800">Sector-specific funds:</span>
-                  <ul class="list-disc pl-5 mt-2 space-y-1 text-gray-700">
-                    <li>Health: 38% of ORT</li>
-                    <li>Education: 34%</li>
-                    <li>Agriculture: 5%</li>
-                    <li>Other sectors: each receives less than 1%</li>
-                  </ul>
-                </li>
-                <li class="pl-2">
-                  <span class="font-medium text-gray-800">General Resource Fund (GRF):</span>
-                  <span class="text-gray-700"> For administrative functions (9.6% of Other Recurrent Transactions)</span>
-                </li>
-                <li class="pl-2">
-                  <span class="font-medium text-gray-800">Development transfers:</span>
-                  <span class="text-gray-700"> DDF, IDF, CDF, Health Rehabilitation, Water Structures funds, city and municipal road funds</span>
-                </li>
-                <li class="pl-2">
-                  <span class="font-medium text-gray-800">Performance-based grants:</span>
-                  <span class="text-gray-700"> Including Governance to Enable Service Delivery (GESD) grants</span>
-                </li>
-              </ol>
-            </div>
-          </div>
-
-          <!-- Formula Components -->
-          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">B. Formula Allocation Criteria</h4>
-                        </div>
-            <div class="p-6">
-              <ol class="list-decimal space-y-4 pl-5">
-                <li class="pl-2">
-                  <span class="font-medium text-gray-800">Population size:</span>
-                  <span class="text-gray-700"> Larger districts receive proportionally more funds</span>
-                </li>
-                <li class="pl-2">
-                  <span class="font-medium text-gray-800">Poverty levels:</span>
-                  <span class="text-gray-700"> Higher allocations to districts with greater poverty to address inequality</span>
-                </li>
-                <li class="pl-2">
-                  <span class="font-medium text-gray-800">Geographical factors:</span>
-                  <span class="text-gray-700"> Compensation for higher service delivery costs in remote/larger areas</span>
-                </li>
-                <li class="pl-2">
-                  <span class="font-medium text-gray-800">Performance indicators:</span>
-                  <span class="text-gray-700"> Rewards for good governance, planning, and financial management (especially under GESD)</span>
-                </li>
-              </ol>
-            </div>
-          </div>
-        </div>
-
-        <!-- Legal Framework -->
-        <div class="mt-12 bg-gray-50 p-6 rounded-xl border border-gray-200">
-          <h4 class="text-lg font-medium text-gray-800 mb-3 flex items-center">
-            <svg class="w-5 h-5 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            Governing Framework
-          </h4>
-          <ul class="space-y-2 text-sm text-gray-700">
-            <li class="flex items-start">
-              <svg class="flex-shrink-0 w-4 h-4 text-indigo-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <span>Constitution of Malawi (1994), Section 149</span>
-            </li>
-            <li class="flex items-start">
-              <svg class="flex-shrink-0 w-4 h-4 text-indigo-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <span>Local Government Act (1998)</span>
-            </li>
-            <li class="flex items-start">
-              <svg class="flex-shrink-0 w-4 h-4 text-indigo-500 mt-0.5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <span>Public Finance Management Act (2022)</span>
-            </li>
-          </ul>
-        </div>
+       
+            <BlocksRenderer :blocks="pages?.['fiscal-decentralization']?.blocks || []" />
       </div>
 
       <!-- IGTF Monitoring Dashboard -->

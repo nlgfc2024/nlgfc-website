@@ -42,3 +42,7 @@ defineProps<{
 </template>
 
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
