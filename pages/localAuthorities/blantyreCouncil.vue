@@ -13,6 +13,10 @@ const activeTab = ref('landing_page')
 const selectedProject = ref(null);
 const selectedArticle = ref(null); // Renamed from selectedNews for consistency with new template
 const searchQuery = ref(''); // New ref for search functionality
+const isTransitioning = ref(false);
+const showModal = ref(false);
+const activeModal = ref('');
+const modalTitle = ref('');
 
 
 const tabs = ref([
@@ -182,26 +186,22 @@ const reports = [
   {
     title: 'Annual Performance Report 2024',
     type: 'Annual Report',
-    date: '2024-12-15',
-    description: 'Comprehensive overview of council activities and achievements for the fiscal year 2024.'
+    date: '2024-12-15'
   },
   {
     title: 'District Development Plan 2023-2027',
     type: 'Strategic Plan',
-    date: '2023-01-20',
-    description: 'Five-year strategic development plan outlining priority areas and implementation strategies.'
+    date: '2023-01-20'
   },
   {
     title: 'Revenue Collection Report Q4 2024',
     type: 'Financial Report',
-    date: '2024-10-30',
-    description: 'Quarterly report on revenue collection and financial performance.'
+    date: '2024-10-30'
   },
   {
     title: 'Infrastructure Development Progress Report',
     type: 'Progress Report',
-    date: '2024-11-15',
-    description: 'Status update on ongoing infrastructure projects across the district.'
+    date: '2024-11-15'
   }
 ]
 
@@ -666,67 +666,6 @@ watch(selectedArticle, (newVal) => {
         </div>
 
         <div v-show="activeTab === 'news'" class="prose max-w-none bg-gray-50">
-          <section class="relative overflow-hidden h-[200px] md:h-[170px]">
-            <div
-              v-for="(article, index) in featuredArticles"
-              :key="index"
-              class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
-              :class="{ 'opacity-100 z-10': currentSlide === index, 'opacity-0 z-0': currentSlide !== index }"
-            >
-              <div class="absolute inset-0">
-                <img :src="article.image || '/images/samples/news1.jpg'" :alt="article.title" class="w-full h-full object-cover" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-              </div>
-              <div class="relative h-full flex flex-col justify-end z-10 pb-12">
-                <div class="container mx-auto px-6">
-                  <div class="mb-3">
-                    <span class="inline-block px-3 py-1 text-xs font-semibold tracking-wider text-white uppercase bg-blue-600 rounded-full">
-                      Latest News
-                    </span>
-                  </div>
-                  <div class="max-w-3xl">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-3 leading-tight">{{ article.title }}</h2>
-                    <p class="text-white/90 text-lg">{{ article.summary }}</p>
-                    <div class="flex items-center mt-4 text-white/80">
-                      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                      </svg>
-                      <span class="text-sm">{{ formatDate(article.date) }} • {{ article.source }}</span>
-                    </div>
-                  </div>
-                  <div class="mt-5">
-                    <a href="#" @click.prevent="selectArticle(article)" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white rounded-lg hover:bg-gray-800 transition">
-                      Read More
-                      <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="absolute bottom-2 left-0 right-0 z-20 pt-5">
-              <div class="container mx-auto px-6 flex items-center justify-between">
-                <div class="flex space-x-2">
-                  <button
-                    v-for="(article, idx) in featuredArticles"
-                    :key="'ind-' + idx"
-                    @click="goToSlide(idx)"
-                    class="w-3 h-3 rounded-full transition-all duration-300"
-                    :class="{ 'w-8 bg-white': currentSlide === idx, 'w-3 bg-white/30 hover:bg-white/50': currentSlide !== idx }"
-                  ></button>
-                </div>
-                <div class="flex items-center space-x-4">
-                  <button @click="prevSlide" class="p-2 text-white/70 hover:text-white transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-                  </button>
-                  <button @click="nextSlide" class="p-2 text-white/70 hover:text-white transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </section>
-
           <div class="container mx-auto px-4 py-12">
             <div class="flex flex-col lg:flex-row gap-8">
               <div class="w-full">
@@ -755,7 +694,7 @@ watch(selectedArticle, (newVal) => {
                     Back to News
                   </button>
 
-                  <article class="bg-white rounded-lg shadow-lg overflow-hidden">
+                  <article class="bg-gray-100 rounded-lg shadow-lg overflow-hidden">
                     <div v-if="selectedArticle.image" class="aspect-video w-full">
                       <img
                         :src="selectedArticle.image"
@@ -826,9 +765,8 @@ watch(selectedArticle, (newVal) => {
                 </div>
 
                 <div v-if="!selectedArticle" class="bg-white rounded-lg shadow-lg overflow-hidden">
-                  <div class="bg-gray-900 text-white px-6 py-4">
-                    <h3 class="text-lg font-semibold">Latest News</h3>
-                    <p class="text-emerald-100 text-sm">{{ filteredArticles.length }} articles</p>
+                  <div class="bg-gray-900  px-6 py-4 h-10">
+                    <p class="text-emerald-100 text-sm font-semibold">{{ filteredArticles.length }} Blantyre news</p>
                   </div>
 
                   <div class="max-h-96 overflow-y-auto">
@@ -874,7 +812,6 @@ watch(selectedArticle, (newVal) => {
                     {{ report.type }}
                   </span>
                 </div>
-                <p class="text-gray-600 mb-2 line-clamp-3">{{ report.description }}</p>
               </div>
               <div class="mt-4 flex justify-between items-center">
                 <span class="text-sm text-gray-500">Published: {{ new Date(report.date).toLocaleDateString() }}</span>
@@ -899,7 +836,7 @@ watch(selectedArticle, (newVal) => {
                 >
                   <div class="absolute inset-0">
                     <img :src="slide.image || '/images/samples/news1.jpg'" :alt="slide.title" class="w-full h-full object-cover" />
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                   </div>
                   <div class="relative h-full flex flex-col justify-end z-10 pb-12">
                     <div class="px-6">
@@ -915,7 +852,7 @@ watch(selectedArticle, (newVal) => {
                       <div class="mt-5">
                         <a href="#" @click.prevent="selectArticle(slide)" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white rounded-lg hover:bg-gray-800 transition">
                           Read More
-                          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
                       </div>
                     </div>
@@ -934,10 +871,10 @@ watch(selectedArticle, (newVal) => {
                     </div>
                     <div class="flex items-center space-x-4">
                       <button @click="prevSlide" class="p-2 text-white/70 hover:text-white transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                       </button>
                       <button @click="nextSlide" class="p-2 text-white/70 hover:text-white transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                       </button>
                     </div>
                   </div>
