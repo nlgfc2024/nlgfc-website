@@ -151,13 +151,7 @@ watch(() => route.hash, (newHash) => {
     updateActiveTabFromHash(newHash.replace('#', ''))
   }
 })
-// Page-builder: MSR,COMSIP, DGRM, E-Payments, LAIFMIS, LAPAS, PMIS, Public Works MIS, SCTP MIS
-// const { data: mvcPage, pending: mvcPending, error: mvcError } = usePageBlocks('MSR,COMSIP, DGRM, E-Payments, LAIFMIS, LAPAS, PMIS, Public Works MIS, SCTP MIS')
-    
-const { data: pages, pending, error: PageError } = usePageBlocks([
-  'malawi-social-registry', 'community-savings-and-investment-promotion',
-  'digital-grievance-redress-mechanism', 'e-payments','local-authorities-integrated-financial-management-system'
-])
+
 function updateActiveTabFromHash(hash) {
   for (const group of projectGroups) {
     const match = group.items.find(item => item.id === hash)
@@ -166,9 +160,11 @@ function updateActiveTabFromHash(hash) {
       break
     }
   }
-
-
 }
+
+const { data: pages, pending, error: PageError } = usePageBlocks([
+  'malawi-social-registry'
+])
 
 //provide('projectContent', projectContent);
 </script>
@@ -188,14 +184,12 @@ function updateActiveTabFromHash(hash) {
   
 <!-- MSR Section -->
 <div v-if="item.id === 'msr'" class="prose max-w-none">
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['malawi-social-registry']?.blocks || []" />
-  <!--h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+  <!-- <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Malawi Social Registry (MSR)
-  </h2>-->
+  </h2>
   
-  <!-- Introduction 
+
+  -- Introduction --
   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
     <p class="text-gray-700 leading-relaxed">
       The Malawi Social Registry (MSR) is a national platform established by the Government 
@@ -206,10 +200,13 @@ function updateActiveTabFromHash(hash) {
 
     </p>
     
-  </div>-->
+  </div> -->
+  <div v-if="PagePending">Loading...</div>
+  <div v-else-if="PageError">Failed to load content.</div>
+  <BlocksRenderer :blocks="pages?.['malawi-social-registry']?.blocks || []" />
   
 <!-- MSR Dashboard -->
-  <!--<div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
     <h3 class="text-lg font-semibold text-gray-900 mb-3">MSR Dashboard</h3>
     <div class="bg-white rounded border border-gray-300 overflow-hidden">
       <iframe
@@ -221,7 +218,7 @@ function updateActiveTabFromHash(hash) {
         class="w-full"
       ></iframe>
     </div>
-  </div>-->
+  </div>
 
   <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
@@ -461,11 +458,7 @@ function updateActiveTabFromHash(hash) {
 
            <!-- LAIFMIS -->
 <div v-else-if="item.id === 'laifmis'" class="prose max-w-none">
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['local-authorities-integrated-financial-management-system']?.blocks || []" />
-
-<!--<h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+  <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Integrated Financial Management Information System (IFMIS)
   </h2>
   
@@ -483,11 +476,11 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
   had IFMIS installed and all relevant personnel trained in its usage. Now IFMIS is being used in all the 35 LAs in Malawi
   <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
-  </div>-->  
+  </div>
   
 <!-- Key Features Section -->
 <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-  <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
+  <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features of Digital GRM</h3>
   
   <!-- Features Grid -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -674,11 +667,7 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
             
             <!-- Electronic Payment Systems -->
 <div v-else-if="item.id === 'e-payments'" class="prose max-w-none">
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['e-payments']?.blocks || []" />
-
-  <!--<h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+  <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Electronic Payment Systems
   </h2>
   
@@ -690,7 +679,7 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
       and provide social protection beneficiaries with convenient access to social benefits anytime, anywhere.
       <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
-  </div>-->
+  </div>
 
   <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
@@ -1055,11 +1044,7 @@ beneficiaries receive timely and accurate compensation for their labor.
           
            <!-- DGRM Section -->
 <div v-else-if="item.id === 'dgrm'" class="prose max-w-none">
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['digital-grievance-redress-mechanism']?.blocks || []" />
-
-  <!--<h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+  <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Digital Grievance Redress Mechanism (Digital GRM)
   </h2>
   
@@ -1070,7 +1055,7 @@ beneficiaries receive timely and accurate compensation for their labor.
       and provide feedback on development projects through multiple user-friendly channels.
       <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
-  </div>-->
+  </div>
   
   <!-- DGRM PICTURE-->
   <div class="mt-8">
@@ -1596,13 +1581,10 @@ beneficiaries receive timely and accurate compensation for their labor.
 
            <!-- COMSIP -->
 <div v-else-if="item.id === 'comsip'" class="prose max-w-none">
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['community-savings-and-investment-promotion']?.blocks || []" />
-  <!--<h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+  <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Community Savings and Investment Promotion MIS
-  </h2>--> 
-  <!--
+  </h2>
+  
   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 mb-6">
     <p class="text-gray-700 leading-relaxed">
 The COMSIP MIS (Management Information System) is a digital platform that supports COMSIP's operations by 
@@ -1610,7 +1592,7 @@ enabling efficient coordination, monitoring, and reporting across its cooperativ
 initiatives.
 <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
-  </div>-->
+  </div>
   
 <!-- Key Features Section -->
 <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
