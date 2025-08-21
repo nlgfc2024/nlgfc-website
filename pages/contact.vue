@@ -3,6 +3,9 @@ definePageMeta({
   title: 'Contact Us'
 })
 
+import BlocksRenderer from '~/components/BlocksRenderer.vue'
+import { usePageBlocks } from '~/composables/usePageBlocks'
+
 const activeTab = ref('address') // Default active tab
 
 const tabs = [
@@ -12,7 +15,7 @@ const tabs = [
 ]
 
 // Load contact data from API
-const { data: contactData, pending } = await $fetch('/api/contact')
+const { data: contactData, Pending } = await $fetch('/api/contact')
 const contact = contactData?.contact || {}
 const officers = contactData?.officers || []
 const ati = contactData?.ati || {}
@@ -26,6 +29,10 @@ onMounted(() => {
     }
   }
 })
+const { data: pages, pending, error: PageError } = usePageBlocks([
+  'contact-us'
+])
+
 
 function onSubmit(event) {
   const response = grecaptcha.getResponse()
@@ -67,15 +74,9 @@ function onSubmit(event) {
       <div class="flex-1 min-w-0">
         <!-- Our Address Content -->
         <div v-show="activeTab === 'address'" class="prose max-w-none">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Contact Us</h2>
-          <p class="text-gray-600 leading-relaxed mb-6">
-            {{ contact.organization_name || 'National Local Government Finance Committee' }}<br>
-            {{ contact.address || 'Red Cross House, Area 14' }}<br>
-            {{ contact.po_box || 'P.O. Box 31162, Lilongwe 3.' }}<br>
-            Phone: {{ contact.primary_phone || '+265891003313' }}<template v-if="contact.secondary_phone"> / {{ contact.secondary_phone }}</template><br>
-            Email: <a :href="`mailto:${contact.primary_email || 'ed@nlgfc.gov.mw'}`" class="text-emerald-600 hover:underline">{{ contact.primary_email || 'ed@nlgfc.gov.mw' }}</a><template v-if="contact.secondary_email"> | 
-<a :href="`mailto:${contact.secondary_email}`" class="text-emerald-600 hover:underline">{{ contact.secondary_email }}</a></template>
-          </p>
+           <div v-if="PagePending">Loading...</div>
+          <div v-else-if="PageError">Failed to load content.</div>
+          <BlocksRenderer :blocks="pages?.['contact-us']?.blocks || []" />
           
           <div class="bg-gray-800 p-6 rounded-lg border border-gray-200 mt-8">
             <h3 class="text-lg font-semibold !text-white mb-3">Map to NLGFC</h3>
