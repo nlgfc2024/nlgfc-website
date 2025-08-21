@@ -30,7 +30,7 @@ onMounted(() => {
   }
 })
 const { data: pages, pending, error: PageError } = usePageBlocks([
-  'contact-us'
+  'contact-us', 'access-to-information'
 ])
 
 
@@ -128,14 +128,16 @@ function onSubmit(event) {
         <!-- Access to Information Content -->
          
         <div v-show="activeTab === 'ati'" class="prose max-w-none">
-          <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Access to Information</h2>
+          
           <div class="space-y-6">
             <div class="flex items-start">
               <div>
                
-                <p class="text-gray-600">{{ ati.description || 'The Access to Information Act (ATIA) provides for the right of access to information in the custody of public and relevant private institutions; the processes and procedures related to obtaining that information; and to provide for matters connected therewith or incidental thereto.' }}</p>
+                 <div v-if="PagePending">Loading...</div>
+          <div v-else-if="PageError">Failed to load content.</div>
+          <BlocksRenderer :blocks="pages?.['access-to-information']?.blocks || []" />
                   <br>
-                <p class="text-gray-600 mb-6">For more information, contact us through our information officers:</p>
+              
 
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
   <!-- Dynamic Information Officers -->
