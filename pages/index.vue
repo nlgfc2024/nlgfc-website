@@ -126,16 +126,12 @@ const publications = ref([
 
 <template>
   <div class="relative">
-    <!-- <Navbar /> -->
     <ImageSlider class="relative z-0 pb-16 md:pb-24" />
-    <!-- Featured Articles Grid -->
     <section class="relative z-10 -mt-10 md:-mt-18 lg:-mt-20 px-4">
       <div class="container mx-auto px-4">
         <div class="grid md:grid-cols-3 gap-6">
-          <!-- Article 1 -->
           <article class="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
             <div class="flex h-full">
-              <!-- Image on left -->
               <div class="w-1/3 relative overflow-hidden">
                 <img 
                   src="/images/samples/news1.jpg" 
@@ -145,7 +141,6 @@ const publications = ref([
                 >
               </div>
               
-              <!-- Content on right -->
               <div class="w-2/3 p-5 flex flex-col">
                 <span class="text-xs font-medium text-gray-500 mb-1 flex items-center">
                   <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -154,7 +149,7 @@ const publications = ref([
                   Jun 15, 2023
                 </span>
                 <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-                  <a href="#">How Our New Initiative is Transforming Communities</a>
+                  <NuxtLink to="news/#2" class="text-gray-700 hover:text-blue-700 transition flex items-center">How Our New Initiative is Transforming Communities</NuxtLink>
                 </h3>
                 <a href="#" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   Read more
@@ -166,10 +161,8 @@ const publications = ref([
             </div>
           </article>
 
-          <!-- Article 2 -->
           <article class="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
             <div class="flex h-full">
-              <!-- Image on left -->
               <div class="w-1/3 relative overflow-hidden">
                 <img 
                   src="/images/samples/news2.jpg" 
@@ -179,7 +172,6 @@ const publications = ref([
                 >
               </div>
               
-              <!-- Content on right -->
               <div class="w-2/3 p-5 flex flex-col">
                 <span class="text-xs font-medium text-gray-500 mb-1 flex items-center">
                   <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -188,9 +180,9 @@ const publications = ref([
                   May 28, 2023
                 </span>
                 <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-                  <a href="#">Partnering for Greater Impact: Our New Alliance</a>
+                  <NuxtLink to="news/#3" class="text-gray-700 hover:text-blue-700 transition flex items-center">Partnering for Greater Impact: Our New Alliance</NuxtLink>
                 </h3>
-                <a href="#" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <a href="news/#3" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   Read more
                   <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
@@ -200,10 +192,8 @@ const publications = ref([
             </div>
           </article>
 
-          <!-- Article 3 -->
           <article class="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
             <div class="flex h-full">
-              <!-- Image on left -->
               <div class="w-1/3 relative overflow-hidden">
                 <img 
                   src="/images/samples/news3.jpg" 
@@ -213,7 +203,6 @@ const publications = ref([
                 >
               </div>
               
-              <!-- Content on right -->
               <div class="w-2/3 p-5 flex flex-col">
                 <span class="text-xs font-medium text-gray-500 mb-1 flex items-center">
                   <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -222,9 +211,9 @@ const publications = ref([
                   Apr 12, 2023
                 </span>
                 <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-                  <a href="#">Annual Report 2022: Our Achievements</a>
+                  <NuxtLink to="news/#4" class="text-gray-700 hover:text-blue-700 transition flex items-center">Annual Report 2022: Our Achievements</NuxtLink>
                 </h3>
-                <a href="#" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <a href="news/#4" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   Read more
                   <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
@@ -238,11 +227,9 @@ const publications = ref([
     </section>
 
     <main class="container mx-auto px-4 py-12">
-      <!-- Mission, Mandate and Vision -->
       <section class="py-8 bg-gradient-to-b from-gray-50 to-gray-100">
         <div class="container mx-auto px-6 max-w-7xl">
           
-          <!-- Mandate Row -->
           <div class="bg-white p-10 rounded-xl shadow-md mb-16 max-w-5xl mx-auto border-t-4 border-emerald-700 transform hover:scale-[1.01] transition-transform duration-300">
             <h3 class="text-4xl font-bold text-gray-900 mb-4 text-center">Our Mandate</h3>
             <p class="text-gray-600 text-lg text-center leading-relaxed max-w-3xl mx-auto">
@@ -250,9 +237,7 @@ const publications = ref([
             </p>
           </div>
           
-          <!-- Three Column Row -->
           <div class="grid md:grid-cols-3 gap-8">
-            <!-- Vision Card -->
             <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border-t-4 border-purple-700 flex flex-col items-center">
               <div class="text-purple-700 mb-5 p-3 bg-purple-50 rounded-full">
                 <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -266,7 +251,6 @@ const publications = ref([
               </p>
             </div>
             
-            <!-- Mission Card -->
             <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border-t-4 border-blue-700 flex flex-col items-center">
               <div class="text-blue-700 mb-5 p-3 bg-blue-50 rounded-full">
                 <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -279,7 +263,6 @@ const publications = ref([
               </p>
             </div>
             
-            <!-- Core Values Card -->
             <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border-t-4 border-emerald-700 flex flex-col items-center">
               <div class="text-emerald-700 mb-5 p-3 bg-emerald-50 rounded-full">
                 <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -330,7 +313,6 @@ const publications = ref([
         </div>
       </section>
     
-      <!-- Projects Section with Interactive Cards -->
       <section class="py-8 bg-gradient-to-b from-primary-50 to-white">
         <div class="container mx-auto px-4 sm:px-6">
           <div class="text-center mb-12 md:mb-16">
@@ -342,11 +324,11 @@ const publications = ref([
             </p>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-0">
+          <div class="flex flex-col sm:flex-row gap-6 px-4 sm:px-0">
             <div
               v-for="(project, index) in projects"
               :key="index"
-              class="group relative overflow-hidden rounded-2xl shadow-xl h-80 min-w-0"
+              class="group relative overflow-hidden rounded-2xl shadow-xl h-80 sm:h-64 w-full sm:w-56"
             >
               <img
                 :src="`https://picsum.photos/600/400?random=${index + 10}`"
@@ -356,7 +338,7 @@ const publications = ref([
               <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
               
               <div class="relative h-full flex flex-col justify-end p-6 text-white">
-                <div class="flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 mb-4 bg-white rounded-xl shadow-md p-2">
+                <div class="flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 mb-4 bg-white rounded-xl shadow-md p-1.5">
                   <img
                     v-if="project.imagePath"
                     :src="project.imagePath"
@@ -366,7 +348,7 @@ const publications = ref([
                   />
                   <svg
                     v-else
-                    class="w-6 h-6 sm:w-8 sm:h-8 text-primary-600"
+                    class="w-6 h-6 sm:w-5 sm:h-5 text-primary-600"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -380,8 +362,8 @@ const publications = ref([
                   </svg>
                 </div>
 
-                <h3 class="text-xl sm:text-2xl font-bold mb-2">{{ project.title }}</h3>
-                <p class="text-white/90 mb-4 line-clamp-2 text-sm sm:text-base">{{ project.description }}</p>
+                <h3 class="text-xl sm:text-lg font-bold mb-2 line-clamp-1">{{ project.title }}</h3>
+                <p class="text-white/90 mb-4 line-clamp-2 text-sm">{{ project.description }}</p>
                 <a
                   :href="project.url"
                   class="inline-flex items-center text-sm font-medium text-white group-hover:text-primary-300 transition"
@@ -407,11 +389,9 @@ const publications = ref([
         </div>
       </section>
 
-      <!-- Publications & Opportunities Section -->
       <section class="py-8 bg-gray-50">
         <div class="container mx-auto px-6 max-w-7xl">
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <!-- Publications Column -->
             <div class="lg:col-span-7">
               <div class="flex items-center justify-between mb-6">
                 <h3 class="text-2xl font-semibold text-gray-900">
@@ -461,14 +441,12 @@ const publications = ref([
               </div>
             </div>
 
-            <!-- Opportunities Column -->
             <div class="lg:col-span-5">
               <div class="sticky top-24">
                 <h3 class="text-2xl font-semibold text-gray-900 mb-6">
                   Current <span class="text-emerald-600">Opportunities</span>
                 </h3>
 
-                <!-- Tabs -->
                 <div class="flex border-b border-gray-200 mb-6">
                   <button
                     v-for="tab in opportunityTabs"
@@ -485,7 +463,6 @@ const publications = ref([
                   </button>
                 </div>
 
-                <!-- Items -->
                 <div class="space-y-3">
                   <div
                     v-for="(op, index) in currentOpportunities"
@@ -546,7 +523,6 @@ const publications = ref([
           </div>
         </div>
       </section>
-      <!-- Partners Section -->
       <section class="py-8 bg-white">
         <div class="container mx-auto px-4">
           <div class="text-center mb-12">
@@ -556,18 +532,14 @@ const publications = ref([
             </p>
           </div>
 
-          <!-- Slider Container -->
           <div class="relative">
-            <!-- Gradient Overlays -->
             <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10"></div>
             <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10"></div>
-             <!-- Slider Track -->
-            <div class="overflow-hidden py-6 px-4">
+             <div class="overflow-hidden py-6 px-4">
               <div 
                 class="flex gap-6 animate-scroll hover:pause"
                 :style="`--scroll-duration: ${scrollDuration}s`"
               >
-                <!-- Two copies for seamless scrolling -->
                 <template v-for="repeat in 2" :key="repeat">
                   <div 
                     v-for="(logo, index) in partnerLogos"
@@ -634,6 +606,25 @@ const publications = ref([
   .animate-scroll::-webkit-scrollbar {
     display: none; /* Chrome/Safari */
   }
+}
+
+/* Projects Section */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
 }
 
 </style>
