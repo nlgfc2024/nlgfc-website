@@ -37,7 +37,7 @@ const projectGroups = [
         id: 'ssrlp_news',
         items: [
           { id: 'ssrlp_news', title: 'SSRLP NEWS' },
-          { id: 'ssrlp_overview', title: 'Overview' },
+          { id: 'ssrlp_overview', title: 'OVERVIEW' },
           { id: 'SCTP', title: 'Social Cash Transfer' },
           { id: 'publicWorks', title: 'Climate Smart Public Works' },
           { id: 'livelihoods', title: 'Livelihoods Support' },
@@ -49,8 +49,8 @@ const projectGroups = [
         subgroup: 'GESD',
         id: 'gesd_news',
         items: [
-          {id: 'gesd_news', title: 'GESD NEWs'},
-          { id: 'gesd_overview', title: 'Overview' },
+          {id: 'gesd_news', title: 'GESD NEWS'},
+          { id: 'gesd_overview', title: 'OVERVIEW' },
       { id: 'pbf', title: 'Performance-Based Financing' },
       { id: 'ias', title: 'Intergovernmental Accountability Systems' },
       { id: 'lgpi', title: 'Local Government Performance Improvement' },
@@ -62,7 +62,7 @@ const projectGroups = [
         id: 'rcrp2_news',
         items: [
           { id: 'rcrp2_news', title: 'RCRP2 NEWS' },
-          { id: 'rcrp_overview', title: 'Overview' },
+          { id: 'rcrp_overview', title: 'OVERVIEW' },
       { id: 'drb', title: 'District-Led Resilience Building' },
       { id: 'usr', title: 'Urban Malawi Social Registry' },
       { id: 'upw', title: 'Urban Climate Smart Public Works Program' }
