@@ -1,4 +1,8 @@
 <script setup>
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+import BlocksRenderer from '~/components/BlocksRenderer.vue'
+import { usePageBlocks } from '~/composables/usePageBlocks'
+
 // Page metadata configuration
 definePageMeta({ title: 'Delivery Systems' })
 
@@ -7,47 +11,6 @@ const activeTab = ref('msr') // Default tab
 
 // Configuration for delivery system categories and items
 // This array defines the sidebar navigation structure with descriptions
-<<<<<<< HEAD
-const projectGroups = [
-  {
-    group: 'Delivery Systems', // Main category name
-    items: [
-      // Each item represents a different delivery system with unique ID, title and description
-{ 
-  id: 'comsip', 
-  title: 'Community Savings & Investment'
-},
-{ 
-  id: 'dgrm', 
-  title: 'Digital Grievance Redress'
-},
-{ 
-  id: 'e-payments', 
-  title: 'E-Payment Systems'
-},
-{ 
-  id: 'laifmis', 
-  title: 'Local Authorities IFMIS'
-},
-{  
-  id: 'msr', 
-  title: 'Malawi Social Registry'
-},
-{ 
-  id: 'lapas', 
-  title: 'Performance Assessment System'
-},
-{ 
-  id: 'pmis', 
-  title: 'Project Monitoring System'
-},
-{ 
-  id: 'publicworks', 
-  title: 'Public Works MIS'
-}
-
-    ]
-=======
 // Delivery systems data for the GeneralSidebar component
 const deliverySystemsData = [
   
@@ -96,7 +59,6 @@ const projectGroups = [
   {
     group: 'Delivery Systems',
     items: deliverySystemsData
->>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
   }
 ]
 const partnerLogos = [
@@ -176,6 +138,12 @@ onMounted(() => {
   }
 })
 
+const { projectGroups: sharedProjectGroups, /*projectContent: sharedProjectContent */} = useGeneralSidebar();
+watchEffect(() => {
+  sharedProjectGroups.value = projectGroups;
+  //sharedProjectContent.value = projectContent;
+});
+
 // Watch for hash changes in the URL and update active tab accordingly
 // This allows for direct linking to specific delivery systems
 watch(() => route.hash, (newHash) => {
@@ -183,7 +151,13 @@ watch(() => route.hash, (newHash) => {
     updateActiveTabFromHash(newHash.replace('#', ''))
   }
 })
-
+// Page-builder: MSR,COMSIP, DGRM, E-Payments, LAIFMIS, LAPAS, PMIS, Public Works MIS, SCTP MIS
+// const { data: mvcPage, pending: mvcPending, error: mvcError } = usePageBlocks('MSR,COMSIP, DGRM, E-Payments, LAIFMIS, LAPAS, PMIS, Public Works MIS, SCTP MIS')
+    
+const { data: pages, pending, error: PageError } = usePageBlocks([
+  'malawi-social-registry', 'community-savings-and-investment-promotion',
+  'digital-grievance-redress-mechanism', 'e-payments','local-authorities-integrated-financial-management-system'
+])
 function updateActiveTabFromHash(hash) {
   for (const group of projectGroups) {
     const match = group.items.find(item => item.id === hash)
@@ -192,9 +166,11 @@ function updateActiveTabFromHash(hash) {
       break
     }
   }
+
+
 }
 
-
+//provide('projectContent', projectContent);
 </script>
 
 <template>
@@ -203,64 +179,6 @@ function updateActiveTabFromHash(hash) {
     <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
       
       <!-- Sidebar Navigation -->
-      <!-- Delivery Systems section styled like opportunities page -->
-      <aside class="w-full md:w-80">
-        <div v-for="group in projectGroups" :key="group.group">
-          <!-- Single Card Container for all Delivery Systems -->
-          <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
-            <!-- Main heading inside container -->
-            <h2 class="text-xl font-semibold text-gray-900 mb-6">{{ group.group }}</h2>
-            <div class="space-y-1">
-              <div v-for="(item, index) in group.items" :key="item.id">
-                <!-- Individual delivery system link -->
-                <a
-                  :href="`#${item.id}`"
-                  @click.prevent="() => { activeTab = item.id; history.replaceState(null, '', `#${item.id}`) }"
-                  :class="[
-                    'block p-4 rounded-lg cursor-pointer transition-all duration-200',
-                    // Conditional styling based on active state - green for active
-                    item.id === activeTab 
-                      ? 'bg-green-50 text-green-800' 
-                      : 'hover:bg-gray-50'
-                  ]"
-                >
-                  <div class="flex items-start">
-                    <!-- System icon -->
-                    <div class="flex-shrink-0 mr-3 mt-0.5">
-                      <Icon 
-                        :name="item.id === activeTab ? 'heroicons:check-circle' : 'heroicons:document-text'" 
-                        :class="[
-                          'w-5 h-5',
-                          item.id === activeTab ? 'text-green-600' : 'text-gray-400'
-                        ]" 
-                      />
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <!-- System title -->
-                      <h3 :class="[
-                        'font-medium text-sm mb-1',
-                        item.id === activeTab ? 'text-green-900' : 'text-gray-900'
-                      ]">
-                        {{ item.title }}
-                      </h3>
-                      <!-- System description -->
-                      <p :class="[
-                        'text-xs leading-relaxed',
-                        item.id === activeTab ? 'text-green-700' : 'text-gray-600'
-                      ]">
-                        {{ item.description }}
-                      </p>
-                    </div>
-                  </div>
-                </a>
-                
-                <!-- Breaking line between items (except last item) -->
-                <hr v-if="index < group.items.length - 1" class="my-3 border-gray-200">
-              </div>
-            </div>
-          </div>
-        </div>
-      </aside>
 
       <!-- Main Content -->
       <main class="flex-1 min-w-0">
@@ -270,12 +188,14 @@ function updateActiveTabFromHash(hash) {
   
 <!-- MSR Section -->
 <div v-if="item.id === 'msr'" class="prose max-w-none">
-  <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+            <div v-if="PagePending">Loading...</div>
+            <div v-else-if="PageError">Failed to load content.</div>
+            <BlocksRenderer :blocks="pages?.['malawi-social-registry']?.blocks || []" />
+  <!--h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Malawi Social Registry (MSR)
-  </h2>
+  </h2>-->
   
-
-  <!-- Introduction -->
+  <!-- Introduction 
   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
     <p class="text-gray-700 leading-relaxed">
       The Malawi Social Registry (MSR) is a national platform established by the Government 
@@ -286,10 +206,10 @@ function updateActiveTabFromHash(hash) {
 
     </p>
     
-  </div>
+  </div>-->
   
 <!-- MSR Dashboard -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
+  <!--<div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
     <h3 class="text-lg font-semibold text-gray-900 mb-3">MSR Dashboard</h3>
     <div class="bg-white rounded border border-gray-300 overflow-hidden">
       <iframe
@@ -301,7 +221,7 @@ function updateActiveTabFromHash(hash) {
         class="w-full"
       ></iframe>
     </div>
-  </div>
+  </div>-->
 
   <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
@@ -541,7 +461,11 @@ function updateActiveTabFromHash(hash) {
 
            <!-- LAIFMIS -->
 <div v-else-if="item.id === 'laifmis'" class="prose max-w-none">
-  <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+            <div v-if="PagePending">Loading...</div>
+            <div v-else-if="PageError">Failed to load content.</div>
+            <BlocksRenderer :blocks="pages?.['local-authorities-integrated-financial-management-system']?.blocks || []" />
+
+<!--<h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Integrated Financial Management Information System (IFMIS)
   </h2>
   
@@ -559,11 +483,11 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
   had IFMIS installed and all relevant personnel trained in its usage. Now IFMIS is being used in all the 35 LAs in Malawi
   <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
-  </div>
+  </div>-->  
   
 <!-- Key Features Section -->
 <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-  <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features of Digital GRM</h3>
+  <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
   
   <!-- Features Grid -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -750,7 +674,11 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
             
             <!-- Electronic Payment Systems -->
 <div v-else-if="item.id === 'e-payments'" class="prose max-w-none">
-  <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+            <div v-if="PagePending">Loading...</div>
+            <div v-else-if="PageError">Failed to load content.</div>
+            <BlocksRenderer :blocks="pages?.['e-payments']?.blocks || []" />
+
+  <!--<h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Electronic Payment Systems
   </h2>
   
@@ -762,7 +690,7 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
       and provide social protection beneficiaries with convenient access to social benefits anytime, anywhere.
       <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
-  </div>
+  </div>-->
 
   <!-- Key Features Section -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
@@ -1127,7 +1055,11 @@ beneficiaries receive timely and accurate compensation for their labor.
           
            <!-- DGRM Section -->
 <div v-else-if="item.id === 'dgrm'" class="prose max-w-none">
-  <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+            <div v-if="PagePending">Loading...</div>
+            <div v-else-if="PageError">Failed to load content.</div>
+            <BlocksRenderer :blocks="pages?.['digital-grievance-redress-mechanism']?.blocks || []" />
+
+  <!--<h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Digital Grievance Redress Mechanism (Digital GRM)
   </h2>
   
@@ -1138,7 +1070,7 @@ beneficiaries receive timely and accurate compensation for their labor.
       and provide feedback on development projects through multiple user-friendly channels.
       <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
-  </div>
+  </div>-->
   
   <!-- DGRM PICTURE-->
   <div class="mt-8">
@@ -1664,10 +1596,13 @@ beneficiaries receive timely and accurate compensation for their labor.
 
            <!-- COMSIP -->
 <div v-else-if="item.id === 'comsip'" class="prose max-w-none">
-  <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+            <div v-if="PagePending">Loading...</div>
+            <div v-else-if="PageError">Failed to load content.</div>
+            <BlocksRenderer :blocks="pages?.['community-savings-and-investment-promotion']?.blocks || []" />
+  <!--<h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
     Community Savings and Investment Promotion MIS
-  </h2>
-  
+  </h2>--> 
+  <!--
   <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 mb-6">
     <p class="text-gray-700 leading-relaxed">
 The COMSIP MIS (Management Information System) is a digital platform that supports COMSIP's operations by 
@@ -1675,7 +1610,7 @@ enabling efficient coordination, monitoring, and reporting across its cooperativ
 initiatives.
 <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
     </p>
-  </div>
+  </div>-->
   
 <!-- Key Features Section -->
 <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">

@@ -49,13 +49,6 @@ const lazyMap: Record<string, () => Promise<any>> = {
   FunctionGroupBlock: () => import('./blocks/FunctionGroupBlock.vue'),
   ProjectContentBlock: () => import('./blocks/ProjectContentBlock.vue'),
   FeaturesGridBlock: () => import('./blocks/FeaturesGridBlock.vue'),
-<<<<<<< HEAD
-=======
-  CtaBlock: () => import('./blocks/CtaBlock.vue'),
-  IframeBlock: () => import('./blocks/IframeBlock.vue'),
-  ImageBlock: () => import('./blocks/ImageBlock.vue'),
-  MandatePanelBlock: () => import('./blocks/MandatePanelBlock.vue'),
->>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
 }
 
 /**
@@ -151,8 +144,6 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
         alt: data.alt ?? data.caption ?? '',
       }
 
-<<<<<<< HEAD
-=======
     case 'ImageBlock':
       return {
         src: data.src ?? data.image ?? data.image_url ?? '',
@@ -179,7 +170,6 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
         tone: data.tone ?? 'blue',
       }
 
->>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
     case 'FunctionGroupBlock': {
       const rows = Array.isArray(data.functions) ? data.functions : (Array.isArray(data.items) ? data.items : [])
       const mapped = rows.map((fn: any) => ({
@@ -203,8 +193,6 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
         theme: data.theme ?? 'blue',
         show_header: data.show_header ?? true,
         body: data.body ?? '',
-<<<<<<< HEAD
-=======
         heading_level: data.heading_level ?? 'h2',
       }
 
@@ -215,7 +203,6 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
         body: data.body ?? '',
         theme: data.theme ?? 'emerald',
         heading_level: data.heading_level ?? 'h3',
->>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
       }
 
     case 'FeaturesGridBlock': {
@@ -313,14 +300,6 @@ const renderItems = computed<RenderItem[]>(() => {
       </div>
 
       <!-- single -->
-<<<<<<< HEAD
-      <Suspense v-else>
-        <component :is="registry[item.type] || UnknownBlock" v-bind="item.props" :type="item.type" />
-        <template #fallback>
-          <div class="animate-pulse h-24 bg-gray-100 rounded my-4" />
-        </template>
-      </Suspense>
-=======
       <div v-else class="mb-10 last:mb-0">
         <Suspense>
           <component :is="registry[item.type] || UnknownBlock" v-bind="item.props" :type="item.type" />
@@ -329,7 +308,6 @@ const renderItems = computed<RenderItem[]>(() => {
           </template>
         </Suspense>
       </div>
->>>>>>> a2e9e2f8dcde85d531de9107a5559409612887b3
     </template>
   </div>
 </template>
