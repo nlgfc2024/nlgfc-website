@@ -905,10 +905,6 @@ const districts = [
                                  >
                                      Clear Selection
                                  </button>
-                
-                                 <!-- Export Buttons -->
-                                
-
                 <!-- Transition wrapper for content -->
                 <transition :name="transitionName" mode="out-in">
                     <div v-if="isLoading" key="loading" class="flex justify-center items-center h-64">
@@ -1173,7 +1169,7 @@ const districts = [
                 
                 <!-- Map Info -->
                                 <transition name="fade-slide-up">
-                                    <div v-if="selectedDistrictDetails" class="text-sm text-gray-900 bg-emerald-800 border border-blue-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
+                                    <div v-if="selectedDistrictDetails" class="text-sm text-gray-900 bg-emerald-700 border border-blue-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
                                         <div class="font-medium text-gray-900 mb-2">Currently viewing Details for {{ selectedDistrictDetails.name }}</div>
                                         <ul class="space-y-2">
                                             <li class="flex items-start">
