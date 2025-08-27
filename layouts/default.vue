@@ -31,6 +31,7 @@ const shouldShowHeader = computed(() => !hideHeaderRoutes.includes(route.path));
 
 // New reactive state for header height and visibility
 const headerHeight = ref(0);
+const navbarHeight = ref(0);
 const isHeaderVisible = ref(true);
 
 const opportunitySections = [
@@ -47,6 +48,10 @@ const opportunitySections = [
     description: 'Current job openings and career opportunities'
   }
 ];
+
+const handleActiveIdUpdate = (newId) => {
+  activeTab.value = newId;
+};
 
 const sidebarProps = computed(() => {
   // Define pages that should NOT have a sidebar
@@ -74,7 +79,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } else {
       // Fallback for projects page when sidebarData is not yet available
@@ -124,7 +129,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -134,7 +139,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -144,7 +149,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; }    
   } else if (route.path.includes('/projects/pastProjects#psn')) {
@@ -152,7 +157,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; }    
   } else if (route.path.includes('/projects/pastProjects#scb')) {
@@ -160,7 +165,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; }    
   } else if (route.path.includes('/projects/pastProjects#pm')) {
@@ -168,7 +173,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; }    
   }
@@ -178,7 +183,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -188,7 +193,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -198,7 +203,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   } else if (route.path.includes('/upcomingProjects#inspire')) {
@@ -206,7 +211,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   } 
@@ -216,7 +221,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -226,7 +231,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -236,7 +241,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -246,7 +251,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -276,29 +281,54 @@ const sidebarProps = computed(() => {
   };
 });
 
+// Reactive state for header visibility ratio
+const headerVisibilityRatio = ref(1);
+
+// reactive state for footer visibility
+const footerVisibilityRatio = ref(0);
+const footerHeight = ref(0);
+
 // Function to handle scroll-based toggling of the sidebar and header visibility
 const handleScroll = () => {
   const footer = document.querySelector('footer');
   const pageHeader = document.querySelector('.page-header');
   const navbar = document.querySelector('.navbar');
 
+  if (navbar) {
+    navbarHeight.value = navbar.offsetHeight; // CAPTURING the navbar's height in pixels
+  }
+
   if (pageHeader && navbar) {
-    const navbarHeight = navbar.offsetHeight;
+    //const navbarHeight = navbar.offsetHeight;
     const headerRect = pageHeader.getBoundingClientRect();
 
     // Update header height
     headerHeight.value = pageHeader.offsetHeight;
 
+    // Calculate visibility ratio for smooth transitions
+    const navbarBottom = navbarHeight.value;
+    const visibleHeaderHeight = Math.max(0, headerRect.bottom - navbarBottom);
+    headerVisibilityRatio.value = Math.max(0, Math.min(1, visibleHeaderHeight / headerHeight.value));
+
     // The header is considered visible if its bottom edge is below the top of the navbar
-    isHeaderVisible.value = headerRect.bottom > navbarHeight;
+    isHeaderVisible.value = headerRect.bottom > navbarHeight.value;
   }
 
   if (footer) {
-    const footerTop = footer.getBoundingClientRect().top;
     const windowHeight = window.innerHeight;
-    const scrollThreshold = windowHeight * 0.2;
-
-    if (windowHeight > footerTop + scrollThreshold) {
+    const footerRect = footer.getBoundingClientRect();
+    
+    // Update footer height
+    footerHeight.value = footer.offsetHeight;
+    
+    // Calculate how much of the footer is visible
+    const footerTopRelativeToViewport = footerRect.top;
+    const footerVisibleHeight = Math.max(0, windowHeight - footerTopRelativeToViewport);
+    footerVisibilityRatio.value = Math.max(0, Math.min(1, footerVisibleHeight / footerHeight.value));
+    
+    // Close sidebar when footer is 80% visible
+    const footerVisibilityThreshold = 0.8;
+    if (footerVisibilityRatio.value >= footerVisibilityThreshold) {
       isSidebarOpen.value = false;
     } else {
       isSidebarOpen.value = true;
@@ -312,23 +342,36 @@ onMounted(() => {
   handleScroll();
 });
 
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-});
-
 watch(() => route.hash, (newHash) => {
   const activeSection = newHash.replace('#', '');
   if (route.path === '/') {
     // Logic for URL hash
   }
 });
+
+// function to force initial calculations
+const initializeLayout = async () => {
+  await nextTick();
+  handleScroll(); // Force initial calculation
+};
+
+// Watch for route changes and reinitialize
+watch(() => route.path, async () => {
+  await initializeLayout();
+});
+
+onUnmounted(async () => {
+  window.removeEventListener('scroll', handleScroll);
+  await initializeLayout();
+});
+
 </script>
 
 <template>
   <div class="min-h-screen flex flex-col">
     <Navbar class="navbar" />
     <PageHeader v-if="shouldShowHeader" :title="route.meta.title" class="page-header" /> 
-    <main class="flex-grow flex">
+    <main class="flex-grow flex items-start">
       <aside v-if="sidebarProps" :class="['w-full md:w-72 flex-shrink-0']">
         <slot name="sidebar">
           <GeneralSidebar
@@ -340,7 +383,11 @@ watch(() => route.hash, (newHash) => {
             :jobOpportunities="sidebarProps.jobOpportunities"
             :procurementNotices="sidebarProps.procurementNotices"
             :headerHeight="headerHeight"
+            :navbarHeight="navbarHeight" 
             :isHeaderVisible="isHeaderVisible"
+            :headerVisibilityRatio="headerVisibilityRatio"
+            :footerHeight="footerHeight"
+            :footerVisibilityRatio="footerVisibilityRatio"
             @update:sidebarOpen="isSidebarOpen = $event"
             @update:activeId="handleActiveIdUpdate"
             @openFaqModal="sidebarProps.onOpenFaqModal"
