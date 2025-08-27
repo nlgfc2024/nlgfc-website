@@ -66,9 +66,25 @@ const props = defineProps({
     type: Number,
     default: 0
   },
+  navbarHeight: { 
+    type: Number,
+    default: 0 // Default to 0
+  },
   isHeaderVisible: {
     type: Boolean,
     default: true
+  },
+  headerVisibilityRatio: {
+    type: Number,
+    default: 1
+  },
+  footerHeight: {
+    type: Number,
+    default: 0
+  },
+  footerVisibilityRatio: {
+    type: Number,
+    default: 0
   }
 });
 // Define emits to notify the parent component of changes to the active item and sidebar visibility
@@ -384,26 +400,109 @@ const getIconPath = (iconName) => {
   }
 };
 
-// Computed style for dynamic top and bottom based on header visibility
-const dynamicSidebarStyle = computed(() => {
-  const navbarHeightRem = 7.5; // Assuming your navbar is h-16, which is 4rem (16px * 4 = 64px)
-  let topValue;
-
-  if (props.isHeaderVisible) {
-    // When the header is visible, the sidebar should be positioned below both the navbar and the header
-    // The `props.headerHeight` is in pixels, so we convert it to rem
-    topValue = `${props.headerHeight / 16 + navbarHeightRem}rem`;
-  } else {
-    // When the header is not visible, the sidebar should snap to just below the navbar
-    topValue = `${navbarHeightRem}rem`;
+// function to calculate initial generalsidebar position
+const calculateInitialPosition = async () => {
+  await nextTick(); // Wait for DOM to be fully rendered
+  
+  const pageHeader = document.querySelector('.page-header');
+  const navbar = document.querySelector('.navbar');
+  
+  if (navbar) {
+    // Force recalculation of navbar height
+    const navbarRect = navbar.getBoundingClientRect();
+    navbarHeight.value = navbar.offsetHeight;
   }
-  // The bottom position remains fixed to maintain the sidebar's height relative to the viewport bottom
-  const bottomValue = '4rem'; // Corresponds to `bottom-16`
+  
+  if (pageHeader) {
+    // Force recalculation of header height and visibility
+    const headerRect = pageHeader.getBoundingClientRect();
+    headerHeight.value = pageHeader.offsetHeight;
+    
+    // Calculate initial visibility ratio
+    const navbarBottom = navbarHeight.value || 0;
+    const visibleHeaderHeight = Math.max(0, headerRect.bottom - navbarBottom);
+    headerVisibilityRatio.value = Math.max(0, Math.min(1, visibleHeaderHeight / headerHeight.value));
+    
+    // Set header as visible initially if it exists
+    isHeaderVisible.value = headerRect.bottom > navbarBottom;
+  }
+};
+
+// Watch for route changes and recalculate position
+watch(() => route.path, async () => {
+  await calculateInitialPosition();
+});
+
+// Also watch for when the sidebar becomes visible
+watch(() => isSidebarOpen.value, async (newValue) => {
+  if (newValue) {
+    await calculateInitialPosition();
+  }
+});
+
+onMounted(async () => {
+  await calculateInitialPosition();
+});
+
+/*const dynamicSidebarStyle = computed(() => {
+  // Convert the navbarHeight from props (in px) to rem. 1rem = 16px.
+  const navbarHeightRem = props.navbarHeight / 16;
+  
+  // Provide a safe fallback if the height isn't calculated yet
+  if (!navbarHeightRem || navbarHeightRem <= 0) {
+    return { top: '5rem' }; 
+  }
+
+  // Calculate dynamic top position based on header visibility ratio
+  const headerHeightRem = props.headerHeight / 16;
+  const dynamicHeaderHeight = headerHeightRem * props.headerVisibilityRatio;
+  const topValue = `${dynamicHeaderHeight + navbarHeightRem}rem`;
+
+  return {
+    top: topValue,
+    // Adjust max-height to ensure the sidebar can scroll its own content if needed
+    maxHeight: `calc(100vh - ${topValue} - 1rem)`, // 1rem bottom margin
+    transition: 'top 0.15s ease-out' // Smooth transition that follows scroll
+  };
+});*/
+
+const dynamicSidebarStyle = computed(() => {
+  // Convert the navbarHeight from props (in px) to rem. 1rem = 16px.
+  const navbarHeightRem = props.navbarHeight / 16;
+  
+  // Provide a safe fallback if the height isn't calculated yet
+  if (!navbarHeightRem || navbarHeightRem <= 0) {
+    return { 
+      top: '5rem',
+      paddingTop: '1rem',
+      paddingLeft: '1rem',
+      paddingRight: '1rem'
+    }; 
+  }
+
+  // Calculate dynamic top position based on header visibility ratio
+  const headerHeightRem = props.headerHeight / 16;
+  const dynamicHeaderHeight = headerHeightRem * props.headerVisibilityRatio;
+  
+  // Add padding to prevent touching navbar/header (0.5rem = 8px)
+  const paddingTop = 0.5;
+  const topValue = `${dynamicHeaderHeight + navbarHeightRem + paddingTop}rem`;
+
+  // Calculate bottom position based on footer visibility
+  const footerHeightRem = props.footerHeight / 16;
+  const dynamicFooterOffset = footerHeightRem * props.footerVisibilityRatio;
+  const paddingBottom = 1; // 1rem bottom padding
+  const bottomValue = `${dynamicFooterOffset + paddingBottom}rem`;
 
   return {
     top: topValue,
     bottom: bottomValue,
-    transition: 'top 0.3s ease-in-out' // Smooth transition for the top position
+    paddingTop: '0.5rem', // Additional internal padding
+    paddingLeft: '1rem',  // Side padding to prevent touching edges
+    paddingRight: '1rem',
+    // Adjust max-height to account for top and bottom positioning
+    maxHeight: `calc(100vh - ${topValue} - ${bottomValue})`,
+    transition: 'top 0.15s ease-out, bottom 0.15s ease-out' // Smooth transition for both top and bottom
   };
 });
 </script>
@@ -460,19 +559,19 @@ const dynamicSidebarStyle = computed(() => {
             <button
               @click="toggleGroup(group.group)"
               :class="[
-                'w-full text-left p-4 rounded-lg transition-all duration-200 group flex justify-between items-center',
+                'w-full text-left p-4 rounded-lg cursor-pointer transition-all duration-200 group flex justify-between items-center',
                 activeGroup === group.group
                   ? 'bg-emerald-50 border-2 border-emerald-200 text-emerald-700' // Group contains active item (emerald)
                   : 'bg-white hover:bg-gray-50 border-2 border-transparent text-gray-700 hover:text-gray-900' // Default/hover group header
               ]"
             >
-              <div class="flex items-center space-x-3">
+              <div class="flex items-center space-x-1">
                   <span
                     :class="[
                       'w-6 h-6 transition-colors',
                       activeGroup === group.group
                         ? 'text-emerald-600'
-                        : 'text-gray-400 group-hover:text-gray-600'
+                        : 'text-gray-50 group-hover:text-gray-600'
                     ]"
                   >
                       <svg 
@@ -492,10 +591,10 @@ const dynamicSidebarStyle = computed(() => {
               </svg>
             </button>
             <div v-show="openGroup === group.group" class="bg-white" >
-              <ul class="py-4">
+              <ul class="py-2">
                 <!-- Sections within Group -->
                 <li v-if="group.sections && Array.isArray(group.sections) && group.sections.length > 0">
-                  <li v-for="section in group.sections.filter(section => section && section.id)" :key="section.id">
+                  <li v-for="section in group.sections.filter(section => section && section.id)" :key="section.id" class="mb-2">
                     <NuxtLink
                       :to="`${$route.path}#${section.id}`"
                       @click="setActiveItem(section.id)"
@@ -525,15 +624,15 @@ const dynamicSidebarStyle = computed(() => {
                 
                 <!-- Subgroups within Group -->
                 <li v-if="group.subgroups && Array.isArray(group.subgroups) && group.subgroups.length > 0">
-                  <li v-for="subgroup in group.subgroups.filter(subgroup => subgroup && subgroup.id)" :key="subgroup.id">
+                  <li v-for="subgroup in group.subgroups.filter(subgroup => subgroup && subgroup.id)" :key="subgroup.id" class="mb-2">
                     <NuxtLink
                       :to="`#${subgroup.id}`"
                       @click.prevent="toggleSubgroup(subgroup.id)"
                       :class="[
-                        'flex items-center justify-between w-full px-4 py-3 rounded-lg text-left cursor-pointer transition-all duration-200 ease-in-out',
+                        'flex items-center justify-between w-full px-6 py-3 rounded-lg text-left cursor-pointer transition-all duration-200 ease-in-out',
                         'hover:bg-gray-100',
                         {
-                          'bg-emerald-50 text-emerald-800 font-semibold': activeSubgroup === subgroup.id || openSubgroup === subgroup.id
+                          'bg-emerald-50 border-1 border-emerald-200 text-emerald-800 font-semibold': activeSubgroup === subgroup.id
                         }
                       ]"
                     >
@@ -551,7 +650,7 @@ const dynamicSidebarStyle = computed(() => {
                           :to="`${$route.path}#${item.id}`"
                           @click="setActiveItem(item.id)"
                           :class="[
-                            'block px-5 py-2.5 text-sm transition-colors duration-150',
+                            'block px-6 py-2.5 text-sm transition-colors duration-150',
                             item.id === activeId
                               ? 'bg-emerald-50 text-emerald-700 font-medium border-l-4 border-emerald-600' // Active item styling (emerald)
                               : 'hover:bg-gray-50 text-gray-700' // Default/hover item styling (gray/darker gray)
@@ -717,5 +816,84 @@ const dynamicSidebarStyle = computed(() => {
 }
 .overflow-y-auto::-webkit-scrollbar-thumb:hover {
   background: #555; /* Color of the scroll thumb on hover */
+}
+
+
+/* More aggressive override - target all possible selectors */
+svg,
+svg *,
+path,
+.sidebar svg,
+.general-sidebar svg,
+div svg,
+button svg,
+a svg,
+span svg {
+  color: inherit !important;
+  fill: currentColor !important;
+}
+
+/* Prevent ANY external color interference with maximum specificity */
+body * svg:not(.text-emerald-500):not(.text-emerald-600):not(.text-transparent),
+html * svg:not(.text-emerald-500):not(.text-emerald-600):not(.text-transparent),
+* * svg:not(.text-emerald-500):not(.text-emerald-600):not(.text-transparent) {
+  color: inherit !important;
+  fill: currentColor !important;
+}
+
+/* Block the specific unwanted color completely */
+*[style*="#6e9d76"],
+*[style*="rgb(110, 157, 118)"],
+*[style*="6e9d76"] {
+  color: inherit !important;
+  fill: currentColor !important;
+}
+
+/* Ensure intended Tailwind classes work with maximum specificity */
+html body .text-emerald-500,
+html body .text-emerald-500 svg,
+html body svg.text-emerald-500 {
+  color: #10b981 !important;
+  fill: #10b981 !important;
+}
+
+html body .text-emerald-600,
+html body .text-emerald-600 svg,
+html body svg.text-emerald-600 {
+  color: #059669 !important;
+  fill: #059669 !important;
+}
+
+html body .text-transparent,
+html body .text-transparent svg,
+html body svg.text-transparent {
+  color: transparent !important;
+  fill: transparent !important;
+}
+
+/* Override any scroll-based or footer-based color changes */
+body[data-footer-visible] * svg,
+.footer-visible * svg,
+.scroll-active * svg,
+body[data-scroll] * svg,
+html[data-scroll] * svg {
+  color: inherit !important;
+  fill: currentColor !important;
+}
+
+/* Target your specific checkmark icon aggressively 
+svg[viewBox="0 0 30 30"],
+svg[viewBox="0 0 30 30"] path,
+svg[viewBox="0 0 30 30"] *,
+.h-5.w-5 svg,
+.h-5.w-5 svg path {
+  color: inherit !important;
+  fill: currentColor !important;
+}*/
+
+/* Nuclear option - override everything except explicitly set classes */
+:not(.text-emerald-500):not(.text-emerald-600):not(.text-transparent) svg {
+  color: inherit !important;
+  fill: currentColor !important;
 }
 </style>
