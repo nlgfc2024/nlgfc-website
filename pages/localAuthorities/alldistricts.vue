@@ -695,7 +695,7 @@ const districts = [
         area: '2,193 km²',
         description: 'Balaka is known for its sugar production and borders Lake Malawi.',
         slug: '',
-        pageSlug: 'balakaDistrict'
+        pageSlug: 'Balaka'
     },
     { 
         name: 'Blantyre', 
