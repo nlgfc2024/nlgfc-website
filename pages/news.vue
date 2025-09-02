@@ -1,5 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-50">
+<<<<<<< HEAD
     <!-- Hero Slider Section (New) -->
     <section class="relative overflow-hidden h-[360px] md:h-[420px]">
       <div
@@ -66,6 +67,14 @@
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
+=======
+    <!-- Header Section -->
+    <section class="bg-gradient-to-r text-gray-600 py-4">
+      <div class="container mx-auto px-2">
+        <div class="max-w-2xl mx-auto text-center">
+          <h1 class="text-2xl md:text-5xl font-bold mb-4">Latest News & Updates</h1>
+          <p class="text-xl text-gray-600">Stay informed about the latest developments in local governance and community initiatives</p>
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
         </div>
       </div>
     </section>
@@ -241,19 +250,26 @@
 definePageMeta({
     title: 'NLGFC - News & Updates',
     })
+<<<<<<< HEAD
 
 import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, watch } from 'vue'
+=======
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
 
 // Reactive data
 const selectedArticle = ref(null)
 const searchQuery = ref('')
 
+<<<<<<< HEAD
 // Slider state
 const currentSlide = ref(0)
 const autoplay = ref(true)
 const autoplayInterval = ref(5000)
 let autoplayTimer = null
 
+=======
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
 // Sample news data
 const newsArticles = ref([
   {
@@ -404,6 +420,7 @@ const filteredArticles = computed(() => {
   return filtered
 })
 
+<<<<<<< HEAD
 // Get featured articles for slider (first 3 articles)
 const featuredArticles = computed(() => filteredArticles.value.slice(0, 3))
 
@@ -448,6 +465,8 @@ const toggleAutoplay = () => {
   else clearInterval(autoplayTimer)
 }
 
+=======
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
 // Methods
 const selectArticle = (article) => {
   selectedArticle.value = article
@@ -495,15 +514,19 @@ onMounted(() => {
   
   // Listen for hash changes
   window.addEventListener('hashchange', handleHashChange)
+<<<<<<< HEAD
   
   // Start autoplay for slider
   startAutoplay()
+=======
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
 })
 
 onUnmounted(() => {
   // Clean up event listener
   window.removeEventListener('hashchange', handleHashChange)
 })
+<<<<<<< HEAD
 
 onBeforeUnmount(() => {
   // Clean up autoplay timer
@@ -521,4 +544,6 @@ watch(selectedArticle, (newVal) => {
   }
 })
 
+=======
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
 </script>

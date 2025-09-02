@@ -447,17 +447,28 @@
                   <div>
                     <NuxtLink to="/resourceCenter#knowledge"><h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Knowledge Management</h3></NuxtLink>
                     <ul class="space-y-2">
+<<<<<<< HEAD
                       <li><NuxtLink to="/resourceCenter#knowledge-image-gallery" class="text-gray-700 hover:text-blue-700 transition">Image Galley</NuxtLink></li>
                       <li><NuxtLink to="/resourceCenter#knowledge-video" class="text-gray-700 hover:text-blue-700 transition">Videos</NuxtLink></li>
+=======
+                      <li><NuxtLink to="/resourceCenter#knowledge-management-image-gallery" class="text-gray-700 hover:text-blue-700 transition">Image Galley</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#knowledge-management-video" class="text-gray-700 hover:text-blue-700 transition">Videos</NuxtLink></li>
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
                     </ul>
                   </div>
                   <br />
                   <div>
                     <NuxtLink to="/resourceCenter#projects"><h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Project Documents</h3></NuxtLink>
                     <ul class="space-y-2">
+<<<<<<< HEAD
                       <li><NuxtLink to="/resourceCenter#projects-ssrlp" class="text-gray-700 hover:text-blue-700 transition">SSRP</NuxtLink></li>
                       <li><NuxtLink to="/resourceCenter#projects-gesd" class="text-gray-700 hover:text-blue-700 transition">GESD</NuxtLink></li>
                       <li><NuxtLink to="/resourceCenter#projects-rcrp2" class="text-gray-700 hover:text-blue-700 transition">RCRP 2</NuxtLink></li>
+=======
+                      <li><NuxtLink to="/resourceCenter#project-documents-ssrlp" class="text-gray-700 hover:text-blue-700 transition">SSRP</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#project-documents-gesd" class="text-gray-700 hover:text-blue-700 transition">GESD</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#project-documents-rcrp2" class="text-gray-700 hover:text-blue-700 transition">RCRP 2</NuxtLink></li>
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
                     </ul>
                   </div>
                 </div>
@@ -892,6 +903,9 @@
 </template>
 
 <script setup>
+import { ref, watch, nextTick } from 'vue';
+import { useRoute } from 'vue-router';
+
 const isMenuOpen = ref(false);
 const activeMegaMenu = ref(null);
 const activeAccordion = ref(null);

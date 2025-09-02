@@ -288,11 +288,19 @@
 </template>
 
 <script setup>
+<<<<<<< HEAD
+=======
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { link } from '#build/ui';
+
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
 definePageMeta({
     title: 'NLGFC - Resource Center',
     })
 
 const route = useRoute()
+<<<<<<< HEAD
 import { link } from '#build/ui';
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
 
@@ -304,6 +312,18 @@ const activeGroup = ref(null);
 const activeSubgroup = ref(null);
 const searchQuery = ref('');
 
+=======
+
+
+const newsId = route.params.id;
+
+// State management for UI
+const expandedGroup = ref(null);
+const activeGroup = ref(null);
+const activeSubgroup = ref(null);
+const searchQuery = ref('');
+
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
 // Data for the resource center, structured into groups and subgroups with IDs
 const resourceGroups = [
   {
@@ -354,7 +374,11 @@ const resourceGroups = [
     ]
   },
   {
+<<<<<<< HEAD
     id: 'projects',
+=======
+    id: 'project-documents',
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
     group: 'Project Documents',
     subgroups: [
       { id: 'ssrlp', subgroup: 'SSRLP', items: [] },
@@ -373,7 +397,11 @@ const resourceGroups = [
     ]
   },
   {
+<<<<<<< HEAD
     id: 'knowledge',
+=======
+    id: 'knowledge-management',
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
     group: 'Knowledge Management',
     subgroups: [
       {
@@ -401,8 +429,11 @@ const resourceGroups = [
  * @param {string} subgroupId - The ID of the subgroup (optional)
  */
 const navigateToSection = (groupId, subgroupId = null) => {
+<<<<<<< HEAD
   console.log('Navigating to:', groupId, subgroupId); // Debug log
   
+=======
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
   const groupIndex = resourceGroups.findIndex(g => g.id === groupId);
   
   if (groupIndex !== -1) {
@@ -414,11 +445,27 @@ const navigateToSection = (groupId, subgroupId = null) => {
         expandedGroup.value = groupIndex;
         activeGroup.value = groupIndex;
         activeSubgroup.value = subgroupIndex;
+<<<<<<< HEAD
         console.log('Navigated to subgroup:', group.group, group.subgroups[subgroupIndex].subgroup);
         return;
       } else {
         console.warn('Subgroup not found:', subgroupId, 'in group:', groupId);
       }
+=======
+        return;
+      }
+    }
+    
+    // Navigate to main group
+    if (group.items) {
+      activeGroup.value = groupIndex;
+      activeSubgroup.value = null;
+      expandedGroup.value = null;
+    } else if (group.subgroups) {
+      expandedGroup.value = groupIndex;
+      activeGroup.value = null;
+      activeSubgroup.value = null;
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
     }
     
     // Navigate to main group
@@ -460,7 +507,11 @@ const getCurrentSectionUrl = () => {
  * Handle URL hash changes for direct navigation
  */
 const handleHashChange = () => {
+<<<<<<< HEAD
   const hash = (route.hash || window.location.hash).slice(1); // Remove the #
+=======
+  const hash = window.location.hash.slice(1); // Remove the #
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
   if (hash) {
     const parts = hash.split('-');
     const groupId = parts[0];
@@ -628,14 +679,19 @@ watch([activeGroup, activeSubgroup], () => {
 // Lifecycle hooks
 onMounted(() => {
   // Handle initial hash on page load
+<<<<<<< HEAD
   nextTick(() => {
     handleHashChange();
   });
+=======
+  handleHashChange();
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
   
   // Listen for hash changes (back/forward navigation)
   window.addEventListener('hashchange', handleHashChange);
 });
 
+<<<<<<< HEAD
 // Watch route changes to handle navigation from other pages
 watch(() => route.hash, (newHash) => {
   if (newHash) {
@@ -644,6 +700,15 @@ watch(() => route.hash, (newHash) => {
     });
   }
 }, { immediate: true });
+=======
+// Watch for hash changes in the URL and handle them
+watch(
+  () => route.hash,
+  () => {
+    handleHashChange();
+  }
+);
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
 
 // Expose methods for external use (e.g., from other components)
 const resourceCenterAPI = {
@@ -653,8 +718,13 @@ const resourceCenterAPI = {
   goToNews: () => navigateToSection('news'),
   goToPressReleases: () => navigateToSection('publications', 'press-releases'),
   goToSuccessStories: () => navigateToSection('publications', 'success-stories'),
+<<<<<<< HEAD
   goToVideos: () => navigateToSection('knowledge', 'video'),
   goToImageGallery: () => navigateToSection('knowledge', 'image-gallery'),
+=======
+  goToVideos: () => navigateToSection('knowledge-management', 'video'),
+  goToImageGallery: () => navigateToSection('knowledge-management', 'image-gallery'),
+>>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
   // Add more convenience methods as needed
 };
 
