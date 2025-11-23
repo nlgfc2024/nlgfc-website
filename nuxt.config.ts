@@ -12,10 +12,11 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/tailwindcss'
   ],
- runtimeConfig: {
+
+  runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://127.0.0.1:8000',
-    },
+      baseUrl: 'http://localhost:8000'
+    }
   },
   // Configuration for subdirectory deployment and app settings
   app: {
