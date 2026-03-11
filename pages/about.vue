@@ -221,7 +221,7 @@ const downloadImage = () => {
 
 <template>
   <div class="min-h-[calc(100vh-120px)] bg-white">
-    <div class="container mx-auto px-2 py-3 flex flex-col md:flex-row gap-8 max-w-6xl">
+    <div class="container mx-auto px-2 py-1 flex flex-col md:flex-row gap-8 max-w-6xl">
     
         <!-- Main Content -->
       <main class="flex-1 min-w-0">
