@@ -15,30 +15,54 @@ const isTransitioning = ref(false);
 
 
 const tabs = ref([
-    { id: 'landing_page', title: 'Lilongwe district' },
+    { id: 'landing_page', title: 'District Overview' },
   { id: 'profile', title: 'Profile' },
   { id: 'projects', title: 'Projects' },
   { id: 'reports', title: 'Reports' },
   { id: 'news', title: 'News' }
 ])
 
-// Map the 'tabs' data to the 'projectGroups' structure
-const mappedProjectGroups = computed(() => {
-  return [
-    {
-      group: 'Portfolio', // The desired group name
-      items: tabs.value // The original tabs become items under this group
-    }
-  ];
+// Map the 'tabs' data to the 'sections' structure
+const mappedSections = computed(() => {
+  return tabs.value.map(tab => ({
+    id: tab.id,
+    name: tab.title,
+    icon: getTabIcon(tab.id), // Optional: add icons for each tab
+    description: getTabDescription(tab.id) // Optional: add descriptions
+  }));
 });
+
+// Helper function to get icons for tabs (optional)
+const getTabIcon = (tabId) => {
+  const iconMap = {
+    'landing_page': 'heroicons:building-office',
+    'profile': 'heroicons:information-circle',
+    'projects': 'heroicons:briefcase',
+    'reports': 'heroicons:document-text',
+    'news': 'heroicons:envelope'
+  };
+  return iconMap[tabId] || 'heroicons:document-text';
+};
+
+// Helper function to get descriptions for tabs (optional)
+const getTabDescription = (tabId) => {
+  const descriptionMap = {
+    'landing_page': 'District overview and highlights',
+    'profile': 'Council profile and information',
+    'projects': 'Ongoing and completed projects',
+    'reports': 'Official reports and documents',
+    'news': 'Latest news and updates'
+  };
+  return descriptionMap[tabId] || '';
+};
 
 // Use the composable to share the data
 const { projectGroups } = useGeneralSidebar();
-projectGroups.value = mappedProjectGroups.value;
+projectGroups.value = mappedSections.value;
 
 // Use watchEffect to automatically update the shared state
 watchEffect(() => {
-  projectGroups.value = mappedProjectGroups.value;
+  projectGroups.value = mappedSections.value;
 });
 
 // Function to update active tab based on URL hash
@@ -351,8 +375,8 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="about-page bg-white">
-    <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
-      <div class="w-full md:w-64 flex-shrink-0">
+    <div class="container mx-auto px-4 py-1 flex flex-col md:flex-row gap-8 max-w-6xl">
+      <!--<div class="w-full md:w-64 flex-shrink-0">
         <nav class="border-r border-gray-200 pr-4">
           <ul class="space-y-1">
             <li v-for="tab in tabs" :key="tab.id">
@@ -369,7 +393,7 @@ onBeforeUnmount(() => {
             </li>
           </ul>
         </nav>
-      </div>
+      </div>-->
 
       <div class="flex-1 min-w-0">
         <div v-show="activeTab === 'profile'" class="prose max-w-none">
@@ -584,7 +608,7 @@ onBeforeUnmount(() => {
         </div>
 
         <div v-show="activeTab === 'landing_page'" class="prose max-w-none">
-          <div class="max-w-7xl mx-auto px-4 py-8">
+          <div class="max-w-7xl mx-auto px-4 py-1">
             <div class="space-y-10">
               <section class="relative overflow-hidden rounded-xl shadow-2xl h-[360px] md:h-[420px]">
                 <div
