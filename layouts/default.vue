@@ -230,20 +230,24 @@ const sidebarProps = computed(() => {
     if (projectGroups.value.length > 0) {
       return {
         sidebarType: 'projects',
-        sectionsData: projectGroups.value,
+        sectionsData: [], // Empty sectionsData for groups
+        sections: projectGroups.value, // Use sections instead
         sidebarTitle: route.meta.title, 
         activeId: activeTab.value
-    }; } 
+      }; 
+    } 
   }
 
   if (route.path.includes('/localAuthorities/lilongwecitycouncil')) {
     if (projectGroups.value.length > 0) {
       return {
         sidebarType: 'projects',
-        sectionsData: projectGroups.value,
+        sectionsData: [], // Empty sectionsData for groups
+        sections: projectGroups.value, // Use sections instead
         sidebarTitle: route.meta.title, 
         activeId: activeTab.value
-    }; } 
+      }; 
+    } 
   }
 
   if (route.path.includes('/resourceCenter')) {
@@ -288,8 +292,32 @@ const headerVisibilityRatio = ref(1);
 const footerVisibilityRatio = ref(0);
 const footerHeight = ref(0);
 
+// Enhanced throttling for smoother updates during fast scrolling
+let scrollTimeout = null;
+let lastScrollTime = 0;
+
 // Function to handle scroll-based toggling of the sidebar and header visibility
 const handleScroll = () => {
+  const currentTime = Date.now();
+  
+  // Immediate update for fast scrolling
+  updateScrollValues();
+  
+  // Clear existing timeout
+  if (scrollTimeout) {
+    clearTimeout(scrollTimeout);
+  }
+  
+  // Set a very short timeout for additional smoothing
+  scrollTimeout = setTimeout(() => {
+    updateScrollValues();
+  }, 5); // Very short delay for final position accuracy
+  
+  lastScrollTime = currentTime;
+};
+
+// Separate function for actual scroll value updates
+const updateScrollValues = () => {
   const footer = document.querySelector('footer');
   const pageHeader = document.querySelector('.page-header');
   const navbar = document.querySelector('.navbar');
@@ -299,7 +327,6 @@ const handleScroll = () => {
   }
 
   if (pageHeader && navbar) {
-    //const navbarHeight = navbar.offsetHeight;
     const headerRect = pageHeader.getBoundingClientRect();
 
     // Update header height
@@ -337,7 +364,8 @@ const handleScroll = () => {
 };
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
+  // Use passive listener for better performance
+  window.addEventListener('scroll', handleScroll, { passive: true });
   // Initial call to set header height and visibility on mount
   handleScroll();
 });
@@ -362,6 +390,9 @@ watch(() => route.path, async () => {
 
 onUnmounted(async () => {
   window.removeEventListener('scroll', handleScroll);
+  if (scrollTimeout) {
+    clearTimeout(scrollTimeout);
+  }
   await initializeLayout();
 });
 
@@ -378,6 +409,7 @@ onUnmounted(async () => {
             :sidebarOpen="isSidebarOpen"
             :sidebarType="sidebarProps.sidebarType"
             :sectionsData="sidebarProps.sectionsData"
+            :sections="sidebarProps.sections"
             :activeId="sidebarProps.activeId"
             :sidebarTitle="sidebarProps.sidebarTitle"
             :jobOpportunities="sidebarProps.jobOpportunities"
