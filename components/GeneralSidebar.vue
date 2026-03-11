@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue';
+import { ref, watch, computed, onMounted, nextTick } from 'vue';
 
 const route = useRoute();
 const props = defineProps({
@@ -400,6 +400,10 @@ const getIconPath = (iconName) => {
   }
 };
 
+// reactive refs to store calculated values
+const calculatedNavbarHeight = ref(0);
+const calculatedHeaderHeight = ref(0);
+
 // function to calculate initial generalsidebar position
 const calculateInitialPosition = async () => {
   await nextTick(); // Wait for DOM to be fully rendered
@@ -410,21 +414,21 @@ const calculateInitialPosition = async () => {
   if (navbar) {
     // Force recalculation of navbar height
     const navbarRect = navbar.getBoundingClientRect();
-    navbarHeight.value = navbar.offsetHeight;
+    calculatedNavbarHeight.value = navbar.offsetHeight;
   }
   
   if (pageHeader) {
     // Force recalculation of header height and visibility
     const headerRect = pageHeader.getBoundingClientRect();
-    headerHeight.value = pageHeader.offsetHeight;
+    calculatedHeaderHeight.value = pageHeader.offsetHeight;
     
     // Calculate initial visibility ratio
-    const navbarBottom = navbarHeight.value || 0;
+    const navbarBottom = calculatedNavbarHeight.value || props.navbarHeight || 0;
     const visibleHeaderHeight = Math.max(0, headerRect.bottom - navbarBottom);
-    headerVisibilityRatio.value = Math.max(0, Math.min(1, visibleHeaderHeight / headerHeight.value));
+    const headerVisibilityRatio = Math.max(0, Math.min(1, visibleHeaderHeight / calculatedHeaderHeight.value));
     
     // Set header as visible initially if it exists
-    isHeaderVisible.value = headerRect.bottom > navbarBottom;
+    const isHeaderVisible = headerRect.bottom > navbarBottom;
   }
 };
 
@@ -467,8 +471,9 @@ onMounted(async () => {
 });*/
 
 const dynamicSidebarStyle = computed(() => {
-  // Convert the navbarHeight from props (in px) to rem. 1rem = 16px.
-  const navbarHeightRem = props.navbarHeight / 16;
+  // Use calculated value or fallback to prop
+  const navbarHeightPx = calculatedNavbarHeight.value || props.navbarHeight || 0;
+  const navbarHeightRem = navbarHeightPx / 16;
   
   // Provide a safe fallback if the height isn't calculated yet
   if (!navbarHeightRem || navbarHeightRem <= 0) {
@@ -481,7 +486,7 @@ const dynamicSidebarStyle = computed(() => {
   }
 
   // Calculate dynamic top position based on header visibility ratio
-  const headerHeightRem = props.headerHeight / 16;
+  const headerHeightRem = (calculatedHeaderHeight.value || props.headerHeight || 0) / 16;
   const dynamicHeaderHeight = headerHeightRem * props.headerVisibilityRatio;
   
   // Add padding to prevent touching navbar/header (0.5rem = 8px)
@@ -502,7 +507,12 @@ const dynamicSidebarStyle = computed(() => {
     paddingRight: '1rem',
     // Adjust max-height to account for top and bottom positioning
     maxHeight: `calc(100vh - ${topValue} - ${bottomValue})`,
-    transition: 'top 0.15s ease-out, bottom 0.15s ease-out' // Smooth transition for both top and bottom
+    // Enhanced transition for smoother response during fast scrolling
+    transition: 'top 0.1s ease-out, bottom 0.1s ease-out', // Reduced from 0.15s to 0.1s
+    // Add transform for hardware acceleration
+    transform: 'translateZ(0)',
+    // Ensure position updates are immediate
+    willChange: 'top, bottom'
   };
 });
 </script>
@@ -608,9 +618,9 @@ const dynamicSidebarStyle = computed(() => {
                     >
                       <span
                         v-if="section.icon"
-                        class="w-5 h-5 mr-3 text-gray-500"
+                        class="w-3 h-3 mr-3 text-gray-500"
                       >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getIconPath(section.icon)"></path>
                         </svg>
                       </span>
