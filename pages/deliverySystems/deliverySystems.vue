@@ -158,13 +158,6 @@ watch(() => route.hash, (newHash) => {
     updateActiveTabFromHash(newHash.replace('#', ''))
   }
 })
-// Page-builder: MSR,COMSIP, DGRM, E-Payments, LAIFMIS, LAPAS, PMIS, Public Works MIS, SCTP MIS
-// const { data: mvcPage, pending: mvcPending, error: mvcError } = usePageBlocks('MSR,COMSIP, DGRM, E-Payments, LAIFMIS, LAPAS, PMIS, Public Works MIS, SCTP MIS')
-    
-const { data: pages, pending, error: PageError } = usePageBlocks([
-  'malawi-social-registry', 'community-savings-and-investment-promotion',
-  'digital-grievance-redress-mechanism', 'e-payments','local-authorities-integrated-financial-management-system'
-])
 function updateActiveTabFromHash(hash) {
   for (const group of projectGroups) {
     const match = group.items.find(item => item.id === hash)
@@ -195,49 +188,12 @@ function updateActiveTabFromHash(hash) {
   
 <!-- MSR Section -->
 <div v-if="item.id === 'msr'" class="prose max-w-none">
-<<<<<<< HEAD
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['malawi-social-registry']?.blocks || []" />
-  <!--h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
-    Malawi Social Registry (MSR)
-  </h2>-->
-  
-  <!-- Introduction 
-  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-    <p class="text-gray-700 leading-relaxed">
-      The Malawi Social Registry (MSR) is a national platform established by the Government 
-      of Malawi in 2016 through the Department of Economic Planning and Development (EP&D). It collects, stores, 
-      accesses, and shares socioeconomic and demographic data about households across the country to support 
-      the implementation of social support programs and ensure assistance reaches those who need it most.
-    <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
-
-    </p>
-    
-  </div>-->
-  
-<!-- MSR Dashboard -->
-  <!--<div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-3">MSR Dashboard</h3>
-    <div class="bg-white rounded border border-gray-300 overflow-hidden">
-      <iframe
-        src="https://dashboards.malawiubr.org/public/dashboard/0929d069-914b-4d88-9017-1a8b46cdc28f"
-        frameborder="0"
-        width="100%"
-        height="600"
-        allowtransparency
-        class="w-full"
-      ></iframe>
-    </div>
-  </div>-->
-=======
   <BlocksRenderer :blocks="pages?.['msr-header']?.blocks || []" />
   
 <!-- MSR Dashboard -->
   <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
     <BlocksRenderer :blocks="pages?.['msr-dashboard']?.blocks || []" />
   </div>
->>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
 
   <!-- Key Features Section -->
   <BlocksRenderer :blocks="pages?.['msr-key-features']?.blocks || []" />
@@ -246,68 +202,7 @@ function updateActiveTabFromHash(hash) {
 
            <!-- LAIFMIS section -->
 <div v-else-if="item.id === 'laifmis'" class="prose max-w-none">
-<<<<<<< HEAD
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['local-authorities-integrated-financial-management-system']?.blocks || []" />
-
-<!--<h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
-    Integrated Financial Management Information System (IFMIS)
-  </h2>
-  
-  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 mb-6">
-    <p class="text-gray-700 leading-relaxed">
-Government of Malawi procured an Integrated Financial Management Information System (IFMIS) in 2008. 
-IFMIS is an Enterprise Resource Planning (ERP) tool ‘dubbed Serenic Navigator’, to be used in the Councils 
-for Financial Management and Reporting under the policy guidance of the Accountant General (AG). IFMIS was 
-implemented in phases, starting with five local authorities in M’mbelwa, Mchinji, Lilongwe District, Blantyre City, 
-and Thyolo in the first phase. Being the first IFMIS implementation in Malawi, the aim of delivering a pilot was to 
-ensure that people learn from the process and improve as the implementation goes to other Local Authorities. Use of 
-IFMIS for Financial Management and Reporting was emphasized to ensure that all Local Authorities have a standardized
- Financial Management System that would help Local Authorities produce standardized reports for onward transmission 
- to the central Government and other relevant stakeholders. By the close of 2013 calendar year, all Local Authorities
-  had IFMIS installed and all relevant personnel trained in its usage. Now IFMIS is being used in all the 35 LAs in Malawi
-  <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
-    </p>
-  </div>-->  
-  
-<!-- Key Features Section -->
-<div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-  <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
-  
-  <!-- Features Grid -->
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    
-    <!-- Multi-Channel Access -->
-    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-      <div class="flex items-start mb-4">
-        <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-          <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path>
-          </svg>
-        </div>
-        <div>
-          <h4 class="font-semibold text-gray-900 text-lg">Multi-Channel Access</h4>
-        </div>
-      </div>
-      <ul class="space-y-3 text-sm text-gray-600">
-        <li class="flex items-start">
-          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-          Toll-Free Line (3056) available on Airtel and TNM
-        </li>
-        <li class="flex items-start">
-          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-          Android App for mobile accessibility
-        </li>
-        <li class="flex items-start">
-          <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-          Web App for online access
-        </li>
-      </ul>
-    </div>
-=======
   <BlocksRenderer :blocks="pages?.['laifmis-header']?.blocks || []" />
->>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
 
             <!--LAIFMIS Key Features-->
 <BlocksRenderer :blocks="pages?.['laifmis-key-features']?.blocks || []" />  
@@ -316,27 +211,7 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
             
             <!-- E-Payment System section -->
 <div v-else-if="item.id === 'e-payments'" class="prose max-w-none">
-<<<<<<< HEAD
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['e-payments']?.blocks || []" />
-
-  <!--<h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
-    Electronic Payment Systems
-  </h2>
-  
-  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 mb-6">
-    <p class="text-gray-700 leading-relaxed">
-      Electronic Payment Systems provide secure, efficient,
-      and convenient digital payment solutions for citizens and businesses.
-      These systems enable seamless transactions
-      and provide social protection beneficiaries with convenient access to social benefits anytime, anywhere.
-      <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
-    </p>
-  </div>-->
-=======
   <BlocksRenderer :blocks="pages?.['e-payment-header']?.blocks || []" />
->>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
 
   <!-- Key Features Section -->
   <BlocksRenderer :blocks="pages?.['e-payment-key-features']?.blocks || []" />
@@ -398,38 +273,6 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
           
            <!-- DGRM Section -->
 <div v-else-if="item.id === 'dgrm'" class="prose max-w-none">
-<<<<<<< HEAD
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['digital-grievance-redress-mechanism']?.blocks || []" />
-
-  <!--<h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
-    Digital Grievance Redress Mechanism (Digital GRM)
-  </h2>
-  
-  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 mb-6">
-    <p class="text-gray-700 leading-relaxed">
-      Digital Grievance Redress Mechanism (Digital GRM) is a technology-enabled platform designed to enhance citizen engagement, 
-      accountability, and transparency in project implementation. It allows community members to report issues, ask questions, 
-      and provide feedback on development projects through multiple user-friendly channels.
-      <a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
-    </p>
-  </div>-->
-  
-  <!-- DGRM PICTURE-->
-  <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">Digital GRM</h3>
-    <div class="flex justify-center">
-      <div class="w-full max-w-2xl h-80 overflow-hidden rounded-lg shadow-lg border border-gray-200">
-        <img 
-          src="/images/deliverySystems/Digital_GRM.png" 
-          alt="Digital_GRM" 
-          class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
-        />
-      </div>
-    </div>
-  </div>
-=======
   <BlocksRenderer :blocks="pages?.['dgrm-header']?.blocks || []" />
 
           <!-- DGRM PICTURE-->
@@ -439,7 +282,6 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
   <BlocksRenderer :blocks="pages?.['dgrm-picture']?.blocks || []" />
 </div>
 
->>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
   
   <!-- Key Feature Section -->
   <BlocksRenderer :blocks="pages?.['dgrm-key-features']?.blocks || []" />
@@ -723,25 +565,7 @@ IFMIS for Financial Management and Reporting was emphasized to ensure that all L
 
             <!-- COMSIP section-->
 <div v-else-if="item.id === 'comsip'" class="prose max-w-none">
-<<<<<<< HEAD
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['community-savings-and-investment-promotion']?.blocks || []" />
-  <!--<h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
-    Community Savings and Investment Promotion MIS
-  </h2>--> 
-  <!--
-  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 mb-6">
-    <p class="text-gray-700 leading-relaxed">
-The COMSIP MIS (Management Information System) is a digital platform that supports COMSIP's operations by 
-enabling efficient coordination, monitoring, and reporting across its cooperative and social protection 
-initiatives.
-<a href="https://malawiubr.org/dashboards" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 ml-2 font-medium no-underline">See more</a>
-    </p>
-  </div>-->
-=======
 <BlocksRenderer :blocks="pages?.['comsip-header']?.blocks || []" />
->>>>>>> 66fc24496fb298cd26d73e938ce18388d2855cfa
   
 <!-- Key Features Section -->
 <BlocksRenderer :blocks="pages?.['comsip-key-features']?.blocks || []" />
