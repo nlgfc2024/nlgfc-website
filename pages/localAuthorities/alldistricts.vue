@@ -567,7 +567,7 @@ const districts = [
         area: '3,624 km²',
         description: 'Dedza is known for pottery and borders Mozambique.',
         slug: 'dedza',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'dedzaDistrict'
     },
     { 
         name: 'Dowa', 
@@ -695,7 +695,7 @@ const districts = [
         area: '2,193 km²',
         description: 'Balaka is known for its sugar production and borders Lake Malawi.',
         slug: '',
-        pageSlug: 'balakaDistrict'
+        pageSlug: 'Balaka'
     },
     { 
         name: 'Blantyre', 
@@ -865,7 +865,7 @@ const districts = [
                         <select 
                             id="region"
                             v-model="selectedRegion"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-bg-emerald-700  focus:border-blue-500"
                         >
                             <option value="">All Regions</option>
                             <option v-for="region in regions" :key="region" :value="region">
@@ -883,7 +883,7 @@ const districts = [
                     <select 
                         id="district"
                         v-model="selectedDistrict"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-gray-300"
                     >
                         <option value="">Choose a district...</option>
                         <option
@@ -905,10 +905,6 @@ const districts = [
                                  >
                                      Clear Selection
                                  </button>
-                
-                                 <!-- Export Buttons -->
-                                
-
                 <!-- Transition wrapper for content -->
                 <transition :name="transitionName" mode="out-in">
                     <div v-if="isLoading" key="loading" class="flex justify-center items-center h-64">
@@ -917,7 +913,7 @@ const districts = [
                     
                     <!-- Default Content (shown when no district is selected) -->
                     <div v-else-if="!selectedDistrict" key="default" class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
-                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                        <div class="bg-gradient-to-r from-[#000C1A] via-[#001830] to-[#001F3F] px-6 py-4">
                             <h3 class="text-xl font-bold text-white">Malawi Local Authorities</h3>
                             <p class="text-blue-100 text-sm">All Districts Information</p>
                         </div>
@@ -986,7 +982,7 @@ const districts = [
                     <!-- Selected District Display (shown when a district is selected) -->
                     <div v-else key="district" class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
                         <!-- Header -->
-                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                        <div class="bg-gradient-to-r from-[#000C1A] via-[#001830] to-[#001F3F] px-6 py-4">
                             <h3 class="text-xl font-bold text-white">{{ selectedDistrictDetails.name }} District</h3>
                             <p class="text-blue-100 text-sm">{{ selectedDistrictDetails.region }} Region</p>
                         </div>
@@ -1017,7 +1013,7 @@ const districts = [
                             <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
                                 <button
                                     @click="handleDistrictLinkClick(selectedDistrictDetails)"
-                                    class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm font-medium flex items-center justify-center"
+                                    class="flex-1 bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm font-medium flex items-center justify-center"
                                 >
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -1052,21 +1048,21 @@ const districts = [
                                     <a
                                         :href="`/localAuthorities/${selectedDistrictDetails.pageSlug}?tab=projects`"
                                         @click="handleProjectsClick"
-                                        class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full hover:bg-purple-200 transition-colors"
+                                        class="inline-flex items-center px-3 py-1 bg-purple-100 text-gray-600 text-xs font-medium rounded-full hover:bg-purple-200 transition-colors"
                                     >
                                         District Profile
                                     </a>
                                     <a
                                         :href="`/localAuthorities/${selectedDistrictDetails.pageSlug}?tab=projects`"
                                         @click="handleProjectsClick"
-                                        class="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full hover:bg-purple-200 transition-colors"
+                                        class="inline-flex items-center px-3 py-1 bg-purple-100 text-gray-600 text-xs font-medium rounded-full hover:bg-purple-200 transition-colors"
                                     >
                                         Projects
                                     </a>
                                     <a 
                                         :href="`/localAuthorities/${selectedDistrictDetails.pageSlug}?tab=news`"
                                         @click="handleNewsClick"
-                                        class="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full hover:bg-red-200 transition-colors"
+                                        class="inline-flex items-center px-3 py-1 bg-red-100 text-gray-600 text-xs font-medium rounded-full hover:bg-red-200 transition-colors"
                                     >
                                         News
                                     </a>
@@ -1173,7 +1169,7 @@ const districts = [
                 
                 <!-- Map Info -->
                                 <transition name="fade-slide-up">
-                                    <div v-if="selectedDistrictDetails" class="text-sm text-gray-900 bg-emerald-800 border border-blue-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
+                                    <div v-if="selectedDistrictDetails" class="text-sm text-gray-900 bg-emerald-700 border border-blue-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
                                         <div class="font-medium text-gray-900 mb-2">Currently viewing Details for {{ selectedDistrictDetails.name }}</div>
                                         <ul class="space-y-2">
                                             <li class="flex items-start">
@@ -1223,50 +1219,13 @@ const districts = [
                             </div>
                         </div>
                     </div>
-                
-                
-                <!-- Map Info -->
-                <transition name="fade-slide-up">
-                    <div v-if="selectedDistrictDetails" class="text-sm text-gray-600 bg-blue-50 border border-blue-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
-                        <div class="font-medium text-blue-800 mb-2">Currently viewing Details for {{ selectedDistrictDetails.name }}</div>
-                        <ul class="space-y-2">
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                </svg>
-                                <span>Phone: {{ selectedDistrictDetails.Phone }}</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                                <span>Email: {{ selectedDistrictDetails.email }}</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                                </svg>
-                                <span>Private Bag: {{ selectedDistrictDetails.PrivateBag }}</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div v-else class="text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
-                        <div class="flex items-center">
-                            <svg class="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span>Select a district from the dropdown to highlight it and see all details</span>
-                        </div>
-                    </div>
-                </transition>
-       
-</template>
+                </template>
 
 <style>
 /* Transition effects */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.6s ease;
 }
 
 .fade-enter-from,
@@ -1276,7 +1235,7 @@ const districts = [
 
 .slide-left-enter-active,
 .slide-left-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
 }
 
 .slide-left-enter-from {

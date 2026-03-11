@@ -49,10 +49,6 @@ const lazyMap: Record<string, () => Promise<any>> = {
   FunctionGroupBlock: () => import('./blocks/FunctionGroupBlock.vue'),
   ProjectContentBlock: () => import('./blocks/ProjectContentBlock.vue'),
   FeaturesGridBlock: () => import('./blocks/FeaturesGridBlock.vue'),
-  CtaBlock: () => import('./blocks/CtaBlock.vue'),
-  IframeBlock: () => import('./blocks/IframeBlock.vue'),
-  ImageBlock: () => import('./blocks/ImageBlock.vue'),
-  MandatePanelBlock: () => import('./blocks/MandatePanelBlock.vue'),
 }
 
 /**
