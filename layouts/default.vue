@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted, computed, watch, inject } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import GeneralSidebar from '../components/GeneralSidebar.vue';
 import Navbar from '../components/Navbar.vue';
@@ -36,18 +36,32 @@ const isHeaderVisible = ref(true);
 
 const opportunitySections = [
   {
-    id: 'procurement',
-    name: 'Procurement Portal',
+    id: 'procurement-notices',
+    name: 'Procurement Notices',
     icon: 'heroicons:document-text',
     description: 'Tenders, RFQs, and procurement notices'
   },
   {
-    id: 'jobs',
-    name: 'Job Opportunities',
+    id: 'job-opportunities',
+    name: 'Job Listings',
     icon: 'heroicons:briefcase',
     description: 'Current job openings and career opportunities'
   }
 ];
+
+const normalizeOpportunitySidebarId = (hashValue) => {
+  const normalizedHash = String(hashValue || '').replace('#', '');
+
+  if (normalizedHash === 'jobs' || normalizedHash === 'job-opportunities') {
+    return 'job-opportunities';
+  }
+
+  if (normalizedHash === 'procurement' || normalizedHash === 'procurement-notices') {
+    return 'procurement-notices';
+  }
+
+  return 'procurement-notices';
+};
 
 const handleActiveIdUpdate = (newId) => {
   activeTab.value = newId;
@@ -65,11 +79,14 @@ const sidebarProps = computed(() => {
   
   // Check for opportunities page
   if (route.path.includes('/opportunities')) {
+    const activeOpportunityId = normalizeOpportunitySidebarId(route.hash);
+
     return {
       sidebarType: 'opportunities',
-      sectionsData: opportunitySections,
+      sectionsData: [],
+      sections: opportunitySections,
       sidebarTitle: 'Browse Opportunities',
-      activeId: 'procurement' // default active section
+      activeId: activeOpportunityId,
     };
   }
   
@@ -260,10 +277,6 @@ const sidebarProps = computed(() => {
     }; } 
   }
 
-  const handleActiveIdUpdate = (newId) => {
-    activeTab.value = newId;
-  };
-  
   // If page provides sidebar data, use that
   /*if (sidebarData) {
     return {
