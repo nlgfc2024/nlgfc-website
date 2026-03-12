@@ -13,6 +13,11 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss'
   ],
 
+  runtimeConfig: {
+    public: {
+      baseUrl: 'http://localhost:8000'
+    }
+  },
   // Configuration for subdirectory deployment and app settings
   app: {
     baseURL: '/nlgfc-website/',

@@ -10,7 +10,7 @@
       <div class="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-900/60"></div>
     </div>
     
-    <div class="relative z-10 py-8 md:py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div class="relative z-10 py-4 md:py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div class="text-center">
         <nav class="flex justify-center mb-2 md:mb-3" aria-label="Breadcrumb">
           <ol class="inline-flex items-center space-x-1 md:space-x-2">
@@ -84,12 +84,12 @@ const props = defineProps({
 
 <style scoped>
 .relative {
-  min-height: 150px; /* Reduced from 200px */
+  min-height: 100px; /* Reduced from 200px */
 }
 
 @media (min-width: 768px) {
   .relative {
-    min-height: 150px; /* Reduced from 200px */
+    min-height: 100px; /* Reduced from 200px */
   }
 }
 

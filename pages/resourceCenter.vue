@@ -246,6 +246,7 @@
                 :href="doc.link"
                 target="_blank"
                 class="absolute bottom-2 right-2 w-8 h-8 bg-gray-800 hover:bg-gray-600 text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md hover:shadow-lg"
+                class="absolute bottom-2 right-2 w-8 h-8 bg-gray-800 hover:bg-gray-600 text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md hover:shadow-lg"
                 title="Download / View"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
@@ -288,6 +289,10 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { link } from '#build/ui';
+
 definePageMeta({
     title: 'NLGFC - Resource Center',
     })
@@ -483,6 +488,41 @@ const updateUrlHash = () => {
     
     window.history.replaceState(null, null, `#${hash}`);
   } else {
+    window.history.replaceState(null, null, window.location.pathname);
+  }
+};
+
+/**
+ * Handles clicks on main group items in the sidebar.
+ * It either toggles subgroup visibility or directly selects a group.
+ * @param {number} index - The index of the clicked group.
+ */
+const handleGroupClick = (index) => {
+  const group = resourceGroups[index];
+  if (group.subgroups && group.subgroups.length > 0) {
+    // This is a group with subgroups, so just toggle expansion
+    expandedGroup.value = expandedGroup.value === index ? null : index;
+    // If we are collapsing the group that was active, clear selection
+    if (expandedGroup.value !== index && activeGroup.value === index) {
+        activeGroup.value = null;
+        activeSubgroup.value = null;
+    }
+  } else if (group.items) {
+    // This is a direct content group like "News"
+    expandedGroup.value = null; // No subgroups to expand
+    activeGroup.value = index;
+    activeSubgroup.value = null; // Signal that it's a direct group selection
+  }
+};
+
+/**
+ * Selects a subgroup to display its content.
+ * @param {number} groupIndex - The index of the parent group.
+ * @param {number} subIndex - The index of the subgroup to select.
+ */
+const selectSubgroup = (groupIndex, subIndex) => {
+  activeGroup.value = groupIndex;
+  activeSubgroup.value = subIndex;
     window.history.replaceState(null, null, window.location.pathname);
   }
 };

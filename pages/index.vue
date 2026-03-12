@@ -6,17 +6,11 @@ useHead({
   ]
 });
 
-const partnerLogos = [
-  { src: "/images/partners/Ireland_Std_Colour.png", alt: "Ireland" },
-  { src: "/images/partners/gizlogo-unternehmen-de-rgb-300.jpg", alt: "GIZ" },
-  { src: "/images/partners/EU normal-reproduction-high-resolution.jpg", alt: "EU" },
-  { src: "/images/partners/Embassy of Iceland logo.png", alt: "Embassy of Iceland" },
-  { src: "/images/partners/Cooperation logo.bmp", alt: "Cooperation" },
-  { src: "/images/partners/New EU logo.png", alt: "New EU" },
-  { src: "/images/partners/UK AID - Standard - 4C PNG.png", alt: "UK Aid" },
-  { src: "/images/partners/USaid logo Horizontal RGB_JPEG.jpg", alt: "USAID" },
-  { src: "/images/partners/WB-WBG-horizontal-RGB (1).jpg", alt: "World Bank" },
-]
+// Import utilities
+const { stripHtmlTags, getExcerpt } = useHtmlUtils();
+
+// Get runtime config for base URL
+const config = useRuntimeConfig();
 
 const props = defineProps({
   partnerLogos: {
@@ -28,6 +22,47 @@ const props = defineProps({
     type: Number,
     default: 20
   }
+})
+
+// Fetch partners using standard API composable
+const { data: partners, loading, error, refresh: fetchPartners } = useApiDataArray(
+  'partners',
+  '/api/partners'
+);
+
+// Fetch latest posts using standard API composable
+const { data: postsData, loading: postsLoading, error: postsError, refresh: fetchPosts } = useApiData(
+  'latest-posts',
+  '/api/posts/latest/3',
+  {
+    default: () => [],
+    transform: (response) => Array.isArray(response) ? response : response?.data || []
+  }
+);
+
+// Transform API data to match component structure
+const newsItems = computed(() => {
+  if (!postsData.value || !Array.isArray(postsData.value)) return []
+  
+  const baseUrl = config.public.baseUrl || 'http://localhost:8000';
+  
+  return postsData.value.map((post) => ({
+    id: post.id,
+    title: post.title || '',
+    content: getExcerpt(post.content, 150), // Strip HTML tags and get excerpt
+    image: post.image 
+      ? `${baseUrl}/storage/${post.image}` 
+      : '/images/samples/default-news.jpg',
+    date: post.created_at ? new Date(post.created_at).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }) : '',
+    category: post.category?.name || 'News',
+    link: `/news/${post.slug}`,
+    readTime: '3 min read',
+    slug: post.slug
+  }))
 })
 
 const activeTab = ref('procurements')
@@ -126,126 +161,116 @@ const publications = ref([
 
 <template>
   <div class="relative">
-    <!-- <Navbar /> -->
     <ImageSlider class="relative z-0 pb-16 md:pb-24" />
-    <!-- Featured Articles Grid -->
     <section class="relative z-10 -mt-10 md:-mt-18 lg:-mt-20 px-4">
       <div class="container mx-auto px-4">
-        <div class="grid md:grid-cols-3 gap-6">
-          <!-- Article 1 -->
-          <article class="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
-            <div class="flex h-full">
-              <!-- Image on left -->
-              <div class="w-1/3 relative overflow-hidden">
-                <img 
-                  src="/images/samples/news1.jpg" 
-                  alt="Article image"
-                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                >
-              </div>
-              
-              <!-- Content on right -->
-              <div class="w-2/3 p-5 flex flex-col">
-                <span class="text-xs font-medium text-gray-500 mb-1 flex items-center">
-                  <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                  </svg>
-                  Jun 15, 2023
-                </span>
-                <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-                  
-                  <NuxtLink to="news/#2" class="text-gray-700 hover:text-blue-700 transition flex items-center">How Our New Initiative is Transforming Communities</NuxtLink>
-                </h3>
-                <a href="#" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  Read more
-                  <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                  </svg>
-                </a>
-              </div>
+      
+      <!-- Loading State -->
+      <div v-if="postsLoading" class="grid md:grid-cols-3 gap-6">
+        <div v-for="n in 3" :key="n" class="group relative overflow-hidden rounded-xl bg-white shadow-sm border border-gray-100">
+          <div class="flex h-full">
+            <div class="w-1/3 relative overflow-hidden bg-gray-200">
+              <div class="absolute inset-0 animate-pulse bg-gray-300"></div>
             </div>
-          </article>
-
-          <!-- Article 2 -->
-          <article class="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
-            <div class="flex h-full">
-              <!-- Image on left -->
-              <div class="w-1/3 relative overflow-hidden">
-                <img 
-                  src="/images/samples/news2.jpg" 
-                  alt="Article image"
-                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                >
-              </div>
-              
-              <!-- Content on right -->
-              <div class="w-2/3 p-5 flex flex-col">
-                <span class="text-xs font-medium text-gray-500 mb-1 flex items-center">
-                  <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                  </svg>
-                  May 28, 2023
-                </span>
-                <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-                  
-                  <NuxtLink to="news/#3" class="text-gray-700 hover:text-blue-700 transition flex items-center">Partnering for Greater Impact: Our New Alliance</NuxtLink>
-                </h3>
-                <a href="news/#3" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  Read more
-                  <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                  </svg>
-                </a>
-              </div>
+            <div class="w-2/3 p-5 flex flex-col">
+              <div class="h-4 bg-gray-200 rounded w-3/4 mb-3 animate-pulse"></div>
+              <div class="h-6 bg-gray-200 rounded w-full mb-2 animate-pulse"></div>
+              <div class="h-4 bg-gray-200 rounded w-5/6 mb-4 animate-pulse"></div>
+              <div class="h-3 bg-gray-200 rounded w-1/3 mt-auto animate-pulse"></div>
             </div>
-          </article>
-
-          <!-- Article 3 -->
-          <article class="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100">
-            <div class="flex h-full">
-              <!-- Image on left -->
-              <div class="w-1/3 relative overflow-hidden">
-                <img 
-                  src="/images/samples/news3.jpg" 
-                  alt="Article image"
-                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                >
-              </div>
-              
-              <!-- Content on right -->
-              <div class="w-2/3 p-5 flex flex-col">
-                <span class="text-xs font-medium text-gray-500 mb-1 flex items-center">
-                  <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                  </svg>
-                  Apr 12, 2023
-                </span>
-                <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-                  
-                  <NuxtLink to="news/#4" class="text-gray-700 hover:text-blue-700 transition flex items-center">Annual Report 2022: Our Achievements</NuxtLink>
-                </h3>
-                <a href="news/#4" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  Read more
-                  <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </article>
+          </div>
         </div>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="postsError" class="text-center py-12">
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+          <div class="text-red-600 mb-3">
+            <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+          </div>
+          <h3 class="text-lg font-medium text-red-800 mb-2">Failed to load news</h3>
+          <p class="text-red-600 mb-4">Please refresh the page to try again.</p>
+        </div>
+      </div>
+
+      <!-- Success State -->
+      <div v-else-if="newsItems.length > 0" class="grid md:grid-cols-3 gap-6">
+        <article 
+          v-for="article in newsItems" 
+          :key="article.id"
+          class="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
+        >
+          <div class="flex h-full">
+            <!-- Image Section -->
+            <div class="w-1/3 relative overflow-hidden bg-gray-200">
+              <img 
+                :src="article.image" 
+                :alt="article.title"
+                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+                @error="(e) => { e.target.src = '/images/samples/default-news.jpg' }"
+              >
+            </div>
+            
+            <!-- Content Section -->
+            <div class="w-2/3 p-5 flex flex-col">
+              <!-- Date -->
+              <span class="text-xs font-medium text-gray-500 mb-1 flex items-center">
+                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                {{ article.date }}
+              </span>
+
+              <!-- Title -->
+              <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                <NuxtLink 
+                  :to="article.link" 
+                  class="text-gray-700 hover:text-blue-700 transition flex items-center"
+                >
+                  {{ article.title }}
+                </NuxtLink>
+              </h3>
+
+              <!-- Excerpt -->
+              <p class="text-sm text-gray-600 mb-3 line-clamp-2">
+                {{ article.content }}
+              </p>
+
+              <!-- Read More Link -->
+              <NuxtLink 
+                :to="article.link"
+                class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                Read more
+                <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+              </NuxtLink>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else class="text-center py-12">
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-8 max-w-md mx-auto">
+          <svg class="w-16 h-16 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-4 0H9m4 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v12m4 0V9"></path>
+          </svg>
+          <h3 class="text-lg font-medium text-gray-800 mt-4">No news articles available</h3>
+          <p class="text-gray-600 mt-2">Check back later for updates.</p>
+        </div>
+      </div>
       </div>
     </section>
 
     <main class="container mx-auto px-4 py-12">
-      <!-- Mission, Mandate and Vision -->
       <section class="py-8 bg-gradient-to-b from-gray-50 to-gray-100">
         <div class="container mx-auto px-6 max-w-7xl">
           
-          <!-- Mandate Row -->
           <div class="bg-white p-10 rounded-xl shadow-md mb-16 max-w-5xl mx-auto border-t-4 border-emerald-700 transform hover:scale-[1.01] transition-transform duration-300">
             <h3 class="text-4xl font-bold text-gray-900 mb-4 text-center">Our Mandate</h3>
             <p class="text-gray-600 text-lg text-center leading-relaxed max-w-3xl mx-auto">
@@ -253,9 +278,7 @@ const publications = ref([
             </p>
           </div>
           
-          <!-- Three Column Row -->
           <div class="grid md:grid-cols-3 gap-8">
-            <!-- Vision Card -->
             <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border-t-4 border-purple-700 flex flex-col items-center">
               <div class="text-purple-700 mb-5 p-3 bg-purple-50 rounded-full">
                 <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -269,7 +292,6 @@ const publications = ref([
               </p>
             </div>
             
-            <!-- Mission Card -->
             <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border-t-4 border-blue-700 flex flex-col items-center">
               <div class="text-blue-700 mb-5 p-3 bg-blue-50 rounded-full">
                 <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -282,7 +304,6 @@ const publications = ref([
               </p>
             </div>
             
-            <!-- Core Values Card -->
             <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border-t-4 border-emerald-700 flex flex-col items-center">
               <div class="text-emerald-700 mb-5 p-3 bg-emerald-50 rounded-full">
                 <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -333,7 +354,6 @@ const publications = ref([
         </div>
       </section>
     
-      <!-- Projects Section - Single Line Desktop / Stacked Mobile -->
       <section class="py-8 bg-gradient-to-b from-primary-50 to-white">
         <div class="container mx-auto px-4 sm:px-6">
           <div class="text-center mb-12 md:mb-16">
@@ -345,7 +365,6 @@ const publications = ref([
             </p>
           </div>
 
-          <!-- Flex container - row on desktop, column on mobile -->
           <div class="flex flex-col sm:flex-row gap-6 px-4 sm:px-0">
             <div
               v-for="(project, index) in projects"
@@ -411,11 +430,9 @@ const publications = ref([
         </div>
       </section>
 
-      <!-- Publications & Opportunities Section -->
       <section class="py-8 bg-gray-50">
         <div class="container mx-auto px-6 max-w-7xl">
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <!-- Publications Column -->
             <div class="lg:col-span-7">
               <div class="flex items-center justify-between mb-6">
                 <h3 class="text-2xl font-semibold text-gray-900">
@@ -465,14 +482,12 @@ const publications = ref([
               </div>
             </div>
 
-            <!-- Opportunities Column -->
             <div class="lg:col-span-5">
               <div class="sticky top-24">
                 <h3 class="text-2xl font-semibold text-gray-900 mb-6">
                   Current <span class="text-emerald-600">Opportunities</span>
                 </h3>
 
-                <!-- Tabs -->
                 <div class="flex border-b border-gray-200 mb-6">
                   <button
                     v-for="tab in opportunityTabs"
@@ -489,7 +504,6 @@ const publications = ref([
                   </button>
                 </div>
 
-                <!-- Items -->
                 <div class="space-y-3">
                   <div
                     v-for="(op, index) in currentOpportunities"
@@ -550,7 +564,7 @@ const publications = ref([
           </div>
         </div>
       </section>
-      <!-- Partners Section -->
+      <!-- Partners Section fetching from api -->
       <section class="py-8 bg-white">
         <div class="container mx-auto px-4">
           <div class="text-center mb-12">
@@ -560,28 +574,52 @@ const publications = ref([
             </p>
           </div>
 
-          <!-- Slider Container -->
-          <div class="relative">
-            <!-- Gradient Overlays -->
+          <!-- Loading State -->
+          <div v-if="loading" class="flex justify-center items-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <span class="ml-3 text-gray-600">Loading partners...</span>
+          </div>
+
+          <!-- Error State -->
+          <div v-else-if="error" class="text-center py-8">
+            <div class="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+              <div class="text-red-600 mb-3">
+                <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+              </div>
+              <h3 class="text-lg font-medium text-red-800 mb-2">Failed to load partners</h3>
+              <p class="text-red-600 mb-4">Please try again later.</p>
+              <button 
+                @click="fetchPartners" 
+                class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+
+          <!-- Success State - Only show if we have partners -->
+          <div v-else-if="partners && partners.length > 0" class="relative">
             <div class="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10"></div>
             <div class="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10"></div>
-             <!-- Slider Track -->
+            
             <div class="overflow-hidden py-6 px-4">
               <div 
                 class="flex gap-6 animate-scroll hover:pause"
                 :style="`--scroll-duration: ${scrollDuration}s`"
               >
-                <!-- Two copies for seamless scrolling -->
+                <!-- Double the array for seamless looping -->
                 <template v-for="repeat in 2" :key="repeat">
                   <div 
-                    v-for="(logo, index) in partnerLogos"
+                    v-for="(logo,index) in partners"
                     :key="`${repeat}-${index}`"
                     class="flex-shrink-0"
                   >
                     <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-center h-24 w-40 sm:h-32 sm:w-48 transition-all hover:scale-105 hover:shadow-xl border border-gray-100">
                       <img
-                        :src="logo.src"
-                        :alt="logo.alt"
+                        :src="`${$config.public.baseUrl}/storage/${logo.logo}`"
+                        :alt="logo.alt || logo.name || 'Partner logo'"
                         loading="lazy"
                         decoding="async"
                         width="192"
@@ -592,6 +630,17 @@ const publications = ref([
                   </div>
                 </template>
               </div>
+            </div>
+          </div>
+
+          <!-- Empty State - No partners from API -->
+          <div v-else class="text-center py-12">
+            <div class="bg-gray-50 border border-gray-200 rounded-lg p-8 max-w-md mx-auto">
+              <svg class="w-16 h-16 text-gray-400 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-4 0H9m4 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v12m4 0V9"></path>
+              </svg>
+              <h3 class="text-lg font-medium text-gray-800 mt-4">No partners available</h3>
+              <p class="text-gray-600 mt-2">Check back later for updates.</p>
             </div>
           </div>
         </div>
