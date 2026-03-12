@@ -427,45 +427,47 @@
             <div v-show="activeMegaMenu === 'resource'" class="absolute right-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 800px;">
               <div class="grid grid-cols-3 gap-6 p-6">
                 <div>
+                  
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Publications</h3>
                   <ul class="space-y-2">
-                    <li><NuxtLink to="/resourceCenter?id=press-releases" class="text-gray-700 hover:text-blue-700 transition">Press Releases</NuxtLink></li>
-                    <li><NuxtLink to="/resourceCenter?id=success-stories" class="text-gray-700 hover:text-blue-700 transition">Success Stories</NuxtLink></li>
-                    <li><NuxtLink to="/resourceCenter?id=speeches" class="text-gray-700 hover:text-blue-700 transition">Speeches</NuxtLink></li>
-                    <li><NuxtLink to="/resourceCenter?id=research-discussions" class="text-gray-700 hover:text-blue-700 transition">Research & Discussions</NuxtLink></li>
-                    <li><NuxtLink to="/resourceCenter?id=budget-documents" class="text-gray-700 hover:text-blue-700 transition">Budget Documents</NuxtLink></li>
-                    <li><NuxtLink to="/resourceCenter?id=disbursements" class="text-gray-700 hover:text-blue-700 transition">Disbursements</NuxtLink></li>
-                    <li><NuxtLink to="/resourceCenter?id=newsletters" class="text-gray-700 hover:text-blue-700 transition">Newsletter</NuxtLink></li>
-                    <li><NuxtLink to="/resourceCenter?id=manuals-guidelines" class="text-gray-700 hover:text-blue-700 transition">Manuals and Guidelines</NuxtLink></li>
-                    <li><NuxtLink to="/resourceCenter?id=policies-strategies" class="text-gray-700 hover:text-blue-700 transition">Policies and Strategies</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#news" class="text-gray-700 hover:text-blue-700 transition">News</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#publications-press-releases" class="text-gray-700 hover:text-blue-700 transition">Press Releases</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#publications-success-stories" class="text-gray-700 hover:text-blue-700 transition">Success Stories</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#publications-speeches" class="text-gray-700 hover:text-blue-700 transition">Speeches</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#publications-research" class="text-gray-700 hover:text-blue-700 transition">Research & Discussions</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#publications-budget" class="text-gray-700 hover:text-blue-700 transition">Budget Documents</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#publications-disbursements" class="text-gray-700 hover:text-blue-700 transition">Disbursements</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#publications-newsletters" class="text-gray-700 hover:text-blue-700 transition">Newsletter</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#publications-manuals" class="text-gray-700 hover:text-blue-700 transition">Manuals and Guidelines</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#publications-policies" class="text-gray-700 hover:text-blue-700 transition">Policies and Strategies</NuxtLink></li>
                   </ul>
                 </div>
 
                 <div>
                   <div>
-                    <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Knowledge Management</h3>
+                    <NuxtLink to="/resourceCenter#knowledge"><h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Knowledge Management</h3></NuxtLink>
                     <ul class="space-y-2">
-                      <li><NuxtLink to="/resourceCenter?id=image-gallery" class="text-gray-700 hover:text-blue-700 transition">Image Galley</NuxtLink></li>
-                      <li><NuxtLink to="/resourceCenter?id=video-library" class="text-gray-700 hover:text-blue-700 transition">Videos</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#knowledge-management-image-gallery" class="text-gray-700 hover:text-blue-700 transition">Image Galley</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#knowledge-management-video" class="text-gray-700 hover:text-blue-700 transition">Videos</NuxtLink></li>
                     </ul>
                   </div>
                   <br />
                   <div>
-                    <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Project Documents</h3>
+                    <NuxtLink to="/resourceCenter#projects"><h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Project Documents</h3></NuxtLink>
                     <ul class="space-y-2">
-                      <li><NuxtLink to="/resourceCenter?id=ssrlp" class="text-gray-700 hover:text-blue-700 transition">SSRP</NuxtLink></li>
-                      <li><NuxtLink to="/resourceCenter?id=gesd" class="text-gray-700 hover:text-blue-700 transition">GESD</NuxtLink></li>
-                      <li><NuxtLink to="/resourceCenter?id=rcrp2" class="text-gray-700 hover:text-blue-700 transition">RCRP 2</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#project-documents-ssrlp" class="text-gray-700 hover:text-blue-700 transition">SSRP</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#project-documents-gesd" class="text-gray-700 hover:text-blue-700 transition">GESD</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#project-documents-rcrp2" class="text-gray-700 hover:text-blue-700 transition">RCRP 2</NuxtLink></li>
                     </ul>
                   </div>
                 </div>
                 <div>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Reports</h3>
                   <ul class="space-y-2">
-                    <li><NuxtLink to="/resourceCenter?id=audit-reports" class="text-gray-700 hover:text-blue-700 transition">Audit Reports</NuxtLink></li>
-                    <li><NuxtLink to="/resourceCenter?id=financial-reports" class="text-gray-700 hover:text-blue-700 transition">Financial Reports</NuxtLink></li>
-                    <li><NuxtLink to="/resourceCenter?id=financial-statements" class="text-gray-700 hover:text-blue-700 transition">Financial Statements</NuxtLink></li>
-                    <li><NuxtLink to="/resourceCenter?id=lapa-synthesis" class="text-gray-700 hover:text-blue-700 transition">LAPA synthesis</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#reports-audit-reports" class="text-gray-700 hover:text-blue-700 transition">Audit Reports</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#reports-financial-reports" class="text-gray-700 hover:text-blue-700 transition">Financial Reports</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#reports-financial-statements" class="text-gray-700 hover:text-blue-700 transition">Financial Statements</NuxtLink></li>
+                    <li><NuxtLink to="/resourceCenter#reports-lapa-synthesis" class="text-gray-700 hover:text-blue-700 transition">LAPA synthesis</NuxtLink></li>
                   </ul>
                 </div>
               </div>
@@ -890,6 +892,9 @@
 </template>
 
 <script setup>
+import { ref, watch, nextTick } from 'vue';
+import { useRoute } from 'vue-router';
+
 const isMenuOpen = ref(false);
 const activeMegaMenu = ref(null);
 const activeAccordion = ref(null);

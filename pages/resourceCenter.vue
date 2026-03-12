@@ -1,65 +1,61 @@
 <template>
-  <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-6xl">
+  <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-screen-2xl">
     <!-- Left Sidebar -->
-    <div class="w-64 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div class="w-full md:w-80 bg-white rounded-lg shadow-sm border border-gray-200 p-6 self-start">
       <div>
-        <h2 class="text-lg font-bold text-gray-800 mb-6">Resource Center</h2>
+        <h2 class="text-xl font-bold text-gray-800 mb-6">Resource Center</h2>
         <nav class="space-y-2">
-          <div v-for="(tab, tabIndex) in tabs" :key="tabIndex" class="group">
+          <!-- Loop through main groups -->
+          <div v-for="(groupItem, groupIndex) in resourceGroups" :key="groupIndex" class="group">
             <div
-                @click="toggleTab(tabIndex)"
-                class="flex items-center justify-between w-full text-left py-3 px-4 font-medium text-gray-700 rounded-lg cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-50 hover:text-gray-900"
-                :class="{
-                'bg-emerald-50 border-2 border-emerald-200 text-emerald-700': expandedTab === tabIndex,
-                'hover:translate-x-1': expandedTab !== tabIndex
+              @click="handleGroupClick(groupIndex)"
+              class="flex items-center justify-between w-full text-left py-3 px-4 font-medium text-gray-700 rounded-lg cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-50 hover:text-gray-900"
+              :class="{
+                'bg-emerald-50 border-2 border-emerald-200 text-emerald-700': expandedGroup === groupIndex || activeGroup === groupIndex,
+                'hover:translate-x-1': expandedGroup !== groupIndex
               }"
             >
               <span class="flex items-center">
-                <svg class="w-5 h-5 mr-3 text-gray-500 group-hover:text-gray-600" :class="{ 'text-emerald-600': expandedTab === tabIndex }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path v-if="tab.name === 'Publications & Downloads'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                  <path v-else-if="tab.name === 'Project Documents'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                  <path v-else-if="tab.name === 'Reports'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a4 4 0 01-4-4V5a2 2 0 012-2h6l2 2h6a2 2 0 012 2v6a4 4 0 01-4 4z"></path>
-                  <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                 <!-- Icon for the group -->
+                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500" fill="none" stroke="currentColor" stroke-width="2"
+                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
                 </svg>
-                {{ tab.name }}
+                {{ groupItem.group }}
               </span>
+               <!-- Chevron icon for expanding/collapsing, shown only if there are subgroups -->
               <svg
-                  class="w-4 h-4 text-gray-400 transition-transform duration-300"
-                  :class="{ 'rotate-180 text-emerald-600': expandedTab === tabIndex }"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                v-if="groupItem.subgroups"
+                :class="{ 'rotate-90': expandedGroup === groupIndex }"
+                class="w-4 h-4 text-gray-400 transition-transform duration-300 ease-in-out"
+                fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
               </svg>
             </div>
-
-            <div
-                v-if="expandedTab === tabIndex"
-                class="mt-2 ml-4 space-y-1 animate-in slide-in-from-top-2 duration-300"
-            >
+            <!-- Subgroups container -->
+            <div v-if="expandedGroup === groupIndex && groupItem.subgroups" class="pl-6 mt-2 space-y-1 animate-in slide-in-from-top-2 duration-300">
               <a
-                  v-for="(sub, subIndex) in tab.subcategories"
+                  v-for="(subgroup, subIndex) in groupItem.subgroups"
                   :key="subIndex"
-                  @click="selectSub(tabIndex, subIndex)"
+                  @click.stop="selectSubgroup(groupIndex, subIndex)"
                   class="flex items-center w-full text-left py-2 px-4 text-sm font-medium text-gray-600 rounded-md cursor-pointer transition-all duration-200 hover:bg-gray-50 hover:text-gray-900 hover:translate-x-2"
                   :class="{
-                  'bg-emerald-50 border-2 border-emerald-200 text-emerald-700 shadow-sm': activeTab === tabIndex && activeSub === subIndex
+                  'bg-emerald-50 border-2 border-emerald-200 text-emerald-700 shadow-sm': activeGroup === groupIndex && activeSubgroup === subIndex
                 }"
               >
                 <div class="w-2 h-2 rounded-full mr-3 transition-colors duration-200"
                      :class="{
-                       'bg-emerald-600': activeTab === tabIndex && activeSub === subIndex,
-                       'bg-gray-300 group-hover:bg-gray-600': !(activeTab === tabIndex && activeSub === subIndex)
+                       'bg-emerald-600': activeGroup === groupIndex && activeSubgroup === subIndex,
+                       'bg-gray-300 group-hover:bg-gray-600': !(activeGroup === groupIndex && activeSubgroup === subIndex)
                      }">
                 </div>
-                {{ sub.name }}
+                {{ subgroup.subgroup }}
               </a>
             </div>
           </div>
         </nav>
-
-        <!-- Help Section with separator -->
+         <!-- Help Section -->
         <div class="mt-6 pt-6 border-t border-gray-200">
           <div class="bg-gray-50 rounded-lg p-4">
             <h3 class="text-sm font-semibold text-emerald-700 mb-2">Need Help?</h3>
@@ -72,9 +68,9 @@
       </div>
     </div>
 
-    <!-- Main content -->
+    <!-- Right Content -->
     <div class="flex-1 p-4">
-      <section v-if="displayedDocuments.length">
+      <section v-if="activeGroup !== null">
         <h3 class="font-bold text-gray-600 text-lg mb-6">{{ currentTitle }}</h3>
         <!-- Search Bar Section -->
         <div v-if="activeTab !== null && activeSub !== null" class="mb-8">
@@ -116,13 +112,57 @@
                 </span>
               </p>
             </div>
+        </div>
+        
+        <!-- News Layout - Simple List Similar to news.vue -->
+        <div v-if="currentDisplayType === 'News'" class="bg-gray-80 rounded-lg shadow-lg overflow-hidden">
+          <div class="max-h-96 overflow-y-auto">
+            <div
+              v-for="newsItem in displayedDocuments"
+              :key="newsItem.id"
+              class="border-b border-gray-100"
+            >
+              <nuxt-link
+                :to="`/news/${newsItem.id}`"
+                class="block p-4 cursor-pointer transition-all duration-200 hover:bg-gray-50"
+              >
+                <h4 class="font-medium text-gray-900 hover:text-emerald-600 transition-colors line-clamp-2 mb-2">
+                  {{ newsItem.title }}
+                </h4>
+                <div class="flex items-center justify-between text-xs text-gray-500">
+                  <span>{{ formatDate(newsItem.date) }}</span>
+                </div>
+              </nuxt-link>
+            </div>
           </div>
-        
-        
+
+          <!-- No Results Message -->
+          <div v-if="displayedDocuments.length === 0" class="p-6 text-center text-gray-500">
+            <svg
+              class="w-12 h-12 mx-auto mb-3 text-gray-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 
+                  5.291A7.962 7.962 0 0112 15c-2.34 0-4.464-.881-6.08-2.334C5.422 
+                  12.272 5.13 11.638 5 11a8 8 0 118 8 
+                  7.956 7.956 0 01-4.709-1.534A7.956 7.956 
+                  0 0112 21a7.956 7.956 0 01-4.709-1.534"
+              ></path>
+            </svg>
+            <p class="text-sm">No news articles available.</p>
+          </div>
+        </div>
+
 
         <!-- Video Grid Layout -->
         <transition-group
-            v-if="currentSubcategoryType === 'Video'"
+            v-else-if="currentDisplayType === 'Video'"
             name="grid-item"
             tag="div"
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6"
@@ -158,7 +198,7 @@
 
         <!-- Image Gallery Iframe Layout -->
         <div
-            v-else-if="currentSubcategoryType === 'Image Gallery'"
+            v-else-if="currentDisplayType === 'Image Gallery'"
             class="w-full">
           <div
               v-for="(doc, index) in displayedDocuments"
@@ -183,34 +223,7 @@
                   :title="doc.name"
                   allowfullscreen
                   loading="lazy"
-                  @load="hideLoadingOverlay"
               ></iframe>
-
-              <!-- Loading overlay -->
-              <div
-                  :class="['absolute inset-0 bg-gray-100 flex items-center justify-center transition-opacity duration-500', iframeLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100']"
-              >
-                <div class="text-center">
-                  <div class="w-12 h-12 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mb-4"></div>
-                  <p class="text-gray-600">Loading gallery...</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Footer with external link -->
-            <div class="bg-gray-50 p-3 flex justify-between items-center">
-              <span class="text-sm text-gray-600">External Gallery Content</span>
-              <a
-                  :href="doc.link"
-                  target="_blank"
-                  class="inline-flex items-center px-3 py-1 text-sm bg-emerald-600 hover:bg-emerald-700 text-white rounded-md transition-colors duration-200"
-                  title="Open in new tab"
-              >
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                </svg>
-                Open Gallery
-              </a>
             </div>
           </div>
         </div>
@@ -232,10 +245,10 @@
             <a
                 :href="doc.link"
                 target="_blank"
-                class="absolute bottom-2 right-2 w-6 h-6 bg-gray-800 hover:bg-gray-600 text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md hover:shadow-lg"
+                class="absolute bottom-2 right-2 w-8 h-8 bg-gray-800 hover:bg-gray-600 text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md hover:shadow-lg"
                 title="Download / View"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none"
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"
                       d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"/>
@@ -243,12 +256,7 @@
             </a>
 
             <div class="flex items-center mb-3">
-              <img
-                  v-if="doc.thumbnail"
-                  :src="doc.thumbnail"
-                  alt="Thumbnail"
-                  class="w-12 h-12 rounded-lg object-cover mr-2"
-              />
+               <!-- Document details -->
               <div>
                 <h3 class="font-semibold text-gray-800 text-base">{{ doc.name }}</h3>
                 <span class="inline-block text-xs bg-gray-100 border border-gray-200 rounded px-2 py-0.5 mt-1 text-gray-700">
@@ -257,697 +265,289 @@
               </div>
             </div>
 
-            <p class="text-sm text-gray-600">
+            <p class="text-sm text-gray-600 flex-grow">
               {{ doc.description || 'No description available.' }}
             </p>
-            <p class="text-[12px] font-semibold text-emerald-600">
+            <p class="text-[12px] font-semibold text-emerald-600 mt-3">
               {{ doc.date || 'No date available.' }}
             </p>
           </div>
         </transition-group>
       </section>
 
-      <!-- Loading State -->
+      <!-- Loading/Welcome State -->
       <transition name="fade" mode="out-in">
-        <div v-if="!displayedDocuments.length" class="flex flex-col items-center justify-center py-16">
-          <div class="w-16 h-16 border-4 border-emerald-200 border-t-gray-600 rounded-full animate-spin mb-4"></div>
-          <p class="text-gray-600 text-lg">Select a subcategory to view content</p>
+        <div v-if="activeGroup === null" class="flex flex-col items-center justify-center py-16 text-center">
+          <svg class="w-16 h-16 text-emerald-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+          <h3 class="text-xl font-semibold text-gray-700">Welcome to the Resource Center</h3>
+          <p class="text-gray-500 mt-2">Please select a category from the left menu to view available documents and resources.</p>
         </div>
       </transition>
     </div>
-
-    <!-- Image Modal (removed since we're using iframe now) -->
-    <transition name="modal">
-      <div v-if="selectedImage" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50" @click="closeImageModal">
-        <div class="relative max-w-4xl max-h-screen p-4">
-          <button
-              @click="closeImageModal"
-              class="absolute top-2 right-2 text-white hover:text-gray-300 z-10 transition-colors duration-200"
-          >
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
-          <img
-              :src="selectedImage.link"
-              :alt="selectedImage.name"
-              class="max-w-full max-h-full object-contain"
-          />
-          <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
-            <h3 class="font-semibold">{{ selectedImage.name }}</h3>
-            <p class="text-sm">{{ selectedImage.description }}</p>
-          </div>
-        </div>
-      </div>
-    </transition>
   </div>
 </template>
 
 <script setup>
-import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { link } from '#build/ui';
 
 definePageMeta({
-    title: 'Resource Center'
+    title: 'NLGFC - Resource Center',
     })
 
-import { ref, computed, watch, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+const route = useRoute()
 
-const route = useRoute();
-const router = useRouter();
 
-// ID mapping for subcategories
-const subcategoryIdMap = {
-  // Publications & Downloads
-  'press-releases': { tab: 0, sub: 0 },
-  'success-stories': { tab: 0, sub: 1 },
-  'speeches': { tab: 0, sub: 2 },
-  'research-discussions': { tab: 0, sub: 3 },
-  'budget-documents': { tab: 0, sub: 4 },
-  'disbursements': { tab: 0, sub: 5 },
-  'newsletters': { tab: 0, sub: 6 },
-  'manuals-guidelines': { tab: 0, sub: 7 },
-  'policies-strategies': { tab: 0, sub: 8 },
+const newsId = route.params.id;
 
-  // Project Documents
-  'ssrlp': { tab: 1, sub: 0 },
-  'gesd': { tab: 1, sub: 1 },
-  'rcrp2': { tab: 1, sub: 2 },
+// State management for UI
+const expandedGroup = ref(null);
+const activeGroup = ref(null);
+const activeSubgroup = ref(null);
+const searchQuery = ref('');
 
-  // Reports
-  'audit-reports': { tab: 2, sub: 0 },
-  'financial-reports': { tab: 2, sub: 1 },
-  'financial-statements': { tab: 2, sub: 2 },
-  'lapa-synthesis': { tab: 2, sub: 3 },
-
-  // Knowledge Management Portal
-  'image-gallery': { tab: 3, sub: 0 },
-  'video-library': { tab: 3, sub: 1 }
-};
-
-// Reverse mapping for generating IDs from tab/sub indices
-const getIdFromTabSub = (tabIndex, subIndex) => {
-  for (const [id, mapping] of Object.entries(subcategoryIdMap)) {
-    if (mapping.tab === tabIndex && mapping.sub === subIndex) {
-      return id;
-    }
-  }
-  return null;
-};
-
-const tabs = ref([
+// Data for the resource center, structured into groups and subgroups with IDs
+const resourceGroups = [
   {
-    name: 'Publications & Downloads',
-    subcategories: [
+    id: 'news',
+    group: 'News',
+    items: [
+        { title: 'Government Launches New Rural Development Initiative', date: '2025-08-15', id: '#1' },
+        { title: 'NLGFC Announces Increased Funding for Local Councils', date: '2025-08-12', id: '#2'},
+        { title: 'Blantyre City Council Unveils New Waste Management Strategy', date: '2025-08-10', id: '#3' },
+        { title: 'New Healthcare Initiative Launched in Northern Region', date: '2025-08-08', id: '#4' },
+        { title: 'Education Sector Receives Technology Boost', date: '2025-08-05', id: '#5' },
+        { title: 'Agricultural Support Program Shows Promising Results', date: '2025-08-03', id: '#6' }
+    ]
+  },
+  {
+    id: 'publications',
+    group: 'Publications & Downloads',
+    subgroups: [
       {
-        name: 'Press Releases',
         id: 'press-releases',
-        contents: [
-          {
-            name: 'Uthenga Wapadera Wa Covid 19 Emergency Cash Transfers',
-            link: '/downloads/ECT_UTHENGA_WAPADERA_WA_COVID_19_LILONGWE_IMMEDIATE_RELEASE_APRIL_19_2020_1.pdf',
-            type: 'PDF',
-            description: 'ECT - Uthenga Wapadera Wa Covid 19 - Lilongwe - Immediate Release',
-            date: '19 April 2020'
-          },
-          {
-            name: 'Press Release on Covid-19',
-            link: '/downloads/Councils_Cumulative_funding_figures_for_Publication_April_2020.xlsx',
-            type: 'Excel',
-            description: 'Revised after Governors meetings with MNOS MAMN and MUSCCO',
-            date: '22  Jan 2025'
-          },
-          {
-            name: 'Councils Funding Figures',
-            link: '/downloads/Councils_funding_figures_for_publication_April_2020 _Word_Version.docx',
-            type: 'Word',
-            description: 'Council funding figures for publications',
-            date: 'April, 2020'
-          },
-          {
-            name: 'Councils accumulative Funding Figures',
-            link: '/downloads/Councils_funding_figures_for_publication_April_2020 _Word_Version.docx',
-            type: 'Word',
-            description: 'Council accumulative funding figures for publications',
-            date: 'April, 2020'
-          },
-          {
-            name: 'Uthenga Wapedera - Special Announcemnts on GoM COVID 19 Responce',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Special announcement on Government of Malawi COVID-19 response',
-
-          },
-          {
-            name: 'Special Communication on Covid 19 Emergency Cash Transfers',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Special Communication',
-          },
-          {
-            name: 'Governance to Enable Service Delivery',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Governance to Enable Service Delivery (GESD) Project approval',
-          },
-          {
-            name: 'STOPCOVID-19 NLGFC',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Details on the STOPCOVID-19 NLGFC initiative',
-          },
-          {
-            name: 'SSRL_Effectiveness declaration',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'SSRL Effectiveness declaration notification',
-            date: 'June 1 2020'
-          },
-          {
-            name: 'Second Disbursment OF Covid -19 Urban Cash Payments',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Immediate release on second disbursement of COVID-19 urban cash payments',
-          },
-          {
-            name: 'Local Authorities (LAs) Funding Advice',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'RCRP Expression of Interest for project implementation',
-            date: 'December 2021'
-          },
-          {
-            name: 'Press Release Appointment of ED',
-            link: '/downloads/press-mar2025.pdf',
-            type: 'PDF',
-            description: 'Appointment of Dr. Kondwani Santhe As Exective Director  For NLGFC',
-            date: 'August 2022'
-          }
+        subgroup: 'Press Releases',
+        items: [
+          { name: 'Uthenga Wapadera Wa Covid 19 Emergency Cash Transfers', link: '/downloads/ECT_UTHENGA_WAPADERA_WA_COVID_19_LILONGWE_IMMEDIATE_RELEASE_APRIL_19_2020_1.pdf', type: 'PDF', description: 'ECT - Uthenga Wapadera Wa Covid 19 - Lilongwe - Immediate Release', date: '19 April 2020' },
+          { name: 'Press Release on Covid-19', link: '/downloads/Councils_Cumulative_funding_figures_for_Publication_April_2020.xlsx', type: 'Excel', description: 'Revised after Governors meetings with MNOS MAMN and MUSCCO', date: '22 Jan 2025' },
         ]
       },
       {
-        name: 'Success Stories',
         id: 'success-stories',
-        contents: [
-          {
-            name: 'NLGFC [PWP] Success Stories MASAF IV',
-            link: '/downloads/success1.pdf',
-            type: 'PDF',
-            description: 'NLGFC PWP Success Stories for Booklet-MASAF IV.',
-            date: 'December 2024'
-          },
-          {
-            name: 'CS-EPWP Balaka Newsletters',
-            link: '/downloads/success2.pdf',
-            type: 'PDF',
-            description: 'Climate Smart Newslatter for Balaka District.',
-            date: 'December 2024'
-          },
-          {
-            name: 'Lilongwe CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Lilongwe CS-EPWP success story',
-            date: 'December 2024'
-          },
-          {
-            name: 'Likoma CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Likoma CS-EPWP success story',
-            date: 'December 2024'
-          },
-          {
-            name: 'Machinga CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Machinga CS-EPWP success story',
-            date: 'December 2024'
-          },
-          {
-            name: 'Mwanza CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Mwanza CS-EPWP success story',
-            date: 'December 2024'
-          },
-          {
-            name: 'Nsanje CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Nsanje CS-EPWP success story',
-            date: 'December 2024'
-          },
-          {
-            name: 'Ntcheu CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Ntcheu CS-EPWP success story',
-            date: 'December 2024'
-          },
-          {
-            name: 'Salima CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Salima CS-EPWP success story',
-            date: 'December 2024'
-          },
-          {
-            name: 'Zomba CS-EPWP Succcess Stories',
-            link: '/downloads/success3.pdf',
-            type: 'PDF',
-            description: 'Summary of Zomba CS-EPWP success story',
-            date: 'December 2024'
-          }
+        subgroup: 'Success Stories',
+        items: [
+          { name: 'NLGFC [PWP] Success Stories MASAF IV', link: '/downloads/success1.pdf', type: 'PDF', description: 'NLGFC PWP Success Stories for Booklet-MASAF IV.', date: 'December 2024' },
+          { name: 'CS-EPWP Balaka Newsletters', link: '/downloads/success2.pdf', type: 'PDF', description: 'Climate Smart Newslatter for Balaka District.', date: 'December 2024' },
         ]
       },
+      { id: 'speeches', subgroup: 'Speeches', items: [] },
+      { id: 'research', subgroup: 'Research & Discussions', items: [] },
+      { id: 'budget', subgroup: 'Budget Documents', items: [] },
+      { id: 'disbursements', subgroup: 'Disbursements', items: [] },
       {
-        name: 'Speeches',
-        id: 'speeches',
-        contents: [
-          {
-            name: 'NLGFC [PWP] Success Stories MASAF IV',
-            link: '/downloads/success1.pdf',
-            type: 'PDF',
-            description: 'NLGFC PWP Success Stories for Booklet-MASAF IV.',
-            date: 'December 2024'
-          }
-        ]
-      },
-      {
-        name: 'Research & Discussions',
-        id: 'research-discussions',
-        contents: [
-          {
-            name: 'Research on Local Governance',
-            link: 'https://example.com/gallery',
-            type: 'pdf',
-            description: 'Gallery showcasing project highlights.',
-            date: 'January 2025'
-          }
-        ]
-      },
-      {
-        name: 'Budget Documents',
-        id: 'budget-documents',
-        contents: [
-          {
-            name: 'Budget Document 2025',
-            link: '/downloads/budget-2025.pdf',
-            type: 'PDF',
-            description: 'Budget document for the year 2025.',
-            date: 'January 2025'
-          }
-        ]
-      },
-      {
-        name: 'Disbursements',
-        id: 'disbursements',
-        contents: [
-          {
-            name: 'Disbursement Report Q1 2025',
-            link: '/downloads/disbursement-q1-2025.pdf',
-            type: 'Excel',
-            description: 'Disbursement report for the first quarter of 2025.',
-            date: 'January 2025'
-          }
-        ]
-      },
-      {
-        name: 'Newsletters & Magazines',
         id: 'newsletters',
-        contents: [
-          {
-            name: 'January Newsletter',
-            link: '/downloads/newsletter-jan2025.pdf',
-            type: 'PDF',
-            description: 'Highlights from January 2025 newsletter.',
-            date: 'January 2025'
-          },
-          {
-            name: 'February Newsletter',
-            link: '/downloads/newsletter-feb2025.pdf',
-            type: 'PDF',
-            description: 'Highlights from February 2025 newsletter.',
-            date: 'February 2025'
-          },
-          {
-            name: 'March Newsletter',
-            link: '/downloads/newsletter-jan2025.pdf',
-            type: 'PDF',
-            description: 'Highlights from March 2025 newsletter.',
-            date: 'March 2025'
-          },
-          {
-            name: 'April Newsletter',
-            link: '/downloads/newsletter-jan2025.pdf',
-            type: 'PDF',
-            description: 'Highlights from April 2025 newsletter.',
-            date: 'April 2025'
-          },
-          {
-            name: 'May Newsletter',
-            link: '/downloads/newsletter-jan2025.pdf',
-            type: 'PDF',
-            description: 'Highlights from May 2025 newsletter.',
-            date: 'May 2025'
-          },
-          {
-            name: 'June Newsletter',
-            link: '/downloads/newsletter-jan2025.pdf',
-            type: 'PDF',
-            description: 'Highlights from June 2025 newsletter.',
-            date: 'June 2025'
-          }
+        subgroup: 'Newsletters & Magazines',
+        items: [
+          { name: 'January Newsletter', link: '/downloads/newsletter-jan2025.pdf', type: 'PDF', description: 'Highlights from January 2025 newsletter.', date: 'January 2025' },
         ]
       },
-      {
-        name: 'Manuals and Guidelines',
-        id: 'manuals-guidelines',
-        contents: []
-      },
-      {
-        name: 'Policies and Strategies',
-        id: 'policies-strategies',
-        contents: [
-          {
-            name: 'Policy Framework 2025',
-            link: '/downloads/policy-framework-2025.pdf',
-            type: 'PDF',
-            description: 'Framework for policy implementation in 2025.'
-          },
-          {
-            name: 'Strategic Plan 2025',
-            link: '/downloads/strategic-plan-2025.pdf',
-            type: 'PDF',
-            description: 'Strategic plan outlining goals and objectives for 2025.'
-          }
-        ]
-      }
+      { id: 'manuals', subgroup: 'Manuals and Guidelines', items: [] },
+      { id: 'policies', subgroup: 'Policies and Strategies', items: [] },
     ]
   },
   {
-    name: 'Project Documents',
-    subcategories: [
-      {
-        name: 'SSRLP',
-        id: 'ssrlp',
-        contents: [
-          {
-            name: 'SSRLP Report 2025',
-            link: '/downloads/ssrlp-report-2025.pdf',
-            type: 'PDF',
-            description: 'SSRLP annual report for 2025.'
-          },
-          {
-            name: 'SSRLP Guidelines',
-            link: '/downloads/ssrlp-guidelines.pdf',
-            type: 'PDF',
-            description: 'Guidelines for SSRLP project implementation.'
-          }
-        ]
-      },
-      {
-        name: 'GESD',
-        id: 'gesd',
-        contents: [
-          {
-            name: 'GESD Plan 2025',
-            link: '/downloads/gesd-plan-2025.pdf',
-            type: 'PDF',
-            description: 'GESD strategic plan for 2025.'
-          }
-        ]
-      },
-      {
-        name: 'RCRP 2',
-        id: 'rcrp2',
-        contents: [
-          {
-            name: 'RCRP Overview',
-            link: '/downloads/rcrp-overview.pdf',
-            type: 'PDF',
-            description: 'Overview of the RCRP project.'
-          },
-          {
-            name: 'RCRP Implementation Guide',
-            link: '/downloads/rcrp-guide.pdf',
-            type: 'PDF',
-            description: 'Implementation guide for RCRP projects.'
-          }
-        ]
-      }
+    id: 'project-documents',
+    group: 'Project Documents',
+    subgroups: [
+      { id: 'ssrlp', subgroup: 'SSRLP', items: [] },
+      { id: 'gesd', subgroup: 'GESD', items: [] },
+      { id: 'rcrp2', subgroup: 'RCRP 2', items: [] },
     ]
   },
   {
-    name: 'Reports',
-    subcategories: [
-      {
-        name: 'Audit Reports',
-        id: 'audit-reports',
-        contents: [
-          {
-            name: 'Annual Report 2024',
-            link: '/downloads/annual-report-2024.pdf',
-            type: 'PDF',
-            description: 'Comprehensive overview of 2024 activities.'
-          },
-          {
-            name: 'Monthly Report - Jan 2025',
-            link: '/downloads/monthly-report-jan2025.pdf',
-            type: 'PDF',
-            description: 'Highlights from January 2025 monthly report.'
-          }
-        ]
-      },
-      {
-        name: 'Financial Reports',
-        id: 'financial-reports',
-        contents: [
-          {
-            name: 'Financial Report Q1 2025',
-            link: '/downloads/financial-report-q1-2025.pdf',
-            type: 'PDF',
-            description: 'Financial overview for the first quarter of 2025.'
-          },
-          {
-            name: 'Budget Report 2025',
-            link: '/downloads/budget-report-2025.pdf',
-            type: 'PDF',
-            description: 'Detailed budget report for the year 2025.'
-          }
-        ]
-      },
-      {
-        name: 'Financial statements',
-        id: 'financial-statements',
-        contents: [
-          {
-            name: 'Project Evaluation 2024',
-            link: '/downloads/project-evaluation-2024.pdf',
-            type: 'PDF',
-            description: 'Evaluation of projects completed in 2024.'
-          },
-          {
-            name: 'Mid-Year Evaluation 2025',
-            link: '/downloads/mid-year-evaluation-2025.pdf',
-            type: 'PDF',
-            description: 'Mid-year evaluation report for 2025.'
-          }
-        ]
-      },
-      {
-        name: 'LAPA Synthesis',
-        id: 'lapa-synthesis',
-        contents: [
-          {
-            name: 'Project Evaluation Report 2024',
-            link: '/downloads/project-evaluation-2024.pdf',
-            type: 'PDF',
-            description: 'Evaluation report for projects completed in 2024.'
-          },
-          {
-            name: 'Mid-Year Evaluation Report 2025',
-            link: '/downloads/mid-year-evaluation-2025.pdf',
-            type: 'PDF',
-            description: 'Mid-year evaluation report for 2025.'
-          }
-        ]
-      }
+    id: 'reports',
+    group: 'Reports',
+    subgroups: [
+      { id: 'audit-reports', subgroup: 'Audit Reports', items: [] },
+      { id: 'financial-reports', subgroup: 'Financial Reports', items: [] },
+      { id: 'financial-statements', subgroup: 'Financial statements', items: [] },
+      { id: 'lapa-synthesis', subgroup: 'LAPA Synthesis', items: [] },
     ]
   },
   {
-    name: 'Knowledge Management',
-    subcategories: [
+    id: 'knowledge-management',
+    group: 'Knowledge Management',
+    subgroups: [
       {
-        name: 'Image Gallery',
         id: 'image-gallery',
-        contents: [
-          {
-            name: 'Community Event Photos',
-            link: 'https://demo2.gov.mw/nlgfc-portal/public/?page=1',
-            type: 'Gallery',
-            description: 'Gallery showcasing community events, activities and projects.'
-          }
+        subgroup: 'Image Gallery',
+        items: [
+          { name: 'Community Event Photos', link: 'https://demo2.gov.mw/nlgfc-portal/public/?page=1', type: 'Gallery', description: 'Gallery showcasing community events, activities and projects.' }
         ]
       },
       {
-        name: 'Video',
-        id: 'video-library',
-        contents: [
-          {
-            name: 'Phalombe District Council',
-            link: 'https://www.youtube.com/watch?v=xfMlyumpENU',
-            type: 'Video',
-            description: 'GESD project overview in Phalombe District Council.'
-          },
-          {
-            name: 'Nkhotakota District Council',
-            link: 'https://www.youtube.com/watch?v=YTbn2duu4og',
-            type: 'Video',
-            description: 'GESD project overview in Nkhotakota District council.'
-          },
-          {
-            name: 'Mmbelwa District Council',
-            link: 'https://www.youtube.com/watch?v=YTbn2duu4og',
-            type: 'Video',
-            description: 'GESD project Impact in Mmbelwa District Council.'
-          },
-          {
-            name: 'Scalable Safety Nets',
-            link: 'https://www.youtube.com/watch?v=JY_A56sfnlU',
-            type: 'Video',
-            description: 'Scalable Safety Nets under SSRLP Tidzidalire project overview.'
-          },
-          {
-            name: 'Ntchisi District Council',
-            link: 'https://www.youtube.com/watch?v=MCQCw74_V-0',
-            type: 'Video',
-            description: 'GESD project Impact'
-          }
+        id: 'video',
+        subgroup: 'Video',
+        items: [
+          { name: 'Phalombe District Council', link: 'https://www.youtube.com/watch?v=xfMlyumpENU', type: 'Video', description: 'GESD project overview in Phalombe District Council.' },
+          { name: 'Nkhotakota District Council', link: 'https://www.youtube.com/watch?v=YTbn2duu4og', type: 'Video', description: 'GESD project overview in Nkhotakota District council.' },
         ]
       }
     ]
   }
-]);
+];
 
-const expandedTab = ref(null);
-const activeTab = ref(null);
-const activeSub = ref(null);
-const selectedImage = ref(null);
-const iframeLoaded = ref(false);
-
-// Function to handle query parameters and open specific tab/subcategory
-function handleQueryParams() {
-  const idParam = route.query.id;
-  const tabParam = route.query.tab;
-  const subParam = route.query.sub;
-
-  // Handle ID-based routing (preferred)
-  if (idParam && subcategoryIdMap[idParam]) {
-    const mapping = subcategoryIdMap[idParam];
-    const tabIndex = mapping.tab;
-    const subIndex = mapping.sub;
-
-    // Set the active tab and subcategory
-    expandedTab.value = tabIndex;
-    activeTab.value = tabIndex;
-    activeSub.value = subIndex;
-    return;
-  }
-
-  // Fallback to old tab/sub parameter system
-  if (tabParam !== undefined && subParam !== undefined) {
-    const tabIndex = parseInt(tabParam);
-    const subIndex = parseInt(subParam);
-
-    // Validate indices
-    if (tabIndex >= 0 && tabIndex < tabs.value.length &&
-        subIndex >= 0 && subIndex < tabs.value[tabIndex].subcategories.length) {
-
-      // Set the active tab and subcategory
-      expandedTab.value = tabIndex;
-      activeTab.value = tabIndex;
-      activeSub.value = subIndex;
+/**
+ * Navigate directly to a specific group or subgroup using IDs
+ * @param {string} groupId - The ID of the group
+ * @param {string} subgroupId - The ID of the subgroup (optional)
+ */
+const navigateToSection = (groupId, subgroupId = null) => {
+  const groupIndex = resourceGroups.findIndex(g => g.id === groupId);
+  
+  if (groupIndex !== -1) {
+    const group = resourceGroups[groupIndex];
+    
+    if (subgroupId && group.subgroups) {
+      const subgroupIndex = group.subgroups.findIndex(sg => sg.id === subgroupId);
+      if (subgroupIndex !== -1) {
+        expandedGroup.value = groupIndex;
+        activeGroup.value = groupIndex;
+        activeSubgroup.value = subgroupIndex;
+        return;
+      }
+    }
+    
+    // Navigate to main group
+    if (group.items) {
+      activeGroup.value = groupIndex;
+      activeSubgroup.value = null;
+      expandedGroup.value = null;
+    } else if (group.subgroups) {
+      expandedGroup.value = groupIndex;
+      activeGroup.value = null;
+      activeSubgroup.value = null;
     }
   }
+};
+
+/**
+ * Get the current URL with hash for sharing/bookmarking
+ * @returns {string} The shareable URL
+ */
+const getCurrentSectionUrl = () => {
+  if (activeGroup.value !== null) {
+    const group = resourceGroups[activeGroup.value];
+    let hash = `#${group.id}`;
+    
+    if (activeSubgroup.value !== null && group.subgroups) {
+      hash += `-${group.subgroups[activeSubgroup.value].id}`;
+    }
+    
+    return `${window.location.origin}${window.location.pathname}${hash}`;
+  }
+  return window.location.href;
+};
+
+/**
+ * Handle URL hash changes for direct navigation
+ */
+const handleHashChange = () => {
+  const hash = window.location.hash.slice(1); // Remove the #
+  if (hash) {
+    const parts = hash.split('-');
+    const groupId = parts[0];
+    const subgroupId = parts.length > 1 ? parts.slice(1).join('-') : null;
+    navigateToSection(groupId, subgroupId);
+  }
+};
+
+/**
+ * Update URL hash when navigation changes
+ */
+const updateUrlHash = () => {
+  if (activeGroup.value !== null) {
+    const group = resourceGroups[activeGroup.value];
+    let hash = group.id;
+    
+    if (activeSubgroup.value !== null && group.subgroups) {
+      hash += `-${group.subgroups[activeSubgroup.value].id}`;
+    }
+    
+    window.history.replaceState(null, null, `#${hash}`);
+  } else {
+    window.history.replaceState(null, null, window.location.pathname);
+  }
+};
+
+/**
+ * Handles clicks on main group items in the sidebar.
+ * It either toggles subgroup visibility or directly selects a group.
+ * @param {number} index - The index of the clicked group.
+ */
+const handleGroupClick = (index) => {
+  const group = resourceGroups[index];
+  if (group.subgroups && group.subgroups.length > 0) {
+    // This is a group with subgroups, so just toggle expansion
+    expandedGroup.value = expandedGroup.value === index ? null : index;
+    // If we are collapsing the group that was active, clear selection
+    if (expandedGroup.value !== index && activeGroup.value === index) {
+        activeGroup.value = null;
+        activeSubgroup.value = null;
+    }
+  } else if (group.items) {
+    // This is a direct content group like "News"
+    expandedGroup.value = null; // No subgroups to expand
+    activeGroup.value = index;
+    activeSubgroup.value = null; // Signal that it's a direct group selection
+  }
+};
+
+/**
+ * Selects a subgroup to display its content.
+ * @param {number} groupIndex - The index of the parent group.
+ * @param {number} subIndex - The index of the subgroup to select.
+ */
+const selectSubgroup = (groupIndex, subIndex) => {
+  activeGroup.value = groupIndex;
+  activeSubgroup.value = subIndex;
 }
 
-// Map the 'tabs' data to the 'projectGroups' structure
-const mappedProjectGroups = computed(() => {
-  return tabs.value.map(tab => {
-    return {
-      group: tab.name,
-      items: tab.subcategories.map(subcategory => ({
-        id: subcategory.id,
-        title: subcategory.name
-      }))
-    };
+/**
+ * Search functionality
+ */
+const handleSearch = () => {
+  // This would typically trigger filtering of displayedDocuments
+  // Implementation depends on your specific search requirements
+};
+
+const clearSearch = () => {
+  searchQuery.value = '';
+};
+
+/**
+ * Computed property for filtered documents based on search
+ */
+const filteredDocuments = computed(() => {
+  if (!searchQuery.value) return displayedDocuments.value;
+  
+  return displayedDocuments.value.filter(doc => {
+    const searchTerm = searchQuery.value.toLowerCase();
+    return (
+      (doc.name && doc.name.toLowerCase().includes(searchTerm)) ||
+      (doc.title && doc.title.toLowerCase().includes(searchTerm)) ||
+      (doc.description && doc.description.toLowerCase().includes(searchTerm))
+    );
   });
 });
 
-const { projectGroups } = useGeneralSidebar();
-projectGroups.value = mappedProjectGroups.value;
-
-// Watch for route changes to handle navigation
-watch(() => route.query, (newQuery) => {
-  handleQueryParams();
-}, { immediate: true });
-
-// Call on component mount
-onMounted(() => {
-  handleQueryParams();
-});
-
-function toggleTab(index) {
-  expandedTab.value = expandedTab.value === index ? null : index;
-  if (expandedTab.value === null) {
-    activeTab.value = null;
-    activeSub.value = null;
-    // Clear query parameters when collapsing
-    router.push({ query: {} });
-  }
-}
-
-function selectSub(tabIndex, subIndex) {
-  activeTab.value = tabIndex;
-  activeSub.value = subIndex;
-  // Reset iframe loaded state when switching subcategories
-  iframeLoaded.value = false;
-
-  // Get the ID for this tab/sub combination
-  const subcategoryId = getIdFromTabSub(tabIndex, subIndex);
-
-  // Update the URL with ID parameter (preferred) or fallback to tab/sub
-  if (subcategoryId) {
-    router.push({
-      query: { id: subcategoryId }
-    });
-  } else {
-    // Fallback to old system
-    router.push({
-      query: {
-        tab: tabIndex,
-        sub: subIndex
-      }
-    });
-  }
-}
-
-function hideLoadingOverlay() {
-  iframeLoaded.value = true;
-}
-
-function openImageModal(image) {
-  selectedImage.value = image;
-}
-
-function closeImageModal() {
-  selectedImage.value = null;
-}
-
+/**
+ * Converts a standard YouTube watch URL to an embeddable URL.
+ * @param {string} url - The original YouTube URL.
+ * @returns {string} The embeddable URL.
+ */
 function getVideoEmbedUrl(url) {
-  // Convert YouTube URLs to embed format
   if (url.includes('youtube.com/watch?v=')) {
     const videoId = url.split('watch?v=')[1].split('&')[0];
     return `https://www.youtube.com/embed/${videoId}`;
@@ -955,173 +555,103 @@ function getVideoEmbedUrl(url) {
     const videoId = url.split('youtu.be/')[1].split('?')[0];
     return `https://www.youtube.com/embed/${videoId}`;
   }
-  return url; // Return original URL if not YouTube
+  return url; // Return original URL if not a standard YouTube link
 }
 
+/**
+ * Formats a date string for display.
+ * @param {string} dateString - The date string to format.
+ * @returns {string} The formatted date.
+ */
+const formatDate = (dateString) => {
+  const options = { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric' 
+  }
+  return new Date(dateString).toLocaleDateString(undefined, options)
+}
+
+// Computed property to get the documents of the currently active group or subgroup
 const displayedDocuments = computed(() => {
-  if (activeTab.value !== null && activeSub.value !== null) {
-    return tabs.value[activeTab.value].subcategories[activeSub.value].contents || [];
+  if (activeGroup.value !== null) {
+    const group = resourceGroups[activeGroup.value];
+    // Check if a subgroup is selected within a group that has subgroups
+    if (activeSubgroup.value !== null && group.subgroups) {
+      return group.subgroups[activeSubgroup.value].items || [];
+    } 
+    // Check if a main group with direct items (like News) is selected
+    else if (activeSubgroup.value === null && group.items) {
+      return group.items;
+    }
   }
   return [];
 });
 
+// Computed property to generate a title for the content pane
 const currentTitle = computed(() => {
-  if (activeTab.value !== null && activeSub.value !== null) {
-    return `${tabs.value[activeTab.value].name} - ${tabs.value[activeTab.value].subcategories[activeSub.value].name}`;
+  if (activeGroup.value !== null) {
+    const group = resourceGroups[activeGroup.value];
+    if (activeSubgroup.value !== null && group.subgroups) {
+      return `${group.group} - ${group.subgroups[activeSubgroup.value].subgroup}`;
+    } else if (group.items) {
+       return group.group;
+    }
+  }
+  return 'Resource Center';
+});
+
+// Computed property to determine the type of the current content for special layouts
+const currentDisplayType = computed(() => {
+  if (activeGroup.value !== null) {
+    const group = resourceGroups[activeGroup.value];
+    if (activeSubgroup.value !== null && group.subgroups) {
+      return group.subgroups[activeSubgroup.value].subgroup; // e.g., 'Video', 'Image Gallery'
+    } else if (activeSubgroup.value === null && group.items) {
+      return group.group; // e.g., 'News'
+    }
   }
   return '';
 });
 
-const currentSubcategoryType = computed(() => {
-  if (activeTab.value !== null && activeSub.value !== null) {
-    return tabs.value[activeTab.value].subcategories[activeSub.value].name;
-  }
-  return '';
+// Watch for changes in active selections to update URL hash
+watch([activeGroup, activeSubgroup], () => {
+  updateUrlHash();
 });
 
-/*const { projectGroups: sharedProjectGroups } = useGeneralSidebar();
+// Lifecycle hooks
+onMounted(() => {
+  // Handle initial hash on page load
+  handleHashChange();
+  
+  // Listen for hash changes (back/forward navigation)
+  window.addEventListener('hashchange', handleHashChange);
+});
 
-watchEffect(() => {
-  sharedProjectGroups.value = projectGroups;
-});*/
+// Watch for hash changes in the URL and handle them
+watch(
+  () => route.hash,
+  () => {
+    handleHashChange();
+  }
+);
+
+// Expose methods for external use (e.g., from other components)
+const resourceCenterAPI = {
+  navigateToSection,
+  getCurrentSectionUrl,
+  // Navigate to specific sections by ID
+  goToNews: () => navigateToSection('news'),
+  goToPressReleases: () => navigateToSection('publications', 'press-releases'),
+  goToSuccessStories: () => navigateToSection('publications', 'success-stories'),
+  goToVideos: () => navigateToSection('knowledge-management', 'video'),
+  goToImageGallery: () => navigateToSection('knowledge-management', 'image-gallery'),
+  // Add more convenience methods as needed
+};
+
+// Make API available globally if needed
+if (process.client) {
+  window.resourceCenterAPI = resourceCenterAPI;
+}
 
 </script>
-
-<style scoped>
-/* Grid item animations */
-.grid-item-enter-active {
-  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.grid-item-enter-from {
-  opacity: 0;
-  transform: translateY(30px) scale(0.95);
-}
-
-.grid-item-enter-to {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.grid-item-leave-active {
-  transition: all 0.4s cubic-bezier(0.55, 0.06, 0.68, 0.19);
-}
-
-.grid-item-leave-from {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.grid-item-leave-to {
-  opacity: 0;
-  transform: translateY(-30px) scale(0.95);
-}
-
-/* Staggered animation delay */
-.grid-item-enter-active:nth-child(1) { transition-delay: 0ms; }
-.grid-item-enter-active:nth-child(2) { transition-delay: 100ms; }
-.grid-item-enter-active:nth-child(3) { transition-delay: 200ms; }
-.grid-item-enter-active:nth-child(4) { transition-delay: 300ms; }
-.grid-item-enter-active:nth-child(5) { transition-delay: 400ms; }
-.grid-item-enter-active:nth-child(6) { transition-delay: 500ms; }
-
-/* Fade transition for loading state */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-}
-
-/* Modal animations */
-.modal-enter-active {
-  transition: all 0.3s ease;
-}
-
-.modal-leave-active {
-  transition: all 0.3s ease;
-}
-
-.modal-enter-from, .modal-leave-to {
-  opacity: 0;
-  transform: scale(0.95);
-}
-
-/* Additional hover animations */
-.group:hover {
-  transform: translateY(-2px);
-}
-
-/* Smooth scale animations for cards */
-.hover\:scale-105:hover {
-  transform: scale(1.05);
-}
-
-/* Loading spinner animation */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
-/* Enhanced grid item animations with spring effect */
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(40px) scale(0.9);
-  }
-  60% {
-    opacity: 0.8;
-    transform: translateY(-5px) scale(1.02);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.grid-item-enter-active {
-  animation: fadeInUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-/* Responsive staggered delays */
-@media (min-width: 768px) {
-  .grid-item-enter-active:nth-child(7) { transition-delay: 600ms; }
-  .grid-item-enter-active:nth-child(8) { transition-delay: 700ms; }
-  .grid-item-enter-active:nth-child(9) { transition-delay: 800ms; }
-  .grid-item-enter-active:nth-child(10) { transition-delay: 900ms; }
-}
-
-/* Pulse effect for loading state */
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Iframe loading animation */
-.iframe-loading {
-  pointer-events: none;
-}
-
-/* Hide loading overlay after iframe loads */
-iframe {
-  background: white;
-}
-
-</style>

@@ -37,7 +37,7 @@ const projectGroups = [
         id: 'ssrlp_news',
         items: [
           { id: 'ssrlp_news', title: 'SSRLP NEWS' },
-          { id: 'ssrlp_overview', title: 'Overview' },
+          { id: 'ssrlp_overview', title: 'OVERVIEW' },
           { id: 'SCTP', title: 'Social Cash Transfer' },
           { id: 'publicWorks', title: 'Climate Smart Public Works' },
           { id: 'livelihoods', title: 'Livelihoods Support' },
@@ -49,8 +49,8 @@ const projectGroups = [
         subgroup: 'GESD',
         id: 'gesd_news',
         items: [
-          {id: 'gesd_news', title: 'GESD NEWs'},
-          { id: 'gesd_overview', title: 'Overview' },
+          {id: 'gesd_news', title: 'GESD NEWS'},
+          { id: 'gesd_overview', title: 'OVERVIEW' },
       { id: 'pbf', title: 'Performance-Based Financing' },
       { id: 'ias', title: 'Intergovernmental Accountability Systems' },
       { id: 'lgpi', title: 'Local Government Performance Improvement' },
@@ -62,7 +62,7 @@ const projectGroups = [
         id: 'rcrp2_news',
         items: [
           { id: 'rcrp2_news', title: 'RCRP2 NEWS' },
-          { id: 'rcrp_overview', title: 'Overview' },
+          { id: 'rcrp_overview', title: 'OVERVIEW' },
       { id: 'drb', title: 'District-Led Resilience Building' },
       { id: 'usr', title: 'Urban Malawi Social Registry' },
       { id: 'upw', title: 'Urban Climate Smart Public Works Program' }
@@ -177,19 +177,23 @@ const projectUpdates = {
   ],
   idf: [
     { date: '2025-07-14', title: 'IDF urban market upgrades commence', tags: ['idf','infrastructure'], summary: 'Urban markets in Mzuzu and Lilongwe begin rehabilitation under IDF.', link: '#' },
-    { date: '2025-06-02', title: 'Design reviews completed for public buildings', tags: ['design','qa'], summary: 'Independent design checks completed to ensure safety and value for money.', link: '#' }
+    { date: '2025-06-02', title: 'Design reviews completed for public buildings', tags: ['design','qa'], summary: 'Independent design checks completed to ensure safety and value for money.', link: '#' },
+    { date: '2025-05-03', title: 'School blocks and boreholes prioritized', tags: ['education','water'], summary: 'Majority of DDF envelopes directed to education and water access gaps.', link: '#' }
   ],
   rrf: [
     { date: '2025-07-30', title: 'Spot regravelling and drainage clearing underway', tags: ['rrf','roads'], summary: 'Maintenance teams deployed on feeder roads ahead of rainy season.', link: '#' },
-    { date: '2025-05-20', title: 'Bridge approaches stabilized in priority corridors', tags: ['maintenance','resilience'], summary: 'Critical spots reinforced to reduce washouts during peak flows.', link: '#' }
+    { date: '2025-05-20', title: 'Bridge approaches stabilized in priority corridors', tags: ['maintenance','resilience'], summary: 'Critical spots reinforced to reduce washouts during peak flows.', link: '#' },
+    { date: '2025-05-03', title: 'Roads connecting fam lands prioritized', tags: ['education','water'], summary: 'Majority of DDF envelopes directed to education and water access gaps.', link: '#' }
   ],
   wsf: [
     { date: '2025-08-08', title: 'New borehole drillings confirmed in 9 TAs', tags: ['wsf','water'], summary: 'Contractors mobilized; quality testing and community WASH committees in place.', link: '#' },
-    { date: '2025-06-25', title: 'Piped scheme rehabilitation achieves 60% progress', tags: ['rehab'], summary: 'Pump replacements and leak repairs improving uptime across schemes.', link: '#' }
+    { date: '2025-06-25', title: 'Piped scheme rehabilitation achieves 60% progress', tags: ['rehab'], summary: 'Pump replacements and leak repairs improving uptime across schemes.', link: '#' },
+    { date: '2025-05-03', title: 'Irrigation and boreholes prioritized', tags: ['education','water'], summary: 'Majority of DDF envelopes directed to education and water access gaps.', link: '#' }
   ],
   health_rehab: [
     { date: '2025-07-19', title: 'Maternity wing refurbishments 70% complete', tags: ['health','rehabilitation'], summary: 'Works focus on roofing, solar backup and sanitation blocks.', link: '#' },
-    { date: '2025-05-27', title: 'Equipment delivery schedule finalized', tags: ['procurement'], summary: 'Oxygen concentrators and cold-chain fridges slated for next quarter.', link: '#' }
+    { date: '2025-05-27', title: 'Equipment delivery schedule finalized', tags: ['procurement'], summary: 'Oxygen concentrators and cold-chain fridges slated for next quarter.', link: '#' },
+    { date: '2025-05-03', title: 'Hospitals and beds prioritized', tags: ['education','water'], summary: 'Majority of DDF envelopes directed to education and water access gaps.', link: '#' }
   ],
 }
 

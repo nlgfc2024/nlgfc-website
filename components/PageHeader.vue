@@ -41,7 +41,7 @@
               </div>
             </li>
           </ol>
-        </nav> -->
+        </nav> 
 
         <h1 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-1 md:mb-2 tracking-tight">
           <span class="relative">
@@ -55,7 +55,7 @@
           class="max-w-2xl md:max-w-3xl mx-auto text-xs md:text-sm text-gray-100/90 leading-snug"
         >
           {{ description }}
-        </p> -->
+        </p> 
       </div>
     </div>
   </div>
