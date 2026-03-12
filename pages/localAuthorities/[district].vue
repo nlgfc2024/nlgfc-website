@@ -1,6 +1,22 @@
-<template>
+﻿<template>
   <div class="district-page">
-    <div v-if="!district" class="not-found">
+    <div v-if="pending" class="not-found">
+      <div class="not-found-content">
+        <h1>Loading District...</h1>
+      </div>
+    </div>
+
+    <div v-else-if="error" class="not-found">
+      <div class="not-found-content">
+        <h1>Unable to Load District</h1>
+        <p>Could not load data for "<strong>{{ route.params.district }}</strong>".</p>
+        <NuxtLink to="/localAuthorities/alldistricts" class="back-link">
+          ← Back to All Districts
+        </NuxtLink>
+      </div>
+    </div>
+
+    <div v-else-if="!district" class="not-found">
       <div class="not-found-content">
         <h1>District Not Found</h1>
         <p>The district "<strong>{{ route.params.district }}</strong>" does not exist.</p>
@@ -42,8 +58,8 @@
             <h3>Quick Facts</h3>
             <ul>
               <li><strong>Region:</strong> {{ district.region }}</li>
-              <li><strong>Population:</strong> {{ district.profile.population }}</li>
-              <li v-if="district.profile.jurisdiction"><strong>Location:</strong> {{ district.profile.jurisdiction }}</li>
+              <li><strong>Population:</strong> {{ district.population }}</li>
+              <li v-if="district.jurisdiction"><strong>Location:</strong> {{ district.jurisdiction }}</li>
             </ul>
           </div>
         </aside>
@@ -53,73 +69,51 @@
           <Transition name="fade-slide" mode="out-in">
             <!-- PROFILE TAB -->
             <div v-if="activeTab === 'profile'" key="profile" class="tab-content">
-              <section class="content-section">
-                <h2>About {{ district.name }}</h2>
-                <p>{{ district.profile.about }}</p>
-              </section>
+              <template v-if="district.profileSections.length">
+                <template v-for="(section, index) in district.profileSections" :key="`profile-section-${index}`">
+                  <section v-if="section.type === 'about'" class="content-section">
+                    <h2>{{ section.title || `About ${district.name}` }}</h2>
+                    <p>{{ section.content }}</p>
+                  </section>
 
-              <section class="content-section" v-if="district.profile.mandate?.length">
-                <h2>Mandate</h2>
-                <ul class="styled-list">
-                  <li v-for="(item, i) in district.profile.mandate" :key="i">{{ item }}</li>
-                </ul>
-              </section>
+                  <section v-else-if="section.type === 'bullet_list'" class="content-section">
+                    <h2>{{ section.title }}</h2>
+                    <ul :class="['styled-list', { numbered: section.style === 'numbered' }]">
+                      <li v-for="(item, itemIndex) in section.items" :key="`list-${index}-${itemIndex}`">
+                        {{ item.label || item }}
+                      </li>
+                    </ul>
+                  </section>
 
-              <div class="vision-mission-grid">
-                <div class="vm-card vision">
-                  <h3>Vision</h3>
-                  <p>{{ district.profile.vision }}</p>
-                </div>
-                <div class="vm-card mission">
-                  <h3>Mission</h3>
-                  <p>{{ district.profile.mission }}</p>
-                </div>
-              </div>
-
-              <section class="content-section" v-if="district.profile.strategicObjectives?.length">
-                <h2>Strategic Objectives</h2>
-                <ul class="styled-list numbered">
-                  <li v-for="(obj, i) in district.profile.strategicObjectives" :key="i">{{ obj }}</li>
-                </ul>
-              </section>
-
-              <section class="content-section" v-if="district.profile.keyFunctions?.length">
-                <h2>Key Functions</h2>
-                <ul class="styled-list">
-                  <li v-for="(fn, i) in district.profile.keyFunctions" :key="i">{{ fn }}</li>
-                </ul>
-              </section>
-
-              <div class="stats-grid">
-                <div class="stat-card" v-if="district.profile.majorAchievements">
-                  <div class="stat-icon">🏆</div>
-                  <div>
-                    <h4>Major Achievements</h4>
-                    <p>{{ district.profile.majorAchievements }}</p>
+                  <div v-else-if="section.type === 'vision_mission'" class="vision-mission-grid">
+                    <div class="vm-card vision">
+                      <h3>Vision</h3>
+                      <p>{{ section.vision || 'Not specified' }}</p>
+                    </div>
+                    <div class="vm-card mission">
+                      <h3>Mission</h3>
+                      <p>{{ section.mission || 'Not specified' }}</p>
+                    </div>
                   </div>
-                </div>
-                <div class="stat-card" v-if="district.profile.jurisdiction">
-                  <div class="stat-icon">📍</div>
-                  <div>
-                    <h4>Jurisdiction</h4>
-                    <p>{{ district.profile.jurisdiction }}</p>
+
+                  <div v-else-if="section.type === 'stats_grid'" class="stats-grid">
+                    <div
+                      v-for="(card, cardIndex) in section.cards"
+                      :key="`card-${index}-${cardIndex}`"
+                      class="stat-card"
+                    >
+                      <div class="stat-icon">{{ card.icon || '📌' }}</div>
+                      <div>
+                        <h4>{{ card.title }}</h4>
+                        <p>{{ card.body }}</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div class="stat-card" v-if="district.profile.population">
-                  <div class="stat-icon">👥</div>
-                  <div>
-                    <h4>Population</h4>
-                    <p>{{ district.profile.population }}</p>
-                  </div>
-                </div>
-                <div class="stat-card" v-if="district.profile.structure">
-                  <div class="stat-icon">🏛️</div>
-                  <div>
-                    <h4>Council Structure</h4>
-                    <p>{{ district.profile.structure }}</p>
-                  </div>
-                </div>
-              </div>
+                </template>
+              </template>
+
+              <p v-else class="empty-state">No profile content available for this district yet.</p>
+
             </div>
 
             <!-- PROJECTS TAB -->
@@ -134,7 +128,7 @@
                   <div class="project-header">
                     <div>
                       <span class="project-acronym">{{ project.name }}</span>
-                      <h3>{{ project.fullName }}</h3>
+                      <h3>{{ project.fullName || project.name }}</h3>
                     </div>
                     <span :class="['status-badge', project.status === 'Active' ? 'active' : 'inactive']">
                       {{ project.status }}
@@ -192,7 +186,7 @@
                     <span class="news-date">{{ formatDate(article.date) }}</span>
                   </div>
                   <h3>{{ article.title }}</h3>
-                  <p>{{ article.summary }}</p>
+                  <p>{{ article.summary || article.content }}</p>
                 </div>
               </div>
               <p v-else class="empty-state">No news available for this district yet.</p>
@@ -205,11 +199,144 @@
 </template>
 
 <script setup>
-const route = useRoute()
-const { getDistrict } = useDistrictContent()
 
-const districtSlug = computed(() => route.params.district)
-const district = computed(() => getDistrict(districtSlug.value))
+const route = useRoute()
+const config = useRuntimeConfig()
+
+const districtSlug = computed(() => String(route.params.district || ''))
+const stripHtml = (value) => String(value || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+
+const { data: districtData, pending, error } = await useAsyncData(
+  () => `la:${districtSlug.value}`,
+  async () => {
+    if (!districtSlug.value) return null
+    try {
+      return await $fetch(
+        `${config.public.apiBase}/api/local-authorities/slug/${districtSlug.value}`
+      )
+    } catch (err) {
+      if (err?.status === 404 || err?.statusCode === 404) return null
+      throw err
+    }
+  },
+  {
+    watch: [districtSlug],
+    default: () => null
+  }
+)
+
+const district = computed(() => {
+  if (!districtData.value) return null
+
+  const payload = districtData.value
+  const profileData = payload?.profile_data || {}
+  const incomingSections = Array.isArray(profileData.sections) ? profileData.sections : []
+
+  const legacySections = [
+    {
+      type: 'about',
+      data: {
+        title: `About ${payload.name || 'District'}`,
+        content: stripHtml(profileData.about || payload.profile),
+      },
+    },
+    Array.isArray(profileData.mandate) && profileData.mandate.length
+      ? {
+          type: 'bullet_list',
+          data: {
+            title: 'Mandate',
+            style: 'default',
+            items: profileData.mandate.map((label) => ({ label })),
+          },
+        }
+      : null,
+    (profileData.vision || profileData.mission)
+      ? {
+          type: 'vision_mission',
+          data: {
+            vision: profileData.vision || '',
+            mission: profileData.mission || '',
+          },
+        }
+      : null,
+    Array.isArray(profileData.strategicObjectives) && profileData.strategicObjectives.length
+      ? {
+          type: 'bullet_list',
+          data: {
+            title: 'Strategic Objectives',
+            style: 'numbered',
+            items: profileData.strategicObjectives.map((label) => ({ label })),
+          },
+        }
+      : null,
+    Array.isArray(profileData.keyFunctions) && profileData.keyFunctions.length
+      ? {
+          type: 'bullet_list',
+          data: {
+            title: 'Key Functions',
+            style: 'default',
+            items: profileData.keyFunctions.map((label) => ({ label })),
+          },
+        }
+      : null,
+    (profileData.majorAchievements || profileData.jurisdiction || profileData.population || profileData.structure)
+      ? {
+          type: 'stats_grid',
+          data: {
+            cards: [
+              profileData.majorAchievements ? { icon: '🏆', title: 'Major Achievements', body: profileData.majorAchievements } : null,
+              (profileData.jurisdiction || payload.jurisdiction) ? { icon: '📍', title: 'Jurisdiction', body: profileData.jurisdiction || payload.jurisdiction } : null,
+              (profileData.population || payload.population) ? { icon: '👥', title: 'Population', body: profileData.population || payload.population } : null,
+              profileData.structure ? { icon: '🏛️', title: 'Council Structure', body: profileData.structure } : null,
+            ].filter(Boolean),
+          },
+        }
+      : null,
+  ].filter(Boolean)
+
+  const profileSections = (incomingSections.length ? incomingSections : legacySections)
+    .map((section) => ({
+      type: section?.type || '',
+      ...(section?.data || {}),
+    }))
+    .filter((section) => !!section.type)
+
+  return {
+    name: payload.name,
+    region: payload.region || '',
+    population: payload.population || 'N/A',
+    jurisdiction: payload.jurisdiction || '',
+    profile: stripHtml(payload.profile),
+    profileSections,
+    projects: Array.isArray(payload.projects)
+      ? payload.projects.map((project) => ({
+          name: project.name || 'Project',
+          fullName: project.full_name || '',
+          description: project.description || '',
+          objectives: Array.isArray(project.objectives) ? project.objectives : [],
+          status: project.status || 'Active'
+        }))
+      : [],
+    reports: Array.isArray(payload.reports)
+      ? payload.reports.map((report) => ({
+          title: report.title || 'Untitled Report',
+          type: report.type || 'Report',
+          date: report.created_at || report.updated_at || null,
+          description: report.description || '',
+          fileUrl: report.file || report.document || null
+        }))
+      : [],
+    news: Array.isArray(payload.news)
+      ? payload.news.map((article) => ({
+          title: article.title || 'Untitled Article',
+          category: article.category || 'News',
+          date: article.created_at || article.updated_at || null,
+          summary: article.summary || '',
+          content: article.content || ''
+        }))
+      : []
+  }
+})
 
 const tabs = [
   { id: 'profile',  title: 'Profile',  icon: '🏛️' },
@@ -238,8 +365,11 @@ const formatDate = (dateStr) => {
 }
 
 const downloadReport = (report) => {
-  // Placeholder — wire up to actual document URLs when available
-  console.log('Download report:', report.title)
+  if (report.fileUrl && process.client) {
+    window.open(report.fileUrl, '_blank', 'noopener')
+    return
+  }
+  console.log('Report file URL is not available for:', report.title)
 }
 
 onMounted(() => {
@@ -248,6 +378,15 @@ onMounted(() => {
     activeTab.value = tabParam
   }
 })
+
+watch(
+  () => route.query.tab,
+  (tabParam) => {
+    if (tabParam && tabs.some((tab) => tab.id === tabParam)) {
+      activeTab.value = tabParam
+    }
+  }
+)
 
 useHead({
   title: computed(() =>
@@ -264,7 +403,7 @@ useHead({
 }
 
 .page-header {
-  background: linear-gradient(135deg, #1e3a5f 0%, #2d5a8e 100%);
+  background: linear-gradient(135deg, #111827 0%, #1e3a5f 100%);
   color: white;
   padding: 2rem 1.5rem 1.5rem;
 }
@@ -346,9 +485,9 @@ useHead({
 
 .tab-btn:hover { background: #f3f4f6; }
 .tab-btn.active {
-  background: #eff6ff;
-  color: #1d4ed8;
-  border-left-color: #1d4ed8;
+  background: #eef2f7;
+  color: #111827;
+  border-left-color: #111827;
   font-weight: 600;
 }
 
@@ -398,7 +537,7 @@ useHead({
 
 .tab-content h2 {
   font-size: 1.5rem;
-  color: #1e3a5f;
+  color: #111827;
   margin: 0 0 1.25rem;
   padding-bottom: 0.75rem;
   border-bottom: 2px solid #e5e7eb;
@@ -435,7 +574,7 @@ useHead({
   content: '▸';
   position: absolute;
   left: 0;
-  color: #2d5a8e;
+  color: #1e3a5f;
 }
 
 .styled-list.numbered {
@@ -450,7 +589,7 @@ useHead({
 .styled-list.numbered li::before {
   content: counter(obj-counter) '.';
   font-weight: 600;
-  color: #1d4ed8;
+  color: #111827;
 }
 
 /* ── Vision/Mission Grid ── */
@@ -479,8 +618,8 @@ useHead({
 
 .vm-card p { margin: 0; line-height: 1.6; font-size: 0.925rem; }
 
-.vision { background: #eff6ff; }
-.vision h3 { color: #1d4ed8; }
+.vision { background: #eef2f7; }
+.vision h3 { color: #111827; }
 
 .mission { background: #f0fdf4; }
 .mission h3 { color: #16a34a; }
@@ -536,7 +675,7 @@ useHead({
 
 .project-acronym {
   display: inline-block;
-  background: #1e3a5f;
+  background: #111827;
   color: white;
   font-size: 0.75rem;
   font-weight: 700;
@@ -545,7 +684,7 @@ useHead({
   margin-bottom: 0.4rem;
 }
 
-.project-header h3 { font-size: 1.1rem; color: #1e3a5f; margin: 0; }
+.project-header h3 { font-size: 1.1rem; color: #111827; margin: 0; }
 
 .status-badge {
   padding: 0.25rem 0.75rem;
@@ -587,14 +726,14 @@ useHead({
 .report-icon { font-size: 2rem; flex-shrink: 0; }
 
 .report-info { flex: 1; }
-.report-info h3 { font-size: 1rem; color: #1e3a5f; margin: 0 0 0.4rem; }
+.report-info h3 { font-size: 1rem; color: #111827; margin: 0 0 0.4rem; }
 .report-info p { font-size: 0.875rem; color: #4b5563; margin: 0.5rem 0 0; }
 
 .report-meta { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
 
 .report-type {
-  background: #dbeafe;
-  color: #1d4ed8;
+  background: #d6e4f0;
+  color: #111827;
   font-size: 0.75rem;
   padding: 0.15rem 0.5rem;
   border-radius: 0.25rem;
@@ -603,7 +742,7 @@ useHead({
 .report-date { font-size: 0.8rem; color: #6b7280; }
 
 .download-btn {
-  background: #1e3a5f;
+  background: #111827;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -616,7 +755,7 @@ useHead({
   transition: background 0.2s;
 }
 
-.download-btn:hover { background: #2d5a8e; }
+.download-btn:hover { background: #1e3a5f; }
 
 /* ── News ── */
 .news-list { display: flex; flex-direction: column; gap: 1rem; }
@@ -644,7 +783,7 @@ useHead({
 
 .news-date { font-size: 0.8rem; color: #6b7280; }
 
-.news-card h3 { font-size: 1rem; color: #1e3a5f; margin: 0 0 0.4rem; }
+.news-card h3 { font-size: 1rem; color: #111827; margin: 0 0 0.4rem; }
 .news-card p { font-size: 0.875rem; color: #4b5563; margin: 0; line-height: 1.6; }
 
 /* ── Empty State ── */
@@ -668,12 +807,12 @@ useHead({
   padding: 2rem;
 }
 
-.not-found-content h1 { font-size: 2rem; color: #1e3a5f; margin-bottom: 1rem; }
+.not-found-content h1 { font-size: 2rem; color: #111827; margin-bottom: 1rem; }
 .not-found-content p { color: #4b5563; margin-bottom: 1.5rem; }
 
 .back-link {
   display: inline-block;
-  background: #1e3a5f;
+  background: #111827;
   color: white;
   padding: 0.6rem 1.5rem;
   border-radius: 0.375rem;
@@ -681,7 +820,7 @@ useHead({
   font-size: 0.9rem;
   transition: background 0.2s;
 }
-.back-link:hover { background: #2d5a8e; }
+.back-link:hover { background: #1e3a5f; }
 
 /* ── Transitions ── */
 .fade-slide-enter-active,
