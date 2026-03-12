@@ -149,6 +149,7 @@ const publications = ref([
                   Jun 15, 2023
                 </span>
                 <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                  
                   <NuxtLink to="news/#2" class="text-gray-700 hover:text-blue-700 transition flex items-center">How Our New Initiative is Transforming Communities</NuxtLink>
                 </h3>
                 <a href="#" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -180,6 +181,7 @@ const publications = ref([
                   May 28, 2023
                 </span>
                 <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                  
                   <NuxtLink to="news/#3" class="text-gray-700 hover:text-blue-700 transition flex items-center">Partnering for Greater Impact: Our New Alliance</NuxtLink>
                 </h3>
                 <a href="news/#3" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -211,6 +213,7 @@ const publications = ref([
                   Apr 12, 2023
                 </span>
                 <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                  
                   <NuxtLink to="news/#4" class="text-gray-700 hover:text-blue-700 transition flex items-center">Annual Report 2022: Our Achievements</NuxtLink>
                 </h3>
                 <a href="news/#4" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

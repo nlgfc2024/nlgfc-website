@@ -20,7 +20,7 @@ defineProps<{
         </span>
         <div>
           <div class="text-gray-800">{{ it.label }}</div>
-          <div v-if="it.description" class="text-gray-600 text-sm">{{ it.description }}</div>
+          <div v-if="it.description" class="text-gray-600 text-sm prose max-w-none" v-html="it.description" />
         </div>
       </li>
     </ul>
@@ -28,7 +28,7 @@ defineProps<{
     <ol v-else class="space-y-3 pl-10 list-decimal">
       <li v-for="(it, i) in items || []" :key="i" class="text-gray-800">
         <div>{{ it.label }}</div>
-        <div v-if="it.description" class="text-gray-600 text-sm">{{ it.description }}</div>
+        <div v-if="it.description" class="text-gray-600 text-sm prose max-w-none" v-html="it.description" />
       </li>
     </ol>
   </div>
