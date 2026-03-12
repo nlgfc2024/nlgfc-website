@@ -3,11 +3,11 @@ import { ref, watch, computed, onMounted, nextTick } from 'vue';
 
 const route = useRoute();
 const props = defineProps({
-  // Only 'projects' sidebar type now - supports both groups and sections
+  // Sidebar supports grouped sections (projects), flat sections (opportunities), and default
   sidebarType: {
     type: String,
     required: true,
-    validator: (value) => ['projects'].includes(value)
+    validator: (value) => ['projects', 'opportunities', 'default'].includes(value)
   },
   // Data for sections or project groups.
   // Structure for 'projects':
@@ -114,9 +114,22 @@ const allSectionsData = computed(() => {
     );
   }
   
-  // Add sectionsData (groups/subgroups/items)
+  // Add sectionsData (groups/subgroups/items OR direct section entries)
   if (props.sectionsData && Array.isArray(props.sectionsData)) {
-    combined.push(...props.sectionsData.filter(group => group && group.group));
+    const mappedSectionsData = props.sectionsData
+      .filter(item => item && (item.group || (item.id && item.name)))
+      .map(item => {
+        if (item.group) {
+          return item;
+        }
+
+        return {
+          ...item,
+          isSection: true,
+        };
+      });
+
+    combined.push(...mappedSectionsData);
   }
   
   return combined;
@@ -531,7 +544,7 @@ const dynamicSidebarStyle = computed(() => {
         <!-- Standalone Sections -->
         <div v-for="item in allSectionsData.filter(item => item && item.isSection)" :key="item.id">
           <NuxtLink
-            :to="`${$route.path}#${item.id}`"
+            :to="{ path: $route.path, query: $route.query, hash: `#${item.id}` }"
             @click="setActiveItem(item.id)"
             :class="[
               'w-full text-left p-4 rounded-lg transition-all duration-200 group block',
@@ -606,7 +619,7 @@ const dynamicSidebarStyle = computed(() => {
                 <li v-if="group.sections && Array.isArray(group.sections) && group.sections.length > 0">
                   <li v-for="section in group.sections.filter(section => section && section.id)" :key="section.id" class="mb-2">
                     <NuxtLink
-                      :to="`${$route.path}#${section.id}`"
+                      :to="{ path: $route.path, query: $route.query, hash: `#${section.id}` }"
                       @click="setActiveItem(section.id)"
                       :class="[
                         'flex items-center w-full px-4 py-3 rounded-lg text-left cursor-pointer transition-all duration-200 ease-in-out',
@@ -657,7 +670,7 @@ const dynamicSidebarStyle = computed(() => {
                     <ul v-show="openSubgroup === subgroup.id" class="mt-1 ml-4 py-1">
                       <li v-for="item in (subgroup.items || []).filter(item => item && item.id)" :key="item.id">
                         <NuxtLink
-                          :to="`${$route.path}#${item.id}`"
+                          :to="{ path: $route.path, query: $route.query, hash: `#${item.id}` }"
                           @click="setActiveItem(item.id)"
                           :class="[
                             'block px-6 py-2.5 text-sm transition-colors duration-150',
@@ -675,7 +688,7 @@ const dynamicSidebarStyle = computed(() => {
                 <li v-else-if="group.items && Array.isArray(group.items)">
                    <li v-for="item in group.items.filter(item => item && item.id)" :key="item.id">
                         <NuxtLink
-                          :to="`${$route.path}#${item.id}`"
+                          :to="{ path: $route.path, query: $route.query, hash: `#${item.id}` }"
                           @click="setActiveItem(item.id)"
                           :class="[
                             'block px-5 py-2.5 text-sm transition-colors duration-150',
