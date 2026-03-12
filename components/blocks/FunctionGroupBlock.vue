@@ -16,7 +16,7 @@ defineProps<{
       <h2 v-if="heading" class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
         {{ heading }}
       </h2>
-      <p v-if="intro" class="text-lg text-gray-600">{{ intro }}</p>
+      <div v-if="intro" class="text-lg text-gray-600 prose max-w-none" v-html="intro" />
     </div>
 
     <div class="space-y-6">
@@ -34,9 +34,7 @@ defineProps<{
           </div>
           <div class="min-w-0">
             <h4 class="font-medium text-gray-900 mb-2">{{ fn.title }}</h4>
-            <p v-if="fn.description" class="text-gray-700">
-              {{ fn.description }}
-            </p>
+            <div v-if="fn.description" class="text-gray-700 prose max-w-none" v-html="fn.description" />
 
             <div v-if="fn.badges?.length" class="mt-3 flex flex-wrap gap-2">
               <span
