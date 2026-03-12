@@ -9,6 +9,15 @@ const props = defineProps({
 const emit = defineEmits(['express-interest', 'download'])
 
 const formatDate = (dateString) => {
+  if (!dateString) {
+    return 'Not specified'
+  }
+
+  const parsed = new Date(dateString)
+  if (Number.isNaN(parsed.getTime())) {
+    return 'Not specified'
+  }
+
   return new Date(dateString).toLocaleDateString('en-GB', {
     day: '2-digit',
     month: 'short',
@@ -17,6 +26,10 @@ const formatDate = (dateString) => {
 }
 
 const isExpired = (dateString) => {
+  if (!dateString) {
+    return false
+  }
+
   return new Date(dateString) < new Date()
 }
 
@@ -26,6 +39,10 @@ const noticeStatus = computed(() => {
 })
 
 const getDaysUntilExpiry = (dateString) => {
+  if (!dateString) {
+    return 0
+  }
+
   const today = new Date()
   const expiryDate = new Date(dateString)
   const diffTime = expiryDate - today
@@ -98,7 +115,7 @@ const getDocumentIcon = (type) => {
           <h4 class="text-sm font-medium text-gray-900 mb-2">Available Documents:</h4>
           <div class="flex flex-wrap gap-2">
             <button
-                v-for="document in notice.documents"
+                v-for="document in (notice.documents || [])"
                 :key="document.name"
                 @click="emit('download', document, notice.title)"
                 class="flex items-center space-x-2 px-3 py-2 text-sm text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors"
