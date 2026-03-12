@@ -191,13 +191,25 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
     }
 
     case 'ProjectContentBlock':
+      {
+      const rawLogo = data.logo ?? data.logo_url ?? ''
+      let normalizedLogo = ''
+      if (typeof rawLogo === 'string') {
+        normalizedLogo = rawLogo
+      } else if (Array.isArray(rawLogo)) {
+        const firstString = rawLogo.flat(Infinity).find((v: any) => typeof v === 'string' && v.length > 0)
+        normalizedLogo = firstString ?? ''
+      }
       return {
         title: data.title ?? '',
         label: data.label ?? '',
         theme: data.theme ?? 'blue',
         show_header: data.show_header ?? true,
+        show_logo: Boolean(data.show_logo ?? false),
+        logo: normalizedLogo,
         body: data.body ?? '',
         heading_level: data.heading_level ?? 'h2',
+      }
       }
 
     case 'MandatePanelBlock':
