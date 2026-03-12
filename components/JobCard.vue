@@ -9,6 +9,15 @@ const props = defineProps({
 const emit = defineEmits(['view-details', 'apply'])
 
 const formatDate = (dateString) => {
+  if (!dateString) {
+    return 'Not specified'
+  }
+
+  const parsed = new Date(dateString)
+  if (Number.isNaN(parsed.getTime())) {
+    return 'Not specified'
+  }
+
   return new Date(dateString).toLocaleDateString('en-GB', {
     day: '2-digit',
     month: 'short',
@@ -17,6 +26,10 @@ const formatDate = (dateString) => {
 }
 
 const isExpired = (dateString) => {
+  if (!dateString) {
+    return false
+  }
+
   return new Date(dateString) < new Date()
 }
 
@@ -26,6 +39,10 @@ const jobStatus = computed(() => {
 })
 
 const getDaysUntilExpiry = (dateString) => {
+  if (!dateString) {
+    return 0
+  }
+
   const today = new Date()
   const expiryDate = new Date(dateString)
   const diffTime = expiryDate - today
@@ -38,7 +55,21 @@ const getStatusColor = (status) => {
 }
 
 const getTypeColor = (type) => {
-  return type === 'Full-time' ? 'text-gray-800 bg-blue-50' : 'text-red-600 bg-red-50'
+  const normalized = String(type || '').toLowerCase()
+  if (normalized === 'full-time') {
+    return 'text-blue-700 bg-blue-50'
+  }
+  if (normalized === 'contract') {
+    return 'text-purple-700 bg-purple-50'
+  }
+  if (normalized === 'temporary') {
+    return 'text-orange-700 bg-orange-50'
+  }
+  if (normalized === 'internship') {
+    return 'text-emerald-700 bg-emerald-50'
+  }
+
+  return 'text-gray-700 bg-gray-50'
 }
 </script>
 
