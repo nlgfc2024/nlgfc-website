@@ -15,6 +15,7 @@ export default defineNuxtConfig({
  runtimeConfig: {
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://nlgfc_api.test',
+      jobsPortalBase: process.env.NUXT_PUBLIC_JOBS_PORTAL_BASE || 'http://localhost:3001',
     },
   },
   // Configuration for subdirectory deployment and app settings
@@ -23,7 +24,7 @@ export default defineNuxtConfig({
     buildAssetsDir: '/_nuxt/',
     head: {
       title: 'National Local Government Finance Committee',
-      charset: 'utf-16',
+      charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
       htmlAttrs: {
         lang: 'en',
