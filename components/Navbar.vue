@@ -43,7 +43,7 @@
             <div class="flex items-center text-sm">
               <a href="#" class="hover:text-blue-300 transition">CMS Login</a>
               <span class="mx-2">|</span>
-              <a href="#" class="hover:text-blue-300 transition">Job Portal</a>
+              <button @click="openJobsPortal" class="hover:text-blue-300 transition">Job Portal</button>
             </div>
           </div>
         </div>
@@ -489,7 +489,7 @@
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Career Opportunities</h3>
                   <ul class="space-y-3">
                     <li>
-                      <button @click="navigateToOpportunities('jobs')" class="w-full text-left flex items-center text-gray-700 hover:text-blue-700 transition group">
+                      <button @click="openJobsPortal" class="w-full text-left flex items-center text-gray-700 hover:text-blue-700 transition group">
                         <svg class="w-5 h-5 mr-2 text-blue-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                         </svg>
@@ -497,7 +497,7 @@
                       </button>
                     </li>
                     <li>
-                      <NuxtLink to="/opportunities#jobs" class="flex items-center text-gray-700 hover:text-blue-700 transition">
+                      <NuxtLink :to="getOpportunitiesRoute('jobs')" class="flex items-center text-gray-700 hover:text-blue-700 transition">
                         <svg class="w-5 h-5 mr-2 text-indigo-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                         </svg>
@@ -519,7 +519,7 @@
                       </button>
                     </li>
                     <li>
-                      <NuxtLink to="/opportunities#procurement" class="flex items-center text-gray-700 hover:text-blue-700 transition">
+                      <NuxtLink :to="getOpportunitiesRoute('procurement')" class="flex items-center text-gray-700 hover:text-blue-700 transition">
                         <svg class="w-5 h-5 mr-2 text-indigo-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                         </svg>
@@ -844,7 +844,7 @@
               <h4 class="font-semibold text-blue-800 mt-2">Career Opportunities</h4>
               <ul class="pl-2 space-y-2">
                 <li>
-                  <button @click="navigateToOpportunities('jobs')" class="w-full text-left flex items-center text-gray-700 hover:text-blue-700 transition group">
+                  <button @click="openJobsPortal" class="w-full text-left flex items-center text-gray-700 hover:text-blue-700 transition group">
                     <svg class="w-5 h-5 mr-2 text-blue-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
@@ -852,12 +852,12 @@
                   </button>
                 </li>
                 <li>
-                  <a href="/opportunities" class="flex items-center text-gray-700 hover:text-blue-700 transition group">
+                  <NuxtLink :to="getOpportunitiesRoute('jobs')" class="flex items-center text-gray-700 hover:text-blue-700 transition group">
                     <svg class="w-5 h-5 mr-2 text-indigo-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                     </svg>
-                    Applicant Registration
-                  </a>
+                    Jobs Listing
+                  </NuxtLink>
                 </li>
               </ul>
               
@@ -872,12 +872,12 @@
                   </button>
                 </li>
                 <li>
-                  <a href="#" class="flex items-center text-gray-700 hover:text-blue-700 transition group">
+                  <NuxtLink :to="getOpportunitiesRoute('procurement')" class="flex items-center text-gray-700 hover:text-blue-700 transition group">
                     <svg class="w-5 h-5 mr-2 text-indigo-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                     </svg>
-                    Supplier Registration
-                  </a>
+                    Procurement Notices
+                  </NuxtLink>
                 </li>
               </ul>
             </div>
@@ -892,17 +892,20 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, ref, watch, nextTick } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const isMenuOpen = ref(false);
 const activeMegaMenu = ref(null);
 const activeAccordion = ref(null);
 const showSearch = ref(false);
 const searchQuery = ref('');
+const config = useRuntimeConfig();
+const jobsPortalUrl = computed(() => `${config.public.jobsPortalBase || 'http://localhost:3001'}/?source=nlgfc-website`);
 
 // Get the current route
 const route = useRoute();
+const router = useRouter();
 
 // Watch for route changes
 watch(() => route.path, () => {
@@ -952,9 +955,27 @@ const onClickOutside = () => {
 };
 
 // Handle opportunities navigation
+const getOpportunitiesRoute = (section) => {
+  const normalizedSection = section === 'jobs' ? 'jobs' : 'procurement';
+
+  return {
+    path: '/opportunities',
+    query: { section: normalizedSection },
+    hash: normalizedSection === 'jobs' ? '#job-opportunities' : '#procurement-notices',
+  };
+};
+
 const navigateToOpportunities = (section) => {
   closeAllMenus();
-  router.push(`/opportunities?section=${section}`);
+  router.push(getOpportunitiesRoute(section));
+};
+
+const openJobsPortal = () => {
+  closeAllMenus();
+
+  if (process.client) {
+    window.location.href = jobsPortalUrl.value;
+  }
 };
 </script>
 
