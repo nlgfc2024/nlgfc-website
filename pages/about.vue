@@ -203,6 +203,9 @@ function updateActiveTabFromHash(hash) {
 const zoom = ref(100);
 const imageLoaded = ref(false);
 
+/**
+ * Zoom in the organogram image by 25% if the zoom level is below 200%
+ */
 const zoomIn = () => {
   if (zoom.value < 200) zoom.value += 25;
 };
