@@ -241,7 +241,21 @@ const paginatedItems = computed(() => {
   return currentItems.value.slice(start, end)
 })
 
-const opportunitiesLoading = computed(() => vacanciesPending.value || procurementPending.value)
+const activeSectionError = computed(() => {
+  if (activeSection.value === JOB_SECTION) {
+    return Boolean(vacanciesError.value)
+  }
+
+  return Boolean(procurementError.value)
+})
+
+const opportunitiesLoading = computed(() => {
+  if (activeSection.value === JOB_SECTION) {
+    return vacanciesPending.value
+  }
+
+  return procurementPending.value
+})
 
 const handleHashChange = () => {
   const hash = window.location.hash.replace('#', '')
@@ -339,16 +353,24 @@ const closeJobModal = () => {
 const closeFaqModal = () => {
   showFaqModal.value = false
 }
+
+const retryCurrentSection = () => {
+  if (activeSection.value === JOB_SECTION) {
+    return refreshVacancies()
+  }
+
+  return refreshProcurement()
+}
 </script>
 
 <template>
   <div>
     <div class="container mx-auto px-4 py-8">
-      <div v-if="vacanciesError || procurementError" class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-        Failed to load latest opportunities. Refresh the page or try again shortly.
+      <div v-if="activeSectionError" class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        Failed to load latest {{ activeSection === JOB_SECTION ? 'job opportunities' : 'procurement notices' }}. Refresh the page or try again shortly.
         <button
           class="ml-3 rounded bg-red-600 px-3 py-1 text-white hover:bg-red-700"
-          @click="() => { refreshVacancies(); refreshProcurement(); }"
+          @click="retryCurrentSection"
         >
           Retry
         </button>
