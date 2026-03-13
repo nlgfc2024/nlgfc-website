@@ -553,7 +553,7 @@ onMounted(() => {
                     
                     <!-- Default Content (shown when no district is selected) -->
                     <div v-else-if="!selectedDistrict" key="default" class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
-                        <div class="bg-gradient-to-r from-[#111827] to-[#1e3a5f] px-6 py-4">
+                        <div class="bg-[#111827] px-6 py-4">
                             <h3 class="text-xl font-bold text-white">Malawi Local Authorities</h3>
                             <p class="text-blue-100 text-sm">All Districts Information</p>
                         </div>
@@ -622,7 +622,7 @@ onMounted(() => {
                     <!-- Selected District Display (shown when a district is selected) -->
                     <div v-else key="district" class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
                         <!-- Header -->
-                        <div class="bg-gradient-to-r from-[#111827] to-[#1e3a5f] px-6 py-4">
+                        <div class="bg-[#111827] px-6 py-4">
                             <h3 class="text-xl font-bold text-white">{{ selectedDistrictDetails.name }} District</h3>
                             <p class="text-blue-100 text-sm">{{ selectedDistrictDetails.region }} Region</p>
                         </div>
