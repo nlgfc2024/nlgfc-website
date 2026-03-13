@@ -69,51 +69,73 @@
           <Transition name="fade-slide" mode="out-in">
             <!-- PROFILE TAB -->
             <div v-if="activeTab === 'profile'" key="profile" class="tab-content">
-              <template v-if="district.profileSections.length">
-                <template v-for="(section, index) in district.profileSections" :key="`profile-section-${index}`">
-                  <section v-if="section.type === 'about'" class="content-section">
-                    <h2>{{ section.title || `About ${district.name}` }}</h2>
-                    <p>{{ section.content }}</p>
-                  </section>
+              <section class="content-section">
+                <h2>About {{ district.name }}</h2>
+                <p>{{ district.profile.about }}</p>
+              </section>
 
-                  <section v-else-if="section.type === 'bullet_list'" class="content-section">
-                    <h2>{{ section.title }}</h2>
-                    <ul :class="['styled-list', { numbered: section.style === 'numbered' }]">
-                      <li v-for="(item, itemIndex) in section.items" :key="`list-${index}-${itemIndex}`">
-                        {{ item.label || item }}
-                      </li>
-                    </ul>
-                  </section>
+              <section class="content-section" v-if="district.profile.mandate?.length">
+                <h2>Mandate</h2>
+                <ul class="styled-list">
+                  <li v-for="(item, i) in district.profile.mandate" :key="i">{{ item }}</li>
+                </ul>
+              </section>
 
-                  <div v-else-if="section.type === 'vision_mission'" class="vision-mission-grid">
-                    <div class="vm-card vision">
-                      <h3>Vision</h3>
-                      <p>{{ section.vision || 'Not specified' }}</p>
-                    </div>
-                    <div class="vm-card mission">
-                      <h3>Mission</h3>
-                      <p>{{ section.mission || 'Not specified' }}</p>
-                    </div>
+              <div class="vision-mission-grid">
+                <div class="vm-card vision">
+                  <h3>Vision</h3>
+                  <p>{{ district.profile.vision }}</p>
+                </div>
+                <div class="vm-card mission">
+                  <h3>Mission</h3>
+                  <p>{{ district.profile.mission }}</p>
+                </div>
+              </div>
+
+              <section class="content-section" v-if="district.profile.strategicObjectives?.length">
+                <h2>Strategic Objectives</h2>
+                <ul class="styled-list numbered">
+                  <li v-for="(obj, i) in district.profile.strategicObjectives" :key="i">{{ obj }}</li>
+                </ul>
+              </section>
+
+              <section class="content-section" v-if="district.profile.keyFunctions?.length">
+                <h2>Key Functions</h2>
+                <ul class="styled-list">
+                  <li v-for="(fn, i) in district.profile.keyFunctions" :key="i">{{ fn }}</li>
+                </ul>
+              </section>
+
+              <div class="stats-grid">
+                <div class="stat-card" v-if="district.profile.majorAchievements">
+                  <div class="stat-icon">🏆</div>
+                  <div>
+                    <h4>Major Achievements</h4>
+                    <p>{{ district.profile.majorAchievements }}</p>
                   </div>
-
-                  <div v-else-if="section.type === 'stats_grid'" class="stats-grid">
-                    <div
-                      v-for="(card, cardIndex) in section.cards"
-                      :key="`card-${index}-${cardIndex}`"
-                      class="stat-card"
-                    >
-                      <div class="stat-icon">{{ card.icon || '📌' }}</div>
-                      <div>
-                        <h4>{{ card.title }}</h4>
-                        <p>{{ card.body }}</p>
-                      </div>
-                    </div>
+                </div>
+                <div class="stat-card" v-if="district.profile.jurisdiction">
+                  <div class="stat-icon">📍</div>
+                  <div>
+                    <h4>Jurisdiction</h4>
+                    <p>{{ district.profile.jurisdiction }}</p>
                   </div>
-                </template>
-              </template>
-
-              <p v-else class="empty-state-box" style="display:block">No profile content available for this district yet.</p>
-
+                </div>
+                <div class="stat-card" v-if="district.profile.population">
+                  <div class="stat-icon">👥</div>
+                  <div>
+                    <h4>Population</h4>
+                    <p>{{ district.profile.population }}</p>
+                  </div>
+                </div>
+                <div class="stat-card" v-if="district.profile.structure">
+                  <div class="stat-icon">🏛️</div>
+                  <div>
+                    <h4>Council Structure</h4>
+                    <p>{{ district.profile.structure }}</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- PROJECTS TAB -->
@@ -270,14 +292,17 @@ const config = useRuntimeConfig()
 
 const districtSlug = computed(() => String(route.params.district || ''))
 const stripHtml = (value) => String(value || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+// Normalize array items — handles plain strings OR Filament Repeater objects {item:"..."}
+const toList = (arr) => Array.isArray(arr) ? arr.map(v => typeof v === 'string' ? v : (v?.item || v?.label || '')).filter(Boolean) : []
 
-const { data: districtData, pending, error } = await useAsyncData(
-  () => `la:${districtSlug.value}`,
+const { data: districtData, pending, error, refresh: refreshData } = await useAsyncData(
+  `la:${districtSlug.value}`,
   async () => {
     if (!districtSlug.value) return null
     try {
       return await $fetch(
-        `${config.public.apiBase}/api/local-authorities/slug/${districtSlug.value}`
+        `${config.public.apiBase}/api/local-authorities/slug/${districtSlug.value}`,
+        { headers: { 'Cache-Control': 'no-cache' } }
       )
     } catch (err) {
       if (err?.status === 404 || err?.statusCode === 404) return null
@@ -286,9 +311,17 @@ const { data: districtData, pending, error } = await useAsyncData(
   },
   {
     watch: [districtSlug],
-    default: () => null
+    default: () => null,
+    // Always fetch fresh data — prevents stale CMS updates being shown
+    getCachedData: () => null,
   }
 )
+
+// Force re-fetch every time this page mounts on the client
+// so CMS updates always reflect immediately without needing a hard refresh
+if (import.meta.client) {
+  onMounted(() => refreshData())
+}
 
 const district = computed(() => {
   if (!districtData.value) return null
@@ -371,8 +404,18 @@ const district = computed(() => {
     region: payload.region || '',
     population: payload.population || 'N/A',
     jurisdiction: payload.jurisdiction || '',
-    profile: stripHtml(payload.profile),
-    profileSections,
+    profile: {
+      about: stripHtml(profileData.about || payload.profile),
+      mandate: toList(profileData.mandate),
+      vision: profileData.vision || '',
+      mission: profileData.mission || '',
+      strategicObjectives: toList(profileData.strategicObjectives),
+      keyFunctions: toList(profileData.keyFunctions),
+      majorAchievements: profileData.majorAchievements || '',
+      jurisdiction: profileData.jurisdiction || payload.jurisdiction || '',
+      population: profileData.population || payload.population || 'N/A',
+      structure: profileData.structure || '',
+    },
     projects: Array.isArray(payload.projects)
       ? payload.projects.map((project) => ({
           name: project.name || 'Project',
