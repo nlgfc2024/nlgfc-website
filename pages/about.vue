@@ -1,4 +1,4 @@
-"<script setup>
+<script setup>
     import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
     import BlocksRenderer from '~/components/BlocksRenderer.vue'
     import { usePageBlocks } from '~/composables/usePageBlocks'
@@ -97,6 +97,7 @@
         { id: 'powers', title: 'Powers and Functions' },
         { id: 'board', title: 'Board of Directors' },
         { id: 'management', title: 'Executive Management' },
+        { id: 'organisational-structure', title: 'Organisational Structure' },
         // { id: 'structure', title: 'Organogram' },
         ]
     },
@@ -136,33 +137,42 @@
     }
     })
 
-    // Map the 'menuItems' data to the 'projectGroups' structure
-    const mappedProjectGroups = computed(() => {
-        const flattenedGroups = menuItems.value.flatMap(section => {
-            return section.items.map(item => {
-                if (item.subItems && item.subItems.length > 0) {
-                    // If the item has sub-items, map them as a group
-                    return {
-                        group: item.title,
-                        id: item.id,
-                        items: item.subItems
-                    };
-                } else {
-                    // If no sub-items, create a group with a single item
-                    return {
-                        group: item.title,
-                        id: item.id,
-                        items: [{ id: item.id, title: item.title }]
-                    };
-                }
-            });
-        });
-        return flattenedGroups;
+    // Flat items: normal sidebar links (no accordion)
+    const flatSectionIds = ['mvc', 'powers', 'board', 'management', 'organisational-structure'];
+    const sidebarSectionsData = computed(() => {
+        return menuItems.value.flatMap(section =>
+            section.items
+                .filter(item => flatSectionIds.includes(item.id))
+                .map(item => ({ id: item.id, name: item.title }))
+        );
+    });
+    // Groups with accordion (only Directorates and Divisions)
+    const accordionGroupsData = computed(() => {
+        return menuItems.value.flatMap(section =>
+            section.items
+                .filter(item => item.subItems && item.subItems.length > 0)
+                .map(item => ({
+                    group: item.title,
+                    id: item.id,
+                    items: item.subItems
+                }))
+        );
     });
 
 // Use the composable to share the data
 const { projectGroups } = useGeneralSidebar();
-projectGroups.value = mappedProjectGroups.value;
+
+// Combined for sidebar rendering:
+// - Top-level links as standalone sections (no dropdown)
+// - Directorates as a single accordion group
+const sidebarData = computed(() => [
+  ...sidebarSectionsData.value,
+  ...accordionGroupsData.value,
+]);
+
+watchEffect(() => {
+  projectGroups.value = sidebarData.value;
+});
 
 // Page-builder: Mission, Vision, Core Values content
 // const { data: mvcPage, pending: mvcPending, error: mvcError } = usePageBlocks('mission-vision-core-values')
@@ -171,8 +181,33 @@ const { data: pages, pending, error: PageError } = usePageBlocks([
   'powers-and-functions-of-nlgfc','procurement-and-assets-disposal-division',
   'directorate-of-finance-and-fiscal-decentralization','directorate-of-corporate-and-strategic-services',
   'planning-monitoring-and-evaluation-division',
-  'internal-audit-and-risk-division','directorate-of-social-and-economic-dev-services'
+  'internal-audit-and-risk-division','directorate-of-social-and-economic-dev-services',
+  'mission-vision-core-values','mission-vision-and-core-values',
+  'organisational-structure','organizational-structure',
+  'powers-and-functions','about-us'
 ])
+
+// Create alias for pending to match template usage
+const PagePending = computed(() => pending.value)
+
+const resolveBlocks = (slugCandidates = []) => {
+  const map = pages.value || {}
+  for (const slug of slugCandidates) {
+    const blocks = map?.[slug]?.blocks
+    if (Array.isArray(blocks) && blocks.length) return blocks
+  }
+  return []
+}
+
+const mvcBlocks = computed(() =>
+  resolveBlocks(['mission-vision-core-values', 'mission-vision-and-core-values', 'about-us'])
+)
+const powersBlocks = computed(() =>
+  resolveBlocks(['powers-and-functions-of-nlgfc', 'powers-and-functions', 'about-us'])
+)
+const orgStructureBlocks = computed(() =>
+  resolveBlocks(['organisational-structure', 'organizational-structure', 'about-us'])
+)
 
 
 function updateActiveTabFromHash(hash) {
@@ -203,6 +238,9 @@ function updateActiveTabFromHash(hash) {
 const zoom = ref(100);
 const imageLoaded = ref(false);
 
+/**
+ * Zoom in the organogram image by 25% if the zoom level is below 200%
+ */
 const zoomIn = () => {
   if (zoom.value < 200) zoom.value += 25;
 };
@@ -232,14 +270,15 @@ const downloadImage = () => {
         <div v-show="activeTab === 'mvc'" class="prose max-w-none">
             <div v-if="PagePending">Loading...</div>
             <div v-else-if="PageError">Failed to load content.</div>
-            <!-- <BlocksRenderer :blocks="pages?.['mission-vision-core-values']?.blocks || []" /> -->
+            <BlocksRenderer :blocks="mvcBlocks" />
              
         </div>
+
        <div v-show="activeTab === 'powers'" class="prose max-w-none">
             <!-- Header Section -->
             <div v-if="PagePending">Loading...</div>
             <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['powers-and-functions-of-nlgfc']?.blocks || []" />
+            <BlocksRenderer :blocks="powersBlocks" />
         </div>
         <!-- Board of Directors Content -->
         <div v-show="activeTab === 'board'" class="prose max-w-none">
@@ -326,6 +365,11 @@ const downloadImage = () => {
             <BlocksRenderer :blocks="pages?.['directorate-of-finance-and-fiscal-decentralization']?.blocks || []" />
         </div>
 
+
+
+
+      
+
         <!-- Corporate Services Directorate Content -->
         <div v-show="activeTab === 'corporate'" class="prose max-w-none">
             <!-- Header Section -->
@@ -361,79 +405,15 @@ const downloadImage = () => {
             <div v-else-if="PageError">Failed to load content.</div>
             <BlocksRenderer :blocks="pages?.['internal-audit-and-risk-division']?.blocks || []" />
         </div>
-        <!-- Organogram Section -->
-        <div v-show="activeTab === 'structure' || activeTab === 'directorates'" class="prose max-w-none">
-            <div class="mb-10">
-                <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
-                Directorates and Divisions
-                </h2>
-                <p class="text-lg text-gray-600">
-                Organizational structure and functional relationships within NLGFC
-                </p>
-            </div>
 
-            <!-- Organogram Container with Enhanced Features -->
-             <div class="bg-white rounded-lg shadow border border-gray-200">
-    <!-- Controls -->
-    <div class="flex justify-between items-center p-3 border-b border-gray-200">
-      <div class="flex space-x-2">
-        <!-- Zoom Controls -->
-        <div class="flex items-center space-x-1 bg-gray-100 rounded-md px-2">
-          <button 
-            @click="zoomOut" 
-            :disabled="zoom <= 50"
-            class="p-1 text-gray-700 disabled:opacity-50"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
-            </svg>
-          </button>
-          <span class="text-sm">{{ zoom }}%</span>
-          <button 
-            @click="zoomIn" 
-            :disabled="zoom >= 200"
-            class="p-1 text-gray-700 disabled:opacity-50"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-          </button>
+        
+        <!-- Organisational Structure Section -->
+        <div v-show="activeTab === 'organisational-structure'" class="prose max-w-none">
+            <div v-if="PagePending">Loading organisational structure...</div>
+            <div v-else-if="PageError">Failed to load organisational structure.</div>
+            <BlocksRenderer v-else :blocks="orgStructureBlocks" />
         </div>
-      </div>
-      
-      <!-- Download Button -->
-      <button 
-        @click="downloadImage"
-        class="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-      >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-        </svg>
-        <span class="text-sm">Download</span>
-      </button>
-    </div>
-    
-    <!-- Image Container -->
-    <div class="relative overflow-hidden h-96">
-      <div 
-        class="absolute inset-0 flex items-center justify-center transition-transform duration-200"
-        :style="{ transform: `scale(${zoom/100})`, transformOrigin: 'center' }"
-      >
-        <img 
-          src="/images/samples/organo.png" 
-          alt="Organogram"
-          class="max-w-full max-h-full object-contain"
-          @load="imageLoaded = true"
-        >
-      </div>
-      
-      <!-- Loading State -->
-      <div v-if="!imageLoaded" class="absolute inset-0 flex items-center justify-center">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-      </div>
-    </div>
-  </div>
-        </div>
+
 
       </main>
     </div>

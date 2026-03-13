@@ -2,9 +2,12 @@
 defineProps<{
   heading?: string
   intro?: string
+  columns?: string | number
+  show_icons?: boolean
   functions?: Array<{
     title: string
     description?: string
+    bullets?: Array<{ value: string }>
     badges?: Array<{ label: string }>
   }>
 }>()
@@ -19,7 +22,7 @@ defineProps<{
       <div v-if="intro" class="text-lg text-gray-600 prose max-w-none" v-html="intro" />
     </div>
 
-    <div class="space-y-6">
+    <div :class="String(columns) === '2' ? 'grid md:grid-cols-2 gap-6' : 'space-y-6'">
       <div
         v-for="(fn, i) in functions || []"
         :key="i"
@@ -35,6 +38,17 @@ defineProps<{
           <div class="min-w-0">
             <h4 class="font-medium text-gray-900 mb-2">{{ fn.title }}</h4>
             <div v-if="fn.description" class="text-gray-700 prose max-w-none" v-html="fn.description" />
+
+            <ul v-if="fn.bullets?.length" class="space-y-2 text-gray-700 mt-3">
+              <li v-for="(b, k) in fn.bullets" :key="k" class="flex items-start">
+                <span v-if="show_icons !== false" class="flex-shrink-0 mt-1 mr-2 text-blue-500">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
+                  </svg>
+                </span>
+                <span>{{ b.value }}</span>
+              </li>
+            </ul>
 
             <div v-if="fn.badges?.length" class="mt-3 flex flex-wrap gap-2">
               <span

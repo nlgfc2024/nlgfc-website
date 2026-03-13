@@ -98,9 +98,22 @@ const allSectionsData = computed(() => {
     );
   }
   
-  // Add sectionsData (groups/subgroups/items)
+  // Add sectionsData (groups/subgroups/items) and standalone section items
   if (props.sectionsData && Array.isArray(props.sectionsData)) {
-    combined.push(...props.sectionsData.filter(group => group && group.group));
+    for (const item of props.sectionsData) {
+      if (!item) continue;
+      if (item.group) {
+        combined.push(item);
+        continue;
+      }
+      // Allow callers to pass section-like entries through sectionsData
+      if (item.id && item.name) {
+        combined.push({
+          ...item,
+          isSection: true,
+        });
+      }
+    }
   }
   
   return combined;
