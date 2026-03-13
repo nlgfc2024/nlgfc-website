@@ -534,11 +534,11 @@
               <div class="border-t border-gray-200 p-4 bg-gray-50">
                 <div class="grid grid-cols-2 gap-4 text-center">
                   <div class="bg-white rounded-lg p-3 shadow-sm">
-                    <div class="text-2xl font-bold text-green-600">2</div>
+                    <div class="text-2xl font-bold text-green-600">{{ activeJobsCount }}</div>
                     <div class="text-xs text-gray-600">Active Jobs</div>
                   </div>
                   <div class="bg-white rounded-lg p-3 shadow-sm">
-                    <div class="text-2xl font-bold text-blue-600">3</div>
+                    <div class="text-2xl font-bold text-blue-600">{{ openTendersCount }}</div>
                     <div class="text-xs text-gray-600">Open Tenders</div>
                   </div>
                 </div>
@@ -902,6 +902,66 @@ const showSearch = ref(false);
 const searchQuery = ref('');
 const config = useRuntimeConfig();
 const jobsPortalUrl = computed(() => `${config.public.jobsPortalBase || 'http://localhost:3001'}/?source=nlgfc-website`);
+
+const isExpired = (dateString) => {
+  if (!dateString) {
+    return false;
+  }
+
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) {
+    return false;
+  }
+
+  return date < new Date();
+};
+
+const { data: navVacancies } = await useAsyncData(
+  'navbar-opportunities-jobs',
+  () =>
+    $fetch(`${config.public.apiBase}/api/vacancies`, {
+      params: {
+        per_page: 100,
+        include_expired: true,
+      },
+    }),
+  {
+    default: () => ({ data: [] }),
+  }
+);
+
+const { data: navProcurements } = await useAsyncData(
+  'navbar-opportunities-procurement',
+  () =>
+    $fetch(`${config.public.apiBase}/api/procurement-notices`, {
+      params: {
+        per_page: 100,
+        status: 'active',
+      },
+    }),
+  {
+    default: () => ({ data: [] }),
+  }
+);
+
+const toArray = (value) => (Array.isArray(value) ? value : []);
+
+const activeJobsCount = computed(() => {
+  const raw = navVacancies.value?.data || navVacancies.value || [];
+  return toArray(raw).filter((vacancy) => {
+    const status = String(vacancy?.status || '').toLowerCase();
+    const expiryDate = vacancy?.application_deadline || vacancy?.expiry_date;
+    return ['active', 'published'].includes(status) && !isExpired(expiryDate);
+  }).length;
+});
+
+const openTendersCount = computed(() => {
+  const raw = navProcurements.value?.data || navProcurements.value || [];
+  return toArray(raw).filter((notice) => {
+    const status = String(notice?.status || '').toLowerCase();
+    return status === 'active' && !isExpired(notice?.closing_date);
+  }).length;
+});
 
 // Get the current route
 const route = useRoute();

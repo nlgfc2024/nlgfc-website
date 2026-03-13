@@ -162,6 +162,7 @@ const mapProcurement = (notice) => {
     department: 'Procurement',
     publishDate: notice.created_at,
     expiryDate,
+    url: notice.url || null,
     estimatedValue: notice.reference ? `Ref: ${notice.reference}` : 'Refer to notice details',
     description: notice.description || 'No procurement description provided yet.',
     documents: toArray(notice.documents),
@@ -313,9 +314,13 @@ const handleApplyJob = (jobId) => {
   }
 }
 
-const handleExpressInterest = (noticeId) => {
-  const target = `mailto:procurement@nlgfc.gov.mw?subject=Procurement Notice Interest #${noticeId}`
-  if (process.client) {
+const handleExpressInterest = (notice) => {
+  if (!process.client) {
+    return
+  }
+
+  const target = typeof notice?.url === 'string' ? notice.url.trim() : ''
+  if (target) {
     window.location.href = target
   }
 }

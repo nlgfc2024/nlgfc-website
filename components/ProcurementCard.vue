@@ -140,7 +140,7 @@ const getDocumentIcon = (type) => {
       <div class="lg:w-40">
         <button
             v-if="noticeStatus === 'active'"
-            @click="emit('express-interest', notice.id)"
+            @click="emit('express-interest', notice)"
             class="w-full px-4 py-2 text-sm font-medium text-white bg-gray-800 hover:bg-emerald-700 rounded-lg transition-colors flex items-center justify-center space-x-2"
         >
           <Icon name="heroicons:hand-raised" class="w-4 h-4" />
