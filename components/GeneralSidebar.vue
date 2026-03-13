@@ -299,6 +299,9 @@ const toggleSubgroup = (subgroupId) => {
 
 const getFirstNavigableSubgroupItem = (subgroup) => {
   if (!subgroup || !Array.isArray(subgroup.items)) return null;
+  const projectItems = subgroup.items.filter((item) => item && item.slug);
+  const preferredProject = projectItems.find((item) => item.is_news_landing);
+  if (preferredProject) return preferredProject;
   return subgroup.items.find((item) => item && (item.href || item.slug || item.id)) || null;
 };
 
@@ -629,7 +632,8 @@ const dynamicSidebarStyle = computed(() => {
                     </ul>
                   </li>
                 </li>
-                <li v-else-if="group.items && Array.isArray(group.items)">
+                <!-- Direct Items within Group (render even when subgroups exist) -->
+                <li v-if="group.items && Array.isArray(group.items) && group.items.length > 0">
                    <li v-for="item in group.items.filter(item => item && item.id)" :key="item.id">
                         <a
                           v-if="isProjectsRoute && item.href && (isExternalHref(item.href) || item.external)"

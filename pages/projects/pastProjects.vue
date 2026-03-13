@@ -39,6 +39,8 @@ const projectGroupsWithSlugs = computed(() => {
 })
 
 const activeSlug = computed(() => activeTab.value || '')
+const stripHtml = (value = '') => value.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+const fallbackNewsImages = ['/images/samples/news1.jpg','/images/samples/news2.jpg','/images/samples/news3.jpg']
 
 const { data: activeProjectPage } = useAsyncData(
   () => `project-page:${activeSlug.value}`,
@@ -53,6 +55,94 @@ const { data: activeProjectPage } = useAsyncData(
   },
   { watch: [activeSlug], server: true }
 )
+
+const { data: activeProjectNews } = useAsyncData(
+  () => `past-project-news:${activeSlug.value}`,
+  async () => {
+    if (!activeSlug.value) return []
+    const response = await $fetch(`${config.public.apiBase}/api/projects/${activeSlug.value}/news?per_page=30`)
+    return Array.isArray(response?.data) ? response.data : []
+  },
+  { watch: [activeSlug], server: true, default: () => [] }
+)
+
+const newsItemsForActive = computed(() =>
+  (activeProjectNews.value || []).map((post) => ({
+    id: post.id,
+    title: post.title,
+    summary: stripHtml(post.content || '').slice(0, 180) + (stripHtml(post.content || '').length > 180 ? '...' : ''),
+    date: post.created_at,
+    image: post.image || null,
+    link: `/news/${post.slug}?source=project&project_status=past`,
+  }))
+)
+const isNewsLanding = computed(() => Boolean(activeProjectPage.value?.project?.is_news_landing))
+const featuredArticles = computed(() => newsItemsForActive.value.slice(0, 3))
+const currentSlide = ref(0)
+const autoplay = ref(true)
+const autoplayInterval = ref(5000)
+let autoplayTimer = null
+
+const slidesForActive = computed(() => (isNewsLanding.value ? newsItemsForActive.value : []))
+
+function nextSlide() {
+  if (!slidesForActive.value.length) return
+  currentSlide.value = (currentSlide.value + 1) % slidesForActive.value.length
+  resetAutoplay()
+}
+function prevSlide() {
+  if (!slidesForActive.value.length) return
+  currentSlide.value = (currentSlide.value - 1 + slidesForActive.value.length) % slidesForActive.value.length
+  resetAutoplay()
+}
+function goToSlide(index) {
+  if (!slidesForActive.value.length) return
+  currentSlide.value = index
+  resetAutoplay()
+}
+function resetAutoplay() {
+  if (!autoplay.value) return
+  clearInterval(autoplayTimer)
+  autoplayTimer = setInterval(() => nextSlide(), autoplayInterval.value)
+}
+function toggleAutoplay() {
+  autoplay.value = !autoplay.value
+  if (autoplay.value) {
+    resetAutoplay()
+  } else {
+    clearInterval(autoplayTimer)
+  }
+}
+
+const pageSize = ref(6)
+const currentPage = ref(1)
+const totalPages = computed(() => Math.max(1, Math.ceil(newsItemsForActive.value.length / pageSize.value)))
+const paginatedNews = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value
+  return newsItemsForActive.value.slice(start, start + pageSize.value)
+})
+
+function goToPage(n) {
+  if (n >= 1 && n <= totalPages.value) {
+    currentPage.value = n
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+}
+function nextPage() { if (currentPage.value < totalPages.value) goToPage(currentPage.value + 1) }
+function prevPage() { if (currentPage.value > 1) goToPage(currentPage.value - 1) }
+
+watch(activeTab, () => { currentPage.value = 1 })
+watch(activeTab, () => {
+  currentSlide.value = 0
+  if (isNewsLanding.value) resetAutoplay()
+  else clearInterval(autoplayTimer)
+})
+onMounted(() => {
+  if (isNewsLanding.value) resetAutoplay()
+})
+onBeforeUnmount(() => {
+  clearInterval(autoplayTimer)
+})
 watch(projectGroupsWithSlugs, (groups) => {
   if (!groups.length) return
   if (!activeTab.value) {
@@ -122,6 +212,106 @@ watchEffect(() => {
           <div class="animate-pulse h-24 bg-gray-100 rounded my-4" />
         </template>
       </Suspense>
+
+      <section v-if="isNewsLanding && slidesForActive.length" class="mt-8 space-y-6">
+        <section class="relative overflow-hidden rounded-xl shadow-2xl h-[320px] md:h-[380px]">
+          <div
+            v-for="(item, index) in slidesForActive"
+            :key="'past-slide-'+index"
+            class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
+            :class="{ 'opacity-100 z-10': currentSlide === index, 'opacity-0 z-0': currentSlide !== index }"
+          >
+            <div class="absolute inset-0">
+              <img :src="item.image || fallbackNewsImages[index % fallbackNewsImages.length]" :alt="item.title" class="w-full h-full object-cover" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+            </div>
+            <div class="relative h-full flex flex-col justify-end z-10 pb-12 px-6">
+              <h2 class="text-3xl font-bold text-white mb-3 leading-tight">{{ item.title }}</h2>
+              <p class="text-white/90 max-w-3xl">{{ item.summary }}</p>
+            </div>
+          </div>
+          <div class="absolute bottom-2 left-0 right-0 z-20 px-6 flex items-center justify-between">
+            <div class="flex space-x-2">
+              <button
+                v-for="(item, idx) in slidesForActive"
+                :key="'past-ind-'+idx"
+                @click="goToSlide(idx)"
+                class="w-3 h-3 rounded-full transition-all duration-300"
+                :class="{ 'w-8 bg-white': currentSlide === idx, 'bg-white/40': currentSlide !== idx }"
+              />
+            </div>
+            <div class="flex items-center space-x-3">
+              <button @click="toggleAutoplay" class="p-2 text-white/70 hover:text-white transition text-sm">{{ autoplay ? 'Pause' : 'Play' }}</button>
+              <button @click="prevSlide" class="p-2 text-white/70 hover:text-white transition">‹</button>
+              <button @click="nextSlide" class="p-2 text-white/70 hover:text-white transition">›</button>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section v-if="newsItemsForActive.length" class="mt-8">
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Latest Updates</h3>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <article
+            v-for="(news, nIdx) in paginatedNews"
+            :key="'past-'+news.id"
+            class="group relative overflow-hidden rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
+          >
+            <div class="flex h-full">
+              <div class="w-1/3 relative overflow-hidden">
+                <img
+                  :src="news.image || fallbackNewsImages[nIdx % fallbackNewsImages.length]"
+                  alt="Article image"
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                >
+              </div>
+              <div class="w-2/3 p-5 flex flex-col">
+                <span class="text-xs font-medium text-gray-500 mb-1">
+                  {{ new Date(news.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}
+                </span>
+                <h4 class="text-base font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                  <NuxtLink :to="news.link">{{ news.title }}</NuxtLink>
+                </h4>
+                <p class="text-sm text-gray-600 line-clamp-2">{{ news.summary }}</p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div v-if="totalPages > 1" class="mt-6 flex items-center justify-between">
+          <button
+            @click="prevPage()"
+            :disabled="currentPage === 1"
+            class="px-3 py-2 text-sm rounded-lg border"
+            :class="currentPage === 1 ? 'text-gray-400 border-gray-200 cursor-not-allowed' : 'text-gray-700 border-gray-300 hover:bg-gray-50'"
+          >
+            Previous
+          </button>
+
+          <div class="space-x-2">
+            <button
+              v-for="p in totalPages"
+              :key="'past-page-'+p"
+              @click="goToPage(p)"
+              class="px-3 py-2 text-sm rounded-lg border"
+              :class="p === currentPage ? 'bg-blue-600 text-white border-blue-600' : 'text-gray-700 border-gray-300 hover:bg-gray-50'"
+            >
+              {{ p }}
+            </button>
+          </div>
+
+          <button
+            @click="nextPage()"
+            :disabled="currentPage === totalPages"
+            class="px-3 py-2 text-sm rounded-lg border"
+            :class="currentPage === totalPages ? 'text-gray-400 border-gray-200 cursor-not-allowed' : 'text-gray-700 border-gray-300 hover:bg-gray-50'"
+          >
+            Next
+          </button>
+        </div>
+      </section>
     </main>
   </div>
 </template>

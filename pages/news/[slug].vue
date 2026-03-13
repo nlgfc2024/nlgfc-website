@@ -61,8 +61,13 @@ const contentHtml = computed(() => {
 
 const backTo = computed(() => {
   const source = String(route.query?.source || '')
+  const projectStatus = String(route.query?.project_status || '')
   if (source === 'resource') return '/resourceCenter#news'
-  if (source === 'project') return '/projects/currentProjects'
+  if (source === 'project') {
+    if (projectStatus === 'past') return '/projects/pastProjects'
+    if (projectStatus === 'upcoming') return '/projects/upcomingProjects'
+    return '/projects/currentProjects'
+  }
   return '/news'
 })
 
