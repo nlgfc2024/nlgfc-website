@@ -5,57 +5,72 @@ import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
 definePageMeta({ title: 'Upcoming Projects' })
 
 const route = useRoute()
-const activeTab = ref('gesd2')
+const activeTab = ref('')
+const openGroup = ref(null)
+const config = useRuntimeConfig()
+const legacyMenuSlugsToHide = new Set(['ssrlp', 'gesd', 'masaf', 'rcrp2', 'miera', 'led'])
 
-const projectGroups = [
-  {
-    group: 'Upcoming Projects',
-    items: [
-      { id: 'gesd2', title: 'GESD 2.0' },
-      { id: 'inspire', title: 'INSPIRE-O' }
-    ]
-  }
-]
-
-const openGroup = ref(projectGroups[0].group)
-
-// Map tabs to page slugs
-const slugByTab = {
-  gesd2: 'gesd-2',
-  inspire: 'inspire-o',
-}
-
-// Inject slug into items for sidebar link building (if used elsewhere)
-const projectGroupsWithSlugs = computed(() =>
-  projectGroups.map(g => ({
-    ...g,
-    items: (g.items || []).map(it => ({ ...it, slug: slugByTab[it.id] || undefined })),
-  }))
+const { data: upcomingMenuResponse } = useAsyncData(
+  'projects:upcoming:menu',
+  () => $fetch(`${config.public.apiBase}/api/projects/menu?project_status=upcoming`),
+  { server: true, default: () => ({ data: [] }) }
 )
 
-// Active slug
-const activeSlug = computed(() => slugByTab[activeTab.value] || '')
+const projectGroupsWithSlugs = computed(() => {
+  const raw = Array.isArray(upcomingMenuResponse.value?.data) ? upcomingMenuResponse.value.data : []
+  return raw.map((group) => ({
+    ...group,
+    items: Array.isArray(group.items)
+      ? group.items
+          .map((item) => ({ ...item, id: item.id || item.slug, slug: item.slug || item.id }))
+          .filter((item) => !legacyMenuSlugsToHide.has(String(item.slug || item.id || '').toLowerCase()))
+      : [],
+    subgroups: Array.isArray(group.subgroups)
+      ? group.subgroups.map((subgroup) => ({
+          ...subgroup,
+          items: Array.isArray(subgroup.items)
+            ? subgroup.items
+                .map((item) => ({ ...item, id: item.id || item.slug, slug: item.slug || item.id }))
+                .filter((item) => !legacyMenuSlugsToHide.has(String(item.slug || item.id || '').toLowerCase()))
+            : [],
+        }))
+      : [],
+  }))
+})
 
-// Fetch only the active page reactively
-const config = useRuntimeConfig()
-const { data: activePage } = useAsyncData(
-  () => `page:${activeSlug.value}`,
-  () => $fetch(`${config.public.apiBase}/api/pages/${activeSlug.value}`),
+const activeSlug = computed(() => activeTab.value || '')
+
+const { data: activeProjectPage } = useAsyncData(
+  () => `project-page:${activeSlug.value}`,
+  async () => {
+    if (!activeSlug.value) return { page: null, news: [], project: null }
+    try {
+      return await $fetch(`${config.public.apiBase}/api/projects/${activeSlug.value}/page`)
+    } catch {
+      const page = await $fetch(`${config.public.apiBase}/api/pages/${activeSlug.value}`)
+      return { page, news: [], project: null }
+    }
+  },
   { watch: [activeSlug], server: true }
 )
 
-// Set from initial hash or ?slug on load
-onMounted(() => {
-  if (route.hash) {
-    updateActiveTabFromHash(route.hash.replace('#', ''))
-  } else {
+watch(projectGroupsWithSlugs, (groups) => {
+  if (!groups.length) return
+  if (!activeTab.value) {
     const q = route.query?.slug
     const slugFromQuery = Array.isArray(q) ? q[0] : q
-    const matchId = Object.keys(slugByTab).find((k) => slugByTab[k] === slugFromQuery)
-    activeTab.value = matchId || 'gesd2'
-    history.replaceState(null, '', `${route.path}#${activeTab.value}`)
+    const fromHash = route.hash ? route.hash.replace('#', '') : null
+    const allItems = groups.flatMap((group) => [
+      ...(group.items || []),
+      ...((group.subgroups || []).flatMap((subgroup) => subgroup.items || [])),
+    ])
+    const bySlug = slugFromQuery ? allItems.find((item) => item.slug === slugFromQuery)?.id : null
+    const firstProjectItem = allItems.find((item) => item.slug)
+    const initial = fromHash || bySlug || firstProjectItem?.id || ''
+    activeTab.value = initial
+    openGroup.value = groups[0]?.group || null
   }
-})
+}, { immediate: true })
 
 const { projectGroups: sharedProjectGroups } = useGeneralSidebar();
 
@@ -71,12 +86,28 @@ watch(() => route.hash, (newHash) => {
 })
 
 function updateActiveTabFromHash(hash) {
-  for (const group of projectGroups) {
-    const match = group.items.find(item => item.id === hash)
-    if (match) {
-      activeTab.value = match.id
+  for (const group of projectGroupsWithSlugs.value) {
+    const direct = (group.items || []).find(item => item.id === hash)
+    if (direct && direct.slug) {
+      activeTab.value = direct.id
       openGroup.value = group.group
-      break
+      return
+    }
+    for (const subgroup of group.subgroups || []) {
+      if (subgroup.id === hash) {
+        const firstItem = (subgroup.items || []).find(item => item?.slug || item?.id)
+        if (firstItem && firstItem.slug) {
+          activeTab.value = firstItem.id
+          openGroup.value = group.group
+          return
+        }
+      }
+      const subItem = (subgroup.items || []).find(item => item.id === hash)
+      if (subItem && subItem.slug) {
+        activeTab.value = subItem.id
+        openGroup.value = group.group
+        return
+      }
     }
   }
 }
@@ -86,8 +117,8 @@ function updateActiveTabFromHash(hash) {
   <div class="flex flex-col md:flex-row gap-8 max-w-7xl pr-30 py-3">
     <!-- Main Content Area -->
     <main class="flex-1 min-w-0">
-      <Suspense v-if="activePage">
-        <BlocksRenderer :blocks="activePage.blocks || []" />
+      <Suspense v-if="activeProjectPage">
+        <BlocksRenderer :blocks="activeProjectPage.page?.blocks || []" />
         <template #fallback>
           <div class="animate-pulse h-24 bg-gray-100 rounded my-4" />
         </template>

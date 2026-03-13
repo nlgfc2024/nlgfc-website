@@ -123,7 +123,7 @@
               class="border-b border-gray-100"
             >
               <nuxt-link
-                :to="`/news/${newsItem.id}`"
+                :to="`/news/${newsItem.slug || newsItem.id}?source=resource`"
                 class="block p-4 cursor-pointer transition-all duration-200 hover:bg-gray-50"
               >
                 <h4 class="font-medium text-gray-900 hover:text-emerald-600 transition-colors line-clamp-2 mb-2">
@@ -293,10 +293,26 @@ definePageMeta({
     })
 
 const route = useRoute()
-import { link } from '#build/ui';
 import { ref, computed, onMounted, watch, nextTick } from 'vue'
+const config = useRuntimeConfig()
 
-const newsId = route.params.id;
+const { data: postsResponse } = useAsyncData(
+  'resource-center:news-posts',
+  () => $fetch(`${config.public.apiBase}/api/posts?per_page=200`),
+  { server: true, default: () => ({ data: [] }) }
+)
+
+const apiNewsItems = computed(() => {
+  const rows = Array.isArray(postsResponse.value?.data) ? postsResponse.value.data : []
+  return rows
+    .map((post) => ({
+      id: post.id,
+      slug: post.slug,
+      title: post.title,
+      date: post.created_at,
+    }))
+    .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+})
 
 // State management for UI
 const expandedGroup = ref(null);
@@ -309,14 +325,7 @@ const resourceGroups = [
   {
     id: 'news',
     group: 'News',
-    items: [
-        { title: 'Government Launches New Rural Development Initiative', date: '2025-08-15', id: '#1' },
-        { title: 'NLGFC Announces Increased Funding for Local Councils', date: '2025-08-12', id: '#2'},
-        { title: 'Blantyre City Council Unveils New Waste Management Strategy', date: '2025-08-10', id: '#3' },
-        { title: 'New Healthcare Initiative Launched in Northern Region', date: '2025-08-08', id: '#4' },
-        { title: 'Education Sector Receives Technology Boost', date: '2025-08-05', id: '#5' },
-        { title: 'Agricultural Support Program Shows Promising Results', date: '2025-08-03', id: '#6' }
-    ]
+    items: []
   },
   {
     id: 'publications',
@@ -588,6 +597,7 @@ const displayedDocuments = computed(() => {
     } 
     // Check if a main group with direct items (like News) is selected
     else if (activeSubgroup.value === null && group.items) {
+      if (group.id === 'news') return apiNewsItems.value;
       return group.items;
     }
   }

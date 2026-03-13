@@ -263,6 +263,20 @@ const setActiveItem = (id) => {
   // Removed for automatic scroll-based toggling
   // emit('update:sidebarOpen', false); // Removed for automatic scroll-based toggling
 };
+
+const isExternalHref = (href) => typeof href === 'string' && /^(https?:)?\/\/|^mailto:|^tel:/.test(href);
+const normalizeInternalHref = (href) => {
+  if (typeof href !== 'string' || !href.trim()) return route.path;
+  const trimmed = href.trim();
+  if (isExternalHref(trimmed)) return trimmed;
+  if (trimmed.startsWith('#')) return `${route.path}${trimmed}`;
+  if (trimmed.startsWith('/')) return trimmed;
+  return `/${trimmed}`;
+};
+const isProjectsRoute = computed(() => route.path.startsWith('/projects'));
+const hiddenProjectWrapperGroups = new Set(['current', 'upcoming', 'past']);
+const shouldHideGroupHeader = (groupName) =>
+  isProjectsRoute.value && hiddenProjectWrapperGroups.has(String(groupName || '').toLowerCase());
 // Function to toggle the open/closed state of a project group
 const toggleGroup = (groupName) => {
   // If the clicked group is currently closed or a different group is open, open this group
@@ -281,6 +295,36 @@ const toggleSubgroup = (subgroupId) => {
   } else {
     openSubgroup.value = null;
   }
+};
+
+const getFirstNavigableSubgroupItem = (subgroup) => {
+  if (!subgroup || !Array.isArray(subgroup.items)) return null;
+  return subgroup.items.find((item) => item && (item.href || item.slug || item.id)) || null;
+};
+
+const handleSubgroupClick = async (subgroup) => {
+  toggleSubgroup(subgroup?.id);
+
+  // Keep non-project sidebars unchanged: only expand/collapse.
+  if (!isProjectsRoute.value) return;
+
+  const firstItem = getFirstNavigableSubgroupItem(subgroup);
+  if (!firstItem) return;
+
+  if (firstItem.href) {
+    const target = normalizeInternalHref(firstItem.href);
+    if (isExternalHref(target) || firstItem.external) {
+      window.open(target, firstItem.external ? '_blank' : '_self');
+      return;
+    }
+    await navigateTo(target);
+    return;
+  }
+
+  const targetId = firstItem.id || firstItem.slug;
+  if (!targetId) return;
+  setActiveItem(targetId);
+  await navigateTo({ path: route.path, hash: `#${targetId}` });
 };
 // Function to explicitly toggle the sidebar's visibility
 const toggleSidebarVisibility = () => {
@@ -458,6 +502,7 @@ const dynamicSidebarStyle = computed(() => {
           class="rounded-lg overflow-hidden"
         >
             <button
+              v-if="!shouldHideGroupHeader(group.group)"
               @click="toggleGroup(group.group)"
               :class="[
                 'w-full text-left p-4 rounded-lg transition-all duration-200 group flex justify-between items-center',
@@ -491,7 +536,7 @@ const dynamicSidebarStyle = computed(() => {
                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </button>
-            <div v-show="openGroup === group.group" class="bg-white" >
+            <div v-show="shouldHideGroupHeader(group.group) || openGroup === group.group" class="bg-white" >
               <ul class="py-4">
                 <!-- Sections within Group -->
                 <li v-if="group.sections && Array.isArray(group.sections) && group.sections.length > 0">
@@ -526,9 +571,9 @@ const dynamicSidebarStyle = computed(() => {
                 <!-- Subgroups within Group -->
                 <li v-if="group.subgroups && Array.isArray(group.subgroups) && group.subgroups.length > 0">
                   <li v-for="subgroup in group.subgroups.filter(subgroup => subgroup && subgroup.id)" :key="subgroup.id">
-                    <NuxtLink
-                      :to="`#${subgroup.id}`"
-                      @click.prevent="toggleSubgroup(subgroup.id)"
+                    <button
+                      type="button"
+                      @click="handleSubgroupClick(subgroup)"
                       :class="[
                         'flex items-center justify-between w-full px-4 py-3 rounded-lg text-left cursor-pointer transition-all duration-200 ease-in-out',
                         'hover:bg-gray-100',
@@ -544,10 +589,31 @@ const dynamicSidebarStyle = computed(() => {
                       >
                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                       </svg>
-                    </NuxtLink>
+                    </button>
                     <ul v-show="openSubgroup === subgroup.id" class="mt-1 ml-4 py-1">
                       <li v-for="item in (subgroup.items || []).filter(item => item && item.id)" :key="item.id">
+                        <a
+                          v-if="isProjectsRoute && item.href && (isExternalHref(item.href) || item.external)"
+                          :href="normalizeInternalHref(item.href)"
+                          :target="item.external ? '_blank' : undefined"
+                          :rel="item.external ? 'noopener noreferrer' : undefined"
+                          :class="[
+                            'block px-5 py-2.5 text-sm transition-colors duration-150 hover:bg-gray-50 text-gray-700'
+                          ]"
+                        >
+                          {{ item.title }}
+                        </a>
                         <NuxtLink
+                          v-else-if="isProjectsRoute && item.href"
+                          :to="normalizeInternalHref(item.href)"
+                          :class="[
+                            'block px-5 py-2.5 text-sm transition-colors duration-150 hover:bg-gray-50 text-gray-700'
+                          ]"
+                        >
+                          {{ item.title }}
+                        </NuxtLink>
+                        <NuxtLink
+                          v-else
                           :to="`${$route.path}#${item.id}`"
                           @click="setActiveItem(item.id)"
                           :class="[
@@ -565,7 +631,28 @@ const dynamicSidebarStyle = computed(() => {
                 </li>
                 <li v-else-if="group.items && Array.isArray(group.items)">
                    <li v-for="item in group.items.filter(item => item && item.id)" :key="item.id">
+                        <a
+                          v-if="isProjectsRoute && item.href && (isExternalHref(item.href) || item.external)"
+                          :href="normalizeInternalHref(item.href)"
+                          :target="item.external ? '_blank' : undefined"
+                          :rel="item.external ? 'noopener noreferrer' : undefined"
+                          :class="[
+                            'block px-5 py-2.5 text-sm transition-colors duration-150 hover:bg-gray-50 text-gray-700'
+                          ]"
+                        >
+                          {{ item.title }}
+                        </a>
                         <NuxtLink
+                          v-else-if="isProjectsRoute && item.href"
+                          :to="normalizeInternalHref(item.href)"
+                          :class="[
+                            'block px-5 py-2.5 text-sm transition-colors duration-150 hover:bg-gray-50 text-gray-700'
+                          ]"
+                        >
+                          {{ item.title }}
+                        </NuxtLink>
+                        <NuxtLink
+                          v-else
                           :to="`${$route.path}#${item.id}`"
                           @click="setActiveItem(item.id)"
                           :class="[

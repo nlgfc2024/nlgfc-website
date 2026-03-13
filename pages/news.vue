@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <NuxtPage v-if="isNewsDetailRoute" />
+  <div v-else class="min-h-screen bg-gray-50">
     <!-- Hero Slider Section (New) -->
     <section class="relative overflow-hidden h-[360px] md:h-[420px]">
       <div
@@ -243,6 +244,9 @@ definePageMeta({
     })
 
 import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, watch } from 'vue'
+const route = useRoute()
+const config = useRuntimeConfig()
+const isNewsDetailRoute = computed(() => Boolean(route.params?.slug))
 
 // Reactive data
 const selectedArticle = ref(null)
@@ -254,138 +258,43 @@ const autoplay = ref(true)
 const autoplayInterval = ref(5000)
 let autoplayTimer = null
 
-// Sample news data
-const newsArticles = ref([
-  {
-    id: 1,
-    title: 'Government Launches New Rural Development Initiative',
-    summary: 'The new program aims to improve infrastructure and access to clean water in several key districts, with funding secured from international partners.',
-    content: `
-      <p>The Government of Malawi has announced the launch of a comprehensive rural development initiative that promises to transform the lives of thousands of citizens across multiple districts. This ambitious program, funded through partnerships with international development organizations, focuses on critical infrastructure improvements and enhanced access to clean water.</p>
-      
-      <p>The initiative, which has been in planning for over two years, will target rural communities that have historically faced challenges in accessing basic services. Key components include:</p>
-      
-      <ul>
-        <li>Construction of new water points and rehabilitation of existing boreholes</li>
-        <li>Road infrastructure improvements to connect remote villages</li>
-        <li>Solar-powered community centers for education and health services</li>
-        <li>Agricultural support programs for smallholder farmers</li>
-      </ul>
-      
-      <p>Minister of Local Government announced that the program will be implemented over a three-year period, with the first phase targeting five districts in the northern region. The initiative represents a significant investment in rural infrastructure and is expected to directly benefit over 50,000 households.</p>
-      
-      <p>"This program represents our commitment to ensuring that no Malawian is left behind in our development agenda," said the Minister during the launch ceremony. "By improving infrastructure and access to basic services, we are creating opportunities for economic growth and improved quality of life in rural areas."</p>
-    `,
-    image: '/images/samples/news1.jpg',
-    date: '2025-08-15',
-    author: 'Sarah Mwale',
-    source: 'Malawi News Agency',
-    tags: ['Rural Development', 'Infrastructure', 'Water', 'Government']
-  },
-  {
-    id: 2,
-    title: 'NLGFC Announces Increased Funding for Local Councils',
-    summary: 'In a move to bolster local governance, the National Local Government Finance Committee has approved a 15% budget increase for all district councils for the next fiscal year.',
-    content: `
-      <p>The National Local Government Finance Committee (NLGFC) has announced a significant 15% increase in funding allocation for all district councils across Malawi for the upcoming fiscal year. This decision marks the largest single-year increase in local government funding in over a decade.</p>
-      
-      <p>The increased allocation is designed to strengthen local governance capacity and improve service delivery at the grassroots level. District councils will have greater resources to address local priorities and respond more effectively to community needs.</p>
-      
-      <p>Key areas that will benefit from the increased funding include:</p>
-      
-      <ul>
-        <li>Primary healthcare facilities and equipment</li>
-        <li>Education infrastructure and learning materials</li>
-        <li>Road maintenance and rural connectivity projects</li>
-        <li>Water and sanitation programs</li>
-        <li>Agricultural extension services</li>
-      </ul>
-      
-      <p>The NLGFC Chairman emphasized that the increase comes with enhanced accountability measures to ensure funds are used effectively and transparently. All councils will be required to submit quarterly progress reports and undergo regular audits.</p>
-    `,
-    image: '/images/samples/news2.jpg',
-    date: '2025-08-12',
-    author: 'James Banda',
-    source: 'The Daily Times',
-    tags: ['NLGFC', 'Funding', 'Local Government', 'Budget']
-  },
-  {
-    id: 3,
-    title: 'Blantyre City Council Unveils New Waste Management Strategy',
-    summary: 'A new comprehensive strategy for waste management was unveiled today, focusing on recycling and community participation to create a cleaner city.',
-    content: `
-      <p>Blantyre City Council has launched an innovative waste management strategy that aims to revolutionize how the commercial capital handles solid waste. The comprehensive plan emphasizes community participation, recycling initiatives, and sustainable waste disposal methods.</p>
-      
-      <p>The new strategy introduces several groundbreaking components including community-based waste collection systems, establishment of recycling centers in each of the city's 30 wards, and partnerships with private sector players in waste management.</p>
-      
-      <p>Mayor John Chimbwandira outlined the key pillars of the strategy during the launch event at the Civic Centre. The initiative includes:</p>
-      
-      <ul>
-        <li>Door-to-door waste collection services in all residential areas</li>
-        <li>Installation of modern waste sorting facilities</li>
-        <li>Public awareness campaigns on waste reduction and recycling</li>
-        <li>Establishment of community composting sites</li>
-        <li>Strict enforcement of waste management bylaws</li>
-      </ul>
-      
-      <p>The Council has allocated K2.5 billion for the first phase of implementation, which will run for 18 months. Citizens are encouraged to participate actively in the program by properly sorting their waste and utilizing designated collection points.</p>
-    `,
-    image: '/images/samples/news3.jpg',
-    date: '2025-08-10',
-    author: 'Grace Phiri',
-    source: 'Blantyre City Council',
-    tags: ['Waste Management', 'Blantyre', 'Environment', 'Recycling']
-  },
-  {
-    id: 4,
-    title: 'New Healthcare Initiative Launched in Northern Region',
-    summary: 'A comprehensive healthcare program targeting maternal and child health has been launched in five northern districts.',
-    content: `<p>A new healthcare initiative focusing on maternal and child health has been launched in the northern region, targeting five key districts. The program aims to reduce maternal and infant mortality rates through improved access to quality healthcare services and community health education programs.</p>
-    
-    <p>The initiative includes the establishment of new health centers, training of community health workers, and provision of essential medical equipment and supplies. Special focus is being placed on remote areas that have historically had limited access to healthcare services.</p>
-    
-    <p>Dr. Mary Kamanga, who is leading the program implementation, emphasized the importance of community participation in ensuring the success of the initiative. "We are not just building facilities, we are building a healthcare system that works for everyone," she said during the launch ceremony.</p>`,
-    image: '/images/samples/news1.jpg',
-    date: '2025-08-08',
-    author: 'Dr. Mary Kamanga',
-    source: 'Ministry of Health',
-    tags: ['Healthcare', 'Northern Region', 'Maternal Health']
-  },
-  {
-    id: 5,
-    title: 'Education Sector Receives Technology Boost',
-    summary: 'Government partners with tech companies to provide digital learning tools to rural schools.',
-    content: `<p>The education sector has received a significant technology boost with the government partnering with leading technology companies to provide digital learning tools to rural schools across the country. This initiative aims to bridge the digital divide and ensure that students in remote areas have access to modern learning resources.</p>
-    
-    <p>The program will see the installation of solar-powered computer labs in 200 rural schools over the next two years. Each lab will be equipped with tablets, educational software, and internet connectivity to enable students to access online learning materials.</p>
-    
-    <p>Peter Mvula from the Ministry of Education highlighted that this represents a major step forward in modernizing education delivery in Malawi. Teachers will also receive training on how to effectively integrate technology into their teaching methods.</p>`,
-    image: '/images/samples/news2.jpg',
-    date: '2025-08-05',
-    author: 'Peter Mvula',
-    source: 'Ministry of Education',
-    tags: ['Education', 'Technology', 'Rural Schools']
-  },
-  {
-    id: 6,
-    title: 'Agricultural Support Program Shows Promising Results',
-    summary: 'Early indicators suggest the new agricultural support program is improving crop yields across the country.',
-    content: `<p>The agricultural support program launched earlier this year is showing promising results, with early indicators suggesting significant improvements in crop yields across participating districts. The program focuses on providing farmers with improved seeds, fertilizers, and training on modern farming techniques.</p>
-    
-    <p>Initial assessments conducted in pilot areas show an average increase of 30% in maize production and 45% in legume crops. The success is attributed to the comprehensive approach that combines input provision with farmer education and extension services.</p>
-    
-    <p>Agnes Msukwa from the Ministry of Agriculture noted that the program's success demonstrates the importance of supporting smallholder farmers with both resources and knowledge. Plans are underway to expand the program to additional districts in the next growing season.</p>`,
-    image: '/images/samples/news3.jpg',
-    date: '2025-08-03',
-    author: 'Agnes Msukwa',
-    source: 'Ministry of Agriculture',
-    tags: ['Agriculture', 'Crop Yields', 'Support Program']
-  }
-])
+const stripHtml = (value = '') => value.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+const resolveMediaUrl = (value) => {
+  if (!value || typeof value !== 'string') return ''
+  if (/^(https?:)?\/\//i.test(value)) return value
+  const base = (config.public.apiBase || '').replace(/\/$/, '')
+  return `${base}/storage/${value.replace(/^\/+/, '').replace(/^storage\//, '')}`
+}
+
+const { data: postsResponse } = useAsyncData(
+  'news:posts',
+  () => $fetch(`${config.public.apiBase}/api/posts?per_page=200`),
+  { server: true, default: () => ({ data: [] }) }
+)
+
+const newsArticles = computed(() => {
+  const rows = Array.isArray(postsResponse.value?.data) ? postsResponse.value.data : []
+  return rows.map((post) => ({
+    id: post.id,
+    slug: post.slug,
+    title: post.title,
+    summary: stripHtml(post.content || '').slice(0, 220) + (stripHtml(post.content || '').length > 220 ? '...' : ''),
+    content: post.content || '',
+    image: resolveMediaUrl(post.image),
+    date: post.created_at,
+    author: post.user?.name || 'NLGFC Editorial',
+    source: post.category?.name || 'News',
+    tags: [
+      ...(post.project?.name ? [post.project.name] : []),
+      ...(post.local_authority?.name ? [post.local_authority.name] : []),
+      ...(post.category?.name ? [post.category.name] : []),
+    ],
+  }))
+})
 
 // Computed properties
 const filteredArticles = computed(() => {
-  let filtered = newsArticles.value
+  let filtered = [...newsArticles.value]
   
   // Apply search filter
   if (searchQuery.value) {
@@ -399,7 +308,7 @@ const filteredArticles = computed(() => {
   }
   
   // Sort by date (newest first)
-  filtered.sort((a, b) => new Date(b.date) - new Date(a.date))
+  filtered.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
   
   return filtered
 })
@@ -451,8 +360,8 @@ const toggleAutoplay = () => {
 // Methods
 const selectArticle = (article) => {
   selectedArticle.value = article
-  // Update URL with hash instead of path parameter
-  window.location.hash = article.id.toString()
+  // Use slug hash for API-backed list (fallback to id for backward compatibility)
+  window.location.hash = String(article.slug || article.id)
   // Scroll to top on mobile/tablet
   if (window.innerWidth < 1024) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -476,10 +385,9 @@ const formatDate = (dateString) => {
 }
 
 const handleHashChange = () => {
-  const hash = window.location.hash.replace('#', '')
+  const hash = window.location.hash.replace('#', '').split('?')[0]
   if (hash) {
-    const articleId = parseInt(hash)
-    const article = newsArticles.value.find(a => a.id === articleId)
+    const article = newsArticles.value.find(a => String(a.slug) === hash || String(a.id) === hash)
     if (article) {
       selectedArticle.value = article
     }
@@ -519,6 +427,10 @@ watch(selectedArticle, (newVal) => {
     // Restart autoplay when back to main view
     startAutoplay()
   }
+})
+
+watch(newsArticles, () => {
+  handleHashChange()
 })
 
 </script>
