@@ -59,7 +59,7 @@ const newsItems = computed(() => {
       day: 'numeric'
     }) : '',
     category: post.category?.name || 'News',
-    link: `/news/${post.slug}`,
+    link: `/news#${post.slug || post.id}`,
     readTime: '3 min read',
     slug: post.slug
   }))
