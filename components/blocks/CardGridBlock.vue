@@ -13,7 +13,7 @@ defineProps<{ cards?: Array<{ title: string; body?: string }> }>()
         <h4 class="font-semibold text-white">{{ c.title }}</h4>
       </div>
       <div class="p-6">
-        <p class="text-gray-700" v-if="c.body">{{ c.body }}</p>
+        <div v-if="c.body" class="text-gray-700 prose max-w-none" v-html="c.body" />
         <slot name="extra" />
       </div>
     </div>

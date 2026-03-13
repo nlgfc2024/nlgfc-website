@@ -17,6 +17,8 @@ const activeContent = ref([])
 const isLoading = ref(false)
 const transitionName = ref('fade')
 const hoveredDistrict = ref('')
+const tooltipX = ref(0)
+const tooltipY = ref(0)
 // District ID mapping for SVG paths
 const districtIdMap = {
   'Chitipa': 'MWCT',
@@ -421,6 +423,13 @@ const handleDistrictLeave = () => {
   hoveredDistrict.value = ''
 }
 
+// Track mouse position inside the SVG container for the tooltip
+const handleMapMouseMove = (event) => {
+  const rect = event.currentTarget.getBoundingClientRect()
+  tooltipX.value = event.clientX - rect.left + 14
+  tooltipY.value = event.clientY - rect.top - 36
+}
+
 // Add this function to handle district clicks on the map
 const handleDistrictClick = (districtName) => {
   console.log('District clicked:', districtName)
@@ -487,7 +496,7 @@ const districts = [
         area: '4,288 km²',
         description: 'Chitipa is located in the far north of Malawi, bordering Tanzania and Zambia.',
         slug: '',
-        pageSlug: 'chitipaDistrict'
+        pageSlug: 'chitipa'
     },
     { 
         name: 'Karonga', 
@@ -500,7 +509,7 @@ const districts = [
         area: '3,355 km²',
         description: 'Karonga is known for its rich archaeological sites and borders Lake Malawi.',
         slug: 'karonga',
-        pageSlug: 'karongaDistrict'
+        pageSlug: 'karonga'
     },
     { 
         name: 'Likoma', 
@@ -513,7 +522,7 @@ const districts = [
         area: '18 km²',
         description: 'Likoma is an island district in Lake Malawi, known for its cathedral and beaches.',
         slug: 'likoma',
-        pageSlug: 'likomaDistrict'
+        pageSlug: 'likoma'
     },
     { 
         name: 'Mmbelwa', 
@@ -526,7 +535,7 @@ const districts = [
         area: '10,430 km²',
         description: 'Mzimba is the largest district in the Northern Region and includes Mzuzu city.',
         slug: 'mmbelwa',
-        pageSlug: 'mmbelwaDistrict'
+        pageSlug: 'mmbelwa'
     },
     { 
         name: 'Nkhata Bay', 
@@ -539,7 +548,7 @@ const districts = [
         area: '4,071 km²',
         description: 'Nkhata Bay is famous for its scenic lakeshore and tourism activities.',
         slug: 'nkhata-bay',
-        pageSlug: 'nkhatabayDistrict'
+        pageSlug: 'nkhatabay'
     },
     { 
         name: 'Rumphi', 
@@ -552,7 +561,7 @@ const districts = [
         area: '4,769 km²',
         description: 'Rumphi is known for its mountainous terrain and the Nyika National Park.',
         slug: 'rumphi',
-        pageSlug: 'rumphiDistrict'
+        pageSlug: 'rumphi'
     },
     
     // Central Region
@@ -567,7 +576,7 @@ const districts = [
         area: '3,624 km²',
         description: 'Dedza is known for pottery and borders Mozambique.',
         slug: 'dedza',
-        pageSlug: 'lilongwecitycouncil'
+        pageSlug: 'dedza'
     },
     { 
         name: 'Dowa', 
@@ -577,7 +586,7 @@ const districts = [
         area: '3,041 km²',
         description: 'Dowa is an agricultural district known for tobacco farming.',
         slug: 'dowa',
-        pageSlug: 'dowaDistrict'
+        pageSlug: 'dowa'
     },
     { 
         name: 'Kasungu', 
@@ -590,7 +599,7 @@ const districts = [
         area: '7,878 km²',
         description: 'Kasungu is home to Kasungu National Park and is an agricultural hub.',
         slug: 'kasungu',
-        pageSlug: 'kasunguDistrict'
+        pageSlug: 'kasungu'
     },
     { 
         name: 'Lilongwe city', 
@@ -602,8 +611,8 @@ const districts = [
         PrivateBag:'93',
         area: '6,159 km²',
         description: 'Lilongwe is the capital city of Malawi and the largest urban center.',
-        slug: 'https://lcc.mw/',
-        pageSlug: 'lilongwecitycouncil'
+        slug: 'lilongwecity',
+        pageSlug: 'lilongwecity'
    
     },
     { 
@@ -617,7 +626,7 @@ const districts = [
         area: '6,159 km²',
         description: 'Lilongwe is the capital city of Malawi and the largest urban center.',
         slug: '',
-        pageSlug: 'lilongweDistrict'
+        pageSlug: 'lilongwe'
    
     },
     { 
@@ -631,7 +640,7 @@ const districts = [
         area: '3,356 km²',
         description: 'Mchinji borders Zambia and is a major cross-border trade center.',
         slug: 'mchinji',
-        pageSlug: 'mchinjiDistrict'
+        pageSlug: 'mchinji'
     },
     { 
         name: 'Nkhotakota', 
@@ -644,7 +653,7 @@ const districts = [
         area: '4,259 km²',
         description: 'Nkhotakota is located on Lake Malawi and has a rich historical heritage.',
         slug: 'nkhotakota',
-        pageSlug: 'nkhotakotaDistrict'
+        pageSlug: 'nkhotakota'
     },
     { 
         name: 'Ntcheu', 
@@ -657,7 +666,7 @@ const districts = [
         area: '3,424 km²',
         description: 'Ntcheu is known for its mountainous landscape and borders Mozambique.',
         slug: 'ntcheu',
-        pageSlug: 'ntcheuDistrict'
+        pageSlug: 'ntcheu'
     },
     { 
         name: 'Ntchisi', 
@@ -667,7 +676,7 @@ const districts = [
         area: '1,655 km²',
         description: 'Ntchisi is one of the smaller districts in the Central Region.',
         slug: 'ntchisi',
-        pageSlug: 'ntchisiDistrict'
+        pageSlug: 'ntchisi'
     },
     { 
         name: 'Salima', 
@@ -680,7 +689,7 @@ const districts = [
         area: '2,196 km²',
         description: 'Salima is located on Lake Malawi and is known for its beaches and fishing.',
         slug: 'salima',
-        pageSlug: 'salimaDistrict'
+        pageSlug: 'salima'
     },
     
     // Southern Region
@@ -695,7 +704,7 @@ const districts = [
         area: '2,193 km²',
         description: 'Balaka is known for its sugar production and borders Lake Malawi.',
         slug: '',
-        pageSlug: 'balakaDistrict'
+        pageSlug: 'balaka'
     },
     { 
         name: 'Blantyre', 
@@ -705,7 +714,7 @@ const districts = [
         area: '2,012 km²',
         description: 'Blantyre is the commercial capital of Malawi and the second-largest city.',
         slug: 'blantyre',
-        pageSlug: 'blantyreDistrict'
+        pageSlug: 'blantyre'
     },
     { 
         name: 'Chikwawa', 
@@ -718,7 +727,7 @@ const districts = [
         area: '4,755 km²',
         description: 'Chikwawa is known for sugar estates and is located in the lower Shire valley.',
         slug: 'chikwawaDistrict',
-        pageSlug: 'chikwawaDistrict'
+        pageSlug: 'chikwawa'
     },
     { 
         name: 'Chiradzulu', 
@@ -731,7 +740,7 @@ const districts = [
         area: '767 km²',
         description: 'Chiradzulu is one of the smallest districts and is known for tea production.',
         slug: '',
-        pageSlug: 'chiradzuluDistrict'
+        pageSlug: 'chiradzulu'
     },
     { 
         name: 'Machinga', 
@@ -744,7 +753,7 @@ const districts = [
         area: '3,771 km²',
         description: 'Machinga is home to Liwonde National Park and borders Lake Malawi.',
         slug: 'machinga',
-        pageSlug: 'machingaDistrict'
+        pageSlug: 'machinga'
     },
     { 
         name: 'Mangochi', 
@@ -757,7 +766,7 @@ const districts = [
         area: '6,273 km²',
         description: 'Mangochi is located on Lake Malawi and is known for tourism and fishing.',
         slug: 'mangochi',
-        pageSlug: 'mangochiDistrict'
+        pageSlug: 'mangochi'
     },
     { 
         name: 'Mwanza', 
@@ -770,7 +779,7 @@ const districts = [
         area: '2,259 km²',
         description: 'Mwanza borders Mozambique and is known for its border trade.',
         slug: 'mwanza',
-        pageSlug: 'mwanzaDistrict'
+        pageSlug: 'mwanza'
     },
     { 
         name: 'Nsanje', 
@@ -779,8 +788,8 @@ const districts = [
         population: '297,257',
         area: '1,942 km²',
         description: 'Nsanje is the southernmost district and borders both Mozambique and Zambia.',
-        slug: 'nsanjeDistrict',
-        pageSlug: 'nsanjeDistrict'
+        slug: 'nsanje',
+        pageSlug: 'nsanje'
     },
     { 
         name: 'Neno', 
@@ -793,7 +802,7 @@ const districts = [
         area: '1,535 km²',
         description: 'Neno is one of the newest districts, created in 2003.',
         slug: 'neno',
-        pageSlug: 'nenoDistrict'
+        pageSlug: 'neno'
     },
     { 
         name: 'Phalombe', 
@@ -806,7 +815,7 @@ const districts = [
         area: '1,394 km²',
         description: 'Phalombe is known for its agricultural activities and tea estates.',
         slug: 'phalombe',
-        pageSlug: 'phalombeDistrict'
+        pageSlug: 'phalombe'
     },
     { 
         name: 'Thyolo', 
@@ -819,7 +828,7 @@ const districts = [
         area: '1,715 km²',
         description: 'Thyolo is famous for its tea and coffee plantations.',
         slug: 'thyolo',
-        pageSlug: 'thyoloDistrict'
+        pageSlug: 'thyolo'
     },
     { 
         name: 'Zomba', 
@@ -829,7 +838,20 @@ const districts = [
         area: '2,580 km²',
         description: 'Zomba is the former capital of Malawi and home to the University of Malawi.',
         slug: 'zomba',
-        pageSlug: 'zombaDistrict'
+        pageSlug: 'zomba'
+    },
+    { 
+        name: 'Mulanje', 
+        region: 'Southern',
+        capital: 'Mulanje',
+        population: '721,456',
+        Phone:'(+265) 01 466 233',
+        email:'mulanjed@malawi.net',
+        PrivateBag:'80',
+        area: '2,056 km²',
+        description: 'Mulanje is dominated by the iconic Mulanje Massif, the highest mountain in Central Africa.',
+        slug: 'mulanje',
+        pageSlug: 'mulanje'
     }
 ]
 
@@ -1082,7 +1104,18 @@ const districts = [
                                         <h3 class="text-lg font-semibold text-gray-800">Map of Malawi</h3>
                                         
                                         <!-- SVG Map Container -->
-                                        <div class="border border-gray-300 rounded-lg p-4 shadow-sm transition-all duration-6000 hover:shadow-md">
+                                        <div
+                                            class="border border-gray-300 rounded-lg p-4 shadow-sm transition-all duration-6000 hover:shadow-md relative"
+                                            @mousemove="handleMapMouseMove"
+                                        >
+                                            <!-- Hover tooltip -->
+                                            <div
+                                                v-if="hoveredDistrict"
+                                                class="pointer-events-none absolute z-50 rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white shadow-lg"
+                                                :style="{ left: tooltipX + 'px', top: tooltipY + 'px' }"
+                                            >
+                                                {{ hoveredDistrict }}
+                                            </div>
                                             <div class="w-full max-w-4xl mx-auto">
                                                 <!-- SVG Map -->
                                                 <svg
@@ -1119,9 +1152,9 @@ const districts = [
   </path>
   <path d="M566.2 526.5l3.4 2.2 11.7 10.7 10 9.2 9.9 11.9 12.3 14.7 10.4 12.5 9.7 11.7 7.7 14.8 9.9 12.6 11.9 15.2 4.2 5.2-0.1 0.1-3.1 2.5-2.6 1-3.4 0.1-2.8 0.4-5.6 1.3-2.5 1-1.6 1-1.7 1.9-0.3 0.6 0 0.8 0.5 4-0.1 1.6-0.5 1.6-1.2 1.6-1.2 0.6-1.2 0.5-1.7 0.9-3 3.2-1.6 0.8-1.8 0.4-1.7-0.4-5.8-2-1.3-0.2-0.8-0.4-0.7-0.6-1.2-2-1.3-1.4-1.9-1.7-0.7-0.5-0.6-0.3-0.5-0.2-0.8-0.1-0.3 0.2-0.3 0.5-0.2 1.2-0.2 0.5-0.6 0.9-0.4 1.1 0 0.7 0 0.6 0.1 0.6 0.5 1.5 0.1 0.3-0.2 0.9-31.3 0-1.1 0-3.9-2.9-3.4-1.6-1.5-1.4-13.3-17.8-3.1-9.4-1.7-8.3-0.7-11.9 0-4.9 0-0.2 1-0.3 1.7-0.3 2-0.8 1.8-1.2 0.8-1.3 0.1-1 0.5-0.6 1.3-0.8 0.2-1-0.7-1.2-0.9-1.2-0.5-1.1 1.1-3.1 2.6-2.9 2-2.8-0.7-2.8-1.8-3.3 0.4-3.1 2.2-1.5 3.4 1 1.5 1.2 2.5 2.7 1.6 0.9-1 4.1 0.9 4.8 2.6 3.3 3.7-0.9 0.5 0.6 1.4 1.2 0.5 0.6 2.6-0.4 2.8 2.5 2.2 3.8 0.9 3.4 0.7 1.1 2.8 3.4 0.4 0.7 2 0.7 1.3 1.6 2.2 3.4 5.5 4.8 0.2 0.5 0.3 0.7 0.4 0.8 0.6 0.4 1-0.1 1.7-1.2 0.9-0.3 0.8-0.8 0.9-2 0.6-2 0-1.2-1.8-2.8-4.7-9.6-1.2-3.6-0.4-4.2-3.6-5.6-1-2 0.1-1.9 0.4-2 0.1-1.8-1.3-3.1-4.1-6.4-0.9-3.3-0.2-4.1-0.4-2.2-0.8-2.7-0.1-2-0.4-0.7-1.4-1.7-1.3-1.9-1.4-4.1-0.6-3.3-1.6-2.2-4.3-0.9-11.8 0.4-1.7-0.2-2.1-1-2.6-2.7-0.6-3.1 0.8-7.5-0.5-5.4 1.1-4.8z" id="MWMG" name="Mangochi" @mouseover="handleDistrictHover('Mangochi')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Mangochi')"
   </path>
-  <path d="M667.3 647.2l4.1 5.3 5.6 5.7 1.3 1.7 0.6 2 1.2 24.7 0.8 1 1.4 0.2 2.5 0-4.3 10.1-3.1 7.5-5.5 13.1-0.8 2.9 0 2.8 0.5 1.9-29.4-0.5-0.3 0.2-0.5 0.3-0.2 0.3-1.1 0.9-1.2 0.8-1.5 0.6-2.4 0.8-1.5 0.2-1.3 0-2.1-0.7-5.8-2.4-2.3-0.5-1.3 0.1-1.3 0.4-0.7 0.5-2.2 2.3-1.1 0.7-1.1 0-1.4-0.2-1.9-0.7-1.9-0.4-1.1 0.2-0.9 0.7-1 1-1.4 0.9-1.1 0-0.8-0.6-0.5-0.7-0.9-2 0.9-0.9 0.9-1.9 0.4-2.5 1.6-4.4 0.7-3.1 2-4.2 0.3-1.1 0.1-1.9 0.3-1 0.8-1.4 3.4-5.5 1.7-1.2 1.2-1 0.8-2.6 1.1-9.5-0.2-5.6-1.3-5.1-2.7-2.9-0.4-0.2 0.2-0.9-0.1-0.3-0.5-1.5-0.1-0.6 0-0.6 0-0.7 0.4-1.1 0.6-0.9 0.2-0.5 0.2-1.2 0.3-0.5 0.3-0.2 0.8 0.1 0.5 0.2 0.6 0.3 0.7 0.5 1.9 1.7 1.3 1.4 1.2 2 0.7 0.6 0.8 0.4 1.3 0.2 5.8 2 1.7 0.4 1.8-0.4 1.6-0.8 3-3.2 1.7-0.9 1.2-0.5 1.2-0.6 1.2-1.6 0.5-1.6 0.1-1.6-0.5-4 0-0.8 0.3-0.6 1.7-1.9 1.6-1 2.5-1 5.6-1.3 2.8-0.4 3.4-0.1 2.6-1 3.1-2.5 0.1-0.1z" id="MWMH" name="Machinga"> @mouseover="handleDistrictHover(name)" @mouseout="handleDistrictLeave()" @click="handleDistrictClick(name)"
+  <path d="M667.3 647.2l4.1 5.3 5.6 5.7 1.3 1.7 0.6 2 1.2 24.7 0.8 1 1.4 0.2 2.5 0-4.3 10.1-3.1 7.5-5.5 13.1-0.8 2.9 0 2.8 0.5 1.9-29.4-0.5-0.3 0.2-0.5 0.3-0.2 0.3-1.1 0.9-1.2 0.8-1.5 0.6-2.4 0.8-1.5 0.2-1.3 0-2.1-0.7-5.8-2.4-2.3-0.5-1.3 0.1-1.3 0.4-0.7 0.5-2.2 2.3-1.1 0.7-1.1 0-1.4-0.2-1.9-0.7-1.9-0.4-1.1 0.2-0.9 0.7-1 1-1.4 0.9-1.1 0-0.8-0.6-0.5-0.7-0.9-2 0.9-0.9 0.9-1.9 0.4-2.5 1.6-4.4 0.7-3.1 2-4.2 0.3-1.1 0.1-1.9 0.3-1 0.8-1.4 3.4-5.5 1.7-1.2 1.2-1 0.8-2.6 1.1-9.5-0.2-5.6-1.3-5.1-2.7-2.9-0.4-0.2 0.2-0.9-0.1-0.3-0.5-1.5-0.1-0.6 0-0.6 0-0.7 0.4-1.1 0.6-0.9 0.2-0.5 0.2-1.2 0.3-0.5 0.3-0.2 0.8 0.1 0.5 0.2 0.6 0.3 0.7 0.5 1.9 1.7 1.3 1.4 1.2 2 0.7 0.6 0.8 0.4 1.3 0.2 5.8 2 1.7 0.4 1.8-0.4 1.6-0.8 3-3.2 1.7-0.9 1.2-0.5 1.2-0.6 1.2-1.6 0.5-1.6 0.1-1.6-0.5-4 0-0.8 0.3-0.6 1.7-1.9 1.6-1 2.5-1 5.6-1.3 2.8-0.4 3.4-0.1 2.6-1 3.1-2.5 0.1-0.1z" id="MWMH" name="Machinga" @mouseover="handleDistrictHover('Machinga')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Machinga')">
   </path>
-  <path d="M511 632l-0.9-1.4-3.2-1.7-1 0.2-0.9 0.5-0.8 0.7-0.9 0.6-0.9 0.2-1.8-0.2-0.9 0.1-11.3 4-8.3 0.3-3.6 1.5-0.9 1.2-1.3 3-0.9 0.6-12-1.6-3.3 0-3.1 0.8-6.7 4-3.2 1.2-3.2-0.3-6.1-4.8-2.5 0.8-1.7 2.7-1 3.4 0 4.1-0.3 2.1-1.2 0.8-2-0.7-1.3-1.2-1-1.5-0.7-2 2-1 1-1.6 1.2-0.7 1-0.9 2.5-4 0.4-1.3 0.3-5.1 0.4-1.8 0.5-1.7 0.9-1.4 1-1.2 1.5-0.9 7.9-3.8 1.3-1 1.3-1.4 2.4-1.7 1.4-0.5 2.1 0.2 1.1-0.3 2.7-1.1 1.1-0.2 1 0 1-0.5 0.9-1 0.6-1.9 0.5-5.5 0.5-1.6 0.9-1.2 1.6-0.9 4.4-0.5 1.2-0.6 1.4-1.2 1.4-1.5 1.3-1.9 1.7-1.3 1.8-1.8 1.1-3.3 0.7-1.4 1-1.5 1.7-1.9 1.4-2.1 1.7-1.6 1-1.5 3.1-5.9 0.5-1.4 0.5-1.2 0.6-0.8 1.4-0.7 2.9-2.1 2.1-2 2-3.4 5 7.1 7 6.9 1.6 1.9 3.8 6.9 3.6 5.4 1.9 1.9 1.3 0.9 0.5-0.2 0.6-0.5 2.4-2.6 0.8-0.6 0.6-0.4 0.5-0.3 0.6-0.3 0.3 0.7 4 4.8 0.7 1.2 0.3 1.6 0.7 1.9 0.9 1.8 0.9 1.2 2 1.5 1.6 0.5 1.8 0.1 2 0.8 1.9 1.7-0.1 1.5-0.6 1.5 0.3 1.8 1.6 1.1 1.8-0.4 1.9-1 0.8-0.3 0 0.2 0 4.9-9.3 5.7-8.5 6.4-6.5 2.7-1.8 0.4-1.2-0.1-1.3-1.2-1.9-0.8-0.8-0.6-0.7-0.5-0.8-0.3-1-0.3-1.7-0.2-2.7-0.5-0.6 0-0.6 0.2-1.2 0.9-1.4 1.2z" id="MWDE" name="Dedza"> @mouseover="handleDistrictHover(name)" @mouseout="handleDistrictLeave()" @click="handleDistrictClick(name)"
+  <path d="M511 632l-0.9-1.4-3.2-1.7-1 0.2-0.9 0.5-0.8 0.7-0.9 0.6-0.9 0.2-1.8-0.2-0.9 0.1-11.3 4-8.3 0.3-3.6 1.5-0.9 1.2-1.3 3-0.9 0.6-12-1.6-3.3 0-3.1 0.8-6.7 4-3.2 1.2-3.2-0.3-6.1-4.8-2.5 0.8-1.7 2.7-1 3.4 0 4.1-0.3 2.1-1.2 0.8-2-0.7-1.3-1.2-1-1.5-0.7-2 2-1 1-1.6 1.2-0.7 1-0.9 2.5-4 0.4-1.3 0.3-5.1 0.4-1.8 0.5-1.7 0.9-1.4 1-1.2 1.5-0.9 7.9-3.8 1.3-1 1.3-1.4 2.4-1.7 1.4-0.5 2.1 0.2 1.1-0.3 2.7-1.1 1.1-0.2 1 0 1-0.5 0.9-1 0.6-1.9 0.5-5.5 0.5-1.6 0.9-1.2 1.6-0.9 4.4-0.5 1.2-0.6 1.4-1.2 1.4-1.5 1.3-1.9 1.7-1.3 1.8-1.8 1.1-3.3 0.7-1.4 1-1.5 1.7-1.9 1.4-2.1 1.7-1.6 1-1.5 3.1-5.9 0.5-1.4 0.5-1.2 0.6-0.8 1.4-0.7 2.9-2.1 2.1-2 2-3.4 5 7.1 7 6.9 1.6 1.9 3.8 6.9 3.6 5.4 1.9 1.9 1.3 0.9 0.5-0.2 0.6-0.5 2.4-2.6 0.8-0.6 0.6-0.4 0.5-0.3 0.6-0.3 0.3 0.7 4 4.8 0.7 1.2 0.3 1.6 0.7 1.9 0.9 1.8 0.9 1.2 2 1.5 1.6 0.5 1.8 0.1 2 0.8 1.9 1.7-0.1 1.5-0.6 1.5 0.3 1.8 1.6 1.1 1.8-0.4 1.9-1 0.8-0.3 0 0.2 0 4.9-9.3 5.7-8.5 6.4-6.5 2.7-1.8 0.4-1.2-0.1-1.3-1.2-1.9-0.8-0.8-0.6-0.7-0.5-0.8-0.3-1-0.3-1.7-0.2-2.7-0.5-0.6 0-0.6 0.2-1.2 0.9-1.4 1.2z" id="MWDE" name="Dedza" @mouseover="handleDistrictHover('Dedza')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Dedza')">
   </path>
   <path d="M391.6 539.7l2.1-2.3 3.3-2.8 0.4-0.7 0.4-1 0.2-1.9 0-1.1-0.3-0.8-0.3-0.5-0.2-0.6 0.2-0.9 1-2.4 0.7-0.5 1.1-0.3 0.6-0.3 1-1.3 2.1 1.5 0.6 0.5 0.5 0.9 0 0.9-0.7 4.1 0 1.8 1.9 8.7 0.2 1.6 0.5 1.7 1.1 1.7 5.3 2.7 6.7 0.1 18-5 1.1-0.1 0.6 0.3 0.2 1 0.1 1.1 0.3 1.1 0.7 2.6 0.4 2.8 0.5 1.5 1.4 1.1 2 0.7 4.1-0.1 5.4-0.8 1.6-0.1 1.8 0.1 2.7 0.7 3.4 1.4 2.3 0.6 0.7 0.3 1.4 0.9 0.9 0.8 0.4 0.4 0.6 0.9 1 1 1.7 0.9 5.9-0.7 2.3-0.5 2.1-0.9 1.4-0.8 1.3-0.6 1.5-0.3 4.1 0.5 1.1 0 3.2-1.8-0.2 3.3-1.3 1.3-3.2 1.3-1.5 1-0.7 0.9-0.5 0.9-0.1 0.7 0.2 0.8 0.6 0.5 1 0.1 1.1-0.4 4-2 0.9-0.3 0.9-0.2 1.4 0 1.2 0.4-2 3.4-2.1 2-2.9 2.1-1.4 0.7-0.6 0.8-0.5 1.2-0.5 1.4-3.1 5.9-1 1.5-1.7 1.6-1.4 2.1-1.7 1.9-1 1.5-0.7 1.4-1.1 3.3-1.8 1.8-1.7 1.3-1.3 1.9-1.4 1.5-1.4 1.2-1.2 0.6-4.4 0.5-1.6 0.9-0.9 1.2-0.5 1.6-0.5 5.5-0.6 1.9-0.9 1-1 0.5-1 0-1.1 0.2-2.7 1.1-1.1 0.3-2.1-0.2-1.4 0.5-2.4 1.7-1.3 1.4-1.3 1-7.9 3.8-1.5 0.9-1 1.2-0.9 1.4-0.5 1.7-0.4 1.8-0.3 5.1-0.4 1.3-2.5 4-1 0.9-1.2 0.7-1 1.6-2 1-1.6-4.4-1-1.5-1.3-1-3-1.5-1.3-1-1-1.5-0.6-1.5-0.7-1.4-1.6-1.3-4.8-2.2-1.4-1.2-2.1-2.8-5.8-11.8-2-2.8-1.6-3.1 0.3-2.1-1.3-5.9-1.8-4.8-0.2-1.6 0.2-1.4 0.9-2.7 0.2-1.8-0.8-3.6 0-1.1 0.1-0.8 0.4-0.9 0.2-1.6-0.2-1.4-0.5-1.2-2.3-3.5-1.7-4.4-0.5-0.8-0.7-0.9-0.9-0.7-1-1-1-1.3-1.1-2.3-0.2-1 0.2-0.8 0.8-0.9 0.3-0.7 0.2-1 0.2-3 0.2-0.8 0.2-0.6 0.7-0.9 0.4-0.7 0.4-0.8 0.2-1.3-0.1-0.9-0.3-0.9 0-0.7 0.2-0.5 0.3-0.5 1.6-1.8 0.2-0.5 0.4-1.4 0.5-1.1 0.7-1 0.4-0.4 0.8-1 0.7-1.7z" id="MWLI" name="Lilongwe" @mouseover="handleDistrictHover('Lilongwe')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Lilongwe')"
   </path>
@@ -1135,13 +1168,13 @@ const districts = [
   </path>
   <path d="M531.4 724.8l-1.2-9.1 0.2-2 1.1-1.3-0.3-1.3-0.7-1.5-0.3-1.7 0.7-1.6 2.3-3.3 0.8-1.7 0.3-2-0.9-1.8-1.2-1.8-1-1.9-0.7-2.3-0.3-2 0-8.7-0.7-3.7-1.2-3.5-1.9-3.8-1.1-4 1.6-7-0.2-4-1.8-3.7-6-5.9-2.6-3.3-3.8-7.7-1.5-2.2 1.4-1.2 1.2-0.9 0.6-0.2 0.6 0 2.7 0.5 1.7 0.2 1 0.3 0.8 0.3 0.7 0.5 0.8 0.6 1.9 0.8 1.3 1.2 1.2 0.1 1.8-0.4 6.5-2.7 8.5-6.4 9.3-5.7 0.7 11.9 1.7 8.3 3.1 9.4 13.3 17.8 1.5 1.4 3.4 1.6 3.9 2.9-0.6 1.4 0.2 1.8 0.5 1.9 0 1.2-0.2 1.5-1.9 6.8-0.5 1-5.8 8.1-0.3 0.8-0.2 0.5 0.4 1.1 0.1 0.8 0 1-8.5 38-1.3 1.5-0.5 0-0.8-0.2-0.2-0.4-0.1-0.6 0.3-1.2 0.1-0.7-0.1-1.2-0.3-1.3-0.5-1.6-1-1-0.9-0.8-1.4-0.6-1.7-0.6-4.5-0.8-1.6-0.6-0.9-0.2-0.9-0.1-1.9 0.3-0.5 0-6.8-2.1-5.3-1.1-1.6-0.1z" id="MWNU" name="Ntcheu" @mouseover="handleDistrictHover('Ntcheu')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Ntcheu')"
   </path>
-  <path d="M671.6 726.1l2.7 11 3.2 13.3-0.3 4.9 0 0.1-0.1 0-13 0.5-4.3 1.3-2.8 1.3-1.6 1.8-2.7 2.5-6 4-1.3 0.6-1.3 0.9-0.9 0.9-1.5 3.7-2.7 2-0.9 0.7-3.4 4-0.9 0.3-1.4 0.2-4.8 0.2-1.4 0.3-1.6 0.7-0.9 0.4-3.2 0.2-5.1-1.8-1.3-0.8-1.4-1.2-1.6-2.4-0.8-1.6-0.9-2.6-0.8-1.1-1-0.8-1.8-0.8-1.2-0.8-0.8-1.2-0.1-1.2 0.2-1.7-0.2-0.7-0.6-0.2-1.3 0.7-0.8 0.5-0.7 0.4-0.8-0.3-1.6 0.3-1.5 0.1-0.6-0.1-0.7-0.3-0.5-0.6-0.1-0.9 0.2-0.8 0.4-0.7 2.3-2.8 0.3-0.7-0.1-0.4-0.8-0.2-2 0-0.9-0.2-1.1-0.9-1.1-1.2-3.8-5.7-2.6-2.2-2.4-4.4 5-3.1 4.6-1.2 1.4-1.4 2.3-3.7 5.2-4.9 0.9 2 0.5 0.7 0.8 0.6 1.1 0 1.4-0.9 1-1 0.9-0.7 1.1-0.2 1.9 0.4 1.9 0.7 1.4 0.2 1.1 0 1.1-0.7 2.2-2.3 0.7-0.5 1.3-0.4 1.3-0.1 2.3 0.5 5.8 2.4 2.1 0.7 1.3 0 1.5-0.2 2.4-0.8 1.5-0.6 1.2-0.8 1.1-0.9 0.2-0.3 0.5-0.3 0.3-0.2 29.4 0.5z" id="MWZO" name="Zomba"> @mouseover="handleDistrictHover(name)" @mouseout="handleDistrictLeave()" @click="handleDistrictClick(name)"
+  <path d="M671.6 726.1l2.7 11 3.2 13.3-0.3 4.9 0 0.1-0.1 0-13 0.5-4.3 1.3-2.8 1.3-1.6 1.8-2.7 2.5-6 4-1.3 0.6-1.3 0.9-0.9 0.9-1.5 3.7-2.7 2-0.9 0.7-3.4 4-0.9 0.3-1.4 0.2-4.8 0.2-1.4 0.3-1.6 0.7-0.9 0.4-3.2 0.2-5.1-1.8-1.3-0.8-1.4-1.2-1.6-2.4-0.8-1.6-0.9-2.6-0.8-1.1-1-0.8-1.8-0.8-1.2-0.8-0.8-1.2-0.1-1.2 0.2-1.7-0.2-0.7-0.6-0.2-1.3 0.7-0.8 0.5-0.7 0.4-0.8-0.3-1.6 0.3-1.5 0.1-0.6-0.1-0.7-0.3-0.5-0.6-0.1-0.9 0.2-0.8 0.4-0.7 2.3-2.8 0.3-0.7-0.1-0.4-0.8-0.2-2 0-0.9-0.2-1.1-0.9-1.1-1.2-3.8-5.7-2.6-2.2-2.4-4.4 5-3.1 4.6-1.2 1.4-1.4 2.3-3.7 5.2-4.9 0.9 2 0.5 0.7 0.8 0.6 1.1 0 1.4-0.9 1-1 0.9-0.7 1.1-0.2 1.9 0.4 1.9 0.7 1.4 0.2 1.1 0 1.1-0.7 2.2-2.3 0.7-0.5 1.3-0.4 1.3-0.1 2.3 0.5 5.8 2.4 2.1 0.7 1.3 0 1.5-0.2 2.4-0.8 1.5-0.6 1.2-0.8 1.1-0.9 0.2-0.3 0.5-0.3 0.3-0.2 29.4 0.5z" id="MWZO" name="Zomba" @mouseover="handleDistrictHover('Zomba')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Zomba')">
   </path>
-  <path d="M641.7 772.9l1.5-3.7 0.9-0.9 1.3-0.9 1.3-0.6 6-4 2.7-2.5 1.6-1.8 2.8-1.3 4.3-1.3 13-0.5 0.1 0-0.7 9.4-1 14.8-0.7 10.5-1.1 17-1.2 4.4 0 0.1-0.1 0-0.1 0-0.1-0.1-0.2-0.1-0.1 0-0.3 0-0.1 0-0.2-0.1-0.5-0.4-0.2 0-0.2 0-0.2 0.1-0.1 0-0.3 0-0.1 0-0.2 0-0.4 0.2-0.3 0.1-0.1 0.1-0.1 0.1-0.2 0.1-0.5 0.3-0.1 0.1-0.2 0-0.1 0-0.1 0.1-0.3 0.1-0.2 0.1-0.1 0.1-0.1 0.1-0.2 0.2-0.1 0.1-0.2 0-0.1 0.1-0.2 0-0.5-0.2-0.4-0.1-0.2-0.2-0.9-0.8-0.8-0.4-2-1.6-1.7-1.7-1.4-1-0.5-0.1-2.8 1-4.5 4-0.6-0.7-3.3-9.2-0.2-0.5-0.2-0.1-0.1-0.1-0.1 0-0.1 0-0.2 0.1-0.2 0.1-0.1 0-0.1 0-0.1-0.1-0.1 0-0.1-0.1-0.1-0.1-0.1-0.2-0.2-0.2-0.1-0.1 0-0.2-0.2-0.1-0.2-0.3-0.1-0.1-0.1 0-0.1 0.1-0.1 0 0-0.1-0.2-0.1-0.1-0.1-0.1 0-0.1-0.1-0.2-0.2-0.2-0.1-0.2-0.2-0.2-0.4-0.6-1.8-0.4-2.3-0.8-10.9 0-0.1-0.1-0.1-0.1-0.1-0.2-0.1-0.2-0.1-0.1 0-0.3-0.1-0.1-0.1-0.1 0-0.4 0-0.1 0-0.1 0-0.1 0-0.1-0.2 0.1-0.6 0.2-0.7 1.3-2.2 0.3-0.4 0.1-0.1 0-0.1 0.2-0.2 0.1-0.3 0.6-1.1 0.1-0.1 0.2 0 0.1-0.1 0.1-0.1 0.1-0.1 0.2-0.3 0-0.1 0.1-0.2 0.4-1.2 0.2-0.6 0-0.2-0.1-0.2-0.9-1z" id="MWPH" name="Phalombe"> @mouseover="handleDistrictHover(name)" @mouseout="handleDistrictLeave()" @click="handleDistrictClick(name)"
+  <path d="M641.7 772.9l1.5-3.7 0.9-0.9 1.3-0.9 1.3-0.6 6-4 2.7-2.5 1.6-1.8 2.8-1.3 4.3-1.3 13-0.5 0.1 0-0.7 9.4-1 14.8-0.7 10.5-1.1 17-1.2 4.4 0 0.1-0.1 0-0.1 0-0.1-0.1-0.2-0.1-0.1 0-0.3 0-0.1 0-0.2-0.1-0.5-0.4-0.2 0-0.2 0-0.2 0.1-0.1 0-0.3 0-0.1 0-0.2 0-0.4 0.2-0.3 0.1-0.1 0.1-0.1 0.1-0.2 0.1-0.5 0.3-0.1 0.1-0.2 0-0.1 0-0.1 0.1-0.3 0.1-0.2 0.1-0.1 0.1-0.1 0.1-0.2 0.2-0.1 0.1-0.2 0-0.1 0.1-0.2 0-0.5-0.2-0.4-0.1-0.2-0.2-0.9-0.8-0.8-0.4-2-1.6-1.7-1.7-1.4-1-0.5-0.1-2.8 1-4.5 4-0.6-0.7-3.3-9.2-0.2-0.5-0.2-0.1-0.1-0.1-0.1 0-0.1 0-0.2 0.1-0.2 0.1-0.1 0-0.1 0-0.1-0.1-0.1 0-0.1-0.1-0.1-0.1-0.1-0.2-0.2-0.2-0.1-0.1 0-0.2-0.2-0.1-0.2-0.3-0.1-0.1-0.1 0-0.1 0.1-0.1 0 0-0.1-0.2-0.1-0.1-0.1-0.1 0-0.1-0.1-0.2-0.2-0.2-0.1-0.2-0.2-0.2-0.4-0.6-1.8-0.4-2.3-0.8-10.9 0-0.1-0.1-0.1-0.1-0.1-0.2-0.1-0.2-0.1-0.1 0-0.3-0.1-0.1-0.1-0.1 0-0.4 0-0.1 0-0.1 0-0.1 0-0.1-0.2 0.1-0.6 0.2-0.7 1.3-2.2 0.3-0.4 0.1-0.1 0-0.1 0.2-0.2 0.1-0.3 0.6-1.1 0.1-0.1 0.2 0 0.1-0.1 0.1-0.1 0.1-0.1 0.2-0.3 0-0.1 0.1-0.2 0.4-1.2 0.2-0.6 0-0.2-0.1-0.2-0.9-1z" id="MWPH" name="Phalombe" @mouseover="handleDistrictHover('Phalombe')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Phalombe')">
   </path>
-  <path d="M620.5 781.9l3.2-0.2 0.9-0.4 1.6-0.7 1.4-0.3 4.8-0.2 1.4-0.2 0.9-0.3 3.4-4 0.9-0.7 2.7-2 0.9 1 0.1 0.2 0 0.2-0.2 0.6-0.4 1.2-0.1 0.2 0 0.1-0.2 0.3-0.1 0.1-0.1 0.1-0.1 0.1-0.2 0-0.1 0.1-0.6 1.1-0.1 0.3-0.2 0.2 0 0.1-0.1 0.1-0.3 0.4-1.3 2.2-0.2 0.7-0.1 0.6 0.1 0.2 0.1 0 0.1 0 0.1 0 0.4 0 0.1 0 0.1 0.1 0.3 0.1 0.1 0 0.2 0.1 0.2 0.1 0.1 0.1 0.1 0.1 0 0.1 0.8 10.9 0.4 2.3 0.6 1.8 0.2 0.4 0.2 0.2 0.2 0.1 0.2 0.2 0.1 0.1 0.1 0 0.1 0.1 0.2 0.1 0 0.1 0.1 0 0.1-0.1 0.1 0 0.1 0.1 0.2 0.3 0.2 0.1 0 0.2 0.1 0.1 0.2 0.2 0.1 0.2 0.1 0.1 0.1 0.1 0.1 0 0.1 0.1 0.1 0 0.1 0 0.2-0.1 0.2-0.1 0.1 0 0.1 0 0.1 0.1 0.2 0.1 0.2 0.5 3.3 9.2 0.6 0.7 4.5-4 2.8-1 0.5 0.1 1.4 1 1.7 1.7 2 1.6 0.8 0.4 0.9 0.8 0.2 0.2 0.4 0.1 0.5 0.2 0.2 0 0.1-0.1 0.2 0 0.1-0.1 0.2-0.2 0.1-0.1 0.1-0.1 0.2-0.1 0.3-0.1 0.1-0.1 0.1 0 0.2 0 0.1-0.1 0.5-0.3 0.2-0.1 0.1-0.1 0.1-0.1 0.3-0.1 0.4-0.2 0.2 0 0.1 0 0.3 0 0.1 0 0.2-0.1 0.2 0 0.2 0 0.5 0.4 0.2 0.1 0.1 0 0.3 0 0.1 0 0.2 0.1 0.1 0.1 0.1 0 0.1 0 0-0.1-0.8 3.1 0.1 1.8 0.6 3.7-0.1 1.8-1.1 2.6-1.7 1.9-8.3 5.8-1.2 0.6-1 0.1-2.2-0.4-1.2 0.1-10.8 3.3-2.8 0.3-0.6 0.7-0.3 1.8-0.7 1.1-1.5-0.1-1.5-0.7-1-0.9-0.8-2-1.9-1.3-2.3-0.6-2.3-0.2-2.6 0.7-2.1 1.5-8 7.2-0.6 0.8-1.3-1.3-0.4-0.6-0.1-1.1 0.2-1.2 0.8-2.1 0.7-1.2 0.7-0.8 0.6-0.5 1-1.1 0.5-3.4-1.4-10.8 1.5-3.8 0.5-0.6 0.6-1.3 0.1-1.7-1.6-19.7 0.1-4.4 2.2-6.7z" id="MWMU" name="Mulanje"> @mouseover="handleDistrictHover(name)" @mouseout="handleDistrictLeave()" @click="handleDistrictClick(name)"
+  <path d="M620.5 781.9l3.2-0.2 0.9-0.4 1.6-0.7 1.4-0.3 4.8-0.2 1.4-0.2 0.9-0.3 3.4-4 0.9-0.7 2.7-2 0.9 1 0.1 0.2 0 0.2-0.2 0.6-0.4 1.2-0.1 0.2 0 0.1-0.2 0.3-0.1 0.1-0.1 0.1-0.1 0.1-0.2 0-0.1 0.1-0.6 1.1-0.1 0.3-0.2 0.2 0 0.1-0.1 0.1-0.3 0.4-1.3 2.2-0.2 0.7-0.1 0.6 0.1 0.2 0.1 0 0.1 0 0.1 0 0.4 0 0.1 0 0.1 0.1 0.3 0.1 0.1 0 0.2 0.1 0.2 0.1 0.1 0.1 0.1 0.1 0 0.1 0.8 10.9 0.4 2.3 0.6 1.8 0.2 0.4 0.2 0.2 0.2 0.1 0.2 0.2 0.1 0.1 0.1 0 0.1 0.1 0.2 0.1 0 0.1 0.1 0 0.1-0.1 0.1 0 0.1 0.1 0.2 0.3 0.2 0.1 0 0.2 0.1 0.1 0.2 0.2 0.1 0.2 0.1 0.1 0.1 0.1 0.1 0 0.1 0.1 0.1 0 0.1 0 0.2-0.1 0.2-0.1 0.1 0 0.1 0 0.1 0.1 0.2 0.1 0.2 0.5 3.3 9.2 0.6 0.7 4.5-4 2.8-1 0.5 0.1 1.4 1 1.7 1.7 2 1.6 0.8 0.4 0.9 0.8 0.2 0.2 0.4 0.1 0.5 0.2 0.2 0 0.1-0.1 0.2 0 0.1-0.1 0.2-0.2 0.1-0.1 0.1-0.1 0.2-0.1 0.3-0.1 0.1-0.1 0.1 0 0.2 0 0.1-0.1 0.5-0.3 0.2-0.1 0.1-0.1 0.1-0.1 0.3-0.1 0.4-0.2 0.2 0 0.1 0 0.3 0 0.1 0 0.2-0.1 0.2 0 0.2 0 0.5 0.4 0.2 0.1 0.1 0 0.3 0 0.1 0 0.2 0.1 0.1 0.1 0.1 0 0.1 0 0-0.1-0.8 3.1 0.1 1.8 0.6 3.7-0.1 1.8-1.1 2.6-1.7 1.9-8.3 5.8-1.2 0.6-1 0.1-2.2-0.4-1.2 0.1-10.8 3.3-2.8 0.3-0.6 0.7-0.3 1.8-0.7 1.1-1.5-0.1-1.5-0.7-1-0.9-0.8-2-1.9-1.3-2.3-0.6-2.3-0.2-2.6 0.7-2.1 1.5-8 7.2-0.6 0.8-1.3-1.3-0.4-0.6-0.1-1.1 0.2-1.2 0.8-2.1 0.7-1.2 0.7-0.8 0.6-0.5 1-1.1 0.5-3.4-1.4-10.8 1.5-3.8 0.5-0.6 0.6-1.3 0.1-1.7-1.6-19.7 0.1-4.4 2.2-6.7z" id="MWMU" name="Mulanje" @mouseover="handleDistrictHover('Mulanje')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Mulanje')">
   </path>
-  <path d="M608.7 866.9l0-0.1-5.3-1.6-2 0.4-0.4 0.8-1.1-0.2-0.9-0.4-6.4-7-1.5-5 0.2-0.9-0.1-1.2-0.1-0.9-15.3-17.6-6.5-10.6 3.1-0.8 0.9-0.6 2.9-2.6 1.1-1.4 2.1-4 0.8-1 0.8-0.8 0.6-0.3 0.7-0.2 2.2-0.1 1.6-0.4 12.3-7.4 4.2 0 1.1 0.3 0.7 0.6 0.8 1.1 0.8 1 4.1 3.8 0.7 1.1 0.6 1.7 0.6 2.5 0.5 1.1 0.9 1.2 1.4 1.4 2.3 1.3 1.4 10.8-0.5 3.4-1 1.1-0.6 0.5-0.7 0.8-0.7 1.2-0.8 2.1-0.2 1.2 0.1 1.1 0.4 0.6 1.3 1.3-2.5 3-2.1 4.5-0.8 5.5 0.3 1.3 1.3 3.3-0.4 1.2-2.7 3.3-0.2 0.6z" id="MWTH" name="Thyolo"> @mouseover="handleDistrictHover(name)" @mouseout="handleDistrictLeave()" @click="handleDistrictClick(name)"
+  <path d="M608.7 866.9l0-0.1-5.3-1.6-2 0.4-0.4 0.8-1.1-0.2-0.9-0.4-6.4-7-1.5-5 0.2-0.9-0.1-1.2-0.1-0.9-15.3-17.6-6.5-10.6 3.1-0.8 0.9-0.6 2.9-2.6 1.1-1.4 2.1-4 0.8-1 0.8-0.8 0.6-0.3 0.7-0.2 2.2-0.1 1.6-0.4 12.3-7.4 4.2 0 1.1 0.3 0.7 0.6 0.8 1.1 0.8 1 4.1 3.8 0.7 1.1 0.6 1.7 0.6 2.5 0.5 1.1 0.9 1.2 1.4 1.4 2.3 1.3 1.4 10.8-0.5 3.4-1 1.1-0.6 0.5-0.7 0.8-0.7 1.2-0.8 2.1-0.2 1.2 0.1 1.1 0.4 0.6 1.3 1.3-2.5 3-2.1 4.5-0.8 5.5 0.3 1.3 1.3 3.3-0.4 1.2-2.7 3.3-0.2 0.6z" id="MWTH" name="Thyolo" @mouseover="handleDistrictHover('Thyolo')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Thyolo')">
   </path>
   <path d="M401.8 522.3l2.1-4 0.8-2.7 1.4-2.3 0.4-0.7 0.9-2.7 0.1-0.6 0-0.7-0.2-0.6-0.3-0.5-0.6-1-0.3-0.5-0.2-0.5 0-0.7 0.4-0.5 0.5-0.4 1 0 0.7 0.2 0.5 0.4 0.4 0.4 0.8 0.7 0.4 0.3 0.4 0.1 0.5 0.2 0.7 0.1 0.7 0 0.7-0.2 0.7-0.5 0.9-1.2 0.9-0.7 1.2-2.4 0.5-0.4 1.7-0.9 1-0.7 0.5-0.6 0.4-0.9 1-2.5 1.8-1.8 0.9 4.1 0.5 0.5 0.9 0.7 1.3 0.7 1.6 1.2 3.1 3.1 1.6 2.3 1.3 2.4 2.5 6.5 0.3 1.6 0.3 5.2 0.4 2.1 0.6 0.9 0.6 0.4 0.8 0.1 5.9 0.1 6.3-2.1 1.2-0.3 1.8 0 1.8 0.4 2.9 1.1 1.6 0.3 3.2-0.2 1.8 0 6.5 2.4 1.1 0.2 1 0 0.7-0.1 3.2-1.4 1-0.5 1.8 8.6 0 1.4-0.3 1.8-0.6 1-0.4 0.8 0.1 0.4 1.4 0.8 0.7 0.6 5.2 5.1 0.9 0.8 1 0.6 0.8 0.2 1 0 1.1-0.2 4.1-2.2 0.7-0.3 0.7 0.1 0.8 0.6 0.3 1.1 0 1.3-0.1 1.1 0 0.7 0.3 1 0.7 0.7 1 0.5 0.5 0.6 0.1 0.4-0.1 0.8-0.2 0.6-0.3 0.5-0.6 0.4-0.5 0.3-1.7 0.6-1.1 0.2-0.7 0.3-0.5 0.3-0.2 0.2-0.1 0.1-0.5 0.5-3.2 1.8-1.1 0-4.1-0.5-1.5 0.3-1.3 0.6-1.4 0.8-2.1 0.9-2.3 0.5-5.9 0.7-1.7-0.9-1-1-0.6-0.9-0.4-0.4-0.9-0.8-1.4-0.9-0.7-0.3-2.3-0.6-3.4-1.4-2.7-0.7-1.8-0.1-1.6 0.1-5.4 0.8-4.1 0.1-2-0.7-1.4-1.1-0.5-1.5-0.4-2.8-0.7-2.6-0.3-1.1-0.1-1.1-0.2-1-0.6-0.3-1.1 0.1-18 5-6.7-0.1-5.3-2.7-1.1-1.7-0.5-1.7-0.2-1.6-1.9-8.7 0-1.8 0.7-4.1 0-0.9-0.5-0.9-0.6-0.5-2.1-1.5z" id="MWDO" name="Dowa" @mouseover="handleDistrictHover('Dowa')" @mouseout="handleDistrictLeave()" @click="handleDistrictClick('Dowa')"
   </path>
@@ -1227,32 +1260,34 @@ const districts = [
                 
                 <!-- Map Info -->
                 <transition name="fade-slide-up">
-                    <div v-if="selectedDistrictDetails" class="text-sm text-gray-600 bg-blue-50 border border-blue-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
-                        <div class="font-medium text-blue-800 mb-2">Currently viewing Details for {{ selectedDistrictDetails.name }}</div>
-                        <ul class="space-y-2">
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                </svg>
-                                <span>Phone: {{ selectedDistrictDetails.Phone }}</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                                <span>Email: {{ selectedDistrictDetails.email }}</span>
-                            </li>
-                            <li class="flex items-start">
-                                <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                                </svg>
-                                <span>Private Bag: {{ selectedDistrictDetails.PrivateBag }}</span>
-                            </li>
-                        </ul>
+                    <div v-if="selectedDistrictDetails" class="text-sm text-gray-600 bg-blue-50 border border-blue-200 rounded-md p-4 transition-all duration-300 hover:shadow-sm">
+                        <div class="max-w-lg mx-auto">
+                            <div class="font-semibold text-blue-800 mb-3 text-center">Currently viewing Details for {{ selectedDistrictDetails.name }}</div>
+                            <ul class="space-y-2">
+                                <li class="flex items-center justify-center gap-2">
+                                    <svg class="h-4 w-4 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                    </svg>
+                                    <span>Phone: {{ selectedDistrictDetails.Phone }}</span>
+                                </li>
+                                <li class="flex items-center justify-center gap-2">
+                                    <svg class="h-4 w-4 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                    <span>Email: {{ selectedDistrictDetails.email }}</span>
+                                </li>
+                                <li class="flex items-center justify-center gap-2">
+                                    <svg class="h-4 w-4 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                    </svg>
+                                    <span>Private Bag: {{ selectedDistrictDetails.PrivateBag }}</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <div v-else class="text-sm text-gray-600 bg-gray-50 border border-gray-200 rounded-md p-3 transition-all duration-300 hover:shadow-sm">
-                        <div class="flex items-center">
-                            <svg class="h-5 w-5 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div class="flex items-center justify-center gap-2">
+                            <svg class="h-5 w-5 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <span>Select a district from the dropdown to highlight it and see all details</span>

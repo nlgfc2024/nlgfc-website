@@ -46,13 +46,13 @@ const lazyMap: Record<string, () => Promise<any>> = {
   CardGridBlock: () => import('./blocks/CardGridBlock.vue'),
   ValuesGridBlock: () => import('./blocks/ValuesGridBlock.vue'),
   ImageZoomableBlock: () => import('./blocks/ImageZoomableBlock.vue'),
+  ImageBlock: () => import('./blocks/ImageBlock.vue'),
+  IframeBlock: () => import('./blocks/IframeBlock.vue'),
+  CtaBlock: () => import('./blocks/CtaBlock.vue'),
+  MandatePanelBlock: () => import('./blocks/MandatePanelBlock.vue'),
   FunctionGroupBlock: () => import('./blocks/FunctionGroupBlock.vue'),
   ProjectContentBlock: () => import('./blocks/ProjectContentBlock.vue'),
   FeaturesGridBlock: () => import('./blocks/FeaturesGridBlock.vue'),
-  CtaBlock: () => import('./blocks/CtaBlock.vue'),
-  IframeBlock: () => import('./blocks/IframeBlock.vue'),
-  ImageBlock: () => import('./blocks/ImageBlock.vue'),
-  MandatePanelBlock: () => import('./blocks/MandatePanelBlock.vue'),
 }
 
 /**
@@ -191,13 +191,25 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
     }
 
     case 'ProjectContentBlock':
+      {
+      const rawLogo = data.logo ?? data.logo_url ?? ''
+      let normalizedLogo = ''
+      if (typeof rawLogo === 'string') {
+        normalizedLogo = rawLogo
+      } else if (Array.isArray(rawLogo)) {
+        const firstString = rawLogo.flat(Infinity).find((v: any) => typeof v === 'string' && v.length > 0)
+        normalizedLogo = firstString ?? ''
+      }
       return {
         title: data.title ?? '',
         label: data.label ?? '',
         theme: data.theme ?? 'blue',
         show_header: data.show_header ?? true,
+        show_logo: Boolean(data.show_logo ?? false),
+        logo: normalizedLogo,
         body: data.body ?? '',
         heading_level: data.heading_level ?? 'h2',
+      }
       }
 
     case 'MandatePanelBlock':
