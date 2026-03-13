@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     public: {
       apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://nlgfc_api.test',
       jobsPortalBase: process.env.NUXT_PUBLIC_JOBS_PORTAL_BASE || 'http://localhost:3001',
+      procurementPortalBase: process.env.NUXT_PUBLIC_PROCUREMENT_PORTAL_BASE || 'http://localhost:3002',
     },
   },
   // Configuration for subdirectory deployment and app settings
