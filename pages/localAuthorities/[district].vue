@@ -141,6 +141,40 @@
             <!-- PROJECTS TAB -->
             <div v-else-if="activeTab === 'projects'" key="projects" class="tab-content">
               <h2>Projects</h2>
+
+              <!-- Project Statistics from API -->
+              <div v-if="statsPending" class="pstats-loading">
+                <span class="pstats-spinner"></span> Loading project statistics…
+              </div>
+              <div v-else-if="projectStats.length" class="pstats-section">
+                <div class="pstats-header">
+                  <h3>Project Statistics</h3>
+                  <span class="item-count">{{ projectStats.length }} record{{ projectStats.length !== 1 ? 's' : '' }}</span>
+                </div>
+                <div class="pstats-table-wrap">
+                  <table class="pstats-table">
+                    <thead>
+                      <tr>
+                        <th>Project</th>
+                        <th>Sub-projects</th>
+                        <th>Beneficiaries</th>
+                        <th>Budget (MWK)</th>
+                        <th>Funds Disbursed (MWK)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="stat in projectStats" :key="stat.id">
+                        <td class="pstats-project-name">{{ stat.projectName }}</td>
+                        <td>{{ stat.totalProjects !== null ? Number(stat.totalProjects).toLocaleString() : '—' }}</td>
+                        <td>{{ stat.beneficiaries !== null ? Number(stat.beneficiaries).toLocaleString() : '—' }}</td>
+                        <td>{{ stat.budget !== null ? Number(stat.budget).toLocaleString() : '—' }}</td>
+                        <td>{{ stat.fundsDisbursed !== null ? Number(stat.fundsDisbursed).toLocaleString() : '—' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
               <div v-if="district.projects?.length" class="projects-list">
                 <div
                   v-for="(project, i) in district.projects"
@@ -187,7 +221,7 @@
                   </div>
                 </div>
               </div>
-              <p v-else class="empty-state-box" style="display:block">No projects available for this district yet.</p>
+              <p v-else-if="!projectStats.length" class="empty-state-box" style="display:block">No projects available for this district yet.</p>
             </div>
 
             <!-- REPORTS TAB -->
@@ -317,10 +351,31 @@ const { data: districtData, pending, error, refresh: refreshData } = await useAs
   }
 )
 
+// Fetch LA projects stats for this local authority
+const { data: statsData, pending: statsPending, refresh: refreshStats } = await useAsyncData(
+  `la-stats:${districtSlug.value}`,
+  async () => {
+    const id = districtData.value?.id
+    if (!id) return null
+    try {
+      return await $fetch(
+        `${config.public.apiBase}/api/la-projects-stats?local_authority_id=${id}&per_page=100`
+      )
+    } catch {
+      return null
+    }
+  },
+  {
+    watch: [districtSlug],
+    default: () => null,
+    getCachedData: () => null,
+  }
+)
+
 // Force re-fetch every time this page mounts on the client
 // so CMS updates always reflect immediately without needing a hard refresh
 if (import.meta.client) {
-  onMounted(() => refreshData())
+  onMounted(() => { refreshData(); refreshStats() })
 }
 
 const district = computed(() => {
@@ -453,6 +508,19 @@ const district = computed(() => {
         }))
       : []
   }
+})
+
+const projectStats = computed(() => {
+  const items = statsData.value?.data
+  if (!Array.isArray(items) || !items.length) return []
+  return items.map(stat => ({
+    id: stat.id,
+    projectName: stat.project?.name || 'Unknown Project',
+    totalProjects: stat.total_projects ?? null,
+    beneficiaries: stat.no_of_beneficiaries ?? null,
+    budget: stat.budget ?? null,
+    fundsDisbursed: stat.total_funds_disbursed ?? null,
+  }))
 })
 
 const tabs = [
@@ -855,6 +923,99 @@ useHead({
 }
 
 .objectives li { color: #4b5563; font-size: 0.9rem; margin-bottom: 0.3rem; }
+
+/* ── Project Statistics Table ── */
+.pstats-section {
+  margin-bottom: 2rem;
+}
+
+.pstats-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.pstats-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pstats-table-wrap {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.pstats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  background: white;
+}
+
+.pstats-table thead tr {
+  background: #111827;
+  color: white;
+}
+
+.pstats-table th {
+  padding: 0.7rem 1rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pstats-table td {
+  padding: 0.65rem 1rem;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+  white-space: nowrap;
+}
+
+.pstats-table tbody tr:last-child td { border-bottom: none; }
+
+.pstats-table tbody tr:hover { background: #f9fafb; }
+
+.pstats-project-name {
+  font-weight: 600;
+  color: #111827 !important;
+  white-space: normal !important;
+  min-width: 140px;
+}
+
+.pstats-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  background: #f9fafb;
+  border: 1px dashed #e5e7eb;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.pstats-spinner {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px solid #d1d5db;
+  border-top-color: #111827;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── Reports ── */
 .reports-list { display: flex; flex-direction: column; gap: 1rem; }

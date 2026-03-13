@@ -119,6 +119,11 @@ const svgLookup = Object.fromEntries(
   Object.entries(districtIdMap).map(([key, value]) => [cleanDistrictLabel(key).toLowerCase(), value])
 )
 
+// SVG paths that use a different name than the database district name
+const svgNameAliases = {
+  'Mzimba': 'Mmbelwa',
+}
+
 const getDistrictSvgId = (districtName) => {
   if (!districtName) return null
   return districtIdMap[districtName] || svgLookup[cleanDistrictLabel(districtName).toLowerCase()] || null
@@ -431,7 +436,8 @@ const handleMapMouseMove = (event) => {
 }
 
 const handleDistrictClick = (districtName) => {
-  selectedDistrict.value = districtName
+  const resolvedName = svgNameAliases[districtName] || districtName
+  selectedDistrict.value = resolvedName
 
   if (process.client) {
     const event = new CustomEvent('district-selected', {
