@@ -511,7 +511,7 @@
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Business Opportunities</h3>
                   <ul class="space-y-3">
                     <li>
-                      <button @click="navigateToOpportunities('procurement')" class="w-full text-left flex items-center text-gray-700 hover:text-blue-700 transition group">
+                      <button @click="openProcurementPortal" class="w-full text-left flex items-center text-gray-700 hover:text-blue-700 transition group">
                         <svg class="w-5 h-5 mr-2 text-orange-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                         </svg>
@@ -864,7 +864,7 @@
               <h4 class="font-semibold text-blue-800 mt-3">Business Opportunities</h4>
               <ul class="pl-2 space-y-2">
                 <li>
-                  <button @click="navigateToOpportunities('procurement')" class="w-full text-left flex items-center text-gray-700 hover:text-blue-700 transition group">
+                  <button @click="openProcurementPortal" class="w-full text-left flex items-center text-gray-700 hover:text-blue-700 transition group">
                     <svg class="w-5 h-5 mr-2 text-orange-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                     </svg>
@@ -902,6 +902,7 @@ const showSearch = ref(false);
 const searchQuery = ref('');
 const config = useRuntimeConfig();
 const jobsPortalUrl = computed(() => `${config.public.jobsPortalBase || 'http://localhost:3001'}/?source=nlgfc-website`);
+const procurementPortalUrl = computed(() => `${config.public.procurementPortalBase || 'http://localhost:3002'}/?source=nlgfc-website`);
 
 const isExpired = (dateString) => {
   if (!dateString) {
@@ -1035,6 +1036,14 @@ const openJobsPortal = () => {
 
   if (process.client) {
     window.location.href = jobsPortalUrl.value;
+  }
+};
+
+const openProcurementPortal = () => {
+  closeAllMenus();
+
+  if (process.client) {
+    window.location.href = procurementPortalUrl.value;
   }
 };
 </script>
