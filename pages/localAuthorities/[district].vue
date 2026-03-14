@@ -1,6 +1,22 @@
-<template>
+﻿<template>
   <div class="district-page">
-    <div v-if="!district" class="not-found">
+    <div v-if="pending" class="not-found">
+      <div class="not-found-content">
+        <h1>Loading District...</h1>
+      </div>
+    </div>
+
+    <div v-else-if="error" class="not-found">
+      <div class="not-found-content">
+        <h1>Unable to Load District</h1>
+        <p>Could not load data for "<strong>{{ route.params.district }}</strong>".</p>
+        <NuxtLink to="/localAuthorities/alldistricts" class="back-link">
+          ← Back to All Districts
+        </NuxtLink>
+      </div>
+    </div>
+
+    <div v-else-if="!district" class="not-found">
       <div class="not-found-content">
         <h1>District Not Found</h1>
         <p>The district "<strong>{{ route.params.district }}</strong>" does not exist.</p>
@@ -42,8 +58,8 @@
             <h3>Quick Facts</h3>
             <ul>
               <li><strong>Region:</strong> {{ district.region }}</li>
-              <li><strong>Population:</strong> {{ district.profile.population }}</li>
-              <li v-if="district.profile.jurisdiction"><strong>Location:</strong> {{ district.profile.jurisdiction }}</li>
+              <li><strong>Population:</strong> {{ district.population }}</li>
+              <li v-if="district.jurisdiction"><strong>Location:</strong> {{ district.jurisdiction }}</li>
             </ul>
           </div>
         </aside>
@@ -125,6 +141,40 @@
             <!-- PROJECTS TAB -->
             <div v-else-if="activeTab === 'projects'" key="projects" class="tab-content">
               <h2>Projects</h2>
+
+              <!-- Project Statistics from API -->
+              <div v-if="statsPending" class="pstats-loading">
+                <span class="pstats-spinner"></span> Loading project statistics…
+              </div>
+              <div v-else-if="projectStats.length" class="pstats-section">
+                <div class="pstats-header">
+                  <h3>Project Statistics</h3>
+                  <span class="item-count">{{ projectStats.length }} record{{ projectStats.length !== 1 ? 's' : '' }}</span>
+                </div>
+                <div class="pstats-table-wrap">
+                  <table class="pstats-table">
+                    <thead>
+                      <tr>
+                        <th>Project</th>
+                        <th>Sub-projects</th>
+                        <th>Beneficiaries</th>
+                        <th>Budget (MWK)</th>
+                        <th>Funds Disbursed (MWK)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="stat in projectStats" :key="stat.id">
+                        <td class="pstats-project-name">{{ stat.projectName }}</td>
+                        <td>{{ stat.totalProjects !== null ? Number(stat.totalProjects).toLocaleString() : '—' }}</td>
+                        <td>{{ stat.beneficiaries !== null ? Number(stat.beneficiaries).toLocaleString() : '—' }}</td>
+                        <td>{{ stat.budget !== null ? Number(stat.budget).toLocaleString() : '—' }}</td>
+                        <td>{{ stat.fundsDisbursed !== null ? Number(stat.fundsDisbursed).toLocaleString() : '—' }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
               <div v-if="district.projects?.length" class="projects-list">
                 <div
                   v-for="(project, i) in district.projects"
@@ -134,13 +184,35 @@
                   <div class="project-header">
                     <div>
                       <span class="project-acronym">{{ project.name }}</span>
-                      <h3>{{ project.fullName }}</h3>
+                      <h3>{{ project.fullName || project.name }}</h3>
                     </div>
-                    <span :class="['status-badge', project.status === 'Active' ? 'active' : 'inactive']">
+                    <span :class="['status-badge', project.status === 'Active' ? 'active' : project.status === 'Completed' ? 'completed' : 'inactive']">
                       {{ project.status }}
                     </span>
                   </div>
-                  <p class="project-description">{{ project.description }}</p>
+                  <!-- description with HTML support -->
+                  <div v-if="project.description" class="project-description" v-html="project.description"></div>
+
+                  <!-- Stats strip -->
+                  <div v-if="project.totalProjects !== null || project.beneficiaries !== null || project.catchment !== null || project.fundsDisbursed !== null" class="project-stats">
+                    <div v-if="project.totalProjects !== null" class="pstat">
+                      <span class="pstat-value">{{ project.totalProjects }}</span>
+                      <span class="pstat-label">Sub-projects</span>
+                    </div>
+                    <div v-if="project.beneficiaries !== null" class="pstat">
+                      <span class="pstat-value">{{ Number(project.beneficiaries).toLocaleString() }}</span>
+                      <span class="pstat-label">{{ project.name?.toUpperCase().includes('GESD') ? 'Infrastructures' : 'Beneficiaries' }}</span>
+                    </div>
+                    <div v-if="project.catchment !== null" class="pstat">
+                      <span class="pstat-value">{{ Number(project.catchment).toLocaleString() }}</span>
+                      <span class="pstat-label">Total Catchment</span>
+                    </div>
+                    <div v-if="project.fundsDisbursed !== null" class="pstat">
+                      <span class="pstat-value">MWK {{ Number(project.fundsDisbursed).toLocaleString() }}</span>
+                      <span class="pstat-label">Funds Disbursed</span>
+                    </div>
+                  </div>
+
                   <div v-if="project.objectives?.length" class="objectives">
                     <h4>Objectives</h4>
                     <ul>
@@ -149,53 +221,96 @@
                   </div>
                 </div>
               </div>
-              <p v-else class="empty-state">No projects available for this district yet.</p>
+              <p v-else-if="!projectStats.length" class="empty-state-box" style="display:block">No projects available for this district yet.</p>
             </div>
 
             <!-- REPORTS TAB -->
             <div v-else-if="activeTab === 'reports'" key="reports" class="tab-content">
-              <h2>Reports &amp; Documents</h2>
+              <div class="tab-header">
+                <h2>Reports &amp; Documents</h2>
+                <span v-if="district.reports?.length" class="item-count">{{ district.reports.length }} document{{ district.reports.length !== 1 ? 's' : '' }}</span>
+              </div>
               <div v-if="district.reports?.length" class="reports-list">
                 <div
                   v-for="(report, i) in district.reports"
                   :key="i"
                   class="report-card"
                 >
-                  <div class="report-icon">📄</div>
+                  <div class="report-icon-wrap">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                    </svg>
+                  </div>
                   <div class="report-info">
-                    <h3>{{ report.title }}</h3>
                     <div class="report-meta">
                       <span class="report-type">{{ report.type }}</span>
-                      <span class="report-date">{{ formatDate(report.date) }}</span>
+                      <span v-if="report.period" class="report-period">{{ report.period }}</span>
+                      <span v-else-if="report.date" class="report-date">{{ formatDate(report.date) }}</span>
                     </div>
-                    <p>{{ report.description }}</p>
+                    <h3>{{ report.title }}</h3>
+                    <div v-if="report.description" class="report-description" v-html="report.description"></div>
                   </div>
-                  <button class="download-btn" @click="downloadReport(report)">
-                    ↓ Download
-                  </button>
+                  <a
+                    v-if="report.fileUrl"
+                    :href="`${config.public.apiBase}/api/la-reports/${report.id}/download`"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="download-btn"
+                  >
+                    <svg viewBox="0 0 20 20" fill="currentColor" class="dl-icon"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                    Download
+                  </a>
+                  <span v-else class="no-file-badge">File not available</span>
                 </div>
               </div>
-              <p v-else class="empty-state">No reports available for this district yet.</p>
+              <div v-else class="empty-state-box">
+                <svg viewBox="0 0 48 48" fill="none" class="empty-icon"><path d="M28 4H10C8.34 4 7 5.34 7 7v34c0 1.66 1.34 3 3 3h28c1.66 0 3-1.34 3-3V20L28 4z" stroke="#d1d5db" stroke-width="2"/><path d="M28 4v16h12" stroke="#d1d5db" stroke-width="2"/></svg>
+                <p>No reports have been published for this district yet.</p>
+              </div>
             </div>
 
             <!-- NEWS TAB -->
             <div v-else-if="activeTab === 'news'" key="news" class="tab-content">
-              <h2>News &amp; Updates</h2>
-              <div v-if="district.news?.length" class="news-list">
-                <div
+              <div class="tab-header">
+                <h2>News &amp; Updates</h2>
+                <span v-if="district.news?.length" class="item-count">{{ district.news.length }} article{{ district.news.length !== 1 ? 's' : '' }}</span>
+              </div>
+              <div v-if="district.news?.length" class="news-grid">
+                <NuxtLink
                   v-for="(article, i) in district.news"
                   :key="i"
-                  class="news-card"
+                  :to="`/localAuthorities/news/${article.id}?from=${districtSlug}`"
+                  class="news-card news-card-link"
                 >
-                  <div class="news-meta">
-                    <span class="news-category">{{ article.category }}</span>
-                    <span class="news-date">{{ formatDate(article.date) }}</span>
+                  <!-- Image banner -->
+                  <div class="news-image-wrap">
+                    <img
+                      v-if="article.image"
+                      :src="article.image"
+                      :alt="article.title"
+                      class="news-image"
+                    />
+                    <div v-else class="news-image-placeholder">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="news-placeholder-icon">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
+                      </svg>
+                    </div>
                   </div>
-                  <h3>{{ article.title }}</h3>
-                  <p>{{ article.summary }}</p>
-                </div>
+                  <!-- Card body -->
+                  <div class="news-body">
+                    <div class="news-meta">
+                      <span class="news-category">{{ article.category }}</span>
+                      <span v-if="article.date" class="news-date">{{ formatDate(article.date) }}</span>
+                    </div>
+                    <h3>{{ article.title }}</h3>
+                    <p v-if="article.summary || article.content">{{ truncateText(article.summary || article.content) }}</p>
+                  </div>
+                </NuxtLink>
               </div>
-              <p v-else class="empty-state">No news available for this district yet.</p>
+              <div v-else class="empty-state-box">
+                <svg viewBox="0 0 48 48" fill="none" class="empty-icon"><rect x="6" y="6" width="36" height="36" rx="4" stroke="#d1d5db" stroke-width="2"/><path d="M14 18h20M14 24h20M14 30h12" stroke="#d1d5db" stroke-width="2" stroke-linecap="round"/></svg>
+                <p>No news has been published for this district yet.</p>
+              </div>
             </div>
           </Transition>
         </main>
@@ -205,11 +320,208 @@
 </template>
 
 <script setup>
-const route = useRoute()
-const { getDistrict } = useDistrictContent()
 
-const districtSlug = computed(() => route.params.district)
-const district = computed(() => getDistrict(districtSlug.value))
+const route = useRoute()
+const config = useRuntimeConfig()
+
+const districtSlug = computed(() => String(route.params.district || ''))
+const stripHtml = (value) => String(value || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+// Normalize array items — handles plain strings OR Filament Repeater objects {item:"..."}
+const toList = (arr) => Array.isArray(arr) ? arr.map(v => typeof v === 'string' ? v : (v?.item || v?.label || '')).filter(Boolean) : []
+
+const { data: districtData, pending, error, refresh: refreshData } = await useAsyncData(
+  `la:${districtSlug.value}`,
+  async () => {
+    if (!districtSlug.value) return null
+    try {
+      return await $fetch(
+        `${config.public.apiBase}/api/local-authorities/slug/${districtSlug.value}`,
+        { headers: { 'Cache-Control': 'no-cache' } }
+      )
+    } catch (err) {
+      if (err?.status === 404 || err?.statusCode === 404) return null
+      throw err
+    }
+  },
+  {
+    watch: [districtSlug],
+    default: () => null,
+    // Always fetch fresh data — prevents stale CMS updates being shown
+    getCachedData: () => null,
+  }
+)
+
+// Fetch LA projects stats for this local authority
+const { data: statsData, pending: statsPending, refresh: refreshStats } = await useAsyncData(
+  `la-stats:${districtSlug.value}`,
+  async () => {
+    const id = districtData.value?.id
+    if (!id) return null
+    try {
+      return await $fetch(
+        `${config.public.apiBase}/api/la-projects-stats?local_authority_id=${id}&per_page=100`
+      )
+    } catch {
+      return null
+    }
+  },
+  {
+    watch: [districtSlug],
+    default: () => null,
+    getCachedData: () => null,
+  }
+)
+
+// Force re-fetch every time this page mounts on the client
+// so CMS updates always reflect immediately without needing a hard refresh
+if (import.meta.client) {
+  onMounted(() => { refreshData(); refreshStats() })
+}
+
+const district = computed(() => {
+  if (!districtData.value) return null
+
+  const payload = districtData.value
+  const profileData = payload?.profile_data || {}
+  const incomingSections = Array.isArray(profileData.sections) ? profileData.sections : []
+
+  const legacySections = [
+    {
+      type: 'about',
+      data: {
+        title: `About ${payload.name || 'District'}`,
+        content: stripHtml(profileData.about || payload.profile),
+      },
+    },
+    Array.isArray(profileData.mandate) && profileData.mandate.length
+      ? {
+          type: 'bullet_list',
+          data: {
+            title: 'Mandate',
+            style: 'default',
+            items: profileData.mandate.map((label) => ({ label })),
+          },
+        }
+      : null,
+    (profileData.vision || profileData.mission)
+      ? {
+          type: 'vision_mission',
+          data: {
+            vision: profileData.vision || '',
+            mission: profileData.mission || '',
+          },
+        }
+      : null,
+    Array.isArray(profileData.strategicObjectives) && profileData.strategicObjectives.length
+      ? {
+          type: 'bullet_list',
+          data: {
+            title: 'Strategic Objectives',
+            style: 'numbered',
+            items: profileData.strategicObjectives.map((label) => ({ label })),
+          },
+        }
+      : null,
+    Array.isArray(profileData.keyFunctions) && profileData.keyFunctions.length
+      ? {
+          type: 'bullet_list',
+          data: {
+            title: 'Key Functions',
+            style: 'default',
+            items: profileData.keyFunctions.map((label) => ({ label })),
+          },
+        }
+      : null,
+    (profileData.majorAchievements || profileData.jurisdiction || profileData.population || profileData.structure)
+      ? {
+          type: 'stats_grid',
+          data: {
+            cards: [
+              profileData.majorAchievements ? { icon: '🏆', title: 'Major Achievements', body: profileData.majorAchievements } : null,
+              (profileData.jurisdiction || payload.jurisdiction) ? { icon: '📍', title: 'Jurisdiction', body: profileData.jurisdiction || payload.jurisdiction } : null,
+              (profileData.population || payload.population) ? { icon: '👥', title: 'Population', body: profileData.population || payload.population } : null,
+              profileData.structure ? { icon: '🏛️', title: 'Council Structure', body: profileData.structure } : null,
+            ].filter(Boolean),
+          },
+        }
+      : null,
+  ].filter(Boolean)
+
+  const profileSections = (incomingSections.length ? incomingSections : legacySections)
+    .map((section) => ({
+      type: section?.type || '',
+      ...(section?.data || {}),
+    }))
+    .filter((section) => !!section.type)
+
+  return {
+    name: payload.name,
+    region: payload.region || '',
+    population: payload.population || 'N/A',
+    jurisdiction: payload.jurisdiction || '',
+    profile: {
+      about: stripHtml(profileData.about || payload.profile),
+      mandate: toList(profileData.mandate),
+      vision: profileData.vision || '',
+      mission: profileData.mission || '',
+      strategicObjectives: toList(profileData.strategicObjectives),
+      keyFunctions: toList(profileData.keyFunctions),
+      majorAchievements: profileData.majorAchievements || '',
+      jurisdiction: profileData.jurisdiction || payload.jurisdiction || '',
+      population: profileData.population || payload.population || 'N/A',
+      structure: profileData.structure || '',
+    },
+    projects: Array.isArray(payload.projects)
+      ? payload.projects.map((project) => ({
+          name: project.name || 'Project',
+          fullName: project.full_name || '',
+          description: project.description || '',
+          objectives: Array.isArray(project.objectives) ? project.objectives : [],
+          status: project.status || 'Active',
+          totalProjects: project.total_projects ?? null,
+          beneficiaries: project.no_of_beneficiaries ?? null,
+          catchment: project.total_catchment ?? null,
+          fundsDisbursed: project.total_funds_disbursed ?? null,
+        }))
+      : [],
+    reports: Array.isArray(payload.reports)
+      ? payload.reports.map((report) => ({
+          id: report.id,
+          title: report.title || 'Untitled Report',
+          type: report.type || 'Report',
+          period: report.period || null,
+          date: report.created_at || report.updated_at || null,
+          description: report.description || '',
+          fileUrl: report.file_url || null
+        }))
+      : [],
+    news: Array.isArray(payload.news)
+      ? payload.news.map((article) => ({
+          id: article.id,
+          title: article.title || 'Untitled Article',
+          slug: article.slug || null,
+          image: article.image_url || null,
+          category: article.category || 'News',
+          date: article.created_at || article.updated_at || null,
+          summary: article.summary || '',
+          content: article.content || ''
+        }))
+      : []
+  }
+})
+
+const projectStats = computed(() => {
+  const items = statsData.value?.data
+  if (!Array.isArray(items) || !items.length) return []
+  return items.map(stat => ({
+    id: stat.id,
+    projectName: stat.project?.name || 'Unknown Project',
+    totalProjects: stat.total_projects ?? null,
+    beneficiaries: stat.no_of_beneficiaries ?? null,
+    budget: stat.budget ?? null,
+    fundsDisbursed: stat.total_funds_disbursed ?? null,
+  }))
+})
 
 const tabs = [
   { id: 'profile',  title: 'Profile',  icon: '🏛️' },
@@ -237,9 +549,9 @@ const formatDate = (dateStr) => {
   })
 }
 
-const downloadReport = (report) => {
-  // Placeholder — wire up to actual document URLs when available
-  console.log('Download report:', report.title)
+const truncateText = (html, maxLength = 120) => {
+  const plain = String(html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+  return plain.length > maxLength ? plain.slice(0, maxLength).trimEnd() + '…' : plain
 }
 
 onMounted(() => {
@@ -248,6 +560,15 @@ onMounted(() => {
     activeTab.value = tabParam
   }
 })
+
+watch(
+  () => route.query.tab,
+  (tabParam) => {
+    if (tabParam && tabs.some((tab) => tab.id === tabParam)) {
+      activeTab.value = tabParam
+    }
+  }
+)
 
 useHead({
   title: computed(() =>
@@ -264,7 +585,7 @@ useHead({
 }
 
 .page-header {
-  background: linear-gradient(135deg, #1e3a5f 0%, #2d5a8e 100%);
+  background: #111827;
   color: white;
   padding: 2rem 1.5rem 1.5rem;
 }
@@ -346,9 +667,9 @@ useHead({
 
 .tab-btn:hover { background: #f3f4f6; }
 .tab-btn.active {
-  background: #eff6ff;
-  color: #1d4ed8;
-  border-left-color: #1d4ed8;
+  background: #eef2f7;
+  color: #111827;
+  border-left-color: #111827;
   font-weight: 600;
 }
 
@@ -398,7 +719,7 @@ useHead({
 
 .tab-content h2 {
   font-size: 1.5rem;
-  color: #1e3a5f;
+  color: #111827;
   margin: 0 0 1.25rem;
   padding-bottom: 0.75rem;
   border-bottom: 2px solid #e5e7eb;
@@ -435,7 +756,7 @@ useHead({
   content: '▸';
   position: absolute;
   left: 0;
-  color: #2d5a8e;
+  color: #1e3a5f;
 }
 
 .styled-list.numbered {
@@ -450,7 +771,7 @@ useHead({
 .styled-list.numbered li::before {
   content: counter(obj-counter) '.';
   font-weight: 600;
-  color: #1d4ed8;
+  color: #111827;
 }
 
 /* ── Vision/Mission Grid ── */
@@ -479,8 +800,8 @@ useHead({
 
 .vm-card p { margin: 0; line-height: 1.6; font-size: 0.925rem; }
 
-.vision { background: #eff6ff; }
-.vision h3 { color: #1d4ed8; }
+.vision { background: #eef2f7; }
+.vision h3 { color: #111827; }
 
 .mission { background: #f0fdf4; }
 .mission h3 { color: #16a34a; }
@@ -536,7 +857,7 @@ useHead({
 
 .project-acronym {
   display: inline-block;
-  background: #1e3a5f;
+  background: #111827;
   color: white;
   font-size: 0.75rem;
   font-weight: 700;
@@ -545,7 +866,7 @@ useHead({
   margin-bottom: 0.4rem;
 }
 
-.project-header h3 { font-size: 1.1rem; color: #1e3a5f; margin: 0; }
+.project-header h3 { font-size: 1.1rem; color: #111827; margin: 0; }
 
 .status-badge {
   padding: 0.25rem 0.75rem;
@@ -557,8 +878,42 @@ useHead({
 
 .status-badge.active { background: #dcfce7; color: #15803d; }
 .status-badge.inactive { background: #f3f4f6; color: #6b7280; }
+.status-badge.completed { background: #dbeafe; color: #1d4ed8; }
 
 .project-description { color: #4b5563; line-height: 1.6; margin-bottom: 1rem; }
+
+/* Stats strip */
+.project-stats {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.pstat {
+  display: flex;
+  flex-direction: column;
+  background: #f0f4f8;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  min-width: 100px;
+}
+
+.pstat-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.pstat-label {
+  font-size: 0.72rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.15rem;
+}
 
 .objectives h4 { font-size: 0.875rem; color: #374151; margin-bottom: 0.5rem; }
 
@@ -568,6 +923,99 @@ useHead({
 }
 
 .objectives li { color: #4b5563; font-size: 0.9rem; margin-bottom: 0.3rem; }
+
+/* ── Project Statistics Table ── */
+.pstats-section {
+  margin-bottom: 2rem;
+}
+
+.pstats-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.pstats-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pstats-table-wrap {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.pstats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  background: white;
+}
+
+.pstats-table thead tr {
+  background: #111827;
+  color: white;
+}
+
+.pstats-table th {
+  padding: 0.7rem 1rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.pstats-table td {
+  padding: 0.65rem 1rem;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+  white-space: nowrap;
+}
+
+.pstats-table tbody tr:last-child td { border-bottom: none; }
+
+.pstats-table tbody tr:hover { background: #f9fafb; }
+
+.pstats-project-name {
+  font-weight: 600;
+  color: #111827 !important;
+  white-space: normal !important;
+  min-width: 140px;
+}
+
+.pstats-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  background: #f9fafb;
+  border: 1px dashed #e5e7eb;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.pstats-spinner {
+  display: inline-block;
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px solid #d1d5db;
+  border-top-color: #111827;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── Reports ── */
 .reports-list { display: flex; flex-direction: column; gap: 1rem; }
@@ -580,80 +1028,231 @@ useHead({
   border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
   transition: box-shadow 0.2s;
+  background: white;
 }
 
 .report-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
 
-.report-icon { font-size: 2rem; flex-shrink: 0; }
+.report-icon-wrap {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: #eef2f7;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-.report-info { flex: 1; }
-.report-info h3 { font-size: 1rem; color: #1e3a5f; margin: 0 0 0.4rem; }
-.report-info p { font-size: 0.875rem; color: #4b5563; margin: 0.5rem 0 0; }
+.report-icon-wrap svg {
+  width: 1.4rem;
+  height: 1.4rem;
+  stroke: #1e3a5f;
+}
 
-.report-meta { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+.report-info { flex: 1; min-width: 0; }
+.report-info h3 { font-size: 1rem; color: #111827; margin: 0.35rem 0 0.4rem; line-height: 1.4; }
+
+.report-description { font-size: 0.875rem; color: #4b5563; line-height: 1.6; margin: 0; }
+.report-description p { margin: 0 0 0.4rem; }
+.report-description p:last-child { margin-bottom: 0; }
+.report-description ul, .report-description ol { padding-left: 1.2rem; margin: 0 0 0.4rem; }
+.report-description li { margin-bottom: 0.2rem; }
+
+.report-meta { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 
 .report-type {
   background: #dbeafe;
-  color: #1d4ed8;
-  font-size: 0.75rem;
+  color: #1e3a5f;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   padding: 0.15rem 0.5rem;
   border-radius: 0.25rem;
+}
+
+.report-period {
+  font-size: 0.8rem;
+  color: #374151;
+  font-weight: 500;
 }
 
 .report-date { font-size: 0.8rem; color: #6b7280; }
 
 .download-btn {
-  background: #1e3a5f;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #111827;
   color: white;
   border: none;
+  text-decoration: none;
   padding: 0.5rem 1rem;
   border-radius: 0.375rem;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 500;
   white-space: nowrap;
   flex-shrink: 0;
   align-self: center;
   transition: background 0.2s;
 }
+.download-btn:hover { background: #1e3a5f; }
+.dl-icon { width: 1rem; height: 1rem; flex-shrink: 0; }
 
-.download-btn:hover { background: #2d5a8e; }
+.no-file-badge {
+  flex-shrink: 0;
+  align-self: center;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  padding: 0.4rem 0.75rem;
+  border: 1px dashed #d1d5db;
+  border-radius: 0.375rem;
+  white-space: nowrap;
+}
 
 /* ── News ── */
-.news-list { display: flex; flex-direction: column; gap: 1rem; }
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
 
 .news-card {
-  padding: 1.25rem;
   border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
-  transition: box-shadow 0.2s;
+  overflow: hidden;
+  background: white;
+  transition: box-shadow 0.2s, transform 0.15s;
+  display: flex;
+  flex-direction: column;
 }
 
-.news-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.news-card-link {
+  text-decoration: none;
+  color: inherit;
+}
 
-.news-meta { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 0.5rem; }
+.news-card:hover {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.news-image-wrap {
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.news-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.news-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #111827 0%, #1e3a5f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.news-placeholder-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  stroke: rgba(255,255,255,0.4);
+}
+
+.news-body {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.news-meta { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
 
 .news-category {
-  background: #fef3c7;
-  color: #92400e;
-  font-size: 0.75rem;
-  font-weight: 600;
+  background: #eef2f7;
+  color: #1e3a5f;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   padding: 0.15rem 0.5rem;
   border-radius: 0.25rem;
-  text-transform: uppercase;
 }
 
-.news-date { font-size: 0.8rem; color: #6b7280; }
+.news-date { font-size: 0.75rem; color: #9ca3af; }
 
-.news-card h3 { font-size: 1rem; color: #1e3a5f; margin: 0 0 0.4rem; }
-.news-card p { font-size: 0.875rem; color: #4b5563; margin: 0; line-height: 1.6; }
-
-/* ── Empty State ── */
-.empty-state {
-  text-align: center;
-  color: #6b7280;
-  padding: 3rem;
+.news-body h3 {
   font-size: 0.95rem;
+  color: #111827;
+  margin: 0;
+  line-height: 1.45;
+  font-weight: 600;
 }
+
+.news-body p {
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ── Tab header ── */
+.tab-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.tab-header h2 {
+  font-size: 1.5rem;
+  color: #111827;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.item-count {
+  font-size: 0.8rem;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+/* ── Empty state box ── */
+.empty-state-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 2rem;
+  text-align: center;
+  color: #9ca3af;
+  background: #f9fafb;
+  border: 1px dashed #e5e7eb;
+  border-radius: 0.75rem;
+}
+
+.empty-icon {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.6;
+}
+
+.empty-state-box p { font-size: 0.9rem; margin: 0; }
 
 /* ── Not Found ── */
 .not-found {
@@ -668,12 +1267,12 @@ useHead({
   padding: 2rem;
 }
 
-.not-found-content h1 { font-size: 2rem; color: #1e3a5f; margin-bottom: 1rem; }
+.not-found-content h1 { font-size: 2rem; color: #111827; margin-bottom: 1rem; }
 .not-found-content p { color: #4b5563; margin-bottom: 1.5rem; }
 
 .back-link {
   display: inline-block;
-  background: #1e3a5f;
+  background: #111827;
   color: white;
   padding: 0.6rem 1.5rem;
   border-radius: 0.375rem;
@@ -681,7 +1280,7 @@ useHead({
   font-size: 0.9rem;
   transition: background 0.2s;
 }
-.back-link:hover { background: #2d5a8e; }
+.back-link:hover { background: #1e3a5f; }
 
 /* ── Transitions ── */
 .fade-slide-enter-active,
