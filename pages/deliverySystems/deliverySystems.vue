@@ -8,8 +8,8 @@ definePageMeta({ title: 'Delivery Systems' })
 
 const { data: pages, pending, error: PageError } = usePageBlocks([
   'msr-header', 'msr-dashboard', 'msr-key-features','laifmis-header','laifmis-key-features',
-  'e-payment-header','e-payment-key-features','cs-epwp-header','cs-epwp-picture',
-  'cs-epwp-key-features','dgrm-header','dgrm-picture','dgrm-key-features','lapas-header','lapas-picture',
+  'e-payment-header','digital-picture','e-payment-key-features','cs-epwp-header','cs-epwp-picture',
+  'cs-epwp-key-features','dgrm-header','dgrm-picture','dgrm-key-features','lapas-header','lapas-dashboard',
   'lapas-key-features','comsip-header','comsip-key-features','pmis-header','pmis-dashboard','pmis-key-features',
   'sctp-header','sctp-picture','sctp-key-features'
 ])
@@ -191,10 +191,10 @@ function updateActiveTabFromHash(hash) {
 <div v-if="item.id === 'msr'" class="prose max-w-none">
   <BlocksRenderer :blocks="pages?.['msr-header']?.blocks || []" />
   
-  <!-- MSR Dashboard-->
-
+<!-- MSR Dashboard-->
+<div class="mt-10">
   <BlocksRenderer :blocks="pages?.['msr-dashboard']?.blocks || []" />
-  
+</div>
   <!-- Key Features Section -->
   <BlocksRenderer :blocks="pages?.['msr-key-features']?.blocks || []" />
   
@@ -211,10 +211,16 @@ function updateActiveTabFromHash(hash) {
 </div>
 
             
-            <!-- E-Payment System section -->
+            <!--digital System section -->
 <div v-else-if="item.id === 'e-payments'" class="prose max-w-none">
   <BlocksRenderer :blocks="pages?.['e-payment-header']?.blocks || []" />
   
+
+<!-- digital PICTURE--> 
+ <div class="flex justify-center mt-10"> 
+  <BlocksRenderer :blocks="pages?.['digital-picture']?.blocks || []" /> 
+</div>
+
 
   <!-- Key Features Section -->
   <BlocksRenderer :blocks="pages?.['e-payment-key-features']?.blocks || []" />
@@ -311,11 +317,10 @@ function updateActiveTabFromHash(hash) {
 <div v-else-if="item.id === 'lapas'" class="prose max-w-none">
   <BlocksRenderer :blocks="pages?.['lapas-header']?.blocks || []" />
 
-<!-- lapas PICTURE--> 
- <div class="flex justify-center mt-10"> 
-  <BlocksRenderer :blocks="pages?.['lapas-picture']?.blocks || []" /> 
+<!-- lapas dashboard--> 
+<div class="mt-10">
+  <BlocksRenderer :blocks="pages?.['lapas-dashboard']?.blocks || []" />
 </div>
-
   <!-- Key Features Section -->
   <BlocksRenderer :blocks="pages?.['lapas-key-features']?.blocks || []" />
 </div>
@@ -333,7 +338,9 @@ function updateActiveTabFromHash(hash) {
   <BlocksRenderer :blocks="pages?.['pmis-header']?.blocks || []" />
 
   <!-- PMIS Dashboard -->
-    <BlocksRenderer :blocks="pages?.['pmis-dashboard']?.blocks || []" />
+<div class="mt-10">
+  <BlocksRenderer :blocks="pages?.['pmis-dashboard']?.blocks || []" />
+</div>
 
   <!-- Key Features Section -->
   <BlocksRenderer :blocks="pages?.['pmis-key-features']?.blocks || []" />
