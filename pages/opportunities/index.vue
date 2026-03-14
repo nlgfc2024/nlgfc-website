@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import OpportunitiesFaqGuidelines from '../../components/OpportunitiesFaqGuidelines.vue'
 
 definePageMeta({
@@ -109,6 +109,7 @@ const { data: vacanciesResponse, pending: vacanciesPending, error: vacanciesErro
       },
     }),
   {
+    lazy: true,
     default: () => ({ data: [] }),
   }
 )
@@ -123,6 +124,7 @@ const { data: procurementResponse, pending: procurementPending, error: procureme
       },
     }),
   {
+    lazy: true,
     default: () => ({ data: [] }),
   }
 )
@@ -257,22 +259,25 @@ const opportunitiesLoading = computed(() => {
   return procurementPending.value
 })
 
-const handleHashChange = () => {
-  const hash = window.location.hash.replace('#', '')
-  if (!hash) {
-    return
+const normalizeRouteQueryValue = (value) => {
+  if (Array.isArray(value)) {
+    return value[0] ? String(value[0]) : ''
   }
+  return value ? String(value) : ''
+}
 
-  const normalized = normalizeSection(hash)
-  if (normalized !== activeSection.value) {
-    activeSection.value = normalized
+const syncActiveSectionFromRoute = () => {
+  const hash = String(route.hash || '').replace('#', '')
+  const hashSection = hash ? normalizeSection(hash) : null
+  const querySection = route.query.section ? normalizeSection(String(route.query.section)) : null
+  const nextSection = hashSection || querySection || PROCUREMENT_SECTION
+
+  if (nextSection !== activeSection.value) {
+    activeSection.value = nextSection
   }
 }
 
 onMounted(() => {
-  if (route.query.section) {
-    activeSection.value = normalizeSection(String(route.query.section))
-  }
   if (route.query.page) {
     currentPage.value = Number.parseInt(String(route.query.page), 10) || 1
   }
@@ -280,25 +285,33 @@ onMounted(() => {
     itemsPerPage.value = Number.parseInt(String(route.query.limit), 10) || 5
   }
 
-  handleHashChange()
-  window.addEventListener('hashchange', handleHashChange)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('hashchange', handleHashChange)
+  syncActiveSectionFromRoute()
 })
 
 watch(() => route.query.section, (newSection) => {
   if (newSection) {
-    const normalized = normalizeSection(String(newSection))
-    if (normalized !== activeSection.value) {
-      activeSection.value = normalized
-    }
+    syncActiveSectionFromRoute()
   }
+})
+
+watch(() => route.hash, () => {
+  syncActiveSectionFromRoute()
 })
 
 watch([activeSection, currentPage, itemsPerPage], ([newSection]) => {
   const hash = newSection === JOB_SECTION ? `#${JOB_HASH}` : `#${PROCUREMENT_HASH}`
+  const currentSection = normalizeRouteQueryValue(route.query.section)
+  const currentPageQuery = normalizeRouteQueryValue(route.query.page)
+  const currentLimitQuery = normalizeRouteQueryValue(route.query.limit)
+
+  if (
+    currentSection === String(newSection) &&
+    currentPageQuery === String(currentPage.value) &&
+    currentLimitQuery === String(itemsPerPage.value) &&
+    route.hash === hash
+  ) {
+    return
+  }
 
   router.replace({
     query: {
