@@ -14,12 +14,8 @@ export default defineNuxtConfig({
   ],
  runtimeConfig: {
     public: {
-<<<<<<< HEAD
       apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://nlgfc_api.test',
       jobsPortalBase: process.env.NUXT_PUBLIC_JOBS_PORTAL_BASE || 'http://localhost:3001',
-=======
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://127.0.0.1:8000',
->>>>>>> origin/chisomo
     },
   },
   // Configuration for subdirectory deployment and app settings
