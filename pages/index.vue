@@ -13,15 +13,40 @@ const { getExcerpt, stripHtmlTags } = useHtmlUtils();
 const config = useRuntimeConfig();
 const apiBaseUrl = config.public.baseUrl || 'http://localhost:8000'
 
-const fetchPaginatedEndpoint = (endpoint, page, perPage, extraQuery = {}) => {
-  return $fetch(`${apiBaseUrl}${endpoint}`, {
-    query: {
-      per_page: perPage,
-      page,
-      ...extraQuery
-    },
-    timeout: 10000
-  })
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+const fetchPaginatedEndpoint = async (
+  endpoint,
+  page,
+  perPage,
+  extraQuery = {},
+  retries = 3
+) => {
+  let lastError
+
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    try {
+      return await $fetch(`${apiBaseUrl}${endpoint}`, {
+        query: {
+          per_page: perPage,
+          page,
+          ...extraQuery
+        },
+        timeout: 20000
+      })
+    } catch (error) {
+      lastError = error
+
+      if (attempt === retries) {
+        throw error
+      }
+
+      // Retry with short backoff to absorb backend cold-starts after restarts.
+      await sleep(500 * (attempt + 1))
+    }
+  }
+
+  throw lastError
 }
 
 const props = defineProps({
@@ -353,25 +378,16 @@ const goToNextPublicationsPage = () => {
   if (!canGoToNextPublicationsPage.value) return
   publicationsPage.value += 1
 }
-</script>
 
-<template>
-  <div class="relative">
-    <ImageSlider class="relative z-0 pb-16 md:pb-24" />
-    <section class="relative z-10 -mt-10 md:-mt-18 lg:-mt-20 px-4">
-      <div class="container mx-auto px-4">
-  const tab = opportunityTabs.value.find(t => t.key === activeTab.value)
-  return tab?.items || []
+onMounted(() => {
+  if (publicationsError.value) {
+    fetchPublications()
+  }
+
+  if (procurementsError.value) {
+    fetchProcurements()
+  }
 })
-
-// Publications
-const publications = ref([
-  { title: '2024 Annual Report and Financial Statements', date: '2024-12-31', file: '/pdfs/annual-report-2024.pdf' },
-  { title: 'Q1 Monitoring and Evaluation Brief', date: '2024-03-30', file: '/pdfs/q1-brief-2024.pdf' },
-  { title: 'Local Authority Financial Management Handbook', date: '2023-11-10', file: '/pdfs/handbook-2023.pdf' },
-  { title: 'Comprehensive Financial Audit Summary Report', date: '2023-08-15', file: '/pdfs/audit-summary-2023.pdf' },
-  { title: 'Development Budget Review and Analysis', date: '2023-06-01', file: '/pdfs/budget-review-2023.pdf' }
-])
 </script>
 
 <template>
@@ -1071,10 +1087,15 @@ const publications = ref([
 }
 
 .projects-grid {
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 14rem));
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  align-items: stretch;
+  width: 100%;
+}
+
+.projects-grid > * {
+  flex: 0 0 14rem;
 }
 
 </style>

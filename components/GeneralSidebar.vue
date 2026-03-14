@@ -332,6 +332,22 @@ const handleSubgroupClick = (group, subgroup) => {
 };
 
 const hasSubgroupItems = (subgroup) => Array.isArray(subgroup?.items) && subgroup.items.length > 0;
+
+// Keep nested content visible for entries that do not have a valid group label.
+const shouldHideGroupHeader = (groupName) => !groupName || !String(groupName).trim();
+
+const isProjectsRoute = computed(() => route.path.startsWith('/projects'));
+
+const isExternalHref = (href = '') => {
+  return /^(https?:)?\/\//i.test(href) || href.startsWith('mailto:') || href.startsWith('tel:');
+};
+
+const normalizeInternalHref = (href = '') => {
+  if (!href) return route.path;
+  if (isExternalHref(href)) return href;
+  if (href.startsWith('#')) return `${route.path}${href}`;
+  return href.startsWith('/') ? href : `/${href}`;
+};
 // Function to explicitly toggle the sidebar's visibility
 const toggleSidebarVisibility = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
@@ -548,7 +564,7 @@ const dynamicSidebarStyle = computed(() => {
             <div v-show="shouldHideGroupHeader(group.group) || openGroup === group.group" class="bg-white" >
               <ul class="py-4">
                 <!-- Sections within Group -->
-                <li v-if="group.sections && Array.isArray(group.sections) && group.sections.length > 0">
+                <template v-if="group.sections && Array.isArray(group.sections) && group.sections.length > 0">
                   <li v-for="section in group.sections.filter(section => section && section.id)" :key="section.id">
                     <NuxtLink
                       :to="`${$route.path}#${section.id}`"
@@ -575,10 +591,10 @@ const dynamicSidebarStyle = computed(() => {
                       </div>
                     </NuxtLink>
                   </li>
-                </li>
+                </template>
                 
                 <!-- Subgroups within Group -->
-                <li v-if="group.subgroups && Array.isArray(group.subgroups) && group.subgroups.length > 0">
+                <template v-if="group.subgroups && Array.isArray(group.subgroups) && group.subgroups.length > 0">
                   <li v-for="subgroup in group.subgroups.filter(subgroup => subgroup && subgroup.id)" :key="subgroup.id">
                     <NuxtLink
                       :to="`${$route.path}#${subgroup.id}`"
@@ -639,9 +655,9 @@ const dynamicSidebarStyle = computed(() => {
                       </li>
                     </ul>
                   </li>
-                </li>
+                </template>
                 <!-- Direct Items within Group (render even when subgroups exist) -->
-                <li v-if="group.items && Array.isArray(group.items) && group.items.length > 0">
+                <template v-if="group.items && Array.isArray(group.items) && group.items.length > 0">
                    <li v-for="item in group.items.filter(item => item && item.id)" :key="item.id">
                         <a
                           v-if="isProjectsRoute && item.href && (isExternalHref(item.href) || item.external)"
@@ -677,7 +693,7 @@ const dynamicSidebarStyle = computed(() => {
                           {{ item.title }}
                         </NuxtLink>
                       </li>
-                </li>
+                </template>
               </ul>
             </div>
         </div>

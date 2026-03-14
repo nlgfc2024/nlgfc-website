@@ -69,24 +69,24 @@
 
     const boardChairperson = computed(() => {
       if (!Array.isArray(boardMembers.value) || !boardMembers.value.length) return null
-      return boardMembers.value[0]
+      return boardMembers.value.find((member) => /chair/i.test(member?.position || '')) || boardMembers.value[0]
     })
 
     const boardOtherMembers = computed(() => {
       if (!Array.isArray(boardMembers.value) || !boardMembers.value.length) return []
       if (!boardChairperson.value) return boardMembers.value
-      return boardMembers.value.filter(member => member.id !== boardChairperson.value.id)
+      return boardMembers.value.filter((member) => member !== boardChairperson.value)
     })
 
     const executiveDirector = computed(() => {
       if (!Array.isArray(executiveMembers.value) || !executiveMembers.value.length) return null
-      return executiveMembers.value[0]
+      return executiveMembers.value.find((member) => /executive director/i.test(member?.position || '')) || executiveMembers.value[0]
     })
 
     const otherExecutiveDirectors = computed(() => {
       if (!Array.isArray(executiveMembers.value) || !executiveMembers.value.length) return []
       if (!executiveDirector.value) return executiveMembers.value
-      return executiveMembers.value.filter(member => member.id !== executiveDirector.value.id)
+      return executiveMembers.value.filter((member) => member !== executiveDirector.value)
     })
 
     const menuItems = ref([
@@ -182,6 +182,83 @@ const { data: pages, pending, error: PageError } = usePageBlocks([
   'planning-monitoring-and-evaluation-division',
   'internal-audit-and-risk-division','directorate-of-social-and-economic-dev-services'
 ])
+
+const PagePending = pending
+
+const isTabPageSlug = (tabId) => Object.prototype.hasOwnProperty.call(TAB_PAGE_SLUGS, tabId)
+
+const getTabSlug = (tabId) => TAB_PAGE_SLUGS[tabId]
+
+const fetchTabPage = async (tabId, force = false) => {
+  if (!isTabPageSlug(tabId)) return
+
+  const slug = getTabSlug(tabId)
+  if (!slug) return
+
+  if (!force && pageLoadedByTab[tabId]) return
+  if (pageLoadingByTab[tabId]) return
+
+  pageLoadingByTab[tabId] = true
+  pageErrorByTab[tabId] = null
+
+  try {
+    const page = await $fetch(`${pagesApiBaseUrl.value}/api/pages/${slug}`)
+    pageBlocksByTab[tabId] = page?.blocks || []
+    pageLoadedByTab[tabId] = true
+  } catch (error) {
+    pageErrorByTab[tabId] = error
+  } finally {
+    pageLoadingByTab[tabId] = false
+  }
+}
+
+const getTabBlocks = (tabId) => {
+  if (Array.isArray(pageBlocksByTab[tabId])) return pageBlocksByTab[tabId]
+  const slug = getTabSlug(tabId)
+  return pages.value?.[slug]?.blocks || []
+}
+
+const isTabPageLoading = (tabId) => {
+  if (pageLoadingByTab[tabId]) return true
+
+  const slug = getTabSlug(tabId)
+  if (!slug) return false
+
+  return pending.value && !pages.value?.[slug]
+}
+
+const getTabPageError = (tabId) => {
+  if (pageErrorByTab[tabId]) return pageErrorByTab[tabId]
+
+  const slug = getTabSlug(tabId)
+  if (!slug) return null
+
+  return PageError.value && !pages.value?.[slug] ? PageError.value : null
+}
+
+const ensureLeadershipDataForTab = async (tabId) => {
+  if (tabId === 'board' && !boardRequested.value) {
+    boardRequested.value = true
+    await refreshBoard()
+  }
+
+  if (tabId === 'management' && !executiveRequested.value) {
+    executiveRequested.value = true
+    await refreshExecutive()
+  }
+}
+
+watch(
+  activeTab,
+  async (tabId) => {
+    await ensureLeadershipDataForTab(tabId)
+
+    if (isTabPageSlug(tabId)) {
+      await fetchTabPage(tabId)
+    }
+  },
+  { immediate: true }
+)
 
 
 function updateActiveTabFromHash(hash) {
