@@ -8,7 +8,24 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'apply'])
 
+const normalizedResponsibilities = computed(() => {
+  return Array.isArray(props.job?.responsibilities) ? props.job.responsibilities : []
+})
+
+const normalizedRequirements = computed(() => {
+  return Array.isArray(props.job?.requirements) ? props.job.requirements : []
+})
+
 const formatDate = (dateString) => {
+  if (!dateString) {
+    return 'Not specified'
+  }
+
+  const parsed = new Date(dateString)
+  if (Number.isNaN(parsed.getTime())) {
+    return 'Not specified'
+  }
+
   return new Date(dateString).toLocaleDateString('en-GB', {
     day: '2-digit',
     month: 'long',
@@ -17,10 +34,18 @@ const formatDate = (dateString) => {
 }
 
 const isExpired = (dateString) => {
+  if (!dateString) {
+    return false
+  }
+
   return new Date(dateString) < new Date()
 }
 
 const getDaysUntilExpiry = (dateString) => {
+  if (!dateString) {
+    return 0
+  }
+
   const today = new Date()
   const expiryDate = new Date(dateString)
   const diffTime = expiryDate - today
@@ -117,7 +142,7 @@ onMounted(() => {
               </h3>
               <div class="bg-green-50 rounded-lg p-4 border border-green-200">
                 <ul class="space-y-3">
-                  <li v-for="(responsibility, index) in job.responsibilities" :key="index" class="flex items-start space-x-3">
+                  <li v-for="(responsibility, index) in normalizedResponsibilities" :key="index" class="flex items-start space-x-3">
                     <div class="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
                       <span class="text-xs font-medium text-green-600">{{ index + 1 }}</span>
                     </div>
@@ -135,7 +160,7 @@ onMounted(() => {
               </h3>
               <div class="bg-purple-50 rounded-lg p-4 border border-purple-200">
                 <ul class="space-y-3">
-                  <li v-for="(requirement, index) in job.requirements" :key="index" class="flex items-start space-x-3">
+                  <li v-for="(requirement, index) in normalizedRequirements" :key="index" class="flex items-start space-x-3">
                     <Icon name="heroicons:check-circle" class="w-5 h-5 text-purple-500 mt-0.5 flex-shrink-0" />
                     <span class="text-gray-700 leading-relaxed">{{ requirement }}</span>
                   </li>

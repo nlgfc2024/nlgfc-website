@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted, computed, watch, inject } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import GeneralSidebar from '../components/GeneralSidebar.vue';
 import Navbar from '../components/Navbar.vue';
@@ -31,6 +31,7 @@ const shouldShowHeader = computed(() => !hideHeaderRoutes.includes(route.path));
 
 // New reactive state for header height and visibility
 const headerHeight = ref(0);
+const navbarHeight = ref(0);
 const isHeaderVisible = ref(true);
 
 const handleActiveIdUpdate = (newId) => {
@@ -39,18 +40,36 @@ const handleActiveIdUpdate = (newId) => {
 
 const opportunitySections = [
   {
-    id: 'procurement',
-    name: 'Procurement Portal',
+    id: 'procurement-notices',
+    name: 'Procurement Notices',
     icon: 'heroicons:document-text',
     description: 'Tenders, RFQs, and procurement notices'
   },
   {
-    id: 'jobs',
-    name: 'Job Opportunities',
+    id: 'job-opportunities',
+    name: 'Job Listings',
     icon: 'heroicons:briefcase',
     description: 'Current job openings and career opportunities'
   }
 ];
+
+const normalizeOpportunitySidebarId = (hashValue) => {
+  const normalizedHash = String(hashValue || '').replace('#', '');
+
+  if (normalizedHash === 'jobs' || normalizedHash === 'job-opportunities') {
+    return 'job-opportunities';
+  }
+
+  if (normalizedHash === 'procurement' || normalizedHash === 'procurement-notices') {
+    return 'procurement-notices';
+  }
+
+  return 'procurement-notices';
+};
+
+const handleActiveIdUpdate = (newId) => {
+  activeTab.value = newId;
+};
 
 const sidebarProps = computed(() => {
   // Define pages that should NOT have a sidebar
@@ -64,11 +83,14 @@ const sidebarProps = computed(() => {
   
   // Check for opportunities page
   if (route.path.includes('/opportunities')) {
+    const activeOpportunityId = normalizeOpportunitySidebarId(route.hash);
+
     return {
       sidebarType: 'opportunities',
-      sectionsData: opportunitySections,
+      sectionsData: [],
+      sections: opportunitySections,
       sidebarTitle: 'Browse Opportunities',
-      activeId: 'procurement' // default active section
+      activeId: activeOpportunityId,
     };
   }
   
@@ -78,7 +100,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } else {
       // Fallback for projects page when sidebarData is not yet available
@@ -128,7 +150,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -138,7 +160,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -148,7 +170,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; }    
   } else if (route.path.includes('/projects/pastProjects#masaf-psn')) {
@@ -156,7 +178,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; }    
   } else if (route.path.includes('/projects/pastProjects#masaf-scb')) {
@@ -164,7 +186,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; }    
   } else if (route.path.includes('/projects/pastProjects#masaf-pm')) {
@@ -172,7 +194,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; }    
   }
@@ -182,7 +204,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -192,7 +214,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -202,7 +224,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   } else if (route.path.includes('/projects/upcomingProjects#inspire-o')) {
@@ -210,7 +232,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   } 
@@ -220,7 +242,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -229,20 +251,24 @@ const sidebarProps = computed(() => {
     if (projectGroups.value.length > 0) {
       return {
         sidebarType: 'projects',
-        sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sectionsData: [], // Empty sectionsData for groups
+        sections: projectGroups.value, // Use sections instead
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
-    }; } 
+      }; 
+    } 
   }
 
   if (route.path.includes('/localAuthorities/lilongwecitycouncil')) {
     if (projectGroups.value.length > 0) {
       return {
         sidebarType: 'projects',
-        sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sectionsData: [], // Empty sectionsData for groups
+        sections: projectGroups.value, // Use sections instead
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
-    }; } 
+      }; 
+    } 
   }
 
   if (route.path.includes('/resourceCenter')) {
@@ -250,7 +276,7 @@ const sidebarProps = computed(() => {
       return {
         sidebarType: 'projects',
         sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
+        sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
   }
@@ -276,29 +302,77 @@ const sidebarProps = computed(() => {
   };
 });
 
+// Reactive state for header visibility ratio
+const headerVisibilityRatio = ref(1);
+
+// reactive state for footer visibility
+const footerVisibilityRatio = ref(0);
+const footerHeight = ref(0);
+
+// Enhanced throttling for smoother updates during fast scrolling
+let scrollTimeout = null;
+let lastScrollTime = 0;
+
 // Function to handle scroll-based toggling of the sidebar and header visibility
 const handleScroll = () => {
+  const currentTime = Date.now();
+  
+  // Immediate update for fast scrolling
+  updateScrollValues();
+  
+  // Clear existing timeout
+  if (scrollTimeout) {
+    clearTimeout(scrollTimeout);
+  }
+  
+  // Set a very short timeout for additional smoothing
+  scrollTimeout = setTimeout(() => {
+    updateScrollValues();
+  }, 5); // Very short delay for final position accuracy
+  
+  lastScrollTime = currentTime;
+};
+
+// Separate function for actual scroll value updates
+const updateScrollValues = () => {
   const footer = document.querySelector('footer');
   const pageHeader = document.querySelector('.page-header');
   const navbar = document.querySelector('.navbar');
 
+  if (navbar) {
+    navbarHeight.value = navbar.offsetHeight; // CAPTURING the navbar's height in pixels
+  }
+
   if (pageHeader && navbar) {
-    const navbarHeight = navbar.offsetHeight;
     const headerRect = pageHeader.getBoundingClientRect();
 
     // Update header height
     headerHeight.value = pageHeader.offsetHeight;
 
+    // Calculate visibility ratio for smooth transitions
+    const navbarBottom = navbarHeight.value;
+    const visibleHeaderHeight = Math.max(0, headerRect.bottom - navbarBottom);
+    headerVisibilityRatio.value = Math.max(0, Math.min(1, visibleHeaderHeight / headerHeight.value));
+
     // The header is considered visible if its bottom edge is below the top of the navbar
-    isHeaderVisible.value = headerRect.bottom > navbarHeight;
+    isHeaderVisible.value = headerRect.bottom > navbarHeight.value;
   }
 
   if (footer) {
-    const footerTop = footer.getBoundingClientRect().top;
     const windowHeight = window.innerHeight;
-    const scrollThreshold = windowHeight * 0.2;
-
-    if (windowHeight > footerTop + scrollThreshold) {
+    const footerRect = footer.getBoundingClientRect();
+    
+    // Update footer height
+    footerHeight.value = footer.offsetHeight;
+    
+    // Calculate how much of the footer is visible
+    const footerTopRelativeToViewport = footerRect.top;
+    const footerVisibleHeight = Math.max(0, windowHeight - footerTopRelativeToViewport);
+    footerVisibilityRatio.value = Math.max(0, Math.min(1, footerVisibleHeight / footerHeight.value));
+    
+    // Close sidebar when footer is 80% visible
+    const footerVisibilityThreshold = 0.8;
+    if (footerVisibilityRatio.value >= footerVisibilityThreshold) {
       isSidebarOpen.value = false;
     } else {
       isSidebarOpen.value = true;
@@ -307,13 +381,10 @@ const handleScroll = () => {
 };
 
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll);
+  // Use passive listener for better performance
+  window.addEventListener('scroll', handleScroll, { passive: true });
   // Initial call to set header height and visibility on mount
   handleScroll();
-});
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
 });
 
 watch(() => route.hash, (newHash) => {
@@ -322,25 +393,50 @@ watch(() => route.hash, (newHash) => {
     // Logic for URL hash
   }
 });
+
+// function to force initial calculations
+const initializeLayout = async () => {
+  await nextTick();
+  handleScroll(); // Force initial calculation
+};
+
+// Watch for route changes and reinitialize
+watch(() => route.path, async () => {
+  await initializeLayout();
+});
+
+onUnmounted(async () => {
+  window.removeEventListener('scroll', handleScroll);
+  if (scrollTimeout) {
+    clearTimeout(scrollTimeout);
+  }
+  await initializeLayout();
+});
+
 </script>
 
 <template>
   <div class="min-h-screen flex flex-col">
     <Navbar class="navbar" />
     <PageHeader v-if="shouldShowHeader" :title="route.meta.title" class="page-header" /> 
-    <main class="flex-grow flex">
+    <main class="flex-grow flex items-start">
       <aside v-if="sidebarProps" :class="['w-full md:w-72 flex-shrink-0']">
         <slot name="sidebar">
           <GeneralSidebar
             :sidebarOpen="isSidebarOpen"
             :sidebarType="sidebarProps.sidebarType"
             :sectionsData="sidebarProps.sectionsData"
+            :sections="sidebarProps.sections"
             :activeId="sidebarProps.activeId"
             :sidebarTitle="sidebarProps.sidebarTitle"
             :jobOpportunities="sidebarProps.jobOpportunities"
             :procurementNotices="sidebarProps.procurementNotices"
             :headerHeight="headerHeight"
+            :navbarHeight="navbarHeight" 
             :isHeaderVisible="isHeaderVisible"
+            :headerVisibilityRatio="headerVisibilityRatio"
+            :footerHeight="footerHeight"
+            :footerVisibilityRatio="footerVisibilityRatio"
             @update:sidebarOpen="isSidebarOpen = $event"
             @update:activeId="handleActiveIdUpdate"
             @openFaqModal="sidebarProps.onOpenFaqModal"

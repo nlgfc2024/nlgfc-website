@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { defineAsyncComponent, computed } from 'vue'
 
+const config = useRuntimeConfig()
+
+function resolveStorageUrl(value?: string): string {
+  if (!value) return ''
+  if (/^(https?:)?\/\//i.test(value) || value.startsWith('data:')) return value
+  const base = (config.public.apiBase as string | undefined)?.replace(/\/$/, '') || ''
+  if (value.startsWith('/')) return base ? `${base}${value}` : value
+  const normalized = value.replace(/^storage\//, '')
+  return base ? `${base}/storage/${normalized}` : `/storage/${normalized}`
+}
+
 type BlockItem = { id?: string; type?: string; data?: Record<string, any> }
 
 // props
