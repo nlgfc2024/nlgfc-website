@@ -1,97 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <section class="relative h-[300px] overflow-hidden sm:h-[360px] md:h-[420px]">
-      <div
-        v-for="(article, index) in featuredArticles"
-        :key="article.id"
-        class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
-        :class="{ 'opacity-100 z-10': currentSlide === index, 'opacity-0 z-0': currentSlide !== index }"
-      >
-        <div class="absolute inset-0">
-          <img
-            :src="article.image || '/images/samples/default-news.jpg'"
-            :alt="article.title"
-            class="w-full h-full object-cover"
-            @error="handleImageError"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-        </div>
-
-        <div class="relative z-10 flex h-full flex-col justify-end pb-8 sm:pb-10 md:pb-12">
-          <div class="container mx-auto px-4 sm:px-6">
-            <div class="mb-3">
-              <span class="inline-block rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white">
-                Latest News
-              </span>
-            </div>
-            <div class="max-w-3xl">
-              <h2 class="mb-3 text-2xl font-bold leading-tight text-white sm:text-3xl md:text-4xl">{{ article.title }}</h2>
-              <p class="line-clamp-3 text-sm text-white/90 sm:text-base md:text-lg">{{ article.summary }}</p>
-              <div class="mt-4 flex flex-wrap items-center gap-2 text-white/80">
-                <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
-                <span class="text-sm">{{ formatDate(article.date) }} | {{ article.source }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="postsLoading" class="absolute inset-0 z-30 flex items-center justify-center bg-gray-900/50">
-        <div class="rounded-lg bg-white/95 px-6 py-4 text-sm font-medium text-gray-700 shadow-lg">
-          Loading latest news...
-        </div>
-      </div>
-
-      <div v-else-if="postsError" class="absolute inset-0 z-30 flex items-center justify-center bg-gray-900/60 px-4">
-        <div class="max-w-md rounded-lg bg-white p-6 text-center shadow-xl">
-          <h3 class="mb-2 text-lg font-semibold text-red-700">Failed to load news</h3>
-          <p class="text-sm text-gray-600">The news feed could not be loaded from the API.</p>
-        </div>
-      </div>
-
-      <div v-else-if="featuredArticles.length === 0" class="absolute inset-0 z-30 flex items-center justify-center bg-gray-900/60 px-4">
-        <div class="max-w-md rounded-lg bg-white p-6 text-center shadow-xl">
-          <h3 class="mb-2 text-lg font-semibold text-gray-800">No news available</h3>
-          <p class="text-sm text-gray-600">Published posts will appear here once they are available.</p>
-        </div>
-      </div>
-
-      <div v-if="featuredArticles.length > 0" class="absolute bottom-2 left-0 right-0 z-20 pt-5">
-        <div class="container mx-auto flex items-center justify-between gap-4 px-4 sm:px-6">
-          <div class="flex flex-wrap gap-2">
-            <button
-              v-for="(article, idx) in featuredArticles"
-              :key="`ind-${article.id}`"
-              class="h-3 rounded-full transition-all duration-300"
-              :class="{ 'w-8 bg-white': currentSlide === idx, 'w-3 bg-white/30 hover:bg-white/50': currentSlide !== idx }"
-              @click="goToSlide(idx)"
-            ></button>
-          </div>
-
-          <div class="flex items-center gap-2 sm:gap-4">
-            <button class="p-2 text-white/70 transition hover:text-white" @click="toggleAutoplay">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path v-if="autoplay" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-              </svg>
-            </button>
-            <button class="p-2 text-white/70 transition hover:text-white" @click="prevSlide">
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <button class="p-2 text-white/70 transition hover:text-white" @click="nextSlide">
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <div class="container mx-auto px-4 py-6 sm:py-8 lg:py-12">
       <div class="flex flex-col gap-8 lg:flex-row">
         <div class="order-2 lg:order-1 lg:w-2/3">
@@ -113,17 +21,8 @@
 
           <div v-else-if="selectedArticle">
             <article class="overflow-hidden rounded-lg bg-white shadow-lg">
-              <div v-if="selectedArticle.image" class="aspect-video w-full">
-                <img
-                  :src="selectedArticle.image"
-                  :alt="selectedArticle.title"
-                  class="h-full w-full object-cover"
-                  @error="handleImageError"
-                />
-              </div>
-
               <div class="p-5 sm:p-6 lg:p-8">
-                <div class="mb-4 flex items-center justify-between">
+                <div class="mb-3 flex items-center justify-between">
                   <time class="text-sm text-gray-500">{{ formatDate(selectedArticle.date) }}</time>
                 </div>
 
@@ -141,6 +40,15 @@
                       <p class="text-sm text-gray-500">{{ selectedArticle.source }}</p>
                     </div>
                   </div>
+                </div>
+
+                <div v-if="selectedArticle.image" class="mb-8 aspect-video w-full overflow-hidden rounded-lg">
+                  <img
+                    :src="selectedArticle.image"
+                    :alt="selectedArticle.title"
+                    class="h-full w-full object-cover"
+                    @error="handleImageError"
+                  />
                 </div>
 
                 <div class="prose max-w-none break-words prose-img:rounded-lg" v-html="selectedArticle.content"></div>
@@ -250,12 +158,25 @@
                   ]"
                   @click="selectArticle(article)"
                 >
-                  <h4 class="mb-2 line-clamp-2 font-medium text-gray-900 transition-colors hover:text-emerald-600">
-                    {{ article.title }}
-                  </h4>
-                  <div class="flex items-center justify-between text-xs text-gray-500">
-                    <span>{{ formatDate(article.date) }}</span>
-                    <span>{{ article.source }}</span>
+                  <div class="flex items-start gap-3">
+                    <div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                      <img
+                        :src="article.image"
+                        :alt="article.title"
+                        class="h-full w-full object-cover"
+                        loading="lazy"
+                        @error="handleImageError"
+                      />
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <h4 class="mb-2 line-clamp-2 font-medium text-gray-900 transition-colors hover:text-emerald-600">
+                        {{ article.title }}
+                      </h4>
+                      <div class="flex flex-col gap-1 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+                        <span>{{ formatDate(article.date) }}</span>
+                        <span>{{ article.source }}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -275,7 +196,7 @@
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 definePageMeta({
   title: 'NLGFC - News & Updates',
@@ -286,10 +207,6 @@ const config = useRuntimeConfig()
 
 const selectedArticle = ref(null)
 const searchQuery = ref('')
-const currentSlide = ref(0)
-const autoplay = ref(true)
-const autoplayInterval = ref(5000)
-let autoplayTimer = null
 
 const { data: postsData, loading: postsLoading, error: postsError } = useApiData(
   'all-posts',
@@ -396,8 +313,6 @@ const filteredArticles = computed(() => {
   return filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 })
 
-const featuredArticles = computed(() => filteredArticles.value.slice(0, 3))
-
 const handleImageError = (event) => {
   event.target.src = '/images/samples/default-news.jpg'
 }
@@ -409,38 +324,6 @@ const formatDate = (dateString) => {
     month: 'short',
     day: 'numeric',
   })
-}
-
-const resetAutoplay = () => {
-  if (!autoplay.value || !featuredArticles.value.length) return
-  clearInterval(autoplayTimer)
-  autoplayTimer = setInterval(() => {
-    currentSlide.value = (currentSlide.value + 1) % featuredArticles.value.length
-  }, autoplayInterval.value)
-}
-
-const nextSlide = () => {
-  if (!featuredArticles.value.length) return
-  currentSlide.value = (currentSlide.value + 1) % featuredArticles.value.length
-  resetAutoplay()
-}
-
-const prevSlide = () => {
-  if (!featuredArticles.value.length) return
-  currentSlide.value = (currentSlide.value - 1 + featuredArticles.value.length) % featuredArticles.value.length
-  resetAutoplay()
-}
-
-const goToSlide = (index) => {
-  if (!featuredArticles.value.length) return
-  currentSlide.value = index
-  resetAutoplay()
-}
-
-const toggleAutoplay = () => {
-  autoplay.value = !autoplay.value
-  if (autoplay.value) resetAutoplay()
-  else clearInterval(autoplayTimer)
 }
 
 const selectArticle = (article) => {
@@ -478,51 +361,14 @@ const handleHashChange = () => {
 
 watch(newsArticles, () => {
   handleHashChange()
-
-  if (currentSlide.value >= featuredArticles.value.length) {
-    currentSlide.value = 0
-  }
-
-  if (!selectedArticle.value) {
-    resetAutoplay()
-  }
 }, { immediate: true })
-
-watch(selectedArticle, (article) => {
-  if (article) {
-    clearInterval(autoplayTimer)
-  } else {
-    resetAutoplay()
-  }
-})
-
-watch(featuredArticles, (articles) => {
-  if (!articles.length) {
-    clearInterval(autoplayTimer)
-    currentSlide.value = 0
-    return
-  }
-
-  if (currentSlide.value >= articles.length) {
-    currentSlide.value = 0
-  }
-
-  if (!selectedArticle.value && autoplay.value) {
-    resetAutoplay()
-  }
-})
 
 onMounted(() => {
   handleHashChange()
   window.addEventListener('hashchange', handleHashChange)
-  resetAutoplay()
 })
 
 onUnmounted(() => {
   window.removeEventListener('hashchange', handleHashChange)
-})
-
-onBeforeUnmount(() => {
-  clearInterval(autoplayTimer)
 })
 </script>

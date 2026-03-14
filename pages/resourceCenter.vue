@@ -124,12 +124,7 @@
         </div>
         
         <!-- News Layout - Simple List Similar to news.vue -->
-        <div v-if="currentDisplayType === 'News'" class="overflow-hidden rounded-lg shadow-lg">
-          <div class="bg-gray-900 px-6 py-4 text-white">
-            <h3 class="text-lg font-semibold">Latest News</h3>
-            <p class="text-sm text-emerald-100">{{ filteredDocuments.length }} articles</p>
-          </div>
-
+        <div v-if="currentDisplayType === 'News'" class="rounded-lg bg-white p-3 shadow-lg sm:p-4">
           <div v-if="newsLoading" class="space-y-3 p-4">
             <div v-for="n in 5" :key="n" class="animate-pulse rounded border border-gray-100 p-4">
               <div class="mb-2 h-4 w-5/6 rounded bg-gray-200"></div>
@@ -141,15 +136,15 @@
             <p class="text-sm">Latest news could not be loaded.</p>
           </div>
 
-          <div v-else class="max-h-[26rem] overflow-y-auto sm:max-h-[32rem]">
+          <div v-else class="max-h-[26rem] overflow-y-auto pr-1 sm:max-h-[32rem] sm:pr-2">
             <div
               v-for="newsItem in filteredDocuments"
               :key="newsItem.id"
-              class="border-b border-gray-100"
+              class="mb-3 last:mb-0"
             >
               <nuxt-link
                 :to="`/news#${newsItem.slug || newsItem.id}`"
-                class="block cursor-pointer p-4 transition-all duration-200 hover:bg-gray-50"
+                class="block cursor-pointer rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gray-50 hover:shadow-md"
               >
                 <div class="flex items-start gap-3 sm:gap-4">
                   <div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100 sm:h-20 sm:w-20">
