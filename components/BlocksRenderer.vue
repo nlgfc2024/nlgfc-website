@@ -8,6 +8,8 @@ const props = defineProps<{
   blocks: BlockItem[]
 }>()
 
+const config = useRuntimeConfig()
+
 /**
  * Minimal fallback component for unknown blocks.
  */
@@ -75,8 +77,35 @@ function extractShortType(fullType?: string) {
   return parts[parts.length - 1] || fullType
 }
 
-/**
- * Map API payload → block props our Vue components expect.
+/** Helper to normalize image URLs for API-uploaded images.
+ * Uses {apiBase}/api/storage/{path} to serve files via Laravel (avoids 403 from symlink on Laragon/Windows).
+ * Handles string paths and Filament FileUpload objects { path, url }.
+ */
+function normalizeImageUrl(imagePath: string | { path?: string; url?: string } | undefined): string {
+  if (!imagePath) return ''
+  let raw: string
+  if (typeof imagePath === 'string') {
+    raw = imagePath
+  } else if (typeof imagePath === 'object' && imagePath !== null) {
+    raw = (imagePath.url ?? imagePath.path ?? '') as string
+  } else {
+    return ''
+  }
+  if (!raw || typeof raw !== 'string') return ''
+  const trimmed = raw.trim()
+  if (!trimmed) return ''
+  // Already a full URL
+  if (trimmed.startsWith('http')) return trimmed
+  // Path relative to storage/app/public (e.g. common/images/file.webp)
+  let path = trimmed.replace(/^\/+/, '').replace(/^storage\/+/, '')
+  const apiBase = (config.public?.apiBase as string) || ''
+  if (apiBase) {
+    return `${apiBase.replace(/\/$/, '')}/api/storage/${path}`
+  }
+  return `/api/storage/${path}`
+}
+
+/** * Map API payload → block props our Vue components expect.
  * Keep this “dumb” and defensive so bad inputs don’t explode the page.
  */
 function normalizeProps(shortType: string, data: Record<string, any> = {}) {
@@ -144,13 +173,13 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
 
     case 'ImageZoomableBlock':
       return {
-        src: data.src ?? data.image ?? data.image_url ?? '',
+        src: normalizeImageUrl(data.src ?? data.image ?? data.image_url ?? ''),
         alt: data.alt ?? data.caption ?? '',
       }
 
     case 'ImageBlock':
       return {
-        src: data.src ?? data.image ?? data.image_url ?? '',
+        src: normalizeImageUrl(data.src ?? data.image ?? data.image_url ?? ''),
         alt: data.alt ?? '',
         fit: data.fit ?? 'contain',
         height: data.height ?? 'h-80',

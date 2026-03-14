@@ -14,7 +14,7 @@ const route = useRoute();
 // const sidebarData = inject('sidebarData', null);
 
 //shared content
-const { projectGroups, projectContent } = useGeneralSidebar();
+const { projectGroups, projectContent, sidebarSections } = useGeneralSidebar();
 const activeTab = ref(route.hash.substring(1) || 'government_funded');
 
 // Watch for route hash changes to keep activeTab in sync
@@ -120,13 +120,13 @@ const sidebarProps = computed(() => {
   }
 
   if (route.path.includes('/about')) {
-    if (projectGroups.value.length > 0) {
-      return {
-        sidebarType: 'projects',
-        sectionsData: projectGroups.value,
-        sidebarTitle: route.meta.title, // ⚡️ Change: Get title from the route meta
-        activeId: activeTab.value
-    }; } 
+    return {
+      sidebarType: 'projects',
+      sections: sidebarSections.value,
+      sectionsData: projectGroups.value,
+      sidebarTitle: route.meta.title,
+      activeId: activeTab.value
+    };
   }
 
   if (route.path.includes('mandate/ourMandate')) {
@@ -334,6 +334,7 @@ watch(() => route.hash, (newHash) => {
           <GeneralSidebar
             :sidebarOpen="isSidebarOpen"
             :sidebarType="sidebarProps.sidebarType"
+            :sections="sidebarProps.sections"
             :sectionsData="sidebarProps.sectionsData"
             :activeId="sidebarProps.activeId"
             :sidebarTitle="sidebarProps.sidebarTitle"
