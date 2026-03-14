@@ -1,8 +1,11 @@
 <script setup>
+const config = useRuntimeConfig()
+const { getExcerpt } = useHtmlUtils()
+
 // Fetch latest posts from API
 const { data: postsData, pending: loading, error, refresh: fetchPosts } = useAsyncData(
-  'latest-posts',
-  () => $fetch('http://localhost:8000/api/posts/latest/3'),
+  'latest-posts-slider',
+  () => $fetch(`${config.public.baseUrl || 'http://localhost:8000'}/api/posts/latest/3`),
   {
     server: true,
     lazy: false,
@@ -19,11 +22,17 @@ const newsItems = computed(() => {
     ? postsData.value 
     : postsData.value?.data || []
   
+  const toStorageUrl = (path) => {
+    if (!path || typeof path !== 'string') return '/images/samples/default-news.jpg'
+    if (path.startsWith('http://') || path.startsWith('https://')) return path
+    return `${config.public.baseUrl || 'http://localhost:8000'}/storage/${path}`
+  }
+
   return postsArray.map((post) => ({
     id: post.id,
-    title: post.title,
-    content: post.content?.substring(0, 150) + '...',
-    image: post.image,
+    title: post.title || 'Latest News',
+    content: getExcerpt(post.content, 150),
+    image: toStorageUrl(post.image),
     date: post.created_at ? new Date(post.created_at).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
@@ -154,7 +163,7 @@ const handleImageError = (event) => {
       <!-- Background Image with Gradient Overlay -->
       <div class="absolute inset-0">
         <img 
-          :src="`${$config.public.baseUrl}/storage/${item.image}`"
+          :src="item.image"
           :alt="item.title" 
           class="w-full h-full object-cover"
           loading="lazy"
@@ -180,7 +189,7 @@ const handleImageError = (event) => {
               <h2 class="mb-4 text-3xl font-bold leading-tight text-white animate-fadeIn delay-100 md:text-4xl lg:text-5xl">
                 {{ item.title }}
               </h2>
-              <div class="mb-6 text-lg text-white/90 animate-fadeIn delay-200 md:text-xl" v-html="item.content"></div>
+              <div class="mb-6 text-lg text-white/90 animate-fadeIn delay-200 md:text-xl">{{ item.content }}</div>
             </div>
 
             <!-- Read More Button -->
