@@ -1,11 +1,80 @@
 <template>
-  <div class="container mx-auto max-w-screen-2xl px-4 py-6 sm:py-8">
-    <div class="min-w-0">
+  <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8 max-w-screen-2xl">
+    <!-- Left Sidebar -->
+    <div class="w-full md:w-80 bg-white rounded-lg shadow-sm border border-gray-200 p-6 self-start">
+      <div>
+        <h2 class="text-xl font-bold text-gray-800 mb-6">Resource Center</h2>
+        <nav class="space-y-2">
+          <!-- Loop through main groups -->
+          <div v-for="(groupItem, groupIndex) in resourceGroups" :key="groupIndex" class="group">
+            <div
+              @click="handleGroupClick(groupIndex)"
+              class="flex items-center justify-between w-full text-left py-3 px-4 font-medium text-gray-700 rounded-lg cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-50 hover:text-gray-900"
+              :class="{
+                'bg-emerald-50 border-2 border-emerald-200 text-emerald-700': expandedGroup === groupIndex || activeGroup === groupIndex,
+                'hover:translate-x-1': expandedGroup !== groupIndex
+              }"
+            >
+              <span class="flex items-center">
+                 <!-- Icon for the group -->
+                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500" fill="none" stroke="currentColor" stroke-width="2"
+                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+                {{ groupItem.group }}
+              </span>
+               <!-- Chevron icon for expanding/collapsing, shown only if there are subgroups -->
+              <svg
+                v-if="groupItem.subgroups"
+                :class="{ 'rotate-90': expandedGroup === groupIndex }"
+                class="w-4 h-4 text-gray-400 transition-transform duration-300 ease-in-out"
+                fill="none" stroke="currentColor" stroke-width="2"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </div>
+            <!-- Subgroups container -->
+            <div v-if="expandedGroup === groupIndex && groupItem.subgroups" class="pl-6 mt-2 space-y-1 animate-in slide-in-from-top-2 duration-300">
+              <a
+                  v-for="(subgroup, subIndex) in groupItem.subgroups"
+                  :key="subIndex"
+                  @click.stop="selectSubgroup(groupIndex, subIndex)"
+                  class="flex items-center w-full text-left py-2 px-4 text-sm font-medium text-gray-600 rounded-md cursor-pointer transition-all duration-200 hover:bg-gray-50 hover:text-gray-900 hover:translate-x-2"
+                  :class="{
+                  'bg-emerald-50 border-2 border-emerald-200 text-emerald-700 shadow-sm': activeGroup === groupIndex && activeSubgroup === subIndex
+                }"
+              >
+                <div class="w-2 h-2 rounded-full mr-3 transition-colors duration-200"
+                     :class="{
+                       'bg-emerald-600': activeGroup === groupIndex && activeSubgroup === subIndex,
+                       'bg-gray-300 group-hover:bg-gray-600': !(activeGroup === groupIndex && activeSubgroup === subIndex)
+                     }">
+                </div>
+                {{ subgroup.subgroup }}
+              </a>
+            </div>
+          </div>
+        </nav>
+         <!-- Help Section -->
+        <div class="mt-6 pt-6 border-t border-gray-200">
+          <div class="bg-gray-50 rounded-lg p-4">
+            <h3 class="text-sm font-semibold text-emerald-700 mb-2">Need Help?</h3>
+            <p class="text-xs text-gray-600 mb-3">Contact our support team for assistance with document access or technical issues.</p>
+            <button class="w-full text-xs bg-gray-800 hover:bg-gray-600 text-white rounded-md py-2 px-3 transition-colors duration-200">
+              Contact Support
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Content -->
+    <div class="flex-1 p-4">
       <section v-if="activeGroup !== null">
-        <h3 class="mb-6 text-lg font-bold text-gray-600">{{ currentTitle }}</h3>
+        <h3 class="font-bold text-gray-600 text-lg mb-6">{{ currentTitle }}</h3>
         <!-- Search Bar Section -->
         <div v-if="activeGroup !== null" class="mb-8">
-            <div class="mx-auto max-w-md lg:max-w-lg">
+            <div class="max-w-md mx-auto lg:max-w-lg">
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,15 +115,16 @@
         </div>
         
         <!-- News Layout - Simple List Similar to news.vue -->
-        <div v-if="currentDisplayType === 'News'" class="rounded-lg bg-white p-4 shadow-lg sm:p-6">
-          <div v-if="newsLoading" class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-            <div v-for="n in 6" :key="n" class="animate-pulse overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-              <div class="aspect-[4/3] w-full bg-gray-200"></div>
-              <div class="space-y-3 p-5">
-                <div class="h-5 w-5/6 rounded bg-gray-200"></div>
-                <div class="h-4 w-full rounded bg-gray-200"></div>
-                <div class="h-4 w-2/3 rounded bg-gray-200"></div>
-              </div>
+        <div v-if="currentDisplayType === 'News'" class="bg-gray-80 rounded-lg shadow-lg overflow-hidden">
+          <div class="bg-gray-900 px-6 py-4 text-white">
+            <h3 class="text-lg font-semibold">Latest News</h3>
+            <p class="text-sm text-emerald-100">{{ filteredDocuments.length }} articles</p>
+          </div>
+
+          <div v-if="newsLoading" class="space-y-3 p-4">
+            <div v-for="n in 5" :key="n" class="animate-pulse rounded border border-gray-100 p-4">
+              <div class="mb-2 h-4 w-5/6 rounded bg-gray-200"></div>
+              <div class="h-3 w-2/5 rounded bg-gray-200"></div>
             </div>
           </div>
 
@@ -62,37 +132,22 @@
             <p class="text-sm">Latest news could not be loaded.</p>
           </div>
 
-          <div v-else class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <div v-else class="max-h-96 overflow-y-auto">
             <div
               v-for="newsItem in filteredDocuments"
               :key="newsItem.id"
+              class="border-b border-gray-100"
             >
               <nuxt-link
                 :to="`/news#${newsItem.slug || newsItem.id}`"
-                class="group block h-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                class="block p-4 cursor-pointer transition-all duration-200 hover:bg-gray-50"
               >
-                <div class="flex h-full flex-col">
-                  <div class="aspect-[4/3] w-full overflow-hidden bg-gray-100">
-                    <img
-                      :src="newsItem.image"
-                      :alt="newsItem.title"
-                      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                      @error="handleNewsImageError"
-                    />
-                  </div>
-                  <div class="flex flex-1 flex-col p-5">
-                    <h4 class="mb-3 line-clamp-2 text-lg font-semibold text-gray-900 transition-colors group-hover:text-emerald-600">
-                      {{ newsItem.title }}
-                    </h4>
-                    <p class="mb-4 line-clamp-3 flex-1 text-sm leading-6 text-gray-600">
-                      {{ newsItem.description }}
-                    </p>
-                    <div class="flex flex-col gap-2 border-t border-gray-100 pt-4 text-xs uppercase tracking-[0.14em] text-gray-500 sm:flex-row sm:items-center sm:justify-between">
-                      <span>{{ formatDate(newsItem.date) }}</span>
-                      <span>{{ newsItem.source }}</span>
-                    </div>
-                  </div>
+                <h4 class="font-medium text-gray-900 hover:text-emerald-600 transition-colors line-clamp-2 mb-2">
+                  {{ newsItem.title }}
+                </h4>
+                <div class="flex items-center justify-between text-xs text-gray-500">
+                  <span>{{ formatDate(newsItem.date) }}</span>
+                  <span>{{ newsItem.source }}</span>
                 </div>
               </nuxt-link>
             </div>
@@ -123,7 +178,7 @@
 
 
         <!-- Video Grid Layout -->
-        <div v-else-if="currentDisplayType === 'Video' && currentVideosLoading" class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div v-else-if="currentDisplayType === 'Video' && currentVideosLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
           <div v-for="n in 4" :key="n" class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
             <div class="relative w-full overflow-hidden bg-gray-200 pt-[56.25%] animate-pulse"></div>
             <div class="space-y-3 p-4">
@@ -138,69 +193,51 @@
           <p class="text-sm text-gray-600">Videos could not be loaded from the API.</p>
         </div>
 
-        <div v-else-if="currentDisplayType === 'Video'">
-          <div v-if="filteredDocuments.length === 0" class="rounded-lg bg-white p-8 text-center shadow-sm">
-            <p class="text-sm text-gray-600">No active videos are available from the API.</p>
-          </div>
-
-          <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div
-                v-for="(doc, index) in paginatedDocuments"
-                :key="doc.name"
-                class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105"
-                :style="{ animationDelay: `${index * 100}ms` }"
-            >
-              <div class="relative w-full overflow-hidden bg-gray-100 pt-[56.25%]">
-                <iframe
-                    :src="getVideoEmbedUrl(doc.link)"
-                    class="absolute inset-0 h-full w-full border-0"
-                    width="100%"
-                    height="100%"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen
-                    loading="lazy"
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    :title="doc.name"
-                ></iframe>
-              </div>
-              <div class="p-4">
-                <h4 class="font-semibold text-gray-800 mb-2">{{ doc.name }}</h4>
-                <p class="text-sm text-gray-600 mb-2">{{ doc.description }}</p>
-                <a href="https://www.youtube.com/@nlgfcmalawi2455">
-                  <p class="text-[12px] font-semibold text-emerald-600 hover:text-emerald-700 mb-2">Watch More on NLGFC YouTube Channel</p>
-                </a>
-                <span class="inline-block text-xs bg-red-100 text-red-600 rounded px-2 py-1">
-                  {{ doc.type }}
-                </span>
-                <p class="mt-3 break-all text-[11px] text-gray-500">
-                  Debug embed URL: {{ getVideoEmbedUrl(doc.link) }}
-                </p>
-                <p class="mt-3 text-[12px] font-semibold text-emerald-600">
-                  {{ doc.date ? formatDate(doc.date) : 'No date available.' }}
-                </p>
-              </div>
+        <transition-group
+            v-else-if="currentDisplayType === 'Video'"
+            name="grid-item"
+            tag="div"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6"
+            appear
+        >
+          <div
+              v-for="(doc, index) in filteredDocuments"
+              :key="doc.name"
+              class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 hover:scale-105"
+              :style="{ animationDelay: `${index * 100}ms` }"
+          >
+            <div class="relative w-full overflow-hidden bg-gray-100 pt-[56.25%]">
+              <iframe
+                  :src="getVideoEmbedUrl(doc.link)"
+                  class="absolute inset-0 h-full w-full border-0"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                  :title="doc.name"
+              ></iframe>
+            </div>
+            <div class="p-4">
+              <h4 class="font-semibold text-gray-800 mb-2">{{ doc.name }}</h4>
+              <p class="text-sm text-gray-600 mb-2">{{ doc.description }}</p>
+              <a href="https://www.youtube.com/@nlgfcmalawi2455">
+                <p class="text-[12px] font-semibold text-emerald-600 hover:text-emerald-700 mb-2">Watch More on NLGFC YouTube Channel</p>
+              </a>
+              <span class="inline-block text-xs bg-red-100 text-red-600 rounded px-2 py-1">
+                {{ doc.type }}
+              </span>
+              <p class="mt-3 text-[12px] font-semibold text-emerald-600">
+                {{ doc.date ? formatDate(doc.date) : 'No date available.' }}
+              </p>
             </div>
           </div>
-
-          <div
-            v-if="shouldPaginateCurrentView && filteredDocuments.length > 0"
-            class="mt-6 overflow-hidden rounded-lg border border-gray-200 bg-white"
-          >
-            <Pagination
-              v-model:currentPage="currentPage"
-              v-model:itemsPerPage="itemsPerPage"
-              :total-items="filteredDocuments.length"
-            />
-          </div>
-        </div>
+        </transition-group>
 
         <!-- Image Gallery Iframe Layout -->
         <div
             v-else-if="currentDisplayType === 'Image Gallery'"
             class="w-full">
           <div
-              v-for="(doc, index) in filteredDocuments"
+              v-for="(doc, index) in displayedDocuments"
               :key="doc.name"
               class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-6 transition-all duration-300 hover:shadow-lg"
           >
@@ -214,7 +251,7 @@
             </div>
 
             <!-- Iframe container -->
-            <div class="relative h-[320px] w-full sm:h-[420px] md:h-[520px] lg:h-[600px]">
+            <div class="relative w-full" style="height: 600px;">
               <iframe
                   :src="doc.link"
                   class="w-full h-full border-0"
@@ -228,7 +265,7 @@
         </div>
 
         <!-- Default Document Grid Layout -->
-        <div v-else-if="currentDocumentsLoading" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div v-else-if="currentDocumentsLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div v-for="n in 6" :key="n" class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
             <div class="animate-pulse space-y-3">
               <div class="h-5 w-3/4 rounded bg-gray-200"></div>
@@ -243,91 +280,73 @@
           <p class="text-sm text-gray-600">Documents could not be loaded from the API.</p>
         </div>
 
-        <div v-else-if="filteredDocuments.length === 0" class="rounded-lg bg-white p-8 text-center shadow-sm">
-          <p class="text-sm text-gray-600">
-            {{ searchQuery ? 'No documents matched your search.' : 'No documents are available in this section.' }}
-          </p>
-        </div>
-
-        <div v-else>
-          <transition-group
-              name="grid-item"
-              tag="div"
-              class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-              appear
+        <transition-group
+            v-else
+            name="grid-item"
+            tag="div"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            appear
+        >
+          <div
+              v-for="(doc, index) in displayedDocuments"
+              :key="doc.name"
+              class="relative bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 p-4 flex flex-col justify-between group hover:scale-105"
+              :style="{ animationDelay: `${index * 100}ms` }"
           >
-            <div
-                v-for="(doc, index) in paginatedDocuments"
-                :key="doc.name"
-                class="relative bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 p-4 flex flex-col justify-between group hover:scale-105"
-                :style="{ animationDelay: `${index * 100}ms` }"
+            <a
+                :href="doc.link"
+                target="_blank"
+                class="absolute bottom-2 right-2 w-8 h-8 bg-gray-800 hover:bg-gray-600 text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md hover:shadow-lg"
+                title="Download / View"
             >
-              <a
-                  :href="doc.link"
-                  target="_blank"
-                  class="absolute bottom-2 right-2 w-8 h-8 bg-gray-800 hover:bg-gray-600 text-white rounded-full flex items-center justify-center transition-colors duration-200 shadow-md hover:shadow-lg"
-                  title="Download / View"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"/>
-                </svg>
-              </a>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"/>
+              </svg>
+            </a>
 
-              <div class="flex items-center mb-3">
-                 <!-- Document details -->
-                <div>
-                  <h3 class="font-semibold text-gray-800 text-base">{{ doc.name }}</h3>
-                  <div class="mt-1 flex items-center gap-2">
-                    <span
-                      class="inline-flex h-7 w-7 items-center justify-center rounded bg-gray-100 text-gray-700"
-                      :title="doc.type"
-                    >
-                      <svg v-if="doc.type === 'PDF'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 3h7l5 5v13a1 1 0 01-1 1H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5" />
-                      </svg>
-                      <svg v-else-if="doc.type === 'XLS' || doc.type === 'XLSX' || doc.type === 'CSV'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 3h7l5 5v13a1 1 0 01-1 1H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M9 10l4 6m0-6l-4 6m6-6h1m-1 3h1m-1 3h1" />
-                      </svg>
-                      <svg v-else-if="doc.type === 'DOC' || doc.type === 'DOCX'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 3h7l5 5v13a1 1 0 01-1 1H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M8.5 11l1.5 5 2-3 2 3 1.5-5" />
-                      </svg>
-                      <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 3h7l5 5v13a1 1 0 01-1 1H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5" />
-                      </svg>
-                    </span>
-                    <span class="inline-block text-xs text-gray-700">
-                      {{ doc.type }}
-                    </span>
-                  </div>
+            <div class="flex items-center mb-3">
+               <!-- Document details -->
+              <div>
+                <h3 class="font-semibold text-gray-800 text-base">{{ doc.name }}</h3>
+                <div class="mt-1 flex items-center gap-2">
+                  <span
+                    class="inline-flex h-7 w-7 items-center justify-center rounded bg-gray-100 text-gray-700"
+                    :title="doc.type"
+                  >
+                    <svg v-if="doc.type === 'PDF'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M7 3h7l5 5v13a1 1 0 01-1 1H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5" />
+                    </svg>
+                    <svg v-else-if="doc.type === 'XLS' || doc.type === 'XLSX' || doc.type === 'CSV'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M7 3h7l5 5v13a1 1 0 01-1 1H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M9 10l4 6m0-6l-4 6m6-6h1m-1 3h1m-1 3h1" />
+                    </svg>
+                    <svg v-else-if="doc.type === 'DOC' || doc.type === 'DOCX'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M7 3h7l5 5v13a1 1 0 01-1 1H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5M8.5 11l1.5 5 2-3 2 3 1.5-5" />
+                    </svg>
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M7 3h7l5 5v13a1 1 0 01-1 1H7a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14 3v5h5" />
+                    </svg>
+                  </span>
+                  <span class="inline-block text-xs text-gray-700">
+                    {{ doc.type }}
+                  </span>
                 </div>
               </div>
-
-              <p class="text-sm text-gray-600 flex-grow">
-                {{ doc.description || 'No description available.' }}
-              </p>
-              <p class="text-[12px] font-semibold text-emerald-600 mt-3">
-                {{ doc.date ? formatDate(doc.date) : 'No date available.' }}
-              </p>
             </div>
-          </transition-group>
 
-          <div
-            v-if="isApiDocumentSubgroupActive && shouldPaginateCurrentView && filteredDocuments.length > 0"
-            class="mt-6 overflow-hidden rounded-lg border border-gray-200 bg-white"
-          >
-            <Pagination
-              v-model:currentPage="currentPage"
-              v-model:itemsPerPage="itemsPerPage"
-              :total-items="filteredDocuments.length"
-            />
+            <p class="text-sm text-gray-600 flex-grow">
+              {{ doc.description || 'No description available.' }}
+            </p>
+            <p class="text-[12px] font-semibold text-emerald-600 mt-3">
+              {{ doc.date ? formatDate(doc.date) : 'No date available.' }}
+            </p>
           </div>
-        </div>
+        </transition-group>
       </section>
 
       <!-- Loading/Welcome State -->
@@ -343,9 +362,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
 
 definePageMeta({
     title: 'NLGFC - Resource Center',
@@ -354,14 +372,12 @@ definePageMeta({
 const route = useRoute()
 const { getExcerpt, stripHtmlTags } = useHtmlUtils()
 const config = useRuntimeConfig()
-const { projectGroups } = useGeneralSidebar()
 
 // State management for UI
+const expandedGroup = ref(null);
 const activeGroup = ref(null);
 const activeSubgroup = ref(null);
 const searchQuery = ref('');
-const currentPage = ref(1);
-const itemsPerPage = ref(6);
 
 // Data for the resource center, structured into groups and subgroups with IDs
 const resourceGroups = [
@@ -436,39 +452,6 @@ const resourceGroups = [
   }
 ];
 
-projectGroups.value = resourceGroups
-
-const resolveResourceHash = (rawHash) => {
-  const hash = String(rawHash || '').replace(/^#/, '').trim()
-  if (!hash) return null
-
-  const directGroup = resourceGroups.find(group => group.id === hash)
-  if (directGroup) {
-    return { groupId: directGroup.id, subgroupId: null }
-  }
-
-  for (const group of resourceGroups) {
-    const directSubgroup = group.subgroups?.find(subgroup => subgroup.id === hash)
-    if (directSubgroup) {
-      return { groupId: group.id, subgroupId: directSubgroup.id }
-    }
-  }
-
-  for (const group of resourceGroups) {
-    if (!hash.startsWith(`${group.id}-`)) continue
-
-    const subgroupId = hash.slice(group.id.length + 1)
-    const matchingSubgroup = group.subgroups?.find(subgroup => subgroup.id === subgroupId)
-    if (matchingSubgroup) {
-      return { groupId: group.id, subgroupId: matchingSubgroup.id }
-    }
-
-    return { groupId: group.id, subgroupId: null }
-  }
-
-  return null
-}
-
 /**
  * Navigate directly to a specific group or subgroup using IDs
  * @param {string} groupId - The ID of the group
@@ -483,6 +466,7 @@ const navigateToSection = (groupId, subgroupId = null) => {
     if (subgroupId && group.subgroups) {
       const subgroupIndex = group.subgroups.findIndex(sg => sg.id === subgroupId);
       if (subgroupIndex !== -1) {
+        expandedGroup.value = groupIndex;
         activeGroup.value = groupIndex;
         activeSubgroup.value = subgroupIndex;
         return;
@@ -493,7 +477,9 @@ const navigateToSection = (groupId, subgroupId = null) => {
     if (group.items) {
       activeGroup.value = groupIndex;
       activeSubgroup.value = null;
+      expandedGroup.value = null;
     } else if (group.subgroups) {
+      expandedGroup.value = groupIndex;
       activeGroup.value = null;
       activeSubgroup.value = null;
     }
@@ -510,7 +496,7 @@ const getCurrentSectionUrl = () => {
     let hash = `#${group.id}`;
     
     if (activeSubgroup.value !== null && group.subgroups) {
-      hash = `#${group.subgroups[activeSubgroup.value].id}`;
+      hash += `-${group.subgroups[activeSubgroup.value].id}`;
     }
     
     return `${window.location.origin}${window.location.pathname}${hash}`;
@@ -522,13 +508,13 @@ const getCurrentSectionUrl = () => {
  * Handle URL hash changes for direct navigation
  */
 const handleHashChange = () => {
-  const selection = resolveResourceHash(window.location.hash)
-  if (selection) {
-    navigateToSection(selection.groupId, selection.subgroupId)
-    return
+  const hash = window.location.hash.slice(1); // Remove the #
+  if (hash) {
+    const parts = hash.split('-');
+    const groupId = parts[0];
+    const subgroupId = parts.length > 1 ? parts.slice(1).join('-') : null;
+    navigateToSection(groupId, subgroupId);
   }
-
-  navigateToSection('news')
 };
 
 /**
@@ -540,7 +526,7 @@ const updateUrlHash = () => {
     let hash = group.id;
     
     if (activeSubgroup.value !== null && group.subgroups) {
-      hash = group.subgroups[activeSubgroup.value].id;
+      hash += `-${group.subgroups[activeSubgroup.value].id}`;
     }
     
     window.history.replaceState(null, null, `#${hash}`);
@@ -548,6 +534,39 @@ const updateUrlHash = () => {
     window.history.replaceState(null, null, window.location.pathname);
   }
 };
+
+/**
+ * Handles clicks on main group items in the sidebar.
+ * It either toggles subgroup visibility or directly selects a group.
+ * @param {number} index - The index of the clicked group.
+ */
+const handleGroupClick = (index) => {
+  const group = resourceGroups[index];
+  if (group.subgroups && group.subgroups.length > 0) {
+    // This is a group with subgroups, so just toggle expansion
+    expandedGroup.value = expandedGroup.value === index ? null : index;
+    // If we are collapsing the group that was active, clear selection
+    if (expandedGroup.value !== index && activeGroup.value === index) {
+        activeGroup.value = null;
+        activeSubgroup.value = null;
+    }
+  } else if (group.items) {
+    // This is a direct content group like "News"
+    expandedGroup.value = null; // No subgroups to expand
+    activeGroup.value = index;
+    activeSubgroup.value = null; // Signal that it's a direct group selection
+  }
+};
+
+/**
+ * Selects a subgroup to display its content.
+ * @param {number} groupIndex - The index of the parent group.
+ * @param {number} subIndex - The index of the subgroup to select.
+ */
+const selectSubgroup = (groupIndex, subIndex) => {
+  activeGroup.value = groupIndex;
+  activeSubgroup.value = subIndex;
+}
 
 /**
  * Search functionality
@@ -578,16 +597,6 @@ const newsPosts = computed(() => {
 
 const newsBaseUrl = computed(() => config.public.baseUrl || 'http://localhost:8000')
 
-const getNewsImageUrl = (imagePath) => {
-  if (!imagePath) return '/images/samples/default-news.jpg'
-  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath
-  return `${newsBaseUrl.value}/storage/${imagePath}`
-}
-
-const handleNewsImageError = (event) => {
-  event.target.src = '/images/samples/default-news.jpg'
-}
-
 const newsItems = computed(() => {
   return [...newsPosts.value]
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
@@ -598,11 +607,11 @@ const newsItems = computed(() => {
       description: getExcerpt(post.content, 150),
       date: post.created_at || post.updated_at || '',
       source: post.category?.name || 'News',
-      image: getNewsImageUrl(post.image),
+      image: post.image ? `${newsBaseUrl.value}/storage/${post.image}` : '/images/samples/default-news.jpg',
     }))
 })
 
-const documentCategoryMap = {
+const publicationCategoryMap = {
   'press-releases': 'Press Releases',
   'success-stories': 'Success Stories',
   speeches: 'Speeches',
@@ -612,13 +621,6 @@ const documentCategoryMap = {
   newsletters: 'Newsletters & Magazines',
   manuals: 'Manuals and Guidelines',
   policies: 'Policies and Strategies',
-  ssrlp: 'SSRLP',
-  gesd: 'GESD',
-  rcrp2: 'RCRP 2',
-  'audit-reports': 'Audit Reports',
-  'financial-reports': 'Financial Reports',
-  'financial-statements': 'Financial statements',
-  'lapa-synthesis': 'LAPA Synthesis',
 }
 
 const { data: documentCategoriesData } = useApiData(
@@ -638,29 +640,14 @@ const activeSubgroupId = computed(() => {
 const activeDocumentCategoryName = computed(() => {
   if (activeGroup.value === null || activeSubgroup.value === null) return null
   const group = resourceGroups[activeGroup.value]
-  if (!['publications', 'project-documents', 'reports'].includes(group?.id)) return null
-
-  const subgroup = group?.subgroups?.[activeSubgroup.value]
-  if (!subgroup) return null
-
-  return documentCategoryMap[activeSubgroupId.value] || subgroup.subgroup || null
+  if (group?.id !== 'publications') return null
+  return publicationCategoryMap[activeSubgroupId.value] || null
 })
-
-const normalizeCategoryName = (value) =>
-  String(value || '')
-    .toLowerCase()
-    .replace(/&/g, 'and')
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim()
 
 const activeDocumentCategory = computed(() => {
   const categories = Array.isArray(documentCategoriesData.value) ? documentCategoriesData.value : []
   if (!activeDocumentCategoryName.value) return null
-  return (
-    categories.find(
-      (category) => normalizeCategoryName(category?.name) === normalizeCategoryName(activeDocumentCategoryName.value)
-    ) || null
-  )
+  return categories.find((category) => category?.name?.toLowerCase() === activeDocumentCategoryName.value.toLowerCase()) || null
 })
 
 const activeDocumentCategoryId = computed(() => activeDocumentCategory.value?.id || null)
@@ -749,33 +736,13 @@ const filteredDocuments = computed(() => {
   
   return displayedDocuments.value.filter(doc => {
     const searchTerm = searchQuery.value.toLowerCase();
-    const searchableContent = [
-      doc.name,
-      doc.title,
-      doc.description,
-      doc.source,
-      doc.type,
-      doc.date ? formatDate(doc.date) : '',
-    ]
-      .filter(Boolean)
-      .join(' ')
-      .toLowerCase()
-
     return (
-      searchableContent.includes(searchTerm)
+      (doc.name && doc.name.toLowerCase().includes(searchTerm)) ||
+      (doc.title && doc.title.toLowerCase().includes(searchTerm)) ||
+      (doc.description && doc.description.toLowerCase().includes(searchTerm))
     );
   });
 });
-
-const totalPages = computed(() => {
-  return Math.max(1, Math.ceil(filteredDocuments.value.length / itemsPerPage.value));
-})
-
-const paginatedDocuments = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage.value
-  const end = start + itemsPerPage.value
-  return filteredDocuments.value.slice(start, end)
-})
 
 /**
  * Converts a standard YouTube watch URL to an embeddable URL.
@@ -791,13 +758,13 @@ function getVideoEmbedUrl(url) {
 
     if (host === 'youtu.be') {
       const videoId = parsedUrl.pathname.split('/').filter(Boolean)[0]
-      return videoId ? `https://www.youtube-nocookie.com/embed/${videoId}` : ''
+      return videoId ? `https://www.youtube.com/embed/${videoId}` : ''
     }
 
     if (host === 'youtube.com' || host === 'm.youtube.com') {
       if (parsedUrl.pathname === '/watch') {
         const videoId = parsedUrl.searchParams.get('v')
-        return videoId ? `https://www.youtube-nocookie.com/embed/${videoId}` : ''
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : ''
       }
 
       if (parsedUrl.pathname.startsWith('/embed/')) {
@@ -806,7 +773,7 @@ function getVideoEmbedUrl(url) {
 
       if (parsedUrl.pathname.startsWith('/shorts/') || parsedUrl.pathname.startsWith('/live/')) {
         const videoId = parsedUrl.pathname.split('/').filter(Boolean)[1]
-        return videoId ? `https://www.youtube-nocookie.com/embed/${videoId}` : ''
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : ''
       }
     }
   } catch {
@@ -836,7 +803,7 @@ const displayedDocuments = computed(() => {
     const group = resourceGroups[activeGroup.value];
     // Check if a subgroup is selected within a group that has subgroups
     if (activeSubgroup.value !== null && group.subgroups) {
-      if (['publications', 'project-documents', 'reports'].includes(group.id) && activeDocumentCategoryName.value) {
+      if (group.id === 'publications' && activeDocumentCategoryName.value) {
         return documentItems.value;
       }
       if (group.id === 'knowledge-management' && group.subgroups[activeSubgroup.value]?.id === 'video') {
@@ -858,7 +825,7 @@ const displayedDocuments = computed(() => {
 const isApiDocumentSubgroupActive = computed(() => {
   if (activeGroup.value === null || activeSubgroup.value === null) return false
   const group = resourceGroups[activeGroup.value]
-  return ['publications', 'project-documents', 'reports'].includes(group?.id) && Boolean(activeDocumentCategoryName.value)
+  return group?.id === 'publications' && Boolean(activeDocumentCategoryName.value)
 })
 
 const isVideoActive = computed(() => {
@@ -876,9 +843,6 @@ const currentDocumentsLoading = computed(() => {
 const currentDocumentsError = computed(() => isApiDocumentSubgroupActive.value && documentsError.value)
 const currentVideosLoading = computed(() => isVideoActive.value && videosLoading.value)
 const currentVideosError = computed(() => isVideoActive.value && videosError.value)
-const shouldPaginateCurrentView = computed(() => {
-  return (isApiDocumentSubgroupActive.value || isVideoActive.value) && filteredDocuments.value.length > itemsPerPage.value
-})
 
 // Computed property to generate a title for the content pane
 const currentTitle = computed(() => {
@@ -909,19 +873,7 @@ const currentDisplayType = computed(() => {
 // Watch for changes in active selections to update URL hash
 watch([activeGroup, activeSubgroup], () => {
   updateUrlHash();
-  currentPage.value = 1;
-  itemsPerPage.value = 6;
 });
-
-watch(searchQuery, () => {
-  currentPage.value = 1;
-})
-
-watch([filteredDocuments, itemsPerPage], () => {
-  if (currentPage.value > totalPages.value) {
-    currentPage.value = totalPages.value
-  }
-})
 
 // Lifecycle hooks
 onMounted(() => {
@@ -931,10 +883,6 @@ onMounted(() => {
   // Listen for hash changes (back/forward navigation)
   window.addEventListener('hashchange', handleHashChange);
 });
-
-onUnmounted(() => {
-  window.removeEventListener('hashchange', handleHashChange);
-})
 
 // Watch for hash changes in the URL and handle them
 watch(

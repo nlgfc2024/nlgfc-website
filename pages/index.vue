@@ -99,7 +99,7 @@ const newsItems = computed(() => {
       day: 'numeric'
     }) : '',
     category: post.category?.name || 'News',
-    link: `/news/${post.slug}`,
+    link: `/news#${post.slug || post.id}`,
     readTime: '3 min read',
     slug: post.slug
   }))
@@ -353,6 +353,25 @@ const goToNextPublicationsPage = () => {
   if (!canGoToNextPublicationsPage.value) return
   publicationsPage.value += 1
 }
+</script>
+
+<template>
+  <div class="relative">
+    <ImageSlider class="relative z-0 pb-16 md:pb-24" />
+    <section class="relative z-10 -mt-10 md:-mt-18 lg:-mt-20 px-4">
+      <div class="container mx-auto px-4">
+  const tab = opportunityTabs.value.find(t => t.key === activeTab.value)
+  return tab?.items || []
+})
+
+// Publications
+const publications = ref([
+  { title: '2024 Annual Report and Financial Statements', date: '2024-12-31', file: '/pdfs/annual-report-2024.pdf' },
+  { title: 'Q1 Monitoring and Evaluation Brief', date: '2024-03-30', file: '/pdfs/q1-brief-2024.pdf' },
+  { title: 'Local Authority Financial Management Handbook', date: '2023-11-10', file: '/pdfs/handbook-2023.pdf' },
+  { title: 'Comprehensive Financial Audit Summary Report', date: '2023-08-15', file: '/pdfs/audit-summary-2023.pdf' },
+  { title: 'Development Budget Review and Analysis', date: '2023-06-01', file: '/pdfs/budget-review-2023.pdf' }
+])
 </script>
 
 <template>

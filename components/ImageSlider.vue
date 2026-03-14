@@ -30,7 +30,7 @@ const newsItems = computed(() => {
       day: 'numeric'
     }) : '',
     category: post.category?.name || 'News',
-    link: `/news/${post.slug}`,
+    link: `/news#${post.slug || post.id}`,
     readTime: '3 min read'
   }))
 })
@@ -166,34 +166,33 @@ const handleImageError = (event) => {
       <!-- Content Container -->
       <div class="relative h-full flex flex-col justify-end z-20 pb-8 md:pb-12">
         <div class="container mx-auto px-6 pb-8 md:pb-12 lg:px-16 transform translate-y-[-1rem]">
-          <!-- Category and Date -->
-          <div class="flex items-center mb-4 animate-fadeIn">
-            <span class="inline-block px-3 py-1 text-xs font-semibold tracking-wider text-white uppercase bg-blue-600 rounded-full">
-              {{ item.category }}
-            </span>
-            <span v-if="item.date" class="ml-3 text-white/80 text-sm">{{ item.date }}</span>
-          </div>
+          <NuxtLink :to="item.link" class="group block max-w-3xl cursor-pointer">
+            <!-- Category and Date -->
+            <div class="mb-4 flex items-center animate-fadeIn">
+              <span class="inline-block rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-white">
+                {{ item.category }}
+              </span>
+              <span v-if="item.date" class="ml-3 text-sm text-white/80">{{ item.date }}</span>
+            </div>
 
-          <!-- Title and Content -->
-          <div class="max-w-3xl">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight animate-fadeIn delay-100">
-              {{ item.title }}
-            </h2>
-            <div class="text-lg md:text-xl text-white/90 mb-6 animate-fadeIn delay-200" v-html="item.content"></div>
-          </div>
+            <!-- Title and Content -->
+            <div>
+              <h2 class="mb-4 text-3xl font-bold leading-tight text-white animate-fadeIn delay-100 md:text-4xl lg:text-5xl">
+                {{ item.title }}
+              </h2>
+              <div class="mb-6 text-lg text-white/90 animate-fadeIn delay-200 md:text-xl" v-html="item.content"></div>
+            </div>
 
-          <!-- Read More Button -->
-          <div class="animate-fadeIn delay-300">
-            <NuxtLink 
-              :to="item.link" 
-              class="inline-flex items-center px-6 py-3 text-sm font-semibold text-white transition-all duration-300 bg-blue-600 rounded-lg hover:bg-blue-700 group"
-            >
-              Read More
-              <svg class="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-              </svg>
-            </NuxtLink>
-          </div>
+            <!-- Read More Button -->
+            <div class="animate-fadeIn delay-300">
+              <span class="inline-flex items-center rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-blue-700">
+                Read More
+                <svg class="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+              </span>
+            </div>
+          </NuxtLink>
         </div>
       </div>
     </div>
