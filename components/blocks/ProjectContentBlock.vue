@@ -1,9 +1,13 @@
 <script setup lang="ts">
+const config = useRuntimeConfig()
+
 defineProps<{
   title?: string
   label?: string
   theme?: 'blue' | 'emerald' | 'indigo' | 'purple' | 'orange' | 'rose'
   show_header?: boolean
+  show_logo?: boolean
+  logo?: string
   body?: string
 }>()
 
@@ -18,12 +22,31 @@ const themeToHeader = (theme?: string) => {
     default: return 'from-blue-50 to-blue-100 border-blue-200 text-blue-600'
   }
 }
+
+const resolveLogoUrl = (value?: string) => {
+  if (!value) return ''
+  if (/^(https?:)?\/\//i.test(value) || value.startsWith('data:')) return value
+
+  const base = (config.public.apiBase as string | undefined)?.replace(/\/$/, '') || ''
+  if (value.startsWith('/')) return base ? `${base}${value}` : value
+
+  const normalized = value.replace(/^storage\//, '')
+  return base ? `${base}/storage/${normalized}` : `/storage/${normalized}`
+}
 </script>
 
 <template>
   <div class="bg-white rounded-xl shadow-sm overflow-hidden">
     <div v-if="show_header !== false" class="px-6 py-5 bg-gradient-to-r" :class="themeToHeader(theme)">
-      <h2 class="text-3xl font-bold text-gray-900 mb-1">{{ title }}</h2>
+      <div class="flex items-center gap-3">
+        <img
+          v-if="show_logo && logo"
+          :src="resolveLogoUrl(logo)"
+          :alt="`${title || 'Project'} logo`"
+          class="h-10 w-10 object-contain rounded bg-white/70 p-1 border border-gray-200"
+        />
+        <h2 class="text-3xl font-bold text-gray-900 mb-1">{{ title }}</h2>
+      </div>
       <div v-if="label" class="flex items-center text-sm" :class="themeToHeader(theme).split(' ').pop()">
         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
@@ -37,5 +60,4 @@ const themeToHeader = (theme?: string) => {
     </div>
   </div>
 </template>
-
 

@@ -7,6 +7,7 @@ type BlockItem = { id?: string; type?: string; data?: Record<string, any> }
 const props = defineProps<{
   blocks: BlockItem[]
 }>()
+const config = useRuntimeConfig()
 
 const config = useRuntimeConfig()
 
@@ -139,6 +140,7 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
         icon: typeof it === 'string' ? undefined : (it?.icon ?? it?.lead_icon ?? undefined),
       }))
       return {
+        title: data.title ?? '',
         style: data.style ?? 'checks',
         show_leading_icons: data.show_leading_icons ?? true,
         default_icon: data.default_icon ?? 'heroicon-o-check',
@@ -173,13 +175,13 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
 
     case 'ImageZoomableBlock':
       return {
-        src: normalizeImageUrl(data.src ?? data.image ?? data.image_url ?? ''),
+        src: toMediaUrl(data.src ?? data.image ?? data.image_url ?? ''),
         alt: data.alt ?? data.caption ?? '',
       }
 
     case 'ImageBlock':
       return {
-        src: normalizeImageUrl(data.src ?? data.image ?? data.image_url ?? ''),
+        src: toMediaUrl(data.src ?? data.image ?? data.image_url ?? ''),
         alt: data.alt ?? '',
         fit: data.fit ?? 'contain',
         height: data.height ?? 'h-80',
@@ -204,10 +206,15 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
       }
 
     case 'FunctionGroupBlock': {
-      const rows = Array.isArray(data.functions) ? data.functions : (Array.isArray(data.items) ? data.items : [])
+      const rows = Array.isArray(data.groups)
+        ? data.groups
+        : (Array.isArray(data.functions) ? data.functions : (Array.isArray(data.items) ? data.items : []))
       const mapped = rows.map((fn: any) => ({
         title: fn?.title ?? fn?.heading ?? '',
         description: fn?.description ?? fn?.body ?? fn?.text ?? '',
+        bullets: Array.isArray(fn?.bullets)
+          ? fn.bullets.map((b: any) => ({ value: typeof b === 'string' ? b : (b?.value ?? b?.label ?? b?.text ?? '') }))
+          : [],
         badges: Array.isArray(fn?.badges ?? fn?.tags)
           ? (fn.badges ?? fn.tags).map((b: any) => (typeof b === 'string' ? { label: b } : { label: b?.label ?? b?.text ?? '' }))
           : [],
@@ -215,18 +222,32 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
       return {
         heading: data.heading ?? data.title ?? '',
         intro: data.intro ?? data.description ?? '',
+        columns: String(data.columns ?? '1'),
+        show_icons: Boolean(data.show_icons ?? true),
         functions: mapped,
       }
     }
 
     case 'ProjectContentBlock':
+      {
+      const rawLogo = data.logo ?? data.logo_url ?? ''
+      let normalizedLogo = ''
+      if (typeof rawLogo === 'string') {
+        normalizedLogo = rawLogo
+      } else if (Array.isArray(rawLogo)) {
+        const firstString = rawLogo.flat(Infinity).find((v: any) => typeof v === 'string' && v.length > 0)
+        normalizedLogo = firstString ?? ''
+      }
       return {
         title: data.title ?? '',
         label: data.label ?? '',
         theme: data.theme ?? 'blue',
         show_header: data.show_header ?? true,
+        show_logo: Boolean(data.show_logo ?? false),
+        logo: normalizedLogo,
         body: data.body ?? '',
         heading_level: data.heading_level ?? 'h2',
+      }
       }
 
     case 'MandatePanelBlock':

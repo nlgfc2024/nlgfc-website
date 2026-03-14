@@ -1,4 +1,4 @@
-"<script setup>
+<script setup>
     import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
     import BlocksRenderer from '~/components/BlocksRenderer.vue'
     import { usePageBlocks } from '~/composables/usePageBlocks'
@@ -160,18 +160,18 @@
     });
 
 // Use the composable to share the data
-const { projectGroups, sidebarSections } = useGeneralSidebar();
-sidebarSections.value = sidebarSectionsData.value;
-projectGroups.value = accordionGroupsData.value;
+const { projectGroups } = useGeneralSidebar();
 
-// Combined for activeTab/hash handling - flat items + accordion items
-const mappedProjectGroups = computed(() => {
-    const flat = sidebarSectionsData.value.map(s => ({
-        group: s.name,
-        id: s.id,
-        items: [{ id: s.id, title: s.name }]
-    }));
-    return [...flat, ...accordionGroupsData.value];
+// Combined for sidebar rendering:
+// - Top-level links as standalone sections (no dropdown)
+// - Directorates as a single accordion group
+const sidebarData = computed(() => [
+  ...sidebarSectionsData.value,
+  ...accordionGroupsData.value,
+]);
+
+watchEffect(() => {
+  projectGroups.value = sidebarData.value;
 });
 
 // Page-builder: Mission, Vision, Core Values content
@@ -181,11 +181,33 @@ const { data: pages, pending, error: PageError } = usePageBlocks([
   'powers-and-functions-of-nlgfc','procurement-and-assets-disposal-division',
   'directorate-of-finance-and-fiscal-decentralization','directorate-of-corporate-and-strategic-services',
   'planning-monitoring-and-evaluation-division',
-  'internal-audit-and-risk-division','directorate-of-social-and-economic-dev-services', 'mission-vision-core-values', 'organisational-structure'
+  'internal-audit-and-risk-division','directorate-of-social-and-economic-dev-services',
+  'mission-vision-core-values','mission-vision-and-core-values',
+  'organisational-structure','organizational-structure',
+  'powers-and-functions','about-us'
 ])
 
 // Create alias for pending to match template usage
 const PagePending = computed(() => pending.value)
+
+const resolveBlocks = (slugCandidates = []) => {
+  const map = pages.value || {}
+  for (const slug of slugCandidates) {
+    const blocks = map?.[slug]?.blocks
+    if (Array.isArray(blocks) && blocks.length) return blocks
+  }
+  return []
+}
+
+const mvcBlocks = computed(() =>
+  resolveBlocks(['mission-vision-core-values', 'mission-vision-and-core-values', 'about-us'])
+)
+const powersBlocks = computed(() =>
+  resolveBlocks(['powers-and-functions-of-nlgfc', 'powers-and-functions', 'about-us'])
+)
+const orgStructureBlocks = computed(() =>
+  resolveBlocks(['organisational-structure', 'organizational-structure', 'about-us'])
+)
 
 
 function updateActiveTabFromHash(hash) {
@@ -248,7 +270,7 @@ const downloadImage = () => {
         <div v-show="activeTab === 'mvc'" class="prose max-w-none">
             <div v-if="PagePending">Loading...</div>
             <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['mission-vision-core-values']?.blocks || []" />
+            <BlocksRenderer :blocks="mvcBlocks" />
              
         </div>
 
@@ -256,7 +278,7 @@ const downloadImage = () => {
             <!-- Header Section -->
             <div v-if="PagePending">Loading...</div>
             <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['powers-and-functions-of-nlgfc']?.blocks || []" />
+            <BlocksRenderer :blocks="powersBlocks" />
         </div>
         <!-- Board of Directors Content -->
         <div v-show="activeTab === 'board'" class="prose max-w-none">
@@ -385,11 +407,11 @@ const downloadImage = () => {
         </div>
 
         
-        <!-- Organisational Structure Section - v-if so images load when tab is visible -->
-        <div v-if="activeTab === 'organisational-structure'" class="prose max-w-none">
+        <!-- Organisational Structure Section -->
+        <div v-show="activeTab === 'organisational-structure'" class="prose max-w-none">
             <div v-if="PagePending">Loading organisational structure...</div>
             <div v-else-if="PageError">Failed to load organisational structure.</div>
-            <BlocksRenderer v-else :blocks="pages?.['organisational-structure']?.blocks || []" />
+            <BlocksRenderer v-else :blocks="orgStructureBlocks" />
         </div>
 
 

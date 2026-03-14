@@ -4,204 +4,136 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import GeneralSidebar from '../../components/GeneralSidebar.vue';
 import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
-import { usePageBlocks } from '~/composables/usePageBlocks'
 import BlocksRenderer from '~/components/BlocksRenderer.vue'
 
 
 definePageMeta({ title: 'Current Projects' })
 
 const route = useRoute()
-const activeTab = ref('cdf')
+const activeTab = ref('')
 const isSidebarOpen = ref(true);
-
-
-// Sidebar structure with groups and nested sub-groups
-const projectGroups = [
-  {
-    group: 'Government Funded Projects',
-    id: 'government_funded',
-    items: [
-      { id: 'cdf', title: 'Constituency Development Fund' },
-      { id: 'ddf', title: 'District Development Fund' },
-      { id: 'idf', title: 'Infrastructure Development Fund (IDF)' },
-      { id: 'rrf', title: 'Road Rehabilitation Fund (RRF)' },
-      { id: 'wsf', title: 'Water Structures Fund' },
-       { id: 'health_rehab', title: 'Health Rehabilitation' }    
-    ]
-  },
-  {
-    group: 'Donor Funded Projects',
-    subgroups: [
-      {
-        subgroup: 'SSRLP',
-        id: 'ssrlp_news',
-        items: [
-          { id: 'ssrlp_news', title: 'SSRLP NEWS' },
-          { id: 'ssrlp_overview', title: 'OVERVIEW' },
-          { id: 'SCTP', title: 'Social Cash Transfer' },
-          { id: 'publicWorks', title: 'Climate Smart Public Works' },
-          { id: 'livelihoods', title: 'Livelihoods Support' },
-          { id: 'scalable', title: 'Scalable Social Safety Nets' },
-          { id: 'cerp', title: 'Contigency Emergency Response' }
-        ]
-      },
-      {
-        subgroup: 'GESD',
-        id: 'gesd_news',
-        items: [
-          {id: 'gesd_news', title: 'GESD NEWS'},
-          { id: 'gesd_overview', title: 'OVERVIEW' },
-      { id: 'pbf', title: 'Performance-Based Financing' },
-      { id: 'ias', title: 'Intergovernmental Accountability Systems' },
-      { id: 'lgpi', title: 'Local Government Performance Improvement' },
-      { id: 'adaptive', title: 'Adaptive Management and Innovation' }
-    ]
-  },
-  {
-        subgroup: 'RCRP 2',
-        id: 'rcrp2_news',
-        items: [
-          { id: 'rcrp2_news', title: 'RCRP2 NEWS' },
-          { id: 'rcrp_overview', title: 'OVERVIEW' },
-      { id: 'drb', title: 'District-Led Resilience Building' },
-      { id: 'usr', title: 'Urban Malawi Social Registry' },
-      { id: 'upw', title: 'Urban Climate Smart Public Works Program' }
-        ]
-      }
-    ]
-  }
-]
-
-// Collapsible state
-const openGroup = ref(projectGroups[0].group)
+const openGroup = ref(null)
 const openSubgroup = ref(null)
+const config = useRuntimeConfig()
+const legacyMenuSlugsToHide = new Set(['ssrlp', 'gesd', 'masaf', 'rcrp2', 'miera', 'led'])
 
-// Map tab ids to page slugs (adjust slugs to match your Pages table)
-const projectSlugByTab = {
-  // Government funded
-  cdf: 'cdf',
-  ddf: 'ddf',
-  idf: 'idf',
-  rrf: 'rrf',
-  wsf: 'wsf',
-  health_rehab: 'health-rehabilitation',
-  // Donor funded: SSRLP
-  ssrlp_news: 'ssrlp-news',
-  ssrlp_overview: 'ssrlp-overview',
-  SCTP: 'ssrlp-sctp',
-  publicWorks: 'ssrlp-public-works',
-  livelihoods: 'ssrlp-livelihoods',
-  scalable: 'ssrlp-scalable',
-  cerp: 'ssrlp-cerp',
-  // Donor funded: GESD
-  gesd_news: 'gesd-news',
-  gesd_overview: 'gesd-overview',
-  pbf: 'gesd-pbf',
-  ias: 'gesd-ias',
-  lgpi: 'gesd-lgpi',
-  adaptive: 'gesd-adaptive',
-  // Donor funded: RCRP2
-  rcrp2_news: 'rcrp2-news',
-  rcrp_overview: 'rcrp-overview',
-  drb: 'rcrp-drb',
-  usr: 'rcrp-usr',
-  upw: 'rcrp-upw',
-}
+const { data: currentMenuResponse } = useAsyncData(
+  'projects:current:menu',
+  () => $fetch(`${config.public.apiBase}/api/projects/menu?project_status=current`),
+  { server: true, default: () => ({ data: [] }) }
+)
 
-// Inject slug onto each sidebar item so links can carry it via query
 const projectGroupsWithSlugs = computed(() => {
-  return projectGroups.map((group) => {
-    if (group.subgroups && Array.isArray(group.subgroups)) {
-      return {
-        ...group,
-        subgroups: group.subgroups.map((sg) => ({
-          ...sg,
-          items: (sg.items || []).map((it) => ({
-            ...it,
-            slug: projectSlugByTab[it.id] || undefined,
-          })),
-        })),
-      }
-    }
-    return {
-      ...group,
-      items: (group.items || []).map((it) => ({
-        ...it,
-        slug: projectSlugByTab[it.id] || undefined,
-      })),
-    }
-  })
+  const raw = Array.isArray(currentMenuResponse.value?.data) ? currentMenuResponse.value.data : []
+  return raw.map((group) => ({
+    ...group,
+    items: Array.isArray(group.items)
+      ? group.items
+          .map((item) => ({ ...item, id: item.id || item.slug, slug: item.slug || item.id }))
+          .filter((item) => !legacyMenuSlugsToHide.has(String(item.slug || item.id || '').toLowerCase()))
+      : [],
+    subgroups: Array.isArray(group.subgroups)
+      ? group.subgroups.map((subgroup) => ({
+          ...subgroup,
+          items: Array.isArray(subgroup.items)
+            ? subgroup.items
+                .map((item) => ({ ...item, id: item.id || item.slug, slug: item.slug || item.id }))
+                .filter((item) => !legacyMenuSlugsToHide.has(String(item.slug || item.id || '').toLowerCase()))
+            : [],
+        }))
+      : [],
+  }))
 })
 
-// Active slug
-const activeSlug = computed(() => projectSlugByTab[activeTab.value] || '')
-
-// Fetch only the active slug reactively
-const config = useRuntimeConfig()
-const { data: activePage } = useAsyncData(
-  () => `page:${activeSlug.value}`,
-  () => $fetch(`${config.public.apiBase}/api/pages/${activeSlug.value}`),
+const activeSlug = computed(() => activeTab.value || '')
+const { data: activeProjectPage } = useAsyncData(
+  () => `project-page:${activeSlug.value}`,
+  async () => {
+    if (!activeSlug.value) return { page: null, news: [], project: null }
+    try {
+      return await $fetch(`${config.public.apiBase}/api/projects/${activeSlug.value}/page`)
+    } catch {
+      const page = await $fetch(`${config.public.apiBase}/api/pages/${activeSlug.value}`)
+      return { page, news: [], project: null }
+    }
+  },
   { watch: [activeSlug], server: true }
 )
-// Rendering will use BlocksRenderer with all blocks from activePage
+// Rendering will use BlocksRenderer with all blocks from activeProjectPage.page.blocks
 
-const projectUpdates = {
-  // Sub-group landing news feeds (existing)
-  ssrlp_news: [
-    { date: '2024-06-20', title: 'SSRLP mid-year review completed', tags: ['ssrlp','review'], summary: 'Key milestones achieved across all pillars; detailed report forthcoming.', link: '#' },
-    { date: '2024-05-14', title: 'Additional livelihood grants disbursed', tags: ['livelihoods'], summary: 'Disbursements reached 3,000 households in priority districts.', link: '#' },
-    { date: '2024-04-08', title: 'Shock response window activated', tags: ['emergency'], summary: 'Activation supports drought-affected households with temporary assistance.', link: '#' },
-    { date: '2024-03-18', title: 'CS-EPWP sites expanded', tags: ['publicWorks'], summary: 'New catchment restoration sites opened across 5 districts.', link: '#' }
-  ],
-  gesd_news: [
-    { date: '2024-06-08', title: 'New LAPA guidelines issued', tags: ['gesd','governance'], summary: 'Updated guidance for council performance assessments released.', link: '#' },
-    { date: '2024-05-12', title: 'PBG top performers announced', tags: ['pbf'], summary: 'Councils exceeding 85% receive performance-based grants.', link: '#' },
-    { date: '2024-04-22', title: 'Audit improvements rolled out', tags: ['ias'], summary: 'New intergovernmental accountability tools deployed nationwide.', link: '#' }
-  ],
-  rcrp2_news: [
-    { date: '2024-05-30', title: 'RCRP 2 launch workshops held', tags: ['rcrp'], summary: 'Stakeholder workshops conducted in Blantyre and Lilongwe.', link: '#' },
-    { date: '2024-05-10', title: 'Hydro-meteorological stations upgraded', tags: ['infrastructure'], summary: 'Upgrades will improve early warning systems and data accuracy.', link: '#' },
-    { date: '2024-04-19', title: 'Catchment rehabilitation plan approved', tags: ['resilience'], summary: 'Plan targets priority basins for ecosystem restoration.', link: '#' }
-  ],
+const stripHtml = (value = '') => value.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+const resolveMediaUrl = (value) => {
+  if (!value) return null
+  if (typeof value !== 'string') return null
+  if (value.startsWith('http')) return value
+  return `${config.public.apiBase}/storage/${value.replace(/^\/+/, '')}`
+}
 
-  // NEW: Government-funded components
-  cdf: [
-    { date: '2025-07-22', title: 'CDF Phase II micro-projects cleared', tags: ['cdf','community'], summary: 'Additional 312 micro-projects approved focusing on classrooms, clinics and bridges.', link: '#' },
-    { date: '2025-06-11', title: 'Community oversight committees trained', tags: ['capacity','governance'], summary: 'Training completed in 28 councils to strengthen community procurement oversight.', link: '#' },
-    { date: '2025-04-29', title: 'Material deliveries reach 85% of sites', tags: ['implementation'], summary: 'Most projects now have core materials on site—construction ramping up this quarter.', link: '#' }
+const mapPostToNewsItem = (post) => ({
+  id: post.id,
+  date: post.created_at,
+  title: post.title,
+  summary: stripHtml(post.content || '').slice(0, 180) + (stripHtml(post.content || '').length > 180 ? '...' : ''),
+  link: `/news/${post.slug}?source=project`,
+  image: resolveMediaUrl(post.image),
+  tags: post.project?.slug ? [post.project.slug] : [],
+})
+
+const mapApiNewsToItem = (post) => ({
+  id: post.id,
+  date: post.created_at,
+  title: post.title,
+  summary: stripHtml(post.content || '').slice(0, 180) + (stripHtml(post.content || '').length > 180 ? '...' : ''),
+  link: `/news/${post.slug}?source=project`,
+  image: resolveMediaUrl(post.image),
+  tags: post.project?.slug ? [post.project.slug] : [],
+})
+
+const { data: activeProjectNews } = useAsyncData(
+  () => `project-news:${activeSlug.value}`,
+  async () => {
+    if (!activeSlug.value) return []
+    const response = await $fetch(`${config.public.apiBase}/api/projects/${activeSlug.value}/news?per_page=30`)
+    return Array.isArray(response?.data) ? response.data : []
+  },
+  { watch: [activeSlug], server: true, default: () => [] }
+)
+
+const dynamicNewsForActive = computed(() => (activeProjectNews.value || []).map(mapPostToNewsItem))
+const fallbackPageNews = computed(() => {
+  const pageNews = activeProjectPage.value?.news
+  return Array.isArray(pageNews) ? pageNews.map(mapApiNewsToItem) : []
+})
+
+const staticLandingFallback = {
+  'ssrlp-news': [
+    { id: 'ssrlp-fallback-1', date: '2026-03-01', title: 'SSRLP Implementation Update', summary: 'Program implementation update for SSRLP components across councils.', link: '/resourceCenter', image: null, tags: ['ssrlp'] },
+    { id: 'ssrlp-fallback-2', date: '2026-02-20', title: 'SSRLP Livelihoods Support Milestone', summary: 'New milestone reached in livelihoods support rollout.', link: '/resourceCenter', image: null, tags: ['ssrlp'] },
+    { id: 'ssrlp-fallback-3', date: '2026-02-10', title: 'SSRLP Public Works Progress', summary: 'Climate smart public works progress reported in multiple districts.', link: '/resourceCenter', image: null, tags: ['ssrlp'] },
   ],
-  ddf: [
-    { date: '2025-08-05', title: 'DDF pipeline aligned to updated DDPs', tags: ['ddf','planning'], summary: 'Councils finalized alignment of DDF investments with District Development Plans.', link: '#' },
-    { date: '2025-06-18', title: 'Quarterly disbursements released to councils', tags: ['finance'], summary: 'Treasury released Q4 tranches; councils to accelerate works completion.', link: '#' },
-    { date: '2025-05-03', title: 'School blocks and boreholes prioritized', tags: ['education','water'], summary: 'Majority of DDF envelopes directed to education and water access gaps.', link: '#' }
+  'gesd-news': [
+    { id: 'gesd-fallback-1', date: '2026-03-02', title: 'GESD Accountability Update', summary: 'Governance accountability implementation update across local authorities.', link: '/resourceCenter', image: null, tags: ['gesd'] },
+    { id: 'gesd-fallback-2', date: '2026-02-18', title: 'GESD Performance Financing Highlights', summary: 'Performance-based financing highlights from current cycle.', link: '/resourceCenter', image: null, tags: ['gesd'] },
+    { id: 'gesd-fallback-3', date: '2026-02-05', title: 'GESD Monitoring Improvements', summary: 'Monitoring and reporting improvements deployed for councils.', link: '/resourceCenter', image: null, tags: ['gesd'] },
   ],
-  idf: [
-    { date: '2025-07-14', title: 'IDF urban market upgrades commence', tags: ['idf','infrastructure'], summary: 'Urban markets in Mzuzu and Lilongwe begin rehabilitation under IDF.', link: '#' },
-    { date: '2025-06-02', title: 'Design reviews completed for public buildings', tags: ['design','qa'], summary: 'Independent design checks completed to ensure safety and value for money.', link: '#' },
-    { date: '2025-05-03', title: 'School blocks and boreholes prioritized', tags: ['education','water'], summary: 'Majority of DDF envelopes directed to education and water access gaps.', link: '#' }
-  ],
-  rrf: [
-    { date: '2025-07-30', title: 'Spot regravelling and drainage clearing underway', tags: ['rrf','roads'], summary: 'Maintenance teams deployed on feeder roads ahead of rainy season.', link: '#' },
-    { date: '2025-05-20', title: 'Bridge approaches stabilized in priority corridors', tags: ['maintenance','resilience'], summary: 'Critical spots reinforced to reduce washouts during peak flows.', link: '#' },
-    { date: '2025-05-03', title: 'Roads connecting fam lands prioritized', tags: ['education','water'], summary: 'Majority of DDF envelopes directed to education and water access gaps.', link: '#' }
-  ],
-  wsf: [
-    { date: '2025-08-08', title: 'New borehole drillings confirmed in 9 TAs', tags: ['wsf','water'], summary: 'Contractors mobilized; quality testing and community WASH committees in place.', link: '#' },
-    { date: '2025-06-25', title: 'Piped scheme rehabilitation achieves 60% progress', tags: ['rehab'], summary: 'Pump replacements and leak repairs improving uptime across schemes.', link: '#' },
-    { date: '2025-05-03', title: 'Irrigation and boreholes prioritized', tags: ['education','water'], summary: 'Majority of DDF envelopes directed to education and water access gaps.', link: '#' }
-  ],
-  health_rehab: [
-    { date: '2025-07-19', title: 'Maternity wing refurbishments 70% complete', tags: ['health','rehabilitation'], summary: 'Works focus on roofing, solar backup and sanitation blocks.', link: '#' },
-    { date: '2025-05-27', title: 'Equipment delivery schedule finalized', tags: ['procurement'], summary: 'Oxygen concentrators and cold-chain fridges slated for next quarter.', link: '#' },
-    { date: '2025-05-03', title: 'Hospitals and beds prioritized', tags: ['education','water'], summary: 'Majority of DDF envelopes directed to education and water access gaps.', link: '#' }
+  'rcrp2-news': [
+    { id: 'rcrp2-fallback-1', date: '2026-03-03', title: 'RCRP2 Catchment Rehabilitation Update', summary: 'Regional catchment rehabilitation activities are progressing.', link: '/resourceCenter', image: null, tags: ['rcrp2'] },
+    { id: 'rcrp2-fallback-2', date: '2026-02-19', title: 'RCRP2 Urban Resilience Planning', summary: 'Urban resilience planning activities continue in targeted councils.', link: '/resourceCenter', image: null, tags: ['rcrp2'] },
+    { id: 'rcrp2-fallback-3', date: '2026-02-08', title: 'RCRP2 Workshop Outcomes', summary: 'Recent workshops produced implementation actions for next quarter.', link: '/resourceCenter', image: null, tags: ['rcrp2'] },
   ],
 }
+
+const updatesForActive = computed(() => {
+  if (dynamicNewsForActive.value.length) return dynamicNewsForActive.value
+  if (fallbackPageNews.value.length) return fallbackPageNews.value
+  return staticLandingFallback[activeSlug.value] || []
+})
 
 // --- Pagination state for any news list ---
 const pageSize = ref(6)           // cards per page
 const currentPage = ref(1)
 
-const newsListForActive = computed(() => projectUpdates[activeTab.value] || [])
+const newsListForActive = computed(() => updatesForActive.value || [])
 const totalPages = computed(() => Math.max(1, Math.ceil(newsListForActive.value.length / pageSize.value)))
 const paginatedNews = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value
@@ -220,21 +152,25 @@ function prevPage() { if (currentPage.value > 1) goToPage(currentPage.value - 1)
 // Reset page when switching tabs
 watch(activeTab, () => { currentPage.value = 1 })
 
+watch(projectGroupsWithSlugs, (groups) => {
+  if (!groups.length || activeTab.value) return
 
-// Set from initial hash on load
-onMounted(() => {
-  if (route.hash) {
-    updateActiveTabFromHash(route.hash.replace('#', ''))
-  } else {
-    // No hash: derive from ?slug= or default to 'cdf'
-    const q = route.query?.slug
-    const slugFromQuery = Array.isArray(q) ? q[0] : q
-    const matchId = Object.keys(projectSlugByTab).find((k) => projectSlugByTab[k] === slugFromQuery)
-    activeTab.value = matchId || 'cdf'
-    // reflect in URL hash for sidebar highlighting
-    history.replaceState(null, '', `${route.path}#${activeTab.value}`)
-  }
-})
+  const q = route.query?.slug
+  const slugFromQuery = Array.isArray(q) ? q[0] : q
+  const fromHash = route.hash ? route.hash.replace('#', '') : null
+
+  const allItems = groups.flatMap((group) => [
+    ...(group.items || []),
+    ...((group.subgroups || []).flatMap((subgroup) => subgroup.items || [])),
+  ])
+  const lookupBySlug = slugFromQuery ? allItems.find((item) => item.slug === slugFromQuery)?.id : null
+  const firstProjectItem = allItems.find((item) => item.slug)
+
+  const fallbackId = firstProjectItem?.id || ''
+
+  activeTab.value = fromHash || lookupBySlug || fallbackId
+  openGroup.value = groups[0]?.group || null
+}, { immediate: true })
 
 // React to hash changes
 watch(() => route.hash, (newHash) => {
@@ -244,7 +180,7 @@ watch(() => route.hash, (newHash) => {
 })
 
 function updateActiveTabFromHash(hash) {
-  for (const group of projectGroups) {
+  for (const group of projectGroupsWithSlugs.value) {
     // Match group landing
     if (group.id && group.id === hash) {
       activeTab.value = group.id
@@ -254,7 +190,7 @@ function updateActiveTabFromHash(hash) {
     // Flat items (government group)
     if (group.items) {
     const match = group.items.find(item => item.id === hash)
-    if (match) {
+    if (match && match.slug) {
       activeTab.value = match.id
         openGroup.value = group.group
         return
@@ -264,13 +200,15 @@ function updateActiveTabFromHash(hash) {
     if (group.subgroups) {
       for (const sg of group.subgroups) {
         if (sg.id === hash) {
-          activeTab.value = sg.id
+          const firstItem = (sg.items || []).find((item) => item?.slug || item?.id)
+          if (!firstItem) return
+          activeTab.value = firstItem.id
           openGroup.value = group.group
-          openSubgroup.value = sg.subgroup
+          openSubgroup.value = sg.id
           return
         }
         const subMatch = sg.items.find(item => item.id === hash)
-        if (subMatch) {
+        if (subMatch && subMatch.slug) {
           activeTab.value = subMatch.id
           openGroup.value = group.group
           openSubgroup.value = sg.subgroup
@@ -287,36 +225,27 @@ watch(activeTab, () => {
 })
 
 // News landing configuration (hero + featured grid + stats)
-const newsLandingTabs = ['ssrlp_news', 'gesd_news', 'rcrp2_news']
-const isNewsLanding = computed(() => newsLandingTabs.includes(activeTab.value))
+const forcedNewsLandingSlugs = new Set(['ssrlp-news', 'gesd-news', 'rcrp2-news', 'crp2-news'])
+const isNewsLanding = computed(() =>
+  forcedNewsLandingSlugs.has(activeSlug.value) || Boolean(activeProjectPage.value?.project?.is_news_landing)
+)
 
-const newsHero = {
-  ssrlp_news: { image: '/images/samples/news1.jpg', category: 'SSRLP' },
-  gesd_news: { image: '/images/samples/news2.jpg', category: 'GESD' },
-  rcrp2_news: { image: '/images/samples/news3.jpg', category: 'RCRP 2' }
-}
+const newsHero = computed(() => ({
+  [activeTab.value]: {
+    image: '/images/samples/news1.jpg',
+    category: activeProjectPage.value?.project?.program_group || 'Project',
+  },
+}))
 
-const newsItemsForActive = computed(() => projectUpdates[activeTab.value] || [])
+const newsItemsForActive = computed(() => updatesForActive.value || [])
 const heroNewsItem = computed(() => newsItemsForActive.value[0] || null)
 const featuredArticles = computed(() => newsItemsForActive.value.slice(0, 3))
 
-const projectStats = {
-  ssrlp_news: [
-    { label: 'Beneficiaries', value: '590k+' },
-    { label: 'Districts & Cities', value: '18 + 4' },
-    { label: 'Budget', value: '$516M' }
-  ],
-  gesd_news: [
-    { label: 'Councils', value: '28' },
-    { label: 'PBG Windows', value: 'Multiple' },
-    { label: 'Assessment', value: 'Annual LAPA' }
-  ],
-  rcrp2_news: [
-    { label: 'Budget', value: '$240M' },
-    { label: 'Duration', value: '2024–2029' },
-    { label: 'Components', value: '5' }
-  ]
-}
+const projectStatsForActive = computed(() => ([
+  { label: 'Status', value: activeProjectPage.value?.project?.status?.name || 'Current' },
+  { label: 'Funding', value: activeProjectPage.value?.project?.funding_type?.name || 'N/A' },
+  { label: 'Program', value: activeProjectPage.value?.project?.program_group || 'N/A' },
+]))
 
 // Slider state for news landing
 const currentSlide = ref(0)
@@ -324,9 +253,9 @@ const autoplay = ref(true)
 const autoplayInterval = ref(5000)
 let autoplayTimer = null
 
-const newsImages = ['/images/samples/news1.jpg','/images/samples/news2.jpg','/images/samples/news3.jpg']
+const fallbackNewsImages = ['/images/samples/news1.jpg','/images/samples/news2.jpg','/images/samples/news3.jpg']
 
-const slidesForActive = computed(() => (isNewsLanding.value ? (projectUpdates[activeTab.value] || []) : []))
+const slidesForActive = computed(() => (isNewsLanding.value ? (updatesForActive.value || []) : []))
 
 function nextSlide() {
   if (!slidesForActive.value.length) return
@@ -431,7 +360,7 @@ const activeProjectTitle = computed(() => {
     }
     return 'Project Overview';
   };
-  return findItem(projectGroups);
+  return findItem(projectGroupsWithSlugs.value);
 });
 
 // removed sample projectContent provider
@@ -463,7 +392,7 @@ const activeProjectTitle = computed(() => {
           >
             <!-- Background image with overlay -->
             <div class="absolute inset-0">
-              <img :src="newsImages[index % newsImages.length]" :alt="item.title" class="w-full h-full object-cover" />
+              <img :src="item.image || fallbackNewsImages[index % fallbackNewsImages.length]" :alt="item.title" class="w-full h-full object-cover" />
               <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
             </div>
             <!-- Content -->
@@ -479,10 +408,10 @@ const activeProjectTitle = computed(() => {
                   <p class="text-white/90">{{ item.summary }}</p>
                 </div>
                 <div class="mt-5" v-if="item.link">
-                  <a :href="item.link" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
+                  <NuxtLink :to="item.link" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
                     Read More
                     <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                  </a>
+                  </NuxtLink>
                 </div>
               </div>
             </div>
@@ -532,7 +461,7 @@ const activeProjectTitle = computed(() => {
                       <!-- Image on left -->
                       <div class="w-1/3 relative overflow-hidden">
                         <img
-                          :src="newsImages[nIdx % newsImages.length]"
+                          :src="news.image || fallbackNewsImages[nIdx % fallbackNewsImages.length]"
                           alt="Article image"
                           class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           loading="lazy"
@@ -549,15 +478,15 @@ const activeProjectTitle = computed(() => {
                           {{ new Date(news.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}
                         </span>
                         <h3 class="text-lg font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-                          <a :href="news.link">{{ news.title }}</a>
+                          <NuxtLink :to="news.link">{{ news.title }}</NuxtLink>
                         </h3>
                         <p class="text-sm text-gray-600 line-clamp-2">{{ news.summary }}</p>
-                        <a :href="news.link" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <NuxtLink :to="news.link" class="mt-auto inline-flex items-center text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                           Read more
                           <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                           </svg>
-                        </a>
+                        </NuxtLink>
                       </div>
                     </div>
                   </article>
@@ -600,7 +529,7 @@ const activeProjectTitle = computed(() => {
 
         <!-- Project Statistics -->
         <section class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div v-for="(stat, sIdx) in projectStats[activeTab]" :key="sIdx" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div v-for="(stat, sIdx) in projectStatsForActive" :key="sIdx" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div class="text-sm text-gray-500">{{ stat.label }}</div>
             <div class="mt-2 text-2xl font-bold text-emerald-700">{{ stat.value }}</div>
           </div>
@@ -608,14 +537,14 @@ const activeProjectTitle = computed(() => {
       </div>
 
       <!-- Standard Project Content (API ProjectContentBlock or fallback sample) -->
-      <Suspense v-if="!isNewsLanding && activePage">
-        <BlocksRenderer :blocks="activePage.blocks || []" />
+      <Suspense v-if="!isNewsLanding && activeProjectPage">
+        <BlocksRenderer :blocks="activeProjectPage.page?.blocks || []" />
         <template #fallback>
           <div class="animate-pulse h-24 bg-gray-100 rounded my-4" />
         </template>
       </Suspense>
                     <!-- Latest Updates for this tab -->
-            <section v-if="projectUpdates[activeTab] && projectUpdates[activeTab].length && !isNewsLanding" class="mt-8">
+            <section v-if="updatesForActive.length && !isNewsLanding" class="mt-8">
               <h3 class="text-xl font-semibold text-gray-900 mb-4">Latest Updates</h3>
 
               <div class="grid md:grid-cols-3 gap-6">
@@ -627,7 +556,7 @@ const activeProjectTitle = computed(() => {
                   <div class="flex h-full">
                     <div class="w-1/3 relative overflow-hidden">
                       <img
-                        :src="newsImages[nIdx % newsImages.length]"
+                        :src="news.image || fallbackNewsImages[nIdx % fallbackNewsImages.length]"
                         alt="Article image"
                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         loading="lazy"
@@ -638,7 +567,7 @@ const activeProjectTitle = computed(() => {
                         {{ new Date(news.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) }}
                       </span>
                       <h4 class="text-base font-semibold text-gray-800 leading-tight mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
-                        <a :href="news.link">{{ news.title }}</a>
+                        <NuxtLink :to="news.link">{{ news.title }}</NuxtLink>
                       </h4>
                       <p class="text-sm text-gray-600 line-clamp-2">{{ news.summary }}</p>
                     </div>

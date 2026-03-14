@@ -1,5 +1,6 @@
 <script setup lang="ts">
 defineProps<{
+  title?: string
   items?: Array<{ label: string; description?: string; icon?: string }>
   style?: 'checks' | 'bullets' | 'numbers'
   show_leading_icons?: boolean
@@ -9,7 +10,9 @@ defineProps<{
 </script>
 
 <template>
-  <div :class="[{ 'grid md:grid-cols-2 gap-4': String(columns) === '2' }]">
+  <div>
+    <h3 v-if="title" class="text-2xl font-semibold text-gray-900 mb-4">{{ title }}</h3>
+    <div :class="[{ 'grid md:grid-cols-2 gap-4': String(columns) === '2' }]">
     <ul v-if="style !== 'numbers'" class="space-y-3 pl-10">
       <li v-for="(it, i) in items || []" :key="i" class="flex">
         <span v-if="show_leading_icons !== false" class="flex-shrink-0 mt-1 mr-3 text-blue-500">
@@ -31,5 +34,6 @@ defineProps<{
         <div v-if="it.description" class="text-gray-600 text-sm prose max-w-none" v-html="it.description" />
       </li>
     </ol>
+    </div>
   </div>
 </template>
