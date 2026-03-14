@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue';
+import { ref, watch, computed } from 'vue';
 
 const route = useRoute();
 const props = defineProps({
@@ -146,11 +146,27 @@ const detectActiveItemFromHash = () => {
         }
       }
       
+      if (group.id === hashId) {
+        if (props.activeId !== group.id) {
+          emit('update:activeId', group.id);
+        }
+        openGroup.value = group.group;
+        openSubgroup.value = null;
+        if (!isSidebarOpen.value) {
+          isSidebarOpen.value = true;
+          emit('update:sidebarOpen', true);
+        }
+        return;
+      }
+
       // Look for the item in subgroups if they exist
       if (group.subgroups && group.subgroups.length > 0) {
         for (const subgroup of group.subgroups) {
           // Check for subgroup link match
           if (subgroup.id === hashId) {
+            if (props.activeId !== subgroup.id) {
+              emit('update:activeId', subgroup.id);
+            }
             openGroup.value = group.group;
             openSubgroup.value = subgroup.id;
             if (!isSidebarOpen.value) {
@@ -233,7 +249,7 @@ watch(() => props.activeId, (newId) => {
       
       if (group.subgroups) {
         for (const subgroup of group.subgroups) {
-          if (subgroup.items?.some(item => item.id === newId)) {
+          if (subgroup.id === newId || subgroup.items?.some(item => item.id === newId)) {
             openGroup.value = group.group;
             openSubgroup.value = subgroup.id;
             if (!isSidebarOpen.value) {
@@ -243,8 +259,9 @@ watch(() => props.activeId, (newId) => {
             break;
           }
         }
-      } else if (group.items?.some(item => item.id === newId)) {
+      } else if (group.id === newId || group.items?.some(item => item.id === newId)) {
         openGroup.value = group.group;
+        openSubgroup.value = null;
         if (!isSidebarOpen.value) {
           isSidebarOpen.value = true;
           emit('update:sidebarOpen', true);
@@ -263,6 +280,12 @@ const setActiveItem = (id) => {
   // Removed for automatic scroll-based toggling
   // emit('update:sidebarOpen', false); // Removed for automatic scroll-based toggling
 };
+
+const navigateToHash = (id) => {
+  if (!id) return;
+  navigateTo({ path: route.path, hash: `#${id}` });
+};
+
 // Function to toggle the open/closed state of a project group
 const toggleGroup = (groupName) => {
   // If the clicked group is currently closed or a different group is open, open this group
@@ -274,14 +297,28 @@ const toggleGroup = (groupName) => {
     // Don't automatically change the active item when closing a group
   }
 };
-// Function to toggle the open/closed state of a subgroup
-const toggleSubgroup = (subgroupId) => {
-  if (openSubgroup.value !== subgroupId) {
-    openSubgroup.value = subgroupId;
-  } else {
-    openSubgroup.value = null;
+const handleGroupClick = (group) => {
+  if (group.subgroups?.length > 0) {
+    toggleGroup(group.group);
+    return;
   }
+
+  openGroup.value = null;
+  openSubgroup.value = null;
+  setActiveItem(group.id);
+  navigateToHash(group.id);
 };
+
+const handleSubgroupClick = (group, subgroup) => {
+  if (openGroup.value !== group.group) {
+    openGroup.value = group.group;
+  }
+  openSubgroup.value = subgroup.items?.length ? (openSubgroup.value === subgroup.id ? null : subgroup.id) : subgroup.id;
+  setActiveItem(subgroup.id);
+  navigateToHash(subgroup.id);
+};
+
+const hasSubgroupItems = (subgroup) => Array.isArray(subgroup?.items) && subgroup.items.length > 0;
 // Function to explicitly toggle the sidebar's visibility
 const toggleSidebarVisibility = () => {
   isSidebarOpen.value = !isSidebarOpen.value;
@@ -310,12 +347,16 @@ const activeGroup = computed(() => {
   if (currentHash) {
     for (const group of allSectionsData.value) {
       if (group.isSection) continue;
-      
+
+      if (group.id === currentHash) {
+        return group.group;
+      }
+
       // Check sections in groups
       if (group.sections && group.sections.some(section => section.id === currentHash)) {
         return group.group;
       }
-      
+
       if (group.subgroups) {
         for (const subgroup of group.subgroups) {
           if (subgroup.id === currentHash || subgroup.items?.some(item => item.id === currentHash)) {
@@ -458,7 +499,7 @@ const dynamicSidebarStyle = computed(() => {
           class="rounded-lg overflow-hidden"
         >
             <button
-              @click="toggleGroup(group.group)"
+              @click="handleGroupClick(group)"
               :class="[
                 'w-full text-left p-4 rounded-lg transition-all duration-200 group flex justify-between items-center',
                 activeGroup === group.group
@@ -527,11 +568,12 @@ const dynamicSidebarStyle = computed(() => {
                 <li v-if="group.subgroups && Array.isArray(group.subgroups) && group.subgroups.length > 0">
                   <li v-for="subgroup in group.subgroups.filter(subgroup => subgroup && subgroup.id)" :key="subgroup.id">
                     <NuxtLink
-                      :to="`#${subgroup.id}`"
-                      @click.prevent="toggleSubgroup(subgroup.id)"
+                      :to="`${$route.path}#${subgroup.id}`"
+                      @click.prevent="handleSubgroupClick(group, subgroup)"
                       :class="[
-                        'flex items-center justify-between w-full px-4 py-3 rounded-lg text-left cursor-pointer transition-all duration-200 ease-in-out',
+                        'flex w-full px-4 py-3 rounded-lg text-left cursor-pointer transition-all duration-200 ease-in-out',
                         'hover:bg-gray-100',
+                        hasSubgroupItems(subgroup) ? 'items-center justify-between' : 'items-center justify-start',
                         {
                           'bg-emerald-50 text-emerald-800 font-semibold': activeSubgroup === subgroup.id || openSubgroup === subgroup.id
                         }
@@ -539,13 +581,14 @@ const dynamicSidebarStyle = computed(() => {
                     >
                       <span class="block px-5 text-sm font-semibold text-gray-900 flex-grow">{{ subgroup.subgroup }}</span>
                       <svg
+                        v-if="hasSubgroupItems(subgroup)"
                         :class="['h-4 w-4 transform transition-transform duration-200', { 'rotate-180': openSubgroup === subgroup.id }]"
                         fill="currentColor" viewBox="0 0 20 20"
                       >
                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                       </svg>
                     </NuxtLink>
-                    <ul v-show="openSubgroup === subgroup.id" class="mt-1 ml-4 py-1">
+                    <ul v-if="hasSubgroupItems(subgroup)" v-show="openSubgroup === subgroup.id" class="mt-1 ml-4 py-1">
                       <li v-for="item in (subgroup.items || []).filter(item => item && item.id)" :key="item.id">
                         <NuxtLink
                           :to="`${$route.path}#${item.id}`"

@@ -1,84 +1,6 @@
 <template>
-  <div class="container mx-auto flex max-w-screen-2xl flex-col gap-6 px-4 py-6 sm:gap-8 sm:py-8 lg:flex-row">
-    <!-- Left Sidebar -->
-    <div class="w-full self-start rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-6 lg:w-80 xl:w-96">
-      <div>
-        <div class="mb-4 flex items-center justify-between gap-4 sm:mb-6">
-          <h2 class="text-xl font-bold text-gray-800">Resource Center</h2>
-          <button
-            type="button"
-            class="inline-flex items-center rounded-md border border-gray-200 px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 lg:hidden"
-            @click="isSidebarOpen = !isSidebarOpen"
-          >
-            {{ isSidebarOpen ? 'Hide menu' : 'Browse sections' }}
-          </button>
-        </div>
-        <nav :class="[isSidebarOpen ? 'block' : 'hidden', 'space-y-2 lg:block']">
-          <!-- Loop through main groups -->
-          <div v-for="(groupItem, groupIndex) in resourceGroups" :key="groupIndex" class="group">
-            <div
-              @click="handleGroupClick(groupIndex)"
-              class="flex items-center justify-between w-full text-left py-3 px-4 font-medium text-gray-700 rounded-lg cursor-pointer transition-all duration-300 ease-in-out hover:bg-gray-50 hover:text-gray-900"
-              :class="{
-                'bg-emerald-50 border-2 border-emerald-200 text-emerald-700': expandedGroup === groupIndex || activeGroup === groupIndex,
-                'hover:translate-x-1': expandedGroup !== groupIndex
-              }"
-            >
-              <span class="flex items-center">
-                 <!-- Icon for the group -->
-                <svg class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500" fill="none" stroke="currentColor" stroke-width="2"
-                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-                {{ groupItem.group }}
-              </span>
-               <!-- Chevron icon for expanding/collapsing, shown only if there are subgroups -->
-              <svg
-                v-if="groupItem.subgroups"
-                :class="{ 'rotate-90': expandedGroup === groupIndex }"
-                class="w-4 h-4 text-gray-400 transition-transform duration-300 ease-in-out"
-                fill="none" stroke="currentColor" stroke-width="2"
-                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-              </svg>
-            </div>
-            <!-- Subgroups container -->
-            <div v-if="expandedGroup === groupIndex && groupItem.subgroups" class="mt-2 space-y-1 pl-4 sm:pl-6 animate-in slide-in-from-top-2 duration-300">
-              <a
-                  v-for="(subgroup, subIndex) in groupItem.subgroups"
-                  :key="subIndex"
-                  @click.stop="selectSubgroup(groupIndex, subIndex)"
-                  class="flex items-center w-full text-left py-2 px-4 text-sm font-medium text-gray-600 rounded-md cursor-pointer transition-all duration-200 hover:bg-gray-50 hover:text-gray-900 hover:translate-x-2"
-                  :class="{
-                  'bg-emerald-50 border-2 border-emerald-200 text-emerald-700 shadow-sm': activeGroup === groupIndex && activeSubgroup === subIndex
-                }"
-              >
-                <div class="w-2 h-2 rounded-full mr-3 transition-colors duration-200"
-                     :class="{
-                       'bg-emerald-600': activeGroup === groupIndex && activeSubgroup === subIndex,
-                       'bg-gray-300 group-hover:bg-gray-600': !(activeGroup === groupIndex && activeSubgroup === subIndex)
-                     }">
-                </div>
-                {{ subgroup.subgroup }}
-              </a>
-            </div>
-          </div>
-        </nav>
-         <!-- Help Section -->
-        <div :class="[isSidebarOpen ? 'block' : 'hidden', 'mt-6 border-t border-gray-200 pt-6 lg:block']">
-          <div class="bg-gray-50 rounded-lg p-4">
-            <h3 class="text-sm font-semibold text-emerald-700 mb-2">Need Help?</h3>
-            <p class="text-xs text-gray-600 mb-3">Contact our support team for assistance with document access or technical issues.</p>
-            <NuxtLink to="/contact" class="inline-flex w-full items-center justify-center rounded-md bg-gray-800 px-3 py-2 text-xs text-white transition-colors duration-200 hover:bg-gray-600">
-              Contact Support
-            </NuxtLink>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right Content -->
-    <div class="min-w-0 flex-1 p-0 sm:p-2 lg:p-4">
+  <div class="container mx-auto max-w-screen-2xl px-4 py-6 sm:py-8">
+    <div class="min-w-0">
       <section v-if="activeGroup !== null">
         <h3 class="mb-6 text-lg font-bold text-gray-600">{{ currentTitle }}</h3>
         <!-- Search Bar Section -->
@@ -124,11 +46,15 @@
         </div>
         
         <!-- News Layout - Simple List Similar to news.vue -->
-        <div v-if="currentDisplayType === 'News'" class="rounded-lg bg-white p-3 shadow-lg sm:p-4">
-          <div v-if="newsLoading" class="space-y-3 p-4">
-            <div v-for="n in 5" :key="n" class="animate-pulse rounded border border-gray-100 p-4">
-              <div class="mb-2 h-4 w-5/6 rounded bg-gray-200"></div>
-              <div class="h-3 w-2/5 rounded bg-gray-200"></div>
+        <div v-if="currentDisplayType === 'News'" class="rounded-lg bg-white p-4 shadow-lg sm:p-6">
+          <div v-if="newsLoading" class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+            <div v-for="n in 6" :key="n" class="animate-pulse overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+              <div class="aspect-[4/3] w-full bg-gray-200"></div>
+              <div class="space-y-3 p-5">
+                <div class="h-5 w-5/6 rounded bg-gray-200"></div>
+                <div class="h-4 w-full rounded bg-gray-200"></div>
+                <div class="h-4 w-2/3 rounded bg-gray-200"></div>
+              </div>
             </div>
           </div>
 
@@ -136,34 +62,33 @@
             <p class="text-sm">Latest news could not be loaded.</p>
           </div>
 
-          <div v-else class="max-h-[26rem] overflow-y-auto pr-1 sm:max-h-[32rem] sm:pr-2">
+          <div v-else class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
             <div
               v-for="newsItem in filteredDocuments"
               :key="newsItem.id"
-              class="mb-3 last:mb-0"
             >
               <nuxt-link
                 :to="`/news#${newsItem.slug || newsItem.id}`"
-                class="block cursor-pointer rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-gray-50 hover:shadow-md"
+                class="group block h-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
-                <div class="flex items-start gap-3 sm:gap-4">
-                  <div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100 sm:h-20 sm:w-20">
+                <div class="flex h-full flex-col">
+                  <div class="aspect-[4/3] w-full overflow-hidden bg-gray-100">
                     <img
                       :src="newsItem.image"
                       :alt="newsItem.title"
-                      class="h-full w-full object-cover"
+                      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                       @error="handleNewsImageError"
                     />
                   </div>
-                  <div class="min-w-0 flex-1">
-                    <h4 class="mb-2 line-clamp-2 font-medium text-gray-900 transition-colors hover:text-emerald-600">
+                  <div class="flex flex-1 flex-col p-5">
+                    <h4 class="mb-3 line-clamp-2 text-lg font-semibold text-gray-900 transition-colors group-hover:text-emerald-600">
                       {{ newsItem.title }}
                     </h4>
-                    <p class="mb-3 line-clamp-2 text-sm text-gray-600">
+                    <p class="mb-4 line-clamp-3 flex-1 text-sm leading-6 text-gray-600">
                       {{ newsItem.description }}
                     </p>
-                    <div class="flex flex-col gap-1 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex flex-col gap-2 border-t border-gray-100 pt-4 text-xs uppercase tracking-[0.14em] text-gray-500 sm:flex-row sm:items-center sm:justify-between">
                       <span>{{ formatDate(newsItem.date) }}</span>
                       <span>{{ newsItem.source }}</span>
                     </div>
@@ -418,8 +343,9 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
 
 definePageMeta({
     title: 'NLGFC - Resource Center',
@@ -428,21 +354,14 @@ definePageMeta({
 const route = useRoute()
 const { getExcerpt, stripHtmlTags } = useHtmlUtils()
 const config = useRuntimeConfig()
+const { projectGroups } = useGeneralSidebar()
 
 // State management for UI
-const expandedGroup = ref(null);
 const activeGroup = ref(null);
 const activeSubgroup = ref(null);
 const searchQuery = ref('');
-const isSidebarOpen = ref(false);
 const currentPage = ref(1);
 const itemsPerPage = ref(6);
-
-const closeSidebarOnSmallScreens = () => {
-  if (process.client && window.innerWidth < 1024) {
-    isSidebarOpen.value = false;
-  }
-}
 
 // Data for the resource center, structured into groups and subgroups with IDs
 const resourceGroups = [
@@ -517,6 +436,39 @@ const resourceGroups = [
   }
 ];
 
+projectGroups.value = resourceGroups
+
+const resolveResourceHash = (rawHash) => {
+  const hash = String(rawHash || '').replace(/^#/, '').trim()
+  if (!hash) return null
+
+  const directGroup = resourceGroups.find(group => group.id === hash)
+  if (directGroup) {
+    return { groupId: directGroup.id, subgroupId: null }
+  }
+
+  for (const group of resourceGroups) {
+    const directSubgroup = group.subgroups?.find(subgroup => subgroup.id === hash)
+    if (directSubgroup) {
+      return { groupId: group.id, subgroupId: directSubgroup.id }
+    }
+  }
+
+  for (const group of resourceGroups) {
+    if (!hash.startsWith(`${group.id}-`)) continue
+
+    const subgroupId = hash.slice(group.id.length + 1)
+    const matchingSubgroup = group.subgroups?.find(subgroup => subgroup.id === subgroupId)
+    if (matchingSubgroup) {
+      return { groupId: group.id, subgroupId: matchingSubgroup.id }
+    }
+
+    return { groupId: group.id, subgroupId: null }
+  }
+
+  return null
+}
+
 /**
  * Navigate directly to a specific group or subgroup using IDs
  * @param {string} groupId - The ID of the group
@@ -531,7 +483,6 @@ const navigateToSection = (groupId, subgroupId = null) => {
     if (subgroupId && group.subgroups) {
       const subgroupIndex = group.subgroups.findIndex(sg => sg.id === subgroupId);
       if (subgroupIndex !== -1) {
-        expandedGroup.value = groupIndex;
         activeGroup.value = groupIndex;
         activeSubgroup.value = subgroupIndex;
         return;
@@ -542,9 +493,7 @@ const navigateToSection = (groupId, subgroupId = null) => {
     if (group.items) {
       activeGroup.value = groupIndex;
       activeSubgroup.value = null;
-      expandedGroup.value = null;
     } else if (group.subgroups) {
-      expandedGroup.value = groupIndex;
       activeGroup.value = null;
       activeSubgroup.value = null;
     }
@@ -561,7 +510,7 @@ const getCurrentSectionUrl = () => {
     let hash = `#${group.id}`;
     
     if (activeSubgroup.value !== null && group.subgroups) {
-      hash += `-${group.subgroups[activeSubgroup.value].id}`;
+      hash = `#${group.subgroups[activeSubgroup.value].id}`;
     }
     
     return `${window.location.origin}${window.location.pathname}${hash}`;
@@ -573,13 +522,13 @@ const getCurrentSectionUrl = () => {
  * Handle URL hash changes for direct navigation
  */
 const handleHashChange = () => {
-  const hash = window.location.hash.slice(1); // Remove the #
-  if (hash) {
-    const parts = hash.split('-');
-    const groupId = parts[0];
-    const subgroupId = parts.length > 1 ? parts.slice(1).join('-') : null;
-    navigateToSection(groupId, subgroupId);
+  const selection = resolveResourceHash(window.location.hash)
+  if (selection) {
+    navigateToSection(selection.groupId, selection.subgroupId)
+    return
   }
+
+  navigateToSection('news')
 };
 
 /**
@@ -591,7 +540,7 @@ const updateUrlHash = () => {
     let hash = group.id;
     
     if (activeSubgroup.value !== null && group.subgroups) {
-      hash += `-${group.subgroups[activeSubgroup.value].id}`;
+      hash = group.subgroups[activeSubgroup.value].id;
     }
     
     window.history.replaceState(null, null, `#${hash}`);
@@ -599,41 +548,6 @@ const updateUrlHash = () => {
     window.history.replaceState(null, null, window.location.pathname);
   }
 };
-
-/**
- * Handles clicks on main group items in the sidebar.
- * It either toggles subgroup visibility or directly selects a group.
- * @param {number} index - The index of the clicked group.
- */
-const handleGroupClick = (index) => {
-  const group = resourceGroups[index];
-  if (group.subgroups && group.subgroups.length > 0) {
-    // This is a group with subgroups, so just toggle expansion
-    expandedGroup.value = expandedGroup.value === index ? null : index;
-    // If we are collapsing the group that was active, clear selection
-    if (expandedGroup.value !== index && activeGroup.value === index) {
-        activeGroup.value = null;
-        activeSubgroup.value = null;
-    }
-  } else if (group.items) {
-    // This is a direct content group like "News"
-    expandedGroup.value = null; // No subgroups to expand
-    activeGroup.value = index;
-    activeSubgroup.value = null; // Signal that it's a direct group selection
-    closeSidebarOnSmallScreens();
-  }
-};
-
-/**
- * Selects a subgroup to display its content.
- * @param {number} groupIndex - The index of the parent group.
- * @param {number} subIndex - The index of the subgroup to select.
- */
-const selectSubgroup = (groupIndex, subIndex) => {
-  activeGroup.value = groupIndex;
-  activeSubgroup.value = subIndex;
-  closeSidebarOnSmallScreens();
-}
 
 /**
  * Search functionality
@@ -1017,6 +931,10 @@ onMounted(() => {
   // Listen for hash changes (back/forward navigation)
   window.addEventListener('hashchange', handleHashChange);
 });
+
+onUnmounted(() => {
+  window.removeEventListener('hashchange', handleHashChange);
+})
 
 // Watch for hash changes in the URL and handle them
 watch(
