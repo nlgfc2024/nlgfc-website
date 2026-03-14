@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
       data: {
         contact: contactInfo || {
           organization_name: 'National Local Government Finance Committee',
-          address: 'Red Cross House, Area 14',
+          address: 'Red Cross Complex, Area 14',
           po_box: 'P.O. Box 31162, Lilongwe 3.',
           primary_phone: '+265891003313',
           secondary_phone: '+265891003314',
@@ -76,7 +76,7 @@ export default defineEventHandler(async (event) => {
       data: {
         contact: {
           organization_name: 'National Local Government Finance Committee',
-          address: 'Red Cross House, Area 14',
+          address: 'Red Cross Complex, Area 14',
           po_box: 'P.O. Box 31162, Lilongwe 3.',
           primary_phone: '+265891003313',
           secondary_phone: '+265891003314',

@@ -15,10 +15,10 @@ const tabs = [
 ]
 
 // Load contact data from API
-const { data: contactData, Pending } = await $fetch('/api/contact')
-const contact = contactData?.contact || {}
-const officers = contactData?.officers || []
-const ati = contactData?.ati || {}
+const contactData = await $fetch('/api/contact')
+const contact = contactData?.data?.contact || contactData?.contact || {}
+const officers = contactData?.data?.officers || contactData?.officers || []
+const ati = contactData?.data?.ati || contactData?.ati || {}
 
 // Set active tab from route hash if present
 onMounted(() => {
@@ -32,6 +32,16 @@ onMounted(() => {
 const { data: pages, pending, error: PageError } = usePageBlocks([
   'contact-us'
 ])
+
+// Compute contact page data and blocks for template-friendly access
+const contactPage = computed(() => {
+  // `pages` is the `data` ref returned by useAsyncData
+  if (!pages) return null
+  return pages.value?.['contact-us'] || pages['contact-us'] || null
+})
+
+const contactBlocks = computed(() => contactPage.value?.blocks || [])
+const contactTitle = computed(() => contactPage.value?.title || 'Contact Us')
 
 
 function onSubmit(event) {
@@ -74,9 +84,18 @@ function onSubmit(event) {
       <div class="flex-1 min-w-0">
         <!-- Our Address Content -->
         <div v-show="activeTab === 'address'" class="prose max-w-none">
-           <div v-if="PagePending">Loading...</div>
-          <div v-else-if="PageError">Failed to load content.</div>
-          <BlocksRenderer :blocks="pages?.['contact-us']?.blocks || []" />
+          <div v-if="pending">Loading...</div>
+          <div v-else>
+            <h1 class="text-2xl font-bold text-gray-900 mb-4">{{ contactTitle }}</h1>
+            <BlocksRenderer :blocks="contactBlocks" />
+
+            <div class="mt-6 mb-4 text-gray-700">
+              <p class="font-semibold">{{ contact.organization_name || 'National Local Government Finance Committee' }}</p>
+              <p>{{ contact.address || 'Red Cross Complex, Area 14' }}</p>
+              <p v-if="contact.primary_phone">Phone: {{ contact.primary_phone }}</p>
+              <p v-if="contact.primary_email">Email: <a :href="`mailto:${contact.primary_email}`" class="text-emerald-600 hover:underline">{{ contact.primary_email }}</a></p>
+            </div>
+          </div>
           
           <div class="bg-gray-800 p-6 rounded-lg border border-gray-200 mt-8">
             <h3 class="text-lg font-semibold !text-white mb-3">Map to NLGFC</h3>
