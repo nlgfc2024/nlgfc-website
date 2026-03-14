@@ -123,7 +123,7 @@
               class="border-b border-gray-100"
             >
               <nuxt-link
-                :to="`/news/${newsItem.id}`"
+                :to="`/news/${newsItem.slug || newsItem.id}?source=resource`"
                 class="block p-4 cursor-pointer transition-all duration-200 hover:bg-gray-50"
               >
                 <h4 class="font-medium text-gray-900 hover:text-emerald-600 transition-colors line-clamp-2 mb-2">
@@ -288,18 +288,31 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
-import { link } from '#build/ui';
-
 definePageMeta({
     title: 'NLGFC - Resource Center',
     })
 
 const route = useRoute()
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
+const config = useRuntimeConfig()
 
+const { data: postsResponse } = useAsyncData(
+  'resource-center:news-posts',
+  () => $fetch(`${config.public.apiBase}/api/posts?per_page=200`),
+  { server: true, default: () => ({ data: [] }) }
+)
 
-const newsId = route.params.id;
+const apiNewsItems = computed(() => {
+  const rows = Array.isArray(postsResponse.value?.data) ? postsResponse.value.data : []
+  return rows
+    .map((post) => ({
+      id: post.id,
+      slug: post.slug,
+      title: post.title,
+      date: post.created_at,
+    }))
+    .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+})
 
 // State management for UI
 const expandedGroup = ref(null);
@@ -312,14 +325,7 @@ const resourceGroups = [
   {
     id: 'news',
     group: 'News',
-    items: [
-        { title: 'Government Launches New Rural Development Initiative', date: '2025-08-15', id: '#1' },
-        { title: 'NLGFC Announces Increased Funding for Local Councils', date: '2025-08-12', id: '#2'},
-        { title: 'Blantyre City Council Unveils New Waste Management Strategy', date: '2025-08-10', id: '#3' },
-        { title: 'New Healthcare Initiative Launched in Northern Region', date: '2025-08-08', id: '#4' },
-        { title: 'Education Sector Receives Technology Boost', date: '2025-08-05', id: '#5' },
-        { title: 'Agricultural Support Program Shows Promising Results', date: '2025-08-03', id: '#6' }
-    ]
+    items: []
   },
   {
     id: 'publications',
@@ -357,7 +363,7 @@ const resourceGroups = [
     ]
   },
   {
-    id: 'project-documents',
+    id: 'projects',
     group: 'Project Documents',
     subgroups: [
       { id: 'ssrlp', subgroup: 'SSRLP', items: [] },
@@ -376,7 +382,7 @@ const resourceGroups = [
     ]
   },
   {
-    id: 'knowledge-management',
+    id: 'knowledge',
     group: 'Knowledge Management',
     subgroups: [
       {
@@ -404,6 +410,8 @@ const resourceGroups = [
  * @param {string} subgroupId - The ID of the subgroup (optional)
  */
 const navigateToSection = (groupId, subgroupId = null) => {
+  console.log('Navigating to:', groupId, subgroupId); // Debug log
+  
   const groupIndex = resourceGroups.findIndex(g => g.id === groupId);
   
   if (groupIndex !== -1) {
@@ -415,7 +423,10 @@ const navigateToSection = (groupId, subgroupId = null) => {
         expandedGroup.value = groupIndex;
         activeGroup.value = groupIndex;
         activeSubgroup.value = subgroupIndex;
+        console.log('Navigated to subgroup:', group.group, group.subgroups[subgroupIndex].subgroup);
         return;
+      } else {
+        console.warn('Subgroup not found:', subgroupId, 'in group:', groupId);
       }
     }
     
@@ -424,11 +435,15 @@ const navigateToSection = (groupId, subgroupId = null) => {
       activeGroup.value = groupIndex;
       activeSubgroup.value = null;
       expandedGroup.value = null;
+      console.log('Navigated to group:', group.group);
     } else if (group.subgroups) {
       expandedGroup.value = groupIndex;
       activeGroup.value = null;
       activeSubgroup.value = null;
+      console.log('Expanded group:', group.group);
     }
+  } else {
+    console.warn('Group not found:', groupId);
   }
 };
 
@@ -454,7 +469,7 @@ const getCurrentSectionUrl = () => {
  * Handle URL hash changes for direct navigation
  */
 const handleHashChange = () => {
-  const hash = window.location.hash.slice(1); // Remove the #
+  const hash = (route.hash || window.location.hash).slice(1); // Remove the #
   if (hash) {
     const parts = hash.split('-');
     const groupId = parts[0];
@@ -582,6 +597,7 @@ const displayedDocuments = computed(() => {
     } 
     // Check if a main group with direct items (like News) is selected
     else if (activeSubgroup.value === null && group.items) {
+      if (group.id === 'news') return apiNewsItems.value;
       return group.items;
     }
   }
@@ -622,19 +638,22 @@ watch([activeGroup, activeSubgroup], () => {
 // Lifecycle hooks
 onMounted(() => {
   // Handle initial hash on page load
-  handleHashChange();
+  nextTick(() => {
+    handleHashChange();
+  });
   
   // Listen for hash changes (back/forward navigation)
   window.addEventListener('hashchange', handleHashChange);
 });
 
-// Watch for hash changes in the URL and handle them
-watch(
-  () => route.hash,
-  () => {
-    handleHashChange();
+// Watch route changes to handle navigation from other pages
+watch(() => route.hash, (newHash) => {
+  if (newHash) {
+    nextTick(() => {
+      handleHashChange();
+    });
   }
-);
+}, { immediate: true });
 
 // Expose methods for external use (e.g., from other components)
 const resourceCenterAPI = {
@@ -644,8 +663,8 @@ const resourceCenterAPI = {
   goToNews: () => navigateToSection('news'),
   goToPressReleases: () => navigateToSection('publications', 'press-releases'),
   goToSuccessStories: () => navigateToSection('publications', 'success-stories'),
-  goToVideos: () => navigateToSection('knowledge-management', 'video'),
-  goToImageGallery: () => navigateToSection('knowledge-management', 'image-gallery'),
+  goToVideos: () => navigateToSection('knowledge', 'video'),
+  goToImageGallery: () => navigateToSection('knowledge', 'image-gallery'),
   // Add more convenience methods as needed
 };
 

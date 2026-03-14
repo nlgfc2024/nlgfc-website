@@ -1,4 +1,4 @@
-"<script setup>
+<script setup>
     import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
     import BlocksRenderer from '~/components/BlocksRenderer.vue'
   import { useApiDataArray } from '~/composables/useApiData'
@@ -96,6 +96,7 @@
         { id: 'powers', title: 'Powers and Functions' },
         { id: 'board', title: 'Board of Directors' },
         { id: 'management', title: 'Executive Management' },
+        { id: 'organisational-structure', title: 'Organisational Structure' },
         // { id: 'structure', title: 'Organogram' },
         ]
     },
@@ -135,98 +136,52 @@
     }
     })
 
-    // Map the 'menuItems' data to the 'projectGroups' structure
-    const mappedProjectGroups = computed(() => {
-        const flattenedGroups = menuItems.value.flatMap(section => {
-            return section.items.map(item => {
-                if (item.subItems && item.subItems.length > 0) {
-                    // If the item has sub-items, map them as a group
-                    return {
-                        group: item.title,
-                        id: item.id,
-                        items: item.subItems
-                    };
-                } else {
-                    // If no sub-items, create a group with a single item
-                    return {
-                        group: item.title,
-                        id: item.id,
-                        items: [{ id: item.id, title: item.title }]
-                    };
-                }
-            });
-        });
-        return flattenedGroups;
+    // Flat items: normal sidebar links (no accordion)
+    const flatSectionIds = ['mvc', 'powers', 'board', 'management', 'organisational-structure'];
+    const sidebarSectionsData = computed(() => {
+        return menuItems.value.flatMap(section =>
+            section.items
+                .filter(item => flatSectionIds.includes(item.id))
+                .map(item => ({ id: item.id, name: item.title }))
+        );
+    });
+    // Groups with accordion (only Directorates and Divisions)
+    const accordionGroupsData = computed(() => {
+        return menuItems.value.flatMap(section =>
+            section.items
+                .filter(item => item.subItems && item.subItems.length > 0)
+                .map(item => ({
+                    group: item.title,
+                    id: item.id,
+                    items: item.subItems
+                }))
+        );
     });
 
 // Use the composable to share the data
 const { projectGroups } = useGeneralSidebar();
-projectGroups.value = mappedProjectGroups.value;
 
-const fetchBoardIfNeeded = () => {
-  if (boardRequested.value) return
-  boardRequested.value = true
-  refreshBoard()
-}
+// Combined for sidebar rendering:
+// - Top-level links as standalone sections (no dropdown)
+// - Directorates as a single accordion group
+const sidebarData = computed(() => [
+  ...sidebarSectionsData.value,
+  ...accordionGroupsData.value,
+]);
 
-const fetchExecutiveIfNeeded = () => {
-  if (executiveRequested.value) return
-  executiveRequested.value = true
-  refreshExecutive()
-}
+watchEffect(() => {
+  projectGroups.value = sidebarData.value;
+});
 
-const fetchTabPage = async (tabId, force = false) => {
-  const slug = TAB_PAGE_SLUGS[tabId]
-  if (!slug) return
-  if (!force && (pageLoadedByTab[tabId] || pageLoadingByTab[tabId])) return
-
-  pageLoadingByTab[tabId] = true
-  pageErrorByTab[tabId] = null
-
-  try {
-    const page = await $fetch(`${pagesApiBaseUrl.value}/api/pages/${slug}`)
-    pageBlocksByTab[tabId] = Array.isArray(page?.blocks) ? page.blocks : []
-    pageLoadedByTab[tabId] = true
-  } catch (error) {
-    pageErrorByTab[tabId] = error
-  } finally {
-    pageLoadingByTab[tabId] = false
-  }
-}
-
-const isTabPageLoading = (tabId) => Boolean(pageLoadingByTab[tabId])
-const getTabPageError = (tabId) => pageErrorByTab[tabId]
-const getTabBlocks = (tabId) => pageBlocksByTab[tabId] || []
-
-const fetchActiveTabContent = (force = false) => {
-  const tab = activeTab.value
-
-  if (tab === 'board') {
-    if (force) {
-      boardRequested.value = true
-      refreshBoard()
-      return
-    }
-    fetchBoardIfNeeded()
-    return
-  }
-
-  if (tab === 'management') {
-    if (force) {
-      executiveRequested.value = true
-      refreshExecutive()
-      return
-    }
-    fetchExecutiveIfNeeded()
-    return
-  }
-
-  fetchTabPage(tab, force)
-}
-
-watch(activeTab, () => {
-  fetchActiveTabContent(false)
-}, { immediate: true })
+// Page-builder: Mission, Vision, Core Values content
+// const { data: mvcPage, pending: mvcPending, error: mvcError } = usePageBlocks('mission-vision-core-values')
+    
+const { data: pages, pending, error: PageError } = usePageBlocks([
+  'powers-and-functions-of-nlgfc','procurement-and-assets-disposal-division',
+  'directorate-of-finance-and-fiscal-decentralization','directorate-of-corporate-and-strategic-services',
+  'planning-monitoring-and-evaluation-division',
+  'internal-audit-and-risk-division','directorate-of-social-and-economic-dev-services'
+])
 
 
 function updateActiveTabFromHash(hash) {
@@ -257,6 +212,9 @@ function updateActiveTabFromHash(hash) {
 const zoom = ref(100);
 const imageLoaded = ref(false);
 
+/**
+ * Zoom in the organogram image by 25% if the zoom level is below 200%
+ */
 const zoomIn = () => {
   if (zoom.value < 200) zoom.value += 25;
 };
@@ -284,32 +242,17 @@ const downloadImage = () => {
       <main class="flex-1 min-w-0">
         <!-- Mission, Vision, Core Values -->
         <div v-show="activeTab === 'mvc'" class="prose max-w-none">
-          <div v-if="isTabPageLoading('mvc')">Loading...</div>
-            <div v-else-if="getTabPageError('mvc')" class="space-y-3">
-              <p>Failed to load content.</p>
-              <button
-                @click="fetchTabPage('mvc', true)"
-                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-              >
-                Try Again
-              </button>
-            </div>
-            <BlocksRenderer v-else :blocks="getTabBlocks('mvc')" />
+            <div v-if="PagePending">Loading...</div>
+            <div v-else-if="PageError">Failed to load content.</div>
+            <!-- <BlocksRenderer :blocks="pages?.['mission-vision-core-values']?.blocks || []" /> -->
              
         </div>
+
        <div v-show="activeTab === 'powers'" class="prose max-w-none">
             <!-- Header Section -->
-          <div v-if="isTabPageLoading('powers')">Loading...</div>
-            <div v-else-if="getTabPageError('powers')" class="space-y-3">
-              <p>Failed to load content.</p>
-              <button
-                @click="fetchTabPage('powers', true)"
-                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-              >
-                Try Again
-              </button>
-            </div>
-            <BlocksRenderer v-else :blocks="getTabBlocks('powers')" />
+            <div v-if="PagePending">Loading...</div>
+            <div v-else-if="PageError">Failed to load content.</div>
+            <BlocksRenderer :blocks="pages?.['powers-and-functions-of-nlgfc']?.blocks || []" />
         </div>
         <!-- Board of Directors Content -->
         <div v-show="activeTab === 'board'" class="prose max-w-none">
@@ -425,6 +368,11 @@ const downloadImage = () => {
             <BlocksRenderer v-else :blocks="getTabBlocks('finance')" />
         </div>
 
+
+
+
+      
+
         <!-- Corporate Services Directorate Content -->
         <div v-show="activeTab === 'corporate'" class="prose max-w-none">
             <!-- Header Section -->
@@ -488,17 +436,9 @@ const downloadImage = () => {
 
         <!-- Internal Audit and Risk Division Content -->
         <div v-show="activeTab === 'audit'" class="prose max-w-none">
-          <div v-if="isTabPageLoading('audit')">Loading...</div>
-            <div v-else-if="getTabPageError('audit')" class="space-y-3">
-              <p>Failed to load content.</p>
-              <button
-                @click="fetchTabPage('audit', true)"
-                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-              >
-                Try Again
-              </button>
-            </div>
-            <BlocksRenderer v-else :blocks="getTabBlocks('audit')" />
+            <div v-if="PagePending">Loading...</div>
+            <div v-else-if="PageError">Failed to load content.</div>
+            <BlocksRenderer :blocks="pages?.['internal-audit-and-risk-division']?.blocks || []" />
         </div>
         <!-- Organogram Section -->
         <div v-show="activeTab === 'structure' || activeTab === 'directorates'" class="prose max-w-none">
@@ -573,6 +513,7 @@ const downloadImage = () => {
     </div>
   </div>
         </div>
+
 
       </main>
     </div>

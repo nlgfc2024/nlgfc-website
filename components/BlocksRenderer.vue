@@ -7,6 +7,7 @@ type BlockItem = { id?: string; type?: string; data?: Record<string, any> }
 const props = defineProps<{
   blocks: BlockItem[]
 }>()
+const config = useRuntimeConfig()
 
 /**
  * Minimal fallback component for unknown blocks.
@@ -46,13 +47,13 @@ const lazyMap: Record<string, () => Promise<any>> = {
   CardGridBlock: () => import('./blocks/CardGridBlock.vue'),
   ValuesGridBlock: () => import('./blocks/ValuesGridBlock.vue'),
   ImageZoomableBlock: () => import('./blocks/ImageZoomableBlock.vue'),
+  ImageBlock: () => import('./blocks/ImageBlock.vue'),
+  IframeBlock: () => import('./blocks/IframeBlock.vue'),
+  CtaBlock: () => import('./blocks/CtaBlock.vue'),
+  MandatePanelBlock: () => import('./blocks/MandatePanelBlock.vue'),
   FunctionGroupBlock: () => import('./blocks/FunctionGroupBlock.vue'),
   ProjectContentBlock: () => import('./blocks/ProjectContentBlock.vue'),
   FeaturesGridBlock: () => import('./blocks/FeaturesGridBlock.vue'),
-  CtaBlock: () => import('./blocks/CtaBlock.vue'),
-  IframeBlock: () => import('./blocks/IframeBlock.vue'),
-  ImageBlock: () => import('./blocks/ImageBlock.vue'),
-  MandatePanelBlock: () => import('./blocks/MandatePanelBlock.vue'),
 }
 
 /**
@@ -73,6 +74,33 @@ function extractShortType(fullType?: string) {
   // strip leading backslashes, split, filter out empties
   const parts = fullType.replace(/^\\+/, '').split('\\').filter(Boolean)
   return parts[parts.length - 1] || fullType
+}
+
+function firstStringValue(value: any): string {
+  if (typeof value === 'string') return value
+  if (Array.isArray(value)) {
+    const flat = value.flat(Infinity)
+    const found = flat.find((v: any) => typeof v === 'string' && v.length > 0)
+    return found ?? ''
+  }
+  if (value && typeof value === 'object') {
+    if (typeof value.url === 'string') return value.url
+    if (typeof value.path === 'string') return value.path
+  }
+  return ''
+}
+
+function toMediaUrl(raw: any): string {
+  const input = firstStringValue(raw).trim()
+  if (!input) return ''
+  if (/^(https?:)?\/\//i.test(input) || input.startsWith('data:')) return input
+  if (input.startsWith('/storage/')) {
+    const base = String(config.public.apiBase || '').replace(/\/+$/, '')
+    return base ? `${base}${input}` : input
+  }
+  if (input.startsWith('/')) return input
+  const base = String(config.public.apiBase || '').replace(/\/+$/, '')
+  return base ? `${base}/storage/${input.replace(/^\/+/, '')}` : `/storage/${input.replace(/^\/+/, '')}`
 }
 
 /**
@@ -110,6 +138,7 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
         icon: typeof it === 'string' ? undefined : (it?.icon ?? it?.lead_icon ?? undefined),
       }))
       return {
+        title: data.title ?? '',
         style: data.style ?? 'checks',
         show_leading_icons: data.show_leading_icons ?? true,
         default_icon: data.default_icon ?? 'heroicon-o-check',
@@ -144,13 +173,13 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
 
     case 'ImageZoomableBlock':
       return {
-        src: data.src ?? data.image ?? data.image_url ?? '',
+        src: toMediaUrl(data.src ?? data.image ?? data.image_url ?? ''),
         alt: data.alt ?? data.caption ?? '',
       }
 
     case 'ImageBlock':
       return {
-        src: data.src ?? data.image ?? data.image_url ?? '',
+        src: toMediaUrl(data.src ?? data.image ?? data.image_url ?? ''),
         alt: data.alt ?? '',
         fit: data.fit ?? 'contain',
         height: data.height ?? 'h-80',
@@ -175,10 +204,15 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
       }
 
     case 'FunctionGroupBlock': {
-      const rows = Array.isArray(data.functions) ? data.functions : (Array.isArray(data.items) ? data.items : [])
+      const rows = Array.isArray(data.groups)
+        ? data.groups
+        : (Array.isArray(data.functions) ? data.functions : (Array.isArray(data.items) ? data.items : []))
       const mapped = rows.map((fn: any) => ({
         title: fn?.title ?? fn?.heading ?? '',
         description: fn?.description ?? fn?.body ?? fn?.text ?? '',
+        bullets: Array.isArray(fn?.bullets)
+          ? fn.bullets.map((b: any) => ({ value: typeof b === 'string' ? b : (b?.value ?? b?.label ?? b?.text ?? '') }))
+          : [],
         badges: Array.isArray(fn?.badges ?? fn?.tags)
           ? (fn.badges ?? fn.tags).map((b: any) => (typeof b === 'string' ? { label: b } : { label: b?.label ?? b?.text ?? '' }))
           : [],
@@ -186,18 +220,32 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
       return {
         heading: data.heading ?? data.title ?? '',
         intro: data.intro ?? data.description ?? '',
+        columns: String(data.columns ?? '1'),
+        show_icons: Boolean(data.show_icons ?? true),
         functions: mapped,
       }
     }
 
     case 'ProjectContentBlock':
+      {
+      const rawLogo = data.logo ?? data.logo_url ?? ''
+      let normalizedLogo = ''
+      if (typeof rawLogo === 'string') {
+        normalizedLogo = rawLogo
+      } else if (Array.isArray(rawLogo)) {
+        const firstString = rawLogo.flat(Infinity).find((v: any) => typeof v === 'string' && v.length > 0)
+        normalizedLogo = firstString ?? ''
+      }
       return {
         title: data.title ?? '',
         label: data.label ?? '',
         theme: data.theme ?? 'blue',
         show_header: data.show_header ?? true,
+        show_logo: Boolean(data.show_logo ?? false),
+        logo: normalizedLogo,
         body: data.body ?? '',
         heading_level: data.heading_level ?? 'h2',
+      }
       }
 
     case 'MandatePanelBlock':

@@ -23,11 +23,14 @@ export function usePageBlocks(slugOrSlugs: string | string[]) {
     return useAsyncData<PageMap>(
       `pages:${slugs.join(',')}`,
       async () => {
-        const results = await Promise.all(
+        const results = await Promise.allSettled(
           slugs.map((s) => $fetch<PagePayload>(`${config.public.apiBase}/api/pages/${s}`))
         )
         const map: PageMap = {}
-        for (const p of results) {
+        for (const result of results) {
+          if (result.status !== 'fulfilled') continue
+          const p = result.value
+          if (!p?.slug) continue
           map[p.slug] = p
         }
         return map

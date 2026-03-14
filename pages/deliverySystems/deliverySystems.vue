@@ -158,7 +158,6 @@ watch(() => route.hash, (newHash) => {
     updateActiveTabFromHash(newHash.replace('#', ''))
   }
 })
-
 function updateActiveTabFromHash(hash) {
   for (const group of projectGroups) {
     const match = group.items.find(item => item.id === hash)
@@ -167,6 +166,8 @@ function updateActiveTabFromHash(hash) {
       break
     }
   }
+
+
 }
 
 //provide('projectContent', projectContent);

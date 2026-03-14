@@ -228,22 +228,17 @@
                 <!-- Column 1 -->
                 <div>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Current Projects</h3>
-                  <strong class="text-gray-700 flex items-center">Government Funded Projects</strong>
-                  <ul class="space-y-1 pl-4 mb-4">
-                    <li><NuxtLink to="/projects/currentProjects#cdf" class="text-gray-600 hover:text-blue-600">Constituency Development Fund (CDF)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#ddf" class="text-gray-600 hover:text-blue-600">District Development Fund (DDF)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#idf" class="text-gray-600 hover:text-blue-600">Infrastructure Development Fund (IDF)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#rrf" class="text-gray-600 hover:text-blue-600">Road Rehabilitation Fund (RRF)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#wsf" class="text-gray-600 hover:text-blue-600">Water Structures Fund (WSF)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#health_rehab" class="text-gray-600 hover:text-blue-600">Health Rehabilitation (HR) </NuxtLink></li>
-                  </ul>
-
-                  <strong class="text-gray-700 flex items-center mt-4">Donor Funded Projects</strong>
-                  <ul class="space-y-1 pl-4">
-                    <li><NuxtLink to="/projects/currentProjects#ssrlp_news" class="text-gray-600 hover:text-blue-600">Social Support For Resilient Livelihoods (SSRLP)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#gesd_news" class="text-gray-600 hover:text-blue-600">Governance To Enable Service Delivery (GESD)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/currentProjects#rcrp2_news" class="text-gray-600 hover:text-blue-600">Regional Climate Resilience Project (RCRP2)</NuxtLink></li>
-                  </ul>
+                  <template v-for="group in currentMenuDisplay" :key="`current-${group.id}`">
+                    <strong class="text-gray-700 flex items-center mt-4 first:mt-0">{{ group.group }}</strong>
+                    <ul class="space-y-1 pl-4 mb-4">
+                      <li v-for="item in group.directItems" :key="`current-item-${item.id}`">
+                        <NuxtLink :to="item.to" class="text-gray-600 hover:text-blue-600">{{ item.title }}</NuxtLink>
+                      </li>
+                      <li v-for="sub in group.subgroupItems" :key="`current-sub-${group.id}-${sub.id}`">
+                        <NuxtLink :to="sub.to" class="text-gray-600 hover:text-blue-600">{{ sub.title }}</NuxtLink>
+                      </li>
+                    </ul>
+                  </template>
                 </div>
 
               
@@ -251,24 +246,24 @@
                 <div class="mt-10 md:mt-0">
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Past Projects</h3>
                   <ul class="space-y-1 pl-4 mb-4">
-                      <li><NuxtLink to="/projects/pastProjects#masaf_overview" class="text-gray-600 hover:text-blue-600">Malawi Social Action Fund (MASAF)</NuxtLink></li>
-                      <li><NuxtLink to="/projects/pastProjects#miera_overview" class="text-gray-600 hover:text-blue-600">More Income and Employment in Rural Areas (MIERA)</NuxtLink></li>
-                      <li><NuxtLink to="/projects/pastProjects#led_overview" class="text-gray-600 hover:text-blue-600">Local Economic Development (LED)</NuxtLink></li>
-                  
-                    </ul>
+                    <li v-for="item in pastMenuLinks" :key="`past-${item.id}`">
+                      <NuxtLink :to="item.to" class="text-gray-600 hover:text-blue-600">{{ item.title }}</NuxtLink>
+                    </li>
+                  </ul>
                  
 
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Upcoming Projects</h3>
-                  <ul class="space-y-2">
-                    <li><NuxtLink to="/projects/upcomingProjects#gesd2" class="text-gray-600 hover:text-blue-600">Governance To Enable Service Delivery (GESD 2.0)</NuxtLink></li>
-                    <li><NuxtLink to="/projects/upcomingProjects#inspire" class="text-gray-600 hover:text-blue-600">Integrated Social Protection Inclusion and Resilience Project (INSPIRE-O)</NuxtLink></li>
+                  <ul class="space-y-1 pl-4 mb-4">
+                    <li v-for="item in upcomingMenuLinks" :key="`upcoming-${item.id}`">
+                      <NuxtLink :to="item.to" class="text-gray-600 hover:text-blue-600">{{ item.title }}</NuxtLink>
+                    </li>
                   </ul>
                 </div>
                                     <div class="bg-blue-50 p-4 rounded-lg">
                         <h3 class="text-lg font-semibold mb-3 text-blue-800">Quick Links</h3>
                         <ul class="space-y-3">
                           <li>
-                            <NuxtLink to="/projects/currentProjects#publicWorks" class="flex items-center text-gray-600 hover:text-blue-600 transition">
+                            <NuxtLink :to="quickLinkToAny(['ssrlp-public-works', 'public-works', 'publicworks'])" class="flex items-center text-gray-600 hover:text-blue-600 transition">
                               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -278,7 +273,7 @@
                           </li>
 
                           <li>
-                            <NuxtLink to="/projects/currentProjects#SCTP" class="flex items-center text-gray-600 hover:text-blue-600 transition">
+                            <NuxtLink :to="quickLinkToAny(['ssrlp-sctp', 'sctp'])" class="flex items-center text-gray-600 hover:text-blue-600 transition">
                               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -288,7 +283,7 @@
                           </li>
 
                           <li>
-                            <NuxtLink to="/projects/currentProjects#livelihoods" class="flex items-center text-gray-600 hover:text-blue-600 transition">
+                            <NuxtLink :to="quickLinkToAny(['ssrlp-livelihoods', 'livelihoods'])" class="flex items-center text-gray-600 hover:text-blue-600 transition">
                               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
@@ -298,7 +293,7 @@
                           </li>
 
                           <li>
-                            <NuxtLink to="/projects/currentProjects#usr" class="flex items-center text-gray-600 hover:text-blue-600 transition">
+                            <NuxtLink :to="quickLinkToAny(['rcrp-usr', 'usr'])" class="flex items-center text-gray-600 hover:text-blue-600 transition">
                               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
@@ -308,7 +303,7 @@
                           </li>
 
                           <li>
-                            <NuxtLink to="/projects/currentProjects#pbf" class="flex items-center text-gray-600 hover:text-blue-600 transition">
+                            <NuxtLink :to="quickLinkToAny(['gesd-pbf', 'pbf'])" class="flex items-center text-gray-600 hover:text-blue-600 transition">
                               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -343,7 +338,7 @@
 <li><NuxtLink to="/deliverySystems/deliverySystems#dgrm" class="text-gray-600 hover:text-blue-600">Digital Grievance Redress Mechanism MIS</NuxtLink></li>
 <li><NuxtLink to="/deliverySystems/deliverySystems#e-payments" class="text-gray-600 hover:text-blue-600">E-Payments</NuxtLink></li>
 <li><NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-600 hover:text-blue-600">Local Authority IFMIS</NuxtLink></li>
-<li><NuxtLink to="/deliverySystems/deliverySystems#lapas" class="text-gray-600 hover:text-blue-600">Local Authority Perfomance Assesment MIS</NuxtLink></li>
+<li><NuxtLink to="/deliverySystems/deliverySystems#gesd-iass" class="text-gray-600 hover:text-blue-600">Local Authority Perfomance Assesment MIS</NuxtLink></li>
 <li><NuxtLink to="/deliverySystems/deliverySystems#msr" class="text-gray-600 hover:text-blue-600">Malawi Social Registry</NuxtLink></li>
 <li><NuxtLink to="/deliverySystems/deliverySystems#pmis" class="text-gray-600 hover:text-blue-600">Projects Monitoring Information System</NuxtLink></li>
 <li><NuxtLink to="/deliverySystems/deliverySystems#publicworks" class="text-gray-600 hover:text-blue-600">Public Works MIS</NuxtLink></li>
@@ -364,53 +359,15 @@
               </svg>
             </button>
 
-            <div v-show="activeMegaMenu === 'councils'" class="absolute left-0 w-full bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 700px;">
-              <div class="grid grid-cols-2 gap-6 p-6">
-                <div>
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">City Councils</h3>
-                  <ul class="space-y-2">
-                    <li><NuxtLink to="/localAuthorities/blantyreCouncil" class="text-gray-700 hover:text-blue-700 transition flex items-center">Blantyre City Council</NuxtLink></li>
-                    <li><NuxtLink to="/localAuthorities/lilongwecitycouncil" class="text-gray-700 hover:text-blue-700 transition flex items-center">Lilongwe City Council</NuxtLink></li>
-                    <li><NuxtLink to="/localAuthorities/mzuzucitycouncil" class="text-gray-700 hover:text-blue-700 transition flex items-center">Mzuzu City Council</NuxtLink></li>
-                    <li><NuxtLink to="/localAuthorities/zombacitycouncil" class="text-gray-700 hover:text-blue-700 transition flex items-center">Zomba City Council</NuxtLink></li>
-                  </ul>
-
-                  <h3 class="text-lg font-semibold mb-3 mt-6 text-blue-800 border-b pb-2">Municipal/Town Councils</h3>
-                  <ul class="space-y-2">
-                    <li><NuxtLink to="/localAuthorities/Lunchezamanucipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">Lunchenza Municipal Council</NuxtLink></li>
-                    <li><NuxtLink to="/localAuthorities/Karongamunicipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">Karonga Municipal Council</NuxtLink></li>
-                    <li><NuxtLink to="/localAuthorities/Kasungumunicipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">Kasungu Municipal Council</NuxtLink></li>
-                    <li><NuxtLink to="/localAuthorities/Mangochimunicipal" class="text-gray-600 hover:text-blue-600 transition flex items-center">Mangochi Municipal Council</NuxtLink></li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">District Councils</h3>
-                  <ul class="space-y-2">
-                    <li>
-                      <NuxtLink to="/localAuthorities/chikwawaDistrict" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                        Chikwawa District Council
-                      </NuxtLink>
-                    </li>
-                    <li>
-                      <NuxtLink to="/localAuthorities/dedzaDistrict" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                        Dedza District Council
-                      </NuxtLink>
-                    </li>
+            <div v-show="activeMegaMenu === 'councils'" class="absolute left-0 bg-white shadow-xl rounded-md py-3 z-50 border border-gray-100" style="min-width: 250px;">
+              <div class="p-4">
+                <ul class="space-y-2">
                   <li>
-                      <NuxtLink to="/localAuthorities/mulanjeDistrict" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                        Mulanje District Council
-                      </NuxtLink>
-                    </li>
-
-    
-                    <li>
-                      <NuxtLink to="/localAuthorities/alldistricts" class="text-gray-700 hover:text-blue-700 transition flex items-center">
-                        All District Councils →
-                      </NuxtLink>
-                    </li>
-                  </ul>
-                </div>
+                    <NuxtLink to="/localAuthorities/alldistricts" class="text-gray-700 hover:text-blue-700 transition flex items-center">
+                      All District Councils
+                    </NuxtLink>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -447,17 +404,17 @@
                   <div>
                     <NuxtLink to="/resourceCenter#knowledge"><h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Knowledge Management</h3></NuxtLink>
                     <ul class="space-y-2">
-                      <li><NuxtLink to="/resourceCenter#knowledge-management-image-gallery" class="text-gray-700 hover:text-blue-700 transition">Image Galley</NuxtLink></li>
-                      <li><NuxtLink to="/resourceCenter#knowledge-management-video" class="text-gray-700 hover:text-blue-700 transition">Videos</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#knowledge-image-gallery" class="text-gray-700 hover:text-blue-700 transition">Image Galley</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#knowledge-video" class="text-gray-700 hover:text-blue-700 transition">Videos</NuxtLink></li>
                     </ul>
                   </div>
                   <br />
                   <div>
                     <NuxtLink to="/resourceCenter#projects"><h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Project Documents</h3></NuxtLink>
                     <ul class="space-y-2">
-                      <li><NuxtLink to="/resourceCenter#project-documents-ssrlp" class="text-gray-700 hover:text-blue-700 transition">SSRP</NuxtLink></li>
-                      <li><NuxtLink to="/resourceCenter#project-documents-gesd" class="text-gray-700 hover:text-blue-700 transition">GESD</NuxtLink></li>
-                      <li><NuxtLink to="/resourceCenter#project-documents-rcrp2" class="text-gray-700 hover:text-blue-700 transition">RCRP 2</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#projects-ssrlp" class="text-gray-700 hover:text-blue-700 transition">SSRP</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#projects-gesd" class="text-gray-700 hover:text-blue-700 transition">GESD</NuxtLink></li>
+                      <li><NuxtLink to="/resourceCenter#projects-rcrp2" class="text-gray-700 hover:text-blue-700 transition">RCRP 2</NuxtLink></li>
                     </ul>
                   </div>
                 </div>
@@ -666,40 +623,26 @@
                 <!-- Current Projects -->
                 <div>
                   <h3 class="font-semibold text-blue-800  pb-2">Current Projects</h3>
-                  <ul class="pl-2 mt-2 space-y-1">
-                    <li>
-                      <strong class="text-gray-700">SSRLP</strong>
-                      <ul class="pl-4 space-y-1">
-                        <li><NuxtLink to="/projects/currentProjects#SCTP" class="text-gray-600 hover:text-blue-600">SCTP</NuxtLink></li>
-                        <li><NuxtLink to="/projects/currentProjects#publicWorks" class="text-gray-600 hover:text-blue-600">Public Works</NuxtLink></li>
-                        <li><NuxtLink to="/projects/currentProjects#emergency" class="text-gray-600 hover:text-blue-600">Emergency Cash Transfer</NuxtLink></li>
-                        <li><NuxtLink to="/projects/currentProjects#livelihoods" class="text-gray-600 hover:text-blue-600">Livelihoods Support</NuxtLink></li>
-                      </ul>
-                    </li>
-                    <li class="mt-4">
-                      <strong class="text-gray-700">GESD</strong>
-                      <ul class="pl-4 space-y-1">
-                        <li><NuxtLink to="/projects/currentProjects#pbg" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
-                        <li><NuxtLink to="/projects/currentProjects#lapa" class="text-gray-600 hover:text-blue-600">LAPA</NuxtLink></li>
-                        <li><NuxtLink to="/projects/currentProjects#adaptive" class="text-gray-600 hover:text-blue-600">Adaptive Management</NuxtLink></li>
-                      </ul>
-                    </li>
-                    <li class="mt-4">
-                      <strong class="text-gray-700">RCRP</strong>
-                      <ul class="pl-4 space-y-1">
-                        <li><NuxtLink to="/projects/currentProjects#usr" class="text-gray-600 hover:text-blue-600">Urban Social Registry</NuxtLink></li>
-                        <li><NuxtLink to="/projects/currentProjects#upw" class="text-gray-600 hover:text-blue-600">Urban Public Works</NuxtLink></li>
-                        <li><NuxtLink to="/projects/currentProjects#pbg2" class="text-gray-600 hover:text-blue-600">Performance Based Grants</NuxtLink></li>
-                      </ul>
-                    </li>
-                  </ul>
+                  <template v-for="group in currentMenuDisplay" :key="`mobile-current-${group.id}`">
+                    <strong class="text-gray-700 block mt-2">{{ group.group }}</strong>
+                    <ul class="pl-4 mt-1 space-y-1">
+                      <li v-for="item in group.directItems" :key="`mobile-current-item-${item.id}`">
+                        <NuxtLink :to="item.to" class="text-gray-600 hover:text-blue-600">{{ item.title }}</NuxtLink>
+                      </li>
+                      <li v-for="sub in group.subgroupItems" :key="`mobile-current-sub-${group.id}-${sub.id}`">
+                        <NuxtLink :to="sub.to" class="text-gray-600 hover:text-blue-600">{{ sub.title }}</NuxtLink>
+                      </li>
+                    </ul>
+                  </template>
                 </div>
 
                 <!-- Past Projects -->
                 <div>
                   <h3 class="font-semibold text-blue-800 border-b pb-2">Past Projects</h3>
                   <ul class="pl-2 mt-2 space-y-1">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700">MASAF 4</a></li>
+                    <li v-for="item in pastMenuLinks" :key="`mobile-past-${item.id}`">
+                      <NuxtLink :to="item.to" class="text-gray-700 hover:text-blue-700">{{ item.title }}</NuxtLink>
+                    </li>
                   </ul>
                 </div>
 
@@ -707,8 +650,9 @@
                 <div>
                   <h3 class="font-semibold text-blue-800 border-b pb-2">Upcoming Projects</h3>
                   <ul class="pl-2 mt-2 space-y-1">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700">GESD 2.0</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700">INSPIRE</a></li>
+                    <li v-for="item in upcomingMenuLinks" :key="`mobile-upcoming-${item.id}`">
+                      <NuxtLink :to="item.to" class="text-gray-700 hover:text-blue-700">{{ item.title }}</NuxtLink>
+                    </li>
                   </ul>
                 </div>
 
@@ -741,47 +685,7 @@
             </button>
 
             <div v-show="activeAccordion === 'mobile-councils'" class="pl-4 space-y-3">
-              <!-- City Councils Section -->
-              <button @click="toggleAccordion('mobile-city')" class="flex items-center justify-between w-full text-gray-700 font-medium">
-                City Councils
-                <svg class="w-4 h-4 transform transition" :class="{ 'rotate-180': activeAccordion === 'mobile-city' }" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                </svg>
-              </button>
-              <div v-show="activeAccordion === 'mobile-city'" class="pl-4 py-2 space-y-1">
-                <NuxtLink to="/localAuthorities/blantyreCouncil" class="block text-gray-600 hover:text-blue-600 py-1">Blantyre City Council</NuxtLink>
-                <NuxtLink to="/localAuthorities/lilongwecitycouncil" class="block text-gray-600 hover:text-blue-600 py-1">Lilongwe City Council</NuxtLink>
-                <NuxtLink to="/localAuthorities/mzuzucitycouncil" class="block text-gray-600 hover:text-blue-600 py-1">Mzuzu City Council</NuxtLink>
-                <NuxtLink to="/localAuthorities/zombacitycouncil" class="block text-gray-600 hover:text-blue-600 py-1">Zomba City Council</NuxtLink>
-              </div>
-
-              <!-- Municipal Councils Section -->
-              <button @click="toggleAccordion('mobile-municipal')" class="flex items-center justify-between w-full text-gray-700 font-medium">
-                Municipal/Town Councils
-                <svg class="w-4 h-4 transform transition" :class="{ 'rotate-180': activeAccordion === 'mobile-municipal' }" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                </svg>
-              </button>
-              <div v-show="activeAccordion === 'mobile-municipal'" class="pl-4 py-2 space-y-1">
-                <NuxtLink to="/localAuthorities/Lunchezamanucipal" class="block text-gray-600 hover:text-blue-600 py-1">Lunchenza Municipal Council</NuxtLink>
-                <NuxtLink to="/localAuthorities/Karongamunicipal" class="block text-gray-600 hover:text-blue-600 py-1">Karonga Municipal Council</NuxtLink>
-                <NuxtLink to="/localAuthorities/Kasungumunicipal" class="block text-gray-600 hover:text-blue-600 py-1">Kasungu Municipal Council</NuxtLink>
-                <NuxtLink to="/localAuthorities/Mangochimunicipal" class="block text-gray-600 hover:text-blue-600 py-1">Mangochi Municipal Council</NuxtLink>
-              </div>
-
-              <!-- District Councils Section -->
-              <button @click="toggleAccordion('mobile-district')" class="flex items-center justify-between w-full text-gray-700 font-medium">
-                District Councils
-                <svg class="w-4 h-4 transform transition" :class="{ 'rotate-180': activeAccordion === 'mobile-district' }" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                </svg>
-              </button>
-              <div v-show="activeAccordion === 'mobile-district'" class="pl-4 py-2 space-y-1">
-                <NuxtLink to="/localAuthorities/chikwawa-district" class="block text-gray-600 hover:text-blue-600 py-1">Chikwawa District Council</NuxtLink>
-                <NuxtLink to="/localAuthorities/dedzaDistrict" class="block text-gray-600 hover:text-blue-600 py-1">Dedza District Council</NuxtLink>
-                <NuxtLink to="/localAuthorities/mulanjeDistrict" class="block text-gray-600 hover:text-blue-600 py-1">Mulanje District Council</NuxtLink>
-                <NuxtLink to="/localAuthorities/alldistricts" class="block text-gray-600 hover:text-blue-600 py-1">All District Councils →</NuxtLink>
-              </div>
+              <NuxtLink to="/localAuthorities/alldistricts" class="block text-gray-600 hover:text-blue-600 py-1">All District Councils</NuxtLink>
             </div>
           </div>
           
@@ -892,17 +796,140 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, computed, watch, nextTick } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const isMenuOpen = ref(false);
 const activeMegaMenu = ref(null);
 const activeAccordion = ref(null);
 const showSearch = ref(false);
 const searchQuery = ref('');
+const config = useRuntimeConfig()
 
 // Get the current route
 const route = useRoute();
+const router = useRouter();
+
+const { data: currentMenuResponse } = useAsyncData(
+  'navbar:projects:current',
+  () => $fetch(`${config.public.apiBase}/api/projects/menu?project_status=current`),
+  { server: true, default: () => ({ data: [] }) }
+)
+
+const { data: pastMenuResponse } = useAsyncData(
+  'navbar:projects:past',
+  () => $fetch(`${config.public.apiBase}/api/projects/menu?project_status=past`),
+  { server: true, default: () => ({ data: [] }) }
+)
+
+const { data: upcomingMenuResponse } = useAsyncData(
+  'navbar:projects:upcoming',
+  () => $fetch(`${config.public.apiBase}/api/projects/menu?project_status=upcoming`),
+  { server: true, default: () => ({ data: [] }) }
+)
+
+const toStatusPath = (status) => {
+  if (status === 'past') return '/projects/pastProjects'
+  if (status === 'upcoming') return '/projects/upcomingProjects'
+  return '/projects/currentProjects'
+}
+
+const buildMenuLink = (item, status) => {
+  if (item?.link_type === 'project' && item?.slug) return `${toStatusPath(status)}#${item.id || item.slug}`
+  if (item?.href) return item.href
+  return toStatusPath(status)
+}
+
+const pickSubgroupRepresentative = (subgroup = {}) => {
+  const items = Array.isArray(subgroup.items) ? subgroup.items : []
+  if (!items.length) return null
+  return items.find((item) => item?.is_news_landing) || items[0]
+}
+
+const normalizeGroups = (response, status) => {
+  const groups = Array.isArray(response?.data) ? response.data : []
+  return groups
+    .map((group) => {
+      const directItems = (Array.isArray(group.items) ? group.items : [])
+        .map((item) => ({
+          id: item.id || item.slug,
+          title: item.full_title || item.title,
+          to: buildMenuLink(item, status),
+        }))
+
+      const subgroupItems = (Array.isArray(group.subgroups) ? group.subgroups : [])
+        .map((subgroup) => {
+          const item = pickSubgroupRepresentative(subgroup)
+          if (!item) return null
+          return {
+            id: subgroup.id || subgroup.subgroup || item.id || item.slug,
+            title: subgroup.subgroup || item.full_title || item.title,
+            to: buildMenuLink(item, status),
+          }
+        })
+        .filter(Boolean)
+
+      return {
+        id: group.id || group.group,
+        group: group.group || 'Projects',
+        directItems,
+        subgroupItems,
+      }
+    })
+    .filter((group) => group.directItems.length || group.subgroupItems.length)
+}
+
+const currentMenuDisplay = computed(() => normalizeGroups(currentMenuResponse.value, 'current'))
+
+const extractFlatLinks = (groups) => {
+  const links = []
+  for (const group of groups) {
+    links.push(...group.directItems)
+    links.push(...group.subgroupItems)
+  }
+  return links
+}
+
+const pastMenuLinks = computed(() => extractFlatLinks(normalizeGroups(pastMenuResponse.value, 'past')))
+const upcomingMenuLinks = computed(() => extractFlatLinks(normalizeGroups(upcomingMenuResponse.value, 'upcoming')))
+
+const findMenuProjectLink = (slug) => {
+  const statuses = ['current', 'past', 'upcoming']
+  for (const status of statuses) {
+    const response =
+      status === 'current' ? currentMenuResponse.value :
+      status === 'past' ? pastMenuResponse.value :
+      upcomingMenuResponse.value
+
+    const groups = Array.isArray(response?.data) ? response.data : []
+    for (const group of groups) {
+      for (const item of (group.items || [])) {
+        if (item?.slug === slug || item?.id === slug) {
+          return buildMenuLink(item, status)
+        }
+      }
+      for (const subgroup of (group.subgroups || [])) {
+        for (const item of (subgroup.items || [])) {
+          if (item?.slug === slug || item?.id === slug) {
+            return buildMenuLink(item, status)
+          }
+        }
+      }
+    }
+  }
+  return null
+}
+
+const quickLinkTo = (slug) => findMenuProjectLink(slug) || `/projects/currentProjects#${slug}`
+const quickLinkToAny = (slugs = []) => {
+  const options = Array.isArray(slugs) ? slugs : [slugs]
+  for (const slug of options) {
+    const found = findMenuProjectLink(slug)
+    if (found) return found
+  }
+  const fallback = options.find(Boolean) || ''
+  return `/projects/currentProjects#${fallback}`
+}
 
 // Watch for route changes
 watch(() => route.path, () => {
