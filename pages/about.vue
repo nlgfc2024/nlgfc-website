@@ -1,13 +1,14 @@
 "<script setup>
     import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
     import BlocksRenderer from '~/components/BlocksRenderer.vue'
-    import { usePageBlocks } from '~/composables/usePageBlocks'
+  import { useApiDataArray } from '~/composables/useApiData'
 
     definePageMeta({
     title: 'About Us'
     })
 
     const route = useRoute()
+    const config = useRuntimeConfig()
     const activeTab = ref('mvc')
     const openSubMenu = ref(null)
     const imageError = ref(false)
@@ -17,78 +18,76 @@
     console.error("Organogram image failed to load");
     };
 
-    // Board of Directors
-    const board = {
-    chairperson: {
-        name: "Commissioner Richard Chapweteka",
-        position: "Board Chairperson",
-        image: "/images/board/CommissionerRichardChapwetekaBoardChairperson.png",
-        reportsTo: null,
-        subordinates: [
-        "member1",
-        "member2",
-        "member3",
-        "member4"
-        ]
-    },
-    member1: {
-        name: "Abel Mwambinga",
-        position: "Board Member",
-        image: "/images/board/Abel MwambingaBoardMember.png",
-        reportsTo: "chairperson"
-    },
-    member2: {
-        name: "Councilor Davie Maunde",
-        position: "Board Member",
-        image: "/images/board/CouncilorDavieMaundeBoardMember.png",
-        reportsTo: "chairperson"
-    },
-    member3: {
-        name: "Mary Mkwanda",
-        position: "Board Member",
-        image: "/images/board/MrsMaryMkwandaBoardMember.png",
-        reportsTo: "chairperson"
-    },
-    member4: {
-        name: "Lilian Khofi",
-        position: "Board Member",
-        image: "/images/board/Ms.LilianKhofiVice.png",
-        reportsTo: "chairperson"
-    }
+    const apiBaseUrl = computed(() => (config.public.baseUrl || 'http://localhost:8000').replace(/\/$/, ''))
+    const pagesApiBaseUrl = computed(() => (config.public.apiBase || config.public.baseUrl || 'http://localhost:8000').replace(/\/$/, ''))
+
+    const TAB_PAGE_SLUGS = {
+      mvc: 'mission-vision-core-values',
+      powers: 'powers-and-functions-of-nlgfc',
+      finance: 'directorate-of-finance-and-fiscal-decentralization',
+      corporate: 'directorate-of-corporate-and-strategic-services',
+      social: 'directorate-of-social-and-economic-dev-services',
+      planning: 'planning-monitoring-and-evaluation-division',
+      procurement: 'procurement-and-assets-disposal-division',
+      audit: 'internal-audit-and-risk-division'
     }
 
-    // Executive Management
-    const leadership = {
-    executiveDirector: {
-        name: "Kondwani Santhe (PhD)",
-        position: "Executive Director",
-        image: "/images/management/kondwani-santhe--ed.png",
-        reportsTo: null,
-        subordinates: [
-        "directorInfrastructure",
-        "directorFinance",
-        "directorCorporate"
-        ]
-    },
-    directorInfrastructure: {
-        name: "Paul Chipeta",
-        position: "Director of Social & Economic Development Services",
-        image: "/images/management/directorEconomicDevelopment.png",
-        reportsTo: "executiveDirector"
-    },
-    directorFinance: {
-        name: "Linda Kapanda",
-        position: "Director of Finance & Fiscal Decentralization",
-        image: "/images/management/financeDirector.png",
-        reportsTo: "executiveDirector"
-    },
-    directorCorporate: {
-        name: "Stanley Chuthi",
-        position: "Director of Administration & Corporate Services",
-        image: "/images/management/directorCorporateServices.png",
-        reportsTo: "executiveDirector"
+    const normalizeImageUrl = (imagePath) => {
+      if (!imagePath || typeof imagePath !== 'string') return ''
+      if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath
+      if (imagePath.startsWith('/images/')) return imagePath
+      if (imagePath.startsWith('/storage/')) return `${apiBaseUrl.value}${imagePath}`
+      return `${apiBaseUrl.value}/storage/${imagePath.replace(/^\/+/, '')}`
     }
-    }
+
+    const { data: boardMembers, loading: boardLoading, error: boardError, refresh: refreshBoard } = useApiDataArray(
+      'about-board-of-directors',
+      '/api/board-of-directors',
+      {
+        immediate: false,
+        lazy: true,
+        server: false
+      }
+    )
+
+    const { data: executiveMembers, loading: executiveLoading, error: executiveError, refresh: refreshExecutive } = useApiDataArray(
+      'about-executive-management',
+      '/api/executive-management',
+      {
+        immediate: false,
+        lazy: true,
+        server: false
+      }
+    )
+
+    const boardRequested = ref(false)
+    const executiveRequested = ref(false)
+    const pageBlocksByTab = reactive({})
+    const pageLoadingByTab = reactive({})
+    const pageErrorByTab = reactive({})
+    const pageLoadedByTab = reactive({})
+
+    const boardChairperson = computed(() => {
+      if (!Array.isArray(boardMembers.value) || !boardMembers.value.length) return null
+      return boardMembers.value[0]
+    })
+
+    const boardOtherMembers = computed(() => {
+      if (!Array.isArray(boardMembers.value) || !boardMembers.value.length) return []
+      if (!boardChairperson.value) return boardMembers.value
+      return boardMembers.value.filter(member => member.id !== boardChairperson.value.id)
+    })
+
+    const executiveDirector = computed(() => {
+      if (!Array.isArray(executiveMembers.value) || !executiveMembers.value.length) return null
+      return executiveMembers.value[0]
+    })
+
+    const otherExecutiveDirectors = computed(() => {
+      if (!Array.isArray(executiveMembers.value) || !executiveMembers.value.length) return []
+      if (!executiveDirector.value) return executiveMembers.value
+      return executiveMembers.value.filter(member => member.id !== executiveDirector.value.id)
+    })
 
     const menuItems = ref([
     { 
@@ -164,15 +163,70 @@
 const { projectGroups } = useGeneralSidebar();
 projectGroups.value = mappedProjectGroups.value;
 
-// Page-builder: Mission, Vision, Core Values content
-// const { data: mvcPage, pending: mvcPending, error: mvcError } = usePageBlocks('mission-vision-core-values')
-    
-const { data: pages, pending, error: PageError } = usePageBlocks([
-  'powers-and-functions-of-nlgfc','procurement-and-assets-disposal-division',
-  'directorate-of-finance-and-fiscal-decentralization','directorate-of-corporate-and-strategic-services',
-  'planning-monitoring-and-evaluation-division',
-  'internal-audit-and-risk-division','directorate-of-social-and-economic-dev-services'
-])
+const fetchBoardIfNeeded = () => {
+  if (boardRequested.value) return
+  boardRequested.value = true
+  refreshBoard()
+}
+
+const fetchExecutiveIfNeeded = () => {
+  if (executiveRequested.value) return
+  executiveRequested.value = true
+  refreshExecutive()
+}
+
+const fetchTabPage = async (tabId, force = false) => {
+  const slug = TAB_PAGE_SLUGS[tabId]
+  if (!slug) return
+  if (!force && (pageLoadedByTab[tabId] || pageLoadingByTab[tabId])) return
+
+  pageLoadingByTab[tabId] = true
+  pageErrorByTab[tabId] = null
+
+  try {
+    const page = await $fetch(`${pagesApiBaseUrl.value}/api/pages/${slug}`)
+    pageBlocksByTab[tabId] = Array.isArray(page?.blocks) ? page.blocks : []
+    pageLoadedByTab[tabId] = true
+  } catch (error) {
+    pageErrorByTab[tabId] = error
+  } finally {
+    pageLoadingByTab[tabId] = false
+  }
+}
+
+const isTabPageLoading = (tabId) => Boolean(pageLoadingByTab[tabId])
+const getTabPageError = (tabId) => pageErrorByTab[tabId]
+const getTabBlocks = (tabId) => pageBlocksByTab[tabId] || []
+
+const fetchActiveTabContent = (force = false) => {
+  const tab = activeTab.value
+
+  if (tab === 'board') {
+    if (force) {
+      boardRequested.value = true
+      refreshBoard()
+      return
+    }
+    fetchBoardIfNeeded()
+    return
+  }
+
+  if (tab === 'management') {
+    if (force) {
+      executiveRequested.value = true
+      refreshExecutive()
+      return
+    }
+    fetchExecutiveIfNeeded()
+    return
+  }
+
+  fetchTabPage(tab, force)
+}
+
+watch(activeTab, () => {
+  fetchActiveTabContent(false)
+}, { immediate: true })
 
 
 function updateActiveTabFromHash(hash) {
@@ -230,31 +284,57 @@ const downloadImage = () => {
       <main class="flex-1 min-w-0">
         <!-- Mission, Vision, Core Values -->
         <div v-show="activeTab === 'mvc'" class="prose max-w-none">
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <!-- <BlocksRenderer :blocks="pages?.['mission-vision-core-values']?.blocks || []" /> -->
+          <div v-if="isTabPageLoading('mvc')">Loading...</div>
+            <div v-else-if="getTabPageError('mvc')" class="space-y-3">
+              <p>Failed to load content.</p>
+              <button
+                @click="fetchTabPage('mvc', true)"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
+            </div>
+            <BlocksRenderer v-else :blocks="getTabBlocks('mvc')" />
              
         </div>
        <div v-show="activeTab === 'powers'" class="prose max-w-none">
             <!-- Header Section -->
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['powers-and-functions-of-nlgfc']?.blocks || []" />
+          <div v-if="isTabPageLoading('powers')">Loading...</div>
+            <div v-else-if="getTabPageError('powers')" class="space-y-3">
+              <p>Failed to load content.</p>
+              <button
+                @click="fetchTabPage('powers', true)"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
+            </div>
+            <BlocksRenderer v-else :blocks="getTabBlocks('powers')" />
         </div>
         <!-- Board of Directors Content -->
         <div v-show="activeTab === 'board'" class="prose max-w-none">
-          
-          <div class="space-y-4">
+          <div v-if="boardLoading">Loading board members...</div>
+          <div v-else-if="boardError" class="space-y-3">
+            <p>Failed to load board members.</p>
+            <button
+              @click="refreshBoard"
+              class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            >
+              Try Again
+            </button>
+          </div>
+          <div v-else-if="!boardChairperson" class="text-gray-600">No board members available.</div>
+          <div v-else class="space-y-4">
                 <div class="board-page">
                    
                     <!-- Top Level - Board Chair -->
                     <div class="org-level top-level">
                     <div class="board-card">
                         <div class="board-image">
-                        <img :src="board.chairperson.image" :alt="board.chairperson.name">
+                        <img :src="normalizeImageUrl(boardChairperson.image)" :alt="boardChairperson.name">
                         </div>
-                        <h2>{{ board.chairperson.name }}</h2>
-                        <p class="position">{{ board.chairperson.position }}</p>
+                        <h2>{{ boardChairperson.name }}</h2>
+                        <p class="position">{{ boardChairperson.position }}</p>
                     </div>
                     </div>
                     
@@ -266,15 +346,15 @@ const downloadImage = () => {
                     <!-- Second Level - Board Members -->
                     <div class="org-level middle-level">
                     <div 
-                        v-for="(id, index) in board.chairperson.subordinates" 
-                        :key="index" 
+                      v-for="(member, index) in boardOtherMembers" 
+                      :key="member.id || index" 
                         class="board-card"
                     >
                         <div class="board-image">
-                        <img :src="board[id].image" :alt="board[id].name">
+                      <img :src="normalizeImageUrl(member.image)" :alt="member.name">
                         </div>
-                        <h3>{{ board[id].name }}</h3>
-                        <p class="position">{{ board[id].position }}</p>
+                      <h3>{{ member.name }}</h3>
+                      <p class="position">{{ member.position }}</p>
                     </div>
                     </div>
                 </div>
@@ -282,36 +362,47 @@ const downloadImage = () => {
         </div>
         <!-- Executive Management Content -->
         <div v-show="activeTab === 'management'" class="prose max-w-none">
-
-            <div class="space-y-4">
-                <div class="executive-page">
+            <div v-if="executiveLoading">Loading executive management...</div>
+            <div v-else-if="executiveError" class="space-y-3">
+              <p>Failed to load executive management.</p>
+              <button
+                @click="refreshExecutive"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
+            </div>
+            <div v-else-if="!executiveDirector" class="text-gray-600">No executive management records available.</div>
+            <div v-else class="space-y-4">
+              <div class="board-page">
                     
                     <!-- Top Level - Executive Director -->
                     <div class="org-level top-level">
-                        <div class="executive-card">
-                            <div class="executive-image">
-                            <img :src="leadership.executiveDirector.image" :alt="leadership.executiveDirector.name">
+                  <div class="board-card">
+                    <div class="board-image">
+                            <img :src="normalizeImageUrl(executiveDirector.image)" :alt="executiveDirector.name">
                             </div>
-                            <h2>{{ leadership.executiveDirector.name }}</h2>
-                            <p class="position">{{ leadership.executiveDirector.position }}</p>
+                            <h2>{{ executiveDirector.name }}</h2>
+                            <p class="position">{{ executiveDirector.position }}</p>
                         </div>
                     </div>
                     
-                    <!-- Connecting line -->
-                    <div class="connector">
+                <!-- Connecting lines -->
+                <div class="connector-container">
+                  <div class="connector-line"></div>
                     </div>
                     
                     <!-- Second Level - Directors -->
                     <div class="org-level middle-level">
                         <div 
-                            v-for="(id, index) in leadership.executiveDirector.subordinates" 
-                            :key="index" 
-                            class="executive-card">
-                            <div class="executive-image">
-                            <img :src="leadership[id].image" :alt="leadership[id].name">
+                        v-for="(member, index) in otherExecutiveDirectors" 
+                        :key="member.id || index" 
+                    class="board-card">
+                    <div class="board-image">
+                        <img :src="normalizeImageUrl(member.image)" :alt="member.name">
                             </div>
-                            <h3>{{ leadership[id].name }}</h3>
-                            <p class="position">{{ leadership[id].position }}</p>
+                        <h3>{{ member.name }}</h3>
+                        <p class="position">{{ member.position }}</p>
                         </div>
                     </div>
                 </div>
@@ -321,45 +412,93 @@ const downloadImage = () => {
         <!-- Finance Directorate Content -->
         <div v-show="activeTab === 'finance'" class="prose max-w-none">
             <!-- Header Section -->
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['directorate-of-finance-and-fiscal-decentralization']?.blocks || []" />
+          <div v-if="isTabPageLoading('finance')">Loading...</div>
+            <div v-else-if="getTabPageError('finance')" class="space-y-3">
+              <p>Failed to load content.</p>
+              <button
+                @click="fetchTabPage('finance', true)"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
+            </div>
+            <BlocksRenderer v-else :blocks="getTabBlocks('finance')" />
         </div>
 
         <!-- Corporate Services Directorate Content -->
         <div v-show="activeTab === 'corporate'" class="prose max-w-none">
             <!-- Header Section -->
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['directorate-of-corporate-and-strategic-services']?.blocks || []" />
+          <div v-if="isTabPageLoading('corporate')">Loading...</div>
+            <div v-else-if="getTabPageError('corporate')" class="space-y-3">
+              <p>Failed to load content.</p>
+              <button
+                @click="fetchTabPage('corporate', true)"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
+            </div>
+            <BlocksRenderer v-else :blocks="getTabBlocks('corporate')" />
         </div>
         <!-- Social and Economic Development Services Directorate Content -->
         <div v-show="activeTab === 'social'" class="prose max-w-none">
             <!-- Header Section -->
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['directorate-of-social-and-economic-dev-services']?.blocks || []" />
+          <div v-if="isTabPageLoading('social')">Loading...</div>
+            <div v-else-if="getTabPageError('social')" class="space-y-3">
+              <p>Failed to load content.</p>
+              <button
+                @click="fetchTabPage('social', true)"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
+            </div>
+            <BlocksRenderer v-else :blocks="getTabBlocks('social')" />
         </div>
 		
         <!-- Planning, Monitoring and Evaluation Division Content -->
         <div v-show="activeTab === 'planning'" class="prose max-w-none">
             <!-- Header Section -->
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['planning-monitoring-and-evaluation-division']?.blocks || []" />
+          <div v-if="isTabPageLoading('planning')">Loading...</div>
+            <div v-else-if="getTabPageError('planning')" class="space-y-3">
+              <p>Failed to load content.</p>
+              <button
+                @click="fetchTabPage('planning', true)"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
+            </div>
+            <BlocksRenderer v-else :blocks="getTabBlocks('planning')" />
         </div>
         <!-- Procurement and Assets Disposal Division Content -->
          <div v-show="activeTab === 'procurement'" class="prose max-w-none">
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['procurement-and-assets-disposal-division']?.blocks || []" />
+          <div v-if="isTabPageLoading('procurement')">Loading...</div>
+            <div v-else-if="getTabPageError('procurement')" class="space-y-3">
+              <p>Failed to load content.</p>
+              <button
+                @click="fetchTabPage('procurement', true)"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
+            </div>
+            <BlocksRenderer v-else :blocks="getTabBlocks('procurement')" />
         </div>
 
         <!-- Internal Audit and Risk Division Content -->
         <div v-show="activeTab === 'audit'" class="prose max-w-none">
-            <div v-if="PagePending">Loading...</div>
-            <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['internal-audit-and-risk-division']?.blocks || []" />
+          <div v-if="isTabPageLoading('audit')">Loading...</div>
+            <div v-else-if="getTabPageError('audit')" class="space-y-3">
+              <p>Failed to load content.</p>
+              <button
+                @click="fetchTabPage('audit', true)"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
+            </div>
+            <BlocksRenderer v-else :blocks="getTabBlocks('audit')" />
         </div>
         <!-- Organogram Section -->
         <div v-show="activeTab === 'structure' || activeTab === 'directorates'" class="prose max-w-none">
@@ -547,83 +686,9 @@ nav h3 {
   border-bottom: 2px solid #ddd;
 }
 
-/* Executive Management */
-.executive-page {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-  text-align: center;
-}
-
-.executive-page h1 {
-  color: #2c3e50;
-  margin-bottom: 2rem;
-}
-
-.executive-page .org-level {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap; /* Added for better responsiveness */
-}
-
-.executive-page .top-level {
-  margin-bottom: 1rem;
-}
-
-.executive-page .middle-level {
-  margin-top: 1rem;
-}
-
-.executive-page .executive-card {
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 1.5rem;
-  min-width: 250px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  min-height: 320px; /* Added for consistent height */
-}
-
-.executive-page .top-level .executive-card {
-  background: #f8f9fa;
-  border-top: 4px solid #e74c3c;
-}
-
-.executive-page .position {
-  color: #666;
-  font-style: italic;
-  margin-top: 0.5rem;
-}
-
-.executive-page .connector {
-  height: 40px;
-  width: 2px;
-  background: #ddd;
-  margin: 0 auto;
-}
-
-.executive-page .executive-image {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin: 0 auto 1rem;
-  border: 3px solid #f1f1f1;
-  background: #f8f8f8; /* Fallback background */
-}
-
-.executive-page .executive-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block; /* Remove extra space under image */
-}
-
 /* Responsive Styles */
 @media (max-width: 768px) {
-  .board-page .org-level,
-  .executive-page .org-level {
+  .board-page .org-level {
     gap: 1rem;
   }
   
@@ -650,22 +715,15 @@ nav h3 {
   .board-page .connector-line {
     width: 60%;
   }
-
-  .executive-page .executive-card {
-    min-height: 300px;
-    min-width: 200px;
-  }
 }
 
 @media (max-width: 480px) {
-  .board-page .org-level,
-  .executive-page .org-level {
+  .board-page .org-level {
     flex-direction: column;
     align-items: center;
   }
   
-  .board-page .board-card,
-  .executive-page .executive-card {
+  .board-page .board-card {
     width: 100%;
     max-width: 250px;
   }
@@ -675,10 +733,6 @@ nav h3 {
     width: 2px;
     border-bottom: none;
     border-left: 2px solid #ddd;
-  }
-  
-  .executive-page .connector {
-    height: 20px;
   }
 }
 </style>

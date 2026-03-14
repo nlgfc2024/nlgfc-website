@@ -7,10 +7,22 @@ useHead({
 });
 
 // Import utilities
-const { stripHtmlTags, getExcerpt } = useHtmlUtils();
+const { getExcerpt, stripHtmlTags } = useHtmlUtils();
 
 // Get runtime config for base URL
 const config = useRuntimeConfig();
+const apiBaseUrl = config.public.baseUrl || 'http://localhost:8000'
+
+const fetchPaginatedEndpoint = (endpoint, page, perPage, extraQuery = {}) => {
+  return $fetch(`${apiBaseUrl}${endpoint}`, {
+    query: {
+      per_page: perPage,
+      page,
+      ...extraQuery
+    },
+    timeout: 10000
+  })
+}
 
 const props = defineProps({
   partnerLogos: {
@@ -40,6 +52,34 @@ const { data: postsData, loading: postsLoading, error: postsError, refresh: fetc
   }
 );
 
+const publicationsPage = ref(1)
+const publicationsPerPage = 5
+
+const { data: documentsResponse, pending: publicationsLoading, error: publicationsError, refresh: fetchPublications } = useAsyncData(
+  'homepage-documents-live',
+  async () => {
+    return await fetchPaginatedEndpoint('/api/documents', publicationsPage.value, publicationsPerPage)
+  },
+  {
+    lazy: true,
+    dedupe: 'defer',
+    deep: false,
+    default: () => ({
+      data: [],
+      current_page: 1,
+      last_page: 1,
+      total: 0,
+      per_page: publicationsPerPage
+    }),
+    watch: [publicationsPage]
+  }
+)
+
+const { data: donorProjectsData, loading: projectsLoading, error: projectsError, refresh: fetchProjects } = useDonorProjects({
+  key: 'homepage-donor-projects',
+  perPage: 100
+})
+
 // Transform API data to match component structure
 const newsItems = computed(() => {
   if (!postsData.value || !Array.isArray(postsData.value)) return []
@@ -66,97 +106,253 @@ const newsItems = computed(() => {
 })
 
 const activeTab = ref('procurements')
+const opportunitiesPerPage = 5
+const procurementPage = ref(1)
+const jobsPage = ref(1)
+const hasLoadedJobsTab = ref(false)
 
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'short', day: 'numeric' }
   return new Date(dateString).toLocaleDateString(undefined, options)
 }
 
-// Projects
-const projects = [
- {
-  title: 'SSRLP',
-  description: 'Social Support for Resilient Livelihoods Project focuses on reducing poverty and enhancing resilience in vulnerable communities through targeted interventions and capacity building.',
-  imagePath: '/images/samples/SSRLP logo(1).jpg',
-  url: '/projects/currentProjects#ssrlp_overview'
-},
-
-  {
-    title: 'GESD',
-    description: 'Governance to Enable Service Delivery Project aims to improve local government capacity and citizen service access through institutional strengthening and policy reforms.',
-    imagePath: '/images/samples/PBG logo.png',
-    url: '/projects/currentProjects#gesd_overview'
-  },
-  {
-    title: 'RCRP 2',
-    description: 'The second phase of the Climate Resilience Project supports districts in disaster preparedness and mitigation through infrastructure development and community training.',
-     imagePath: '/images/samples/RCRP LOGO- Final.png',
-    url: '/projects/currentProjects#rcrp_overview'
-  },
-  {
-    title: 'RCRP 1',
-    description: 'The first phase of the Climate Resilience Project focuses on disaster preparedness and mitigation through infrastructure development and community training.',
-     imagePath: '/images/samples/RCRP LOGO- Final.png',
-    url: '/projects/currentProjects#rcrp_overview'
-  },
-  {
-    title: 'GESD',
-    description: 'Governance to Enable Service Delivery Project aims to improve local government capacity and citizen service access through institutional strengthening and policy reforms.',
-    imagePath: '/images/samples/PBG logo.png',
-    url: '/projects/currentProjects#gesd_overview'
+const donorFundedProjects = computed(() => {
+  if (!Array.isArray(donorProjectsData.value) || donorProjectsData.value.length === 0) {
+    return []
   }
 
-]
+  const baseUrl = config.public.baseUrl || 'http://localhost:8000'
 
-// Opportunity tabs
-const opportunityTabs = ref([
+  const toStorageUrl = (path) => {
+    if (!path || typeof path !== 'string') return ''
+    if (path.startsWith('http')) return path
+    return `${baseUrl}/storage/${path}`
+  }
+
+  return donorProjectsData.value
+    .map((project) => {
+      const rawImagePath = project?.bg_image || project?.image || project?.thumbnail || project?.featured_image || project?.image_path || ''
+      const image = rawImagePath
+        ? toStorageUrl(rawImagePath)
+        : '/images/samples/default-news.jpg'
+
+      const logo = toStorageUrl(project?.logo)
+
+      return {
+        id: project.id,
+        title: project.name || project.title || 'Project',
+        description: project.description
+          ? stripHtmlTags(project.description)
+          : 'No project description available.',
+        image,
+        logo,
+        url: project.slug ? `/projects/currentProjects#${project.slug}` : '/projects/currentProjects'
+      }
+    })
+    .slice(0, 5)
+})
+
+const opportunityTabs = [
   {
     key: 'procurements',
-    label: 'Procurements',
-    items: [
-      { 
-        title: 'Supply of IT Equipment for Local Offices', 
-        deadline: '2024-08-15',
-        file: '/tenders/it-equipment-supply.pdf'
-      },
-      { 
-        title: 'Construction of School Blocks in Rural Areas', 
-        deadline: '2024-09-01',
-        file: '/tenders/school-construction.pdf'
-      }
-    ]
+    label: 'Procurements'
   },
   {
     key: 'jobs',
-    label: 'Job Opportunities',
-    items: [
-      { 
-        title: 'Finance Officer Position (Multiple Locations)', 
-        deadline: '2024-07-30',
-        applyLink: '/careers/finance-officer'
-      },
-      { 
-        title: 'Monitoring & Evaluation Specialist', 
-        deadline: '2024-08-10',
-        applyLink: '/careers/monitoring-specialist'
-      }
-    ]
+    label: 'Job Opportunities'
   }
-])
+]
 
-const currentOpportunities = computed(() => {
-  const tab = opportunityTabs.value.find(t => t.key === activeTab.value)
-  return tab?.items || []
+const { data: procurementsResponse, pending: procurementsLoading, error: procurementsError, refresh: fetchProcurements } = useAsyncData(
+  'homepage-procurements-live',
+  async () => {
+    return await fetchPaginatedEndpoint('/api/procurement-notices', procurementPage.value, opportunitiesPerPage)
+  },
+  {
+    lazy: true,
+    dedupe: 'defer',
+    deep: false,
+    default: () => ({
+      data: [],
+      current_page: 1,
+      last_page: 1,
+      total: 0,
+      per_page: opportunitiesPerPage
+    }),
+    watch: [procurementPage]
+  }
+)
+
+const { data: jobsResponse, pending: jobsLoading, error: jobsError, refresh: fetchJobs } = useAsyncData(
+  'homepage-jobs-live',
+  async () => {
+    return await fetchPaginatedEndpoint('/api/vacancies', jobsPage.value, opportunitiesPerPage)
+  },
+  {
+    immediate: false,
+    lazy: true,
+    dedupe: 'defer',
+    deep: false,
+    default: () => ({
+      data: [],
+      current_page: 1,
+      last_page: 1,
+      total: 0,
+      per_page: opportunitiesPerPage
+    }),
+    watch: [jobsPage]
+  }
+)
+
+const normalizePaginatedResponse = (response) => {
+  const normalizedSource = response?.data && !Array.isArray(response.data) && Array.isArray(response.data?.data)
+    ? response.data
+    : response
+
+  const items = Array.isArray(normalizedSource?.data)
+    ? normalizedSource.data
+    : Array.isArray(response)
+      ? response
+      : []
+
+  return {
+    items,
+    currentPage: Number(normalizedSource?.current_page || 1),
+    lastPage: Number(normalizedSource?.last_page || 1),
+    total: Number(normalizedSource?.total || items.length)
+  }
+}
+
+const procurementsPayload = computed(() => normalizePaginatedResponse(procurementsResponse.value))
+const jobsPayload = computed(() => normalizePaginatedResponse(jobsResponse.value))
+
+const procurementItems = computed(() => {
+  if (!Array.isArray(procurementsPayload.value.items)) return []
+
+  return procurementsPayload.value.items.map((notice) => ({
+    id: notice.id,
+    title: notice.title || 'Procurement Notice',
+    deadline: notice.closing_date || notice.updated_at || notice.created_at || new Date().toISOString(),
+    link: notice.url || '/opportunities?section=procurement#procurement-notices'
+  }))
 })
 
-// Publications
-const publications = ref([
-  { title: '2024 Annual Report and Financial Statements', date: '2024-12-31', file: '/pdfs/annual-report-2024.pdf' },
-  { title: 'Q1 Monitoring and Evaluation Brief', date: '2024-03-30', file: '/pdfs/q1-brief-2024.pdf' },
-  { title: 'Local Authority Financial Management Handbook', date: '2023-11-10', file: '/pdfs/handbook-2023.pdf' },
-  { title: 'Comprehensive Financial Audit Summary Report', date: '2023-08-15', file: '/pdfs/audit-summary-2023.pdf' },
-  { title: 'Development Budget Review and Analysis', date: '2023-06-01', file: '/pdfs/budget-review-2023.pdf' }
-])
+const jobItems = computed(() => {
+  if (!Array.isArray(jobsPayload.value.items)) return []
+
+  return jobsPayload.value.items.map((vacancy) => ({
+    id: vacancy.id,
+    title: vacancy.title || 'Job Opportunity',
+    deadline: vacancy.expiry_date || vacancy.updated_at || vacancy.created_at || new Date().toISOString(),
+    applyLink: vacancy.url || '/opportunities?section=jobs#job-opportunities'
+  }))
+})
+
+const currentOpportunities = computed(() => {
+  return activeTab.value === 'procurements' ? procurementItems.value : jobItems.value
+})
+
+const opportunitiesLoading = computed(() => {
+  return activeTab.value === 'procurements' ? procurementsLoading.value : jobsLoading.value
+})
+
+const opportunitiesError = computed(() => {
+  return activeTab.value === 'procurements' ? procurementsError.value : jobsError.value
+})
+
+const opportunitiesPagination = computed(() => {
+  return activeTab.value === 'procurements' ? procurementsPayload.value : jobsPayload.value
+})
+
+const fetchOpportunities = () => {
+  if (activeTab.value === 'procurements') {
+    fetchProcurements()
+    return
+  }
+
+  hasLoadedJobsTab.value = true
+  fetchJobs()
+}
+
+const switchOpportunityTab = (tabKey) => {
+  activeTab.value = tabKey
+
+  if (tabKey === 'jobs' && !hasLoadedJobsTab.value) {
+    hasLoadedJobsTab.value = true
+    fetchJobs()
+  }
+}
+
+const canGoToPreviousOpportunityPage = computed(() => opportunitiesPagination.value.currentPage > 1)
+const canGoToNextOpportunityPage = computed(() => opportunitiesPagination.value.currentPage < opportunitiesPagination.value.lastPage)
+
+const goToPreviousOpportunityPage = () => {
+  if (!canGoToPreviousOpportunityPage.value) return
+
+  if (activeTab.value === 'procurements') {
+    procurementPage.value -= 1
+    return
+  }
+
+  jobsPage.value -= 1
+}
+
+const goToNextOpportunityPage = () => {
+  if (!canGoToNextOpportunityPage.value) return
+
+  if (activeTab.value === 'procurements') {
+    procurementPage.value += 1
+    return
+  }
+
+  jobsPage.value += 1
+}
+
+const publicationsPayload = computed(() => {
+  const response = documentsResponse.value
+  const normalizedSource = response?.data && !Array.isArray(response.data) && Array.isArray(response.data?.data)
+    ? response.data
+    : response
+
+  const items = Array.isArray(normalizedSource?.data)
+    ? normalizedSource.data
+    : Array.isArray(response)
+      ? response
+      : []
+
+  return {
+    items,
+    currentPage: Number(normalizedSource?.current_page || 1),
+    lastPage: Number(normalizedSource?.last_page || 1),
+    total: Number(normalizedSource?.total || items.length)
+  }
+})
+
+const publications = computed(() => {
+  if (!Array.isArray(publicationsPayload.value.items) || publicationsPayload.value.items.length === 0) {
+    return []
+  }
+
+  return publicationsPayload.value.items.map((document) => ({
+    id: document.id,
+    title: document.name || 'Document',
+    date: document.created_at || document.updated_at || new Date().toISOString(),
+    file: `${apiBaseUrl}/api/documents/${document.id}/download`
+  }))
+})
+
+const canGoToPreviousPublicationsPage = computed(() => publicationsPayload.value.currentPage > 1)
+const canGoToNextPublicationsPage = computed(() => publicationsPayload.value.currentPage < publicationsPayload.value.lastPage)
+
+const goToPreviousPublicationsPage = () => {
+  if (!canGoToPreviousPublicationsPage.value) return
+  publicationsPage.value -= 1
+}
+
+const goToNextPublicationsPage = () => {
+  if (!canGoToNextPublicationsPage.value) return
+  publicationsPage.value += 1
+}
 </script>
 
 <template>
@@ -365,24 +561,47 @@ const publications = ref([
             </p>
           </div>
 
-          <div class="flex flex-col sm:flex-row gap-6 px-4 sm:px-0">
+          <div v-if="projectsLoading" class="mx-auto projects-grid gap-6 px-4 sm:px-0">
             <div
-              v-for="(project, index) in projects"
-              :key="index"
-              class="group relative overflow-hidden rounded-2xl shadow-xl h-80 sm:h-64 w-full sm:w-56"
+              v-for="n in 3"
+              :key="`project-skeleton-${n}`"
+              class="relative overflow-hidden rounded-2xl shadow-xl h-80 sm:h-64 w-56 bg-gray-200 animate-pulse"
+            />
+          </div>
+
+          <div v-else-if="projectsError" class="text-center py-8">
+            <div class="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+              <h3 class="text-lg font-medium text-red-800 mb-2">Failed to load projects</h3>
+              <p class="text-red-600 mb-4">Please try again.</p>
+              <button
+                @click="fetchProjects"
+                class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+
+          <div v-else-if="donorFundedProjects.length > 0" class="mx-auto projects-grid gap-6 px-4 sm:px-0">
+            <div
+              v-for="(project, index) in donorFundedProjects"
+              :key="project.id || index"
+              class="group relative overflow-hidden rounded-2xl shadow-xl h-80 sm:h-64 w-56"
             >
               <img
-                :src="`https://picsum.photos/600/400?random=${index + 10}`"
+                :src="project.image"
                 :alt="project.title"
                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                loading="lazy"
+                @error="(e) => { e.target.src = '/images/samples/default-news.jpg' }"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
               
               <div class="relative h-full flex flex-col justify-end p-6 text-white">
                 <div class="flex items-center justify-center w-14 h-14 sm:w-12 sm:h-12 mb-4 bg-white rounded-xl shadow-md p-1.5">
                   <img
-                    v-if="project.imagePath"
-                    :src="project.imagePath"
+                    v-if="project.logo"
+                    :src="project.logo"
                     alt="Project Logo"
                     class="w-full h-full object-contain"
                     loading="lazy"
@@ -427,6 +646,13 @@ const publications = ref([
               </div>
             </div>
           </div>
+
+          <div v-else class="text-center py-8">
+            <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 max-w-md mx-auto">
+              <h3 class="text-lg font-medium text-gray-800 mb-2">No donor-funded projects found</h3>
+              <p class="text-gray-600">Donor-funded projects will appear here once available.</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -449,10 +675,37 @@ const publications = ref([
                 </a>
               </div>
 
-              <div class="space-y-3">
+              <div v-if="publicationsLoading" class="space-y-3">
+                <div
+                  v-for="n in 4"
+                  :key="`publication-loading-${n}`"
+                  class="flex items-start gap-4 p-4 bg-white rounded-lg"
+                >
+                  <div class="w-10 h-10 bg-gray-200 rounded-md animate-pulse"></div>
+                  <div class="flex-grow space-y-2">
+                    <div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+                    <div class="h-3 bg-gray-200 rounded w-1/3 animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div v-else-if="publicationsError" class="text-center py-6">
+                <div class="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+                  <h3 class="text-lg font-medium text-red-800 mb-2">Failed to load publications</h3>
+                  <p class="text-red-600 mb-4">Please try again.</p>
+                  <button
+                    @click="fetchPublications"
+                    class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+                  >
+                    Try Again
+                  </button>
+                </div>
+              </div>
+
+              <div v-else-if="publications.length > 0" class="space-y-3">
                 <div
                   v-for="(pub, index) in publications"
-                  :key="index"
+                  :key="pub.id || index"
                   class="group flex items-start gap-4 p-4 hover:bg-gray-100 rounded-lg transition"
                 >
                   <div class="flex-shrink-0 w-10 h-10 bg-emerald-50 rounded-md flex items-center justify-center">
@@ -479,6 +732,35 @@ const publications = ref([
                     </svg>
                   </a>
                 </div>
+
+                <div class="flex items-center justify-between pt-2">
+                  <p class="text-sm text-gray-600">
+                    Page {{ publicationsPayload.currentPage }} of {{ publicationsPayload.lastPage }}
+                  </p>
+                  <div class="flex items-center gap-2">
+                    <button
+                      @click="goToPreviousPublicationsPage"
+                      :disabled="!canGoToPreviousPublicationsPage"
+                      class="px-3 py-1 text-sm rounded-md border border-gray-200 text-gray-700 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Previous
+                    </button>
+                    <button
+                      @click="goToNextPublicationsPage"
+                      :disabled="!canGoToNextPublicationsPage"
+                      class="px-3 py-1 text-sm rounded-md border border-emerald-200 text-emerald-700 hover:bg-emerald-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div v-else class="text-center py-6">
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 max-w-md mx-auto">
+                  <h3 class="text-lg font-medium text-gray-800 mb-2">No publications available</h3>
+                  <p class="text-gray-600">Published documents will appear here once available.</p>
+                </div>
               </div>
             </div>
 
@@ -492,7 +774,7 @@ const publications = ref([
                   <button
                     v-for="tab in opportunityTabs"
                     :key="tab.key"
-                    @click="activeTab = tab.key"
+                    @click="switchOpportunityTab(tab.key)"
                     :class="[
                       'px-4 py-2 font-medium text-sm transition',
                       activeTab === tab.key
@@ -505,39 +787,100 @@ const publications = ref([
                 </div>
 
                 <div class="space-y-3">
-                  <div
-                    v-for="(op, index) in currentOpportunities"
-                    :key="index"
-                    class="p-4 bg-white border border-gray-200 rounded-lg hover:shadow-sm transition"
-                  >
-                    <div class="flex items-start justify-between gap-4">
-                      <div>
-                        <h4 class="font-medium text-gray-900">{{ op.title }}</h4>
-                        <p class="text-sm text-gray-600 mt-1">
-                          Deadline: {{ formatDate(op.deadline) }}
-                        </p>
+                  <template v-if="opportunitiesLoading">
+                    <div
+                      v-for="n in 3"
+                      :key="`opportunity-loading-${n}`"
+                      class="p-4 bg-white border border-gray-200 rounded-lg"
+                    >
+                      <div class="space-y-2">
+                        <div class="h-4 bg-gray-200 rounded w-3/4 animate-pulse"></div>
+                        <div class="h-3 bg-gray-200 rounded w-1/2 animate-pulse"></div>
                       </div>
-                      <template v-if="activeTab === 'procurements'">
-                        <a
-                          :href="op.file"
-                          download
-                          class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-md text-sm font-medium hover:bg-emerald-100 transition"
-                        >
-                          <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                          </svg>
-                          Download
-                        </a>
-                      </template>
-                      <template v-else-if="activeTab === 'jobs'">
-                        <a
-                          :href="op.applyLink"
-                          class="px-3 py-1 bg-emerald-600 text-white rounded-md text-sm font-medium hover:bg-emerald-700 transition"
-                        >
-                          Apply Now
-                        </a>
-                      </template>
                     </div>
+                  </template>
+
+                  <div
+                    v-else-if="opportunitiesError"
+                    class="p-4 bg-red-50 border border-red-200 rounded-lg"
+                  >
+                    <h4 class="font-medium text-red-800">Failed to load opportunities</h4>
+                    <p class="text-sm text-red-600 mt-1">Please try again.</p>
+                    <button
+                      @click="fetchOpportunities"
+                      class="mt-3 px-3 py-1 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700 transition"
+                    >
+                      Try Again
+                    </button>
+                  </div>
+
+                  <template v-else-if="currentOpportunities.length > 0">
+                    <div
+                      v-for="(op, index) in currentOpportunities"
+                      :key="op.id || index"
+                      class="p-4 bg-white border border-gray-200 rounded-lg hover:shadow-sm transition"
+                    >
+                      <div class="flex items-start justify-between gap-4">
+                        <div>
+                          <h4 class="font-medium text-gray-900">{{ op.title }}</h4>
+                          <p class="text-sm text-gray-600 mt-1">
+                            Deadline: {{ formatDate(op.deadline) }}
+                          </p>
+                        </div>
+                        <template v-if="activeTab === 'procurements'">
+                          <a
+                            :href="op.link"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-md text-sm font-medium hover:bg-emerald-100 transition"
+                          >
+                            View Notice
+                          </a>
+                        </template>
+                        <template v-else-if="activeTab === 'jobs'">
+                          <a
+                            :href="op.applyLink"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="px-3 py-1 bg-emerald-600 text-white rounded-md text-sm font-medium hover:bg-emerald-700 transition"
+                          >
+                            Apply Now
+                          </a>
+                        </template>
+                      </div>
+                    </div>
+                  </template>
+
+                  <div
+                    v-else
+                    class="p-4 bg-gray-50 border border-gray-200 rounded-lg"
+                  >
+                    <h4 class="font-medium text-gray-800">No opportunities available</h4>
+                    <p class="text-sm text-gray-600 mt-1">
+                      {{ activeTab === 'procurements' ? 'Procurement opportunities will appear here once available.' : 'Job opportunities will appear here once available.' }}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="mt-4 flex items-center justify-between">
+                  <p class="text-sm text-gray-600">
+                    Page {{ opportunitiesPagination.currentPage }} of {{ opportunitiesPagination.lastPage }}
+                  </p>
+                  <div class="flex items-center gap-2">
+                    <button
+                      @click="goToPreviousOpportunityPage"
+                      :disabled="!canGoToPreviousOpportunityPage || opportunitiesLoading"
+                      class="px-3 py-1 text-sm rounded-md border border-gray-200 text-gray-700 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Previous
+                    </button>
+                    <button
+                      @click="goToNextOpportunityPage"
+                      :disabled="!canGoToNextOpportunityPage || opportunitiesLoading"
+                      class="px-3 py-1 text-sm rounded-md border border-emerald-200 text-emerald-700 hover:bg-emerald-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Next
+                    </button>
                   </div>
                 </div>
 
@@ -610,10 +953,10 @@ const publications = ref([
                 :style="`--scroll-duration: ${scrollDuration}s`"
               >
                 <!-- Double the array for seamless looping -->
-                <template v-for="repeat in 2" :key="repeat">
+                <template v-for="repeat in 2">
                   <div 
                     v-for="(logo,index) in partners"
-                    :key="`${repeat}-${index}`"
+                    :key="`${repeat}-${logo.id || index}`"
                     class="flex-shrink-0"
                   >
                     <div class="bg-white p-6 rounded-lg shadow-lg flex items-center justify-center h-24 w-40 sm:h-32 sm:w-48 transition-all hover:scale-105 hover:shadow-xl border border-gray-100">
@@ -706,6 +1049,13 @@ const publications = ref([
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.3);
+}
+
+.projects-grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 14rem));
+  justify-content: center;
 }
 
 </style>

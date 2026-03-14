@@ -1,7 +1,7 @@
 <script setup>
 // Nuxt 3 auto-imports definePageMeta and useRoute.
 // Vue composition API imports:
-import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch, watchEffect } from 'vue'
 import GeneralSidebar from '../../components/GeneralSidebar.vue';
 import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
 import { usePageBlocks } from '~/composables/usePageBlocks'
@@ -13,6 +13,12 @@ definePageMeta({ title: 'Current Projects' })
 const route = useRoute()
 const activeTab = ref('cdf')
 const isSidebarOpen = ref(true);
+
+const { data: donorProjects } = useDonorProjects({
+  key: 'current-projects-donor',
+  perPage: 100,
+  limit: 3
+})
 
 
 // Sidebar structure with groups and nested sub-groups
@@ -72,6 +78,24 @@ const projectGroups = [
   }
 ]
 
+watchEffect(() => {
+  if (!Array.isArray(donorProjects.value) || donorProjects.value.length === 0) {
+    return
+  }
+
+  const donorGroup = projectGroups.find((group) => group.group === 'Donor Funded Projects')
+  if (!donorGroup?.subgroups || !Array.isArray(donorGroup.subgroups)) {
+    return
+  }
+
+  donorGroup.subgroups.forEach((subgroup, index) => {
+    const donorProject = donorProjects.value[index]
+    if (donorProject?.name) {
+      subgroup.subgroup = donorProject.name
+    }
+  })
+})
+
 // Collapsible state
 const openGroup = ref(projectGroups[0].group)
 const openSubgroup = ref(null)
@@ -106,6 +130,65 @@ const projectSlugByTab = {
   drb: 'rcrp-drb',
   usr: 'rcrp-usr',
   upw: 'rcrp-upw',
+}
+
+const donorLandingTabs = ['ssrlp_news', 'gesd_news', 'rcrp2_news']
+
+const normalizeSlug = (value) => String(value || '')
+  .trim()
+  .toLowerCase()
+  .replace(/[_\s]+/g, '-')
+
+const donorSlugToTab = computed(() => {
+  const fallbackMap = {
+    ssrlp: 'ssrlp_news',
+    gesd: 'gesd_news',
+    rcrp: 'rcrp2_news',
+    'rcrp-2': 'rcrp2_news',
+    rcrp2: 'rcrp2_news'
+  }
+
+  if (!Array.isArray(donorProjects.value) || donorProjects.value.length === 0) {
+    return fallbackMap
+  }
+
+  const map = { ...fallbackMap }
+  donorProjects.value.slice(0, donorLandingTabs.length).forEach((project, index) => {
+    const targetTab = donorLandingTabs[index]
+    const normalizedApiSlug = normalizeSlug(project?.slug)
+    const normalizedApiName = normalizeSlug(project?.name)
+
+    if (normalizedApiSlug) {
+      map[normalizedApiSlug] = targetTab
+    }
+
+    if (normalizedApiName) {
+      map[normalizedApiName] = targetTab
+    }
+  })
+
+  return map
+})
+
+function resolveHashToTab(hash) {
+  if (!hash) {
+    return hash
+  }
+
+  if (projectSlugByTab[hash]) {
+    return hash
+  }
+
+  const normalizedHash = normalizeSlug(hash)
+
+  const pageSlugMatch = Object.keys(projectSlugByTab).find((tabId) => {
+    return normalizeSlug(projectSlugByTab[tabId]) === normalizedHash
+  })
+  if (pageSlugMatch) {
+    return pageSlugMatch
+  }
+
+  return donorSlugToTab.value[normalizedHash] || hash
 }
 
 // Inject slug onto each sidebar item so links can carry it via query
@@ -243,17 +326,25 @@ watch(() => route.hash, (newHash) => {
   }
 })
 
+watch(donorProjects, () => {
+  if (route.hash) {
+    updateActiveTabFromHash(route.hash.replace('#', ''))
+  }
+})
+
 function updateActiveTabFromHash(hash) {
+  const resolvedHash = resolveHashToTab(hash)
+
   for (const group of projectGroups) {
     // Match group landing
-    if (group.id && group.id === hash) {
+    if (group.id && group.id === resolvedHash) {
       activeTab.value = group.id
       openGroup.value = group.group
       return
     }
     // Flat items (government group)
     if (group.items) {
-    const match = group.items.find(item => item.id === hash)
+    const match = group.items.find(item => item.id === resolvedHash)
     if (match) {
       activeTab.value = match.id
         openGroup.value = group.group
@@ -263,13 +354,13 @@ function updateActiveTabFromHash(hash) {
     // Subgroups (donor group)
     if (group.subgroups) {
       for (const sg of group.subgroups) {
-        if (sg.id === hash) {
+        if (sg.id === resolvedHash) {
           activeTab.value = sg.id
           openGroup.value = group.group
           openSubgroup.value = sg.subgroup
           return
         }
-        const subMatch = sg.items.find(item => item.id === hash)
+        const subMatch = sg.items.find(item => item.id === resolvedHash)
         if (subMatch) {
           activeTab.value = subMatch.id
           openGroup.value = group.group
