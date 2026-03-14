@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { defineAsyncComponent, computed } from 'vue'
 
+declare function useRuntimeConfig(): { public: { apiBase?: string } }
+
 const config = useRuntimeConfig()
 
 function resolveStorageUrl(value?: string): string {
@@ -18,7 +20,6 @@ type BlockItem = { id?: string; type?: string; data?: Record<string, any> }
 const props = defineProps<{
   blocks: BlockItem[]
 }>()
-const config = useRuntimeConfig()
 
 /**
  * Minimal fallback component for unknown blocks.
@@ -87,12 +88,25 @@ function extractShortType(fullType?: string) {
   return parts[parts.length - 1] || fullType
 }
 
+function findFirstStringDeep(value: any): string {
+  if (typeof value === 'string' && value.length > 0) return value
+  if (!Array.isArray(value)) return ''
+
+  for (const item of value) {
+    if (typeof item === 'string' && item.length > 0) return item
+    if (Array.isArray(item)) {
+      const nested = findFirstStringDeep(item)
+      if (nested) return nested
+    }
+  }
+
+  return ''
+}
+
 function firstStringValue(value: any): string {
   if (typeof value === 'string') return value
   if (Array.isArray(value)) {
-    const flat = value.flat(Infinity)
-    const found = flat.find((v: any) => typeof v === 'string' && v.length > 0)
-    return found ?? ''
+    return findFirstStringDeep(value)
   }
   if (value && typeof value === 'object') {
     if (typeof value.url === 'string') return value.url
@@ -244,8 +258,7 @@ function normalizeProps(shortType: string, data: Record<string, any> = {}) {
       if (typeof rawLogo === 'string') {
         normalizedLogo = rawLogo
       } else if (Array.isArray(rawLogo)) {
-        const firstString = rawLogo.flat(Infinity).find((v: any) => typeof v === 'string' && v.length > 0)
-        normalizedLogo = firstString ?? ''
+        normalizedLogo = findFirstStringDeep(rawLogo)
       }
       return {
         title: data.title ?? '',
@@ -341,7 +354,7 @@ const renderItems = computed<RenderItem[]>(() => {
 
 <template>
   <div>
-    <template v-for="item in renderItems" :key="item.id">
+    <div v-for="item in renderItems" :key="item.id">
       <!-- grouped card -->
       <div
         v-if="item.kind === 'group'"
@@ -371,6 +384,6 @@ const renderItems = computed<RenderItem[]>(() => {
           </template>
         </Suspense>
       </div>
-    </template>
+    </div>
   </div>
 </template>

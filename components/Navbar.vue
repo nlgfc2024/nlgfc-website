@@ -228,7 +228,7 @@
                 <!-- Column 1 -->
                 <div>
                   <h3 class="text-lg font-semibold mb-3 text-blue-800 border-b pb-2">Current Projects</h3>
-                  <template v-for="group in currentMenuDisplay" :key="`current-${group.id}`">
+                  <div v-for="group in currentMenuDisplay" :key="`current-${group.id}`">
                     <strong class="text-gray-700 flex items-center mt-4 first:mt-0">{{ group.group }}</strong>
                     <ul class="space-y-1 pl-4 mb-4">
                       <li v-for="item in group.directItems" :key="`current-item-${item.id}`">
@@ -238,7 +238,7 @@
                         <NuxtLink :to="sub.to" class="text-gray-600 hover:text-blue-600">{{ sub.title }}</NuxtLink>
                       </li>
                     </ul>
-                  </template>
+                  </div>
                 </div>
 
               
@@ -623,7 +623,7 @@
                 <!-- Current Projects -->
                 <div>
                   <h3 class="font-semibold text-blue-800  pb-2">Current Projects</h3>
-                  <template v-for="group in currentMenuDisplay" :key="`mobile-current-${group.id}`">
+                  <div v-for="group in currentMenuDisplay" :key="`mobile-current-${group.id}`">
                     <strong class="text-gray-700 block mt-2">{{ group.group }}</strong>
                     <ul class="pl-4 mt-1 space-y-1">
                       <li v-for="item in group.directItems" :key="`mobile-current-item-${item.id}`">
@@ -633,7 +633,7 @@
                         <NuxtLink :to="sub.to" class="text-gray-600 hover:text-blue-600">{{ sub.title }}</NuxtLink>
                       </li>
                     </ul>
-                  </template>
+                  </div>
                 </div>
 
                 <!-- Past Projects -->
@@ -866,7 +866,6 @@ const openTendersCount = computed(() => {
     return status === 'active' && !isExpired(notice?.closing_date);
   }).length;
 });
-const config = useRuntimeConfig()
 
 // Get the current route
 const route = useRoute();

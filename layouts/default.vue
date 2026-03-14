@@ -67,10 +67,6 @@ const normalizeOpportunitySidebarId = (hashValue) => {
   return 'procurement-notices';
 };
 
-const handleActiveIdUpdate = (newId) => {
-  activeTab.value = newId;
-};
-
 const sidebarProps = computed(() => {
   // Define pages that should NOT have a sidebar
   const noSidebarPages = ['/', '/index2'];
