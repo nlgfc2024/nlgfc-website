@@ -1,6 +1,7 @@
 <script setup>
 import BlocksRenderer from '~/components/BlocksRenderer.vue'
 import { useGeneralSidebar } from '~/composables/useGeneralSidebar'
+import ProjectNewsLanding from '~/components/projects/ProjectNewsLanding.vue'
 
 definePageMeta({ title: 'Past Projects' })
 
@@ -9,6 +10,24 @@ const activeTab = ref('')
 const openGroup = ref(null)
 const config = useRuntimeConfig()
 const legacyMenuSlugsToHide = new Set(['ssrlp', 'gesd', 'masaf', 'rcrp2', 'miera', 'led'])
+
+const sortProgramItems = (items = []) => {
+  const rank = (item) => {
+    const title = String(item?.title || item?.menu_title || item?.name || '').toLowerCase()
+    if (title.includes('news')) return 0
+    if (title.includes('overview')) return 1
+    return 2
+  }
+
+  return [...items].sort((a, b) => {
+    const r = rank(a) - rank(b)
+    if (r !== 0) return r
+    const ao = Number(a?.order ?? a?.menu_order ?? 9999)
+    const bo = Number(b?.order ?? b?.menu_order ?? 9999)
+    if (ao !== bo) return ao - bo
+    return String(a?.title || '').localeCompare(String(b?.title || ''))
+  })
+}
 
 const { data: pastMenuResponse } = useAsyncData(
   'projects:past:menu',
@@ -29,9 +48,11 @@ const projectGroupsWithSlugs = computed(() => {
       ? group.subgroups.map((subgroup) => ({
           ...subgroup,
           items: Array.isArray(subgroup.items)
-            ? subgroup.items
+            ? sortProgramItems(
+                subgroup.items
                 .map((item) => ({ ...item, id: item.id || item.slug, slug: item.slug || item.id }))
                 .filter((item) => !legacyMenuSlugsToHide.has(String(item.slug || item.id || '').toLowerCase()))
+              )
             : [],
         }))
       : [],
@@ -77,43 +98,6 @@ const newsItemsForActive = computed(() =>
   }))
 )
 const isNewsLanding = computed(() => Boolean(activeProjectPage.value?.project?.is_news_landing))
-const featuredArticles = computed(() => newsItemsForActive.value.slice(0, 3))
-const currentSlide = ref(0)
-const autoplay = ref(true)
-const autoplayInterval = ref(5000)
-let autoplayTimer = null
-
-const slidesForActive = computed(() => (isNewsLanding.value ? newsItemsForActive.value : []))
-
-function nextSlide() {
-  if (!slidesForActive.value.length) return
-  currentSlide.value = (currentSlide.value + 1) % slidesForActive.value.length
-  resetAutoplay()
-}
-function prevSlide() {
-  if (!slidesForActive.value.length) return
-  currentSlide.value = (currentSlide.value - 1 + slidesForActive.value.length) % slidesForActive.value.length
-  resetAutoplay()
-}
-function goToSlide(index) {
-  if (!slidesForActive.value.length) return
-  currentSlide.value = index
-  resetAutoplay()
-}
-function resetAutoplay() {
-  if (!autoplay.value) return
-  clearInterval(autoplayTimer)
-  autoplayTimer = setInterval(() => nextSlide(), autoplayInterval.value)
-}
-function toggleAutoplay() {
-  autoplay.value = !autoplay.value
-  if (autoplay.value) {
-    resetAutoplay()
-  } else {
-    clearInterval(autoplayTimer)
-  }
-}
-
 const pageSize = ref(6)
 const currentPage = ref(1)
 const totalPages = computed(() => Math.max(1, Math.ceil(newsItemsForActive.value.length / pageSize.value)))
@@ -132,17 +116,6 @@ function nextPage() { if (currentPage.value < totalPages.value) goToPage(current
 function prevPage() { if (currentPage.value > 1) goToPage(currentPage.value - 1) }
 
 watch(activeTab, () => { currentPage.value = 1 })
-watch(activeTab, () => {
-  currentSlide.value = 0
-  if (isNewsLanding.value) resetAutoplay()
-  else clearInterval(autoplayTimer)
-})
-onMounted(() => {
-  if (isNewsLanding.value) resetAutoplay()
-})
-onBeforeUnmount(() => {
-  clearInterval(autoplayTimer)
-})
 watch(projectGroupsWithSlugs, (groups) => {
   if (!groups.length) return
   if (!activeTab.value) {
@@ -213,43 +186,16 @@ watchEffect(() => {
         </template>
       </Suspense>
 
-      <section v-if="isNewsLanding && slidesForActive.length" class="mt-8 space-y-6">
-        <section class="relative overflow-hidden rounded-xl shadow-2xl h-[320px] md:h-[380px]">
-          <div
-            v-for="(item, index) in slidesForActive"
-            :key="'past-slide-'+index"
-            class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
-            :class="{ 'opacity-100 z-10': currentSlide === index, 'opacity-0 z-0': currentSlide !== index }"
-          >
-            <div class="absolute inset-0">
-              <img :src="item.image || fallbackNewsImages[index % fallbackNewsImages.length]" :alt="item.title" class="w-full h-full object-cover" />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-            </div>
-            <div class="relative h-full flex flex-col justify-end z-10 pb-12 px-6">
-              <h2 class="text-3xl font-bold text-white mb-3 leading-tight">{{ item.title }}</h2>
-              <p class="text-white/90 max-w-3xl">{{ item.summary }}</p>
-            </div>
-          </div>
-          <div class="absolute bottom-2 left-0 right-0 z-20 px-6 flex items-center justify-between">
-            <div class="flex space-x-2">
-              <button
-                v-for="(item, idx) in slidesForActive"
-                :key="'past-ind-'+idx"
-                @click="goToSlide(idx)"
-                class="w-3 h-3 rounded-full transition-all duration-300"
-                :class="{ 'w-8 bg-white': currentSlide === idx, 'bg-white/40': currentSlide !== idx }"
-              />
-            </div>
-            <div class="flex items-center space-x-3">
-              <button @click="toggleAutoplay" class="p-2 text-white/70 hover:text-white transition text-sm">{{ autoplay ? 'Pause' : 'Play' }}</button>
-              <button @click="prevSlide" class="p-2 text-white/70 hover:text-white transition">‹</button>
-              <button @click="nextSlide" class="p-2 text-white/70 hover:text-white transition">›</button>
-            </div>
-          </div>
-        </section>
+      <section v-if="isNewsLanding && newsItemsForActive.length" class="mt-8">
+        <ProjectNewsLanding
+          :items="newsItemsForActive"
+          :active-tab="activeTab"
+          :page-size="3"
+          :fallback-images="fallbackNewsImages"
+        />
       </section>
 
-      <section v-if="newsItemsForActive.length" class="mt-8">
+      <section v-if="newsItemsForActive.length && !isNewsLanding" class="mt-8">
         <h3 class="text-xl font-semibold text-gray-900 mb-4">Latest Updates</h3>
 
         <div class="grid md:grid-cols-3 gap-6">

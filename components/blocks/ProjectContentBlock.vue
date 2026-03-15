@@ -37,7 +37,7 @@ const resolveLogoUrl = (value?: string) => {
 
 <template>
   <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-    <div v-if="show_header !== false" class="px-6 py-5 bg-gradient-to-r" :class="themeToHeader(theme)">
+    <div v-if="show_header !== false" class="not-prose px-6 py-3 bg-gradient-to-r" :class="themeToHeader(theme)">
       <div class="flex items-center gap-3">
         <img
           v-if="show_logo && logo"
@@ -45,7 +45,7 @@ const resolveLogoUrl = (value?: string) => {
           :alt="`${title || 'Project'} logo`"
           class="h-10 w-10 object-contain rounded bg-white/70 p-1 border border-gray-200"
         />
-        <h2 class="text-3xl font-bold text-gray-900 mb-1">{{ title }}</h2>
+        <div class="text-3xl leading-tight font-bold text-gray-900 m-0">{{ title }}</div>
       </div>
       <div v-if="label" class="flex items-center text-sm" :class="themeToHeader(theme).split(' ').pop()">
         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -60,4 +60,3 @@ const resolveLogoUrl = (value?: string) => {
     </div>
   </div>
 </template>
-
