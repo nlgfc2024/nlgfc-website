@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
 import BlocksRenderer from '~/components/BlocksRenderer.vue'
 import { usePageBlocks } from '~/composables/usePageBlocks'
@@ -8,10 +8,10 @@ definePageMeta({ title: 'Delivery Systems' })
 
 const { data: pages, pending, error: PageError } = usePageBlocks([
   'msr-header', 'msr-dashboard', 'msr-key-features','laifmis-header','laifmis-key-features',
-  'e-payment-header','e-payment-key-features','cs-epwp-header','cs-epwp-picture',
-  'cs-epwp-key-features','dgrm-header','dgrm-picture','dgrm-key-features','lapas-header','lapas-picture',
+  'digital-payment-services-header','digital-picture','digital-payment-services-key-features','cs-epwp-header','cs-epwp-picture',
+  'cs-epwp-key-features','dgrm-header','dgrm-picture','dgrm-key-features','lapas-header','lapas-dashboard',
   'lapas-key-features','comsip-header','comsip-key-features','pmis-header','pmis-dashboard','pmis-key-features',
-  'sctp-header','sctp-picture','sctp-key-features'
+  'sctp-header','sctp-key-features'
 ])
 
 const route = useRoute()
@@ -21,45 +21,15 @@ const activeTab = ref('msr') // Default tab
 // This array defines the sidebar navigation structure with descriptions
 // Delivery systems data for the GeneralSidebar component
 const deliverySystemsData = [
-  
-// Each delivery system item contains an id, title, and description
- { 
-    id: 'comsip', 
-    title: 'Community Savings and Investment Promotion',
-},
-{ 
-    id: 'dgrm', 
-    title: 'Digital Grievance Redress',
-},
-{ 
-    id: 'e-payments', 
-    title: 'E-Payment Systems',
-},
-{ 
-    id: 'laifmis', 
-    title: 'Local Authorities Integrated Financial Management Information System'
-},
-{ 
-    id: 'lapas', 
-    title: 'Local Athourities Performance Assessment System'
-},
-{  
-    id: 'msr', 
-    title: 'Malawi Social Registry'
-},
-{ 
-    id: 'pmis', 
-    title: 'Project Monitoring System'
-},
-{ 
-    id: 'publicworks', 
-    title: 'Public Works MIS'
-},
-{ 
-    id: 'sctpmis', 
-    title: 'Social Cash Transfer Programme MIS'
-}
-
+  { id: 'laifmis', title: 'Local Authorities Integrated Financial MIS' },
+  { id: 'comsip', title: 'COMSIP Integrated MIS' },
+  { id: 'dgrm',   title: 'Digital Grievance Redress Mechanism MIS' },
+  { id: 'digital-payment-services', title: 'Digital Payment Services' },
+  { id: 'lapas',  title: 'Local Athourities Performance Assessment System' },
+  { id: 'msr',    title: 'Malawi Social Registry' },
+  { id: 'pmis',   title: 'Project Monitoring System' },
+  { id: 'publicworks', title: 'Public Works MIS' },
+  { id: 'sctpmis', title: 'Social Cash Transfer Programme MIS' },
 ]
 
 // Keep original structure for backward compatibility with existing template code
@@ -69,26 +39,21 @@ const projectGroups = [
     items: deliverySystemsData
   }
 ]
-const partnerLogos = [
-  { src: "/images/deliverySystems/Airtel _money.png", alt: "Airtel Money" },
-  { src: "/images/deliverySystems/mpamba_logo.png", alt: "TNM Mpamba Logo" },
-  { src: "/images/deliverySystems/fdh_bank.png", alt: "FDH Logo" },
-  { src: "/images/deliverySystems/nbs_bank.png", alt: "FBS Bank Logo" },
-  { src: "/images/deliverySystems/Standard_bank.png", alt: "Standard Bank" },
-  { src: "/images/deliverySystems/kaku_pay.jpeg", alt: "Kaku Pay" }
-]
+const config = useRuntimeConfig()
+const apiBase = (config.public.apiBase as string | undefined)?.replace(/\/$/, '') || ''
 
-const props = defineProps({
-  partnerLogos: {
-    type: Array,
-    required: true,
-    validator: (logos) => logos.every(logo => logo.src && logo.alt)
-  },
-  scrollDuration: {
-    type: Number,
-    default: 20
-  }
-})
+const { data: partnersRaw } = await useAsyncData('partners', () =>
+  $fetch<{ id: number; name: string; logo: string }[]>(`${apiBase}/api/partners`)
+)
+
+const partnerLogos = computed(() =>
+  (partnersRaw.value ?? []).map(p => ({
+    src: `${apiBase}/storage/${p.logo}`,
+    alt: p.name
+  }))
+)
+
+const scrollDuration = ref(20)
 // Sample story data for LAIFMIS
 const grm= [
   {
@@ -99,7 +64,7 @@ const grm= [
   }
 ]
 
-// Sample story data for E-Payments
+// Sample story data for digital-payment-services
 const ePaymentsStories = [
   {
     id: 1,
@@ -159,7 +124,7 @@ watch(() => route.hash, (newHash) => {
     updateActiveTabFromHash(newHash.replace('#', ''))
   }
 })
-function updateActiveTabFromHash(hash) {
+function updateActiveTabFromHash(hash: string) {
   for (const group of projectGroups) {
     const match = group.items.find(item => item.id === hash)
     if (match) {
@@ -191,10 +156,10 @@ function updateActiveTabFromHash(hash) {
 <div v-if="item.id === 'msr'" class="prose max-w-none">
   <BlocksRenderer :blocks="pages?.['msr-header']?.blocks || []" />
   
-  <!-- MSR Dashboard-->
-
+<!-- MSR Dashboard-->
+<div class="mt-10">
   <BlocksRenderer :blocks="pages?.['msr-dashboard']?.blocks || []" />
-  
+</div>
   <!-- Key Features Section -->
   <BlocksRenderer :blocks="pages?.['msr-key-features']?.blocks || []" />
   
@@ -211,17 +176,23 @@ function updateActiveTabFromHash(hash) {
 </div>
 
             
-            <!-- E-Payment System section -->
-<div v-else-if="item.id === 'e-payments'" class="prose max-w-none">
-  <BlocksRenderer :blocks="pages?.['e-payment-header']?.blocks || []" />
+            <!--digital-payment-services section -->
+<div v-else-if="item.id === 'digital-payment-services'" class="prose max-w-none">
+  <BlocksRenderer :blocks="pages?.['digital-payment-services-header']?.blocks || []" />
   
 
-  <!-- Key Features Section -->
-  <BlocksRenderer :blocks="pages?.['e-payment-key-features']?.blocks || []" />
+<!-- digital PICTURE--> 
+ <div class="flex justify-center mt-10"> 
+  <BlocksRenderer :blocks="pages?.['digital-picture']?.blocks || []" /> 
+</div>
 
-  <!-- E-Payment Service Providers Section -->
+
+  <!-- Key Features Section -->
+  <BlocksRenderer :blocks="pages?.['digital-payment-services-key-features']?.blocks || []" />
+
+  <!-- DIGITAL Service Providers Section -->
   <div class="mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">E-Payment Service Providers</h3>
+    <h3 class="text-lg font-semibold text-gray-900 mb-6 text-center">Digital Payments Service Providers</h3>
     
     <!-- Slider Container -->
     <div class="relative overflow-hidden bg-white rounded-lg shadow-sm" aria-label="Partner logos carousel">
@@ -298,10 +269,7 @@ function updateActiveTabFromHash(hash) {
 <div v-else-if="item.id === 'sctpmis'" class="prose max-w-none">
   <BlocksRenderer :blocks="pages?.['sctp-header']?.blocks || []" />
   
-  <!-- SCTP Picture -->
-  <div class="flex justify-center mt-10">
-    <BlocksRenderer :blocks="pages?.['sctp-picture']?.blocks || []" />
-  </div>
+
 
   <!-- Key Features Section -->
   <BlocksRenderer :blocks="pages?.['sctp-key-features']?.blocks || []" />
@@ -311,11 +279,10 @@ function updateActiveTabFromHash(hash) {
 <div v-else-if="item.id === 'lapas'" class="prose max-w-none">
   <BlocksRenderer :blocks="pages?.['lapas-header']?.blocks || []" />
 
-<!-- lapas PICTURE--> 
- <div class="flex justify-center mt-10"> 
-  <BlocksRenderer :blocks="pages?.['lapas-picture']?.blocks || []" /> 
+<!-- lapas dashboard--> 
+<div class="mt-10">
+  <BlocksRenderer :blocks="pages?.['lapas-dashboard']?.blocks || []" />
 </div>
-
   <!-- Key Features Section -->
   <BlocksRenderer :blocks="pages?.['lapas-key-features']?.blocks || []" />
 </div>
@@ -333,7 +300,9 @@ function updateActiveTabFromHash(hash) {
   <BlocksRenderer :blocks="pages?.['pmis-header']?.blocks || []" />
 
   <!-- PMIS Dashboard -->
-    <BlocksRenderer :blocks="pages?.['pmis-dashboard']?.blocks || []" />
+<div class="mt-10">
+  <BlocksRenderer :blocks="pages?.['pmis-dashboard']?.blocks || []" />
+</div>
 
   <!-- Key Features Section -->
   <BlocksRenderer :blocks="pages?.['pmis-key-features']?.blocks || []" />
