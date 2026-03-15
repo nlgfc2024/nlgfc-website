@@ -9,6 +9,10 @@ import AppFooter from '../components/AppFooter.vue';
 import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
 
 const route = useRoute();
+const normalizedRoutePath = computed(() => {
+  const path = String(route.path || '').replace(/\/+$/, '')
+  return path || '/'
+})
 
 // Inject sidebar data from pages (if available)
 // const sidebarData = inject('sidebarData', null);
@@ -50,11 +54,14 @@ const opportunitySections = [
 
 const sidebarProps = computed(() => {
   // Define pages that should NOT have a sidebar
-  const noSidebarPages = ['/', '/index2'];
-  const isLocalAuthoritiesPage = route.path.startsWith('/localAuthorities/alldistricts');
+  const noSidebarPages = ['/', '/index2', '/news'];
+  const isLocalAuthoritiesPage = normalizedRoutePath.value.includes('/localAuthorities/alldistricts');
+  const isNoSidebarPage = noSidebarPages.some((page) =>
+    normalizedRoutePath.value === page || normalizedRoutePath.value.endsWith(page)
+  )
   
   // Return null (no sidebar) for specific pages
-  if (noSidebarPages.includes(route.path) || isLocalAuthoritiesPage) {
+  if (isNoSidebarPage || isLocalAuthoritiesPage) {
     return null;
   }
   

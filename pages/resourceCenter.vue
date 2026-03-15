@@ -47,6 +47,32 @@
         
         <!-- News Layout - Simple List Similar to news.vue -->
         <div v-if="currentDisplayType === 'News'" class="rounded-lg bg-white p-4 shadow-lg sm:p-6">
+          <div class="mb-8 overflow-hidden rounded-[28px] bg-gradient-to-br from-gray-950 via-gray-900 to-emerald-800 text-white shadow-xl">
+            <div class="grid gap-6 px-6 py-8 sm:px-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+              <div>
+                <p class="mb-3 inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-100">
+                  Resource Center
+                </p>
+                <h4 class="max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">
+                  Latest updates, announcements, and stories from NLGFC
+                </h4>
+                <p class="mt-4 max-w-2xl text-sm leading-6 text-emerald-50/90 sm:text-base">
+                  Browse recent news, featured developments, and timely updates from across our programs, local authorities, and institutional work.
+                </p>
+              </div>
+              <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                <div class="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur">
+                  <p class="text-2xl font-semibold">{{ filteredDocuments.length }}</p>
+                  <p class="mt-1 text-xs uppercase tracking-[0.18em] text-emerald-100">Visible Stories</p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur">
+                  <p class="text-2xl font-semibold">{{ displayedDocuments.length }}</p>
+                  <p class="mt-1 text-xs uppercase tracking-[0.18em] text-emerald-100">News Total</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div v-if="newsLoading" class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
             <div v-for="n in 6" :key="n" class="animate-pulse overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
               <div class="aspect-[4/3] w-full bg-gray-200"></div>
@@ -64,7 +90,7 @@
 
           <div v-else class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
             <div
-              v-for="newsItem in filteredDocuments"
+              v-for="newsItem in paginatedDocuments"
               :key="newsItem.id"
             >
               <nuxt-link
@@ -118,6 +144,17 @@
               ></path>
             </svg>
             <p class="text-sm">No news articles available.</p>
+          </div>
+
+          <div
+            v-if="!newsLoading && !newsError && shouldPaginateCurrentView && filteredDocuments.length > 0"
+            class="mt-6 overflow-hidden rounded-lg border border-gray-200 bg-white"
+          >
+            <Pagination
+              v-model:currentPage="currentPage"
+              v-model:itemsPerPage="itemsPerPage"
+              :total-items="filteredDocuments.length"
+            />
           </div>
         </div>
 
@@ -195,36 +232,244 @@
           </div>
         </div>
 
-        <!-- Image Gallery Iframe Layout -->
-        <div
-            v-else-if="currentDisplayType === 'Image Gallery'"
-            class="w-full">
-          <div
-              v-for="(doc, index) in filteredDocuments"
-              :key="doc.name"
-              class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-6 transition-all duration-300 hover:shadow-lg"
-          >
-            <!-- Header with gallery info -->
-            <div class="bg-gradient-to-r from-gray-900 to-emerald-600 text-white p-4">
-              <h4 class="font-semibold text-lg mb-1">{{ doc.name }}</h4>
-              <p class="text-emerald-100 text-sm">{{ doc.description }}</p>
-              <span class="inline-block text-xs bg-white bg-opacity-20 text-emerald-200 rounded px-2 py-1 mt-2">
-                {{ doc.type }}
-              </span>
-            </div>
-
-            <!-- Iframe container -->
-            <div class="relative h-[320px] w-full sm:h-[420px] md:h-[520px] lg:h-[600px]">
-              <iframe
-                  :src="doc.link"
-                  class="w-full h-full border-0"
-                  frameborder="0"
-                  :title="doc.name"
-                  allowfullscreen
-                  loading="lazy"
-              ></iframe>
+        <!-- Image Gallery Layout -->
+        <div v-else-if="currentDisplayType === 'Image Gallery' && currentGalleryLoading" class="space-y-6">
+          <div class="overflow-hidden rounded-[28px] bg-gradient-to-br from-gray-950 via-gray-900 to-emerald-800 p-6 text-white shadow-xl sm:p-8">
+            <div class="animate-pulse space-y-4">
+              <div class="h-4 w-28 rounded bg-white/20"></div>
+              <div class="h-10 w-2/3 rounded bg-white/20"></div>
+              <div class="h-4 w-1/2 rounded bg-white/20"></div>
             </div>
           </div>
+          <div class="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
+            <div class="h-[420px] animate-pulse rounded-[28px] bg-gray-200"></div>
+            <div class="grid grid-cols-2 gap-4">
+              <div v-for="n in 4" :key="n" class="aspect-[4/5] animate-pulse rounded-[24px] bg-gray-200"></div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else-if="currentDisplayType === 'Image Gallery' && currentGalleryError" class="rounded-lg bg-white p-8 text-center shadow-sm">
+          <p class="text-sm text-gray-600">Image gallery items could not be loaded from the API.</p>
+        </div>
+
+        <div v-else-if="currentDisplayType === 'Image Gallery'" class="space-y-6">
+          <div class="overflow-hidden rounded-[28px] bg-gradient-to-br from-gray-950 via-gray-900 to-emerald-800 text-white shadow-xl">
+            <div class="grid gap-6 px-6 py-8 sm:px-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+              <div>
+                <p class="mb-3 inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-100">
+                  Knowledge Management
+                </p>
+                <h4 class="max-w-2xl text-3xl font-semibold leading-tight sm:text-4xl">
+                  Moments from local government work across Malawi
+                </h4>
+                <p class="mt-4 max-w-2xl text-sm leading-6 text-emerald-50/90 sm:text-base">
+                  Explore field photography, project highlights, and documentation snapshots from the NLGFC image archive.
+                </p>
+              </div>
+              <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                <div class="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur">
+                  <p class="text-2xl font-semibold">{{ filteredDocuments.length }}</p>
+                  <p class="mt-1 text-xs uppercase tracking-[0.18em] text-emerald-100">Visible Images</p>
+                </div>
+                <div class="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur">
+                  <p class="text-2xl font-semibold">{{ displayedDocuments.length }}</p>
+                  <p class="mt-1 text-xs uppercase tracking-[0.18em] text-emerald-100">Archive Total</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="filteredDocuments.length === 0" class="rounded-lg bg-white p-8 text-center shadow-sm">
+            <p class="text-sm text-gray-600">
+              {{ searchQuery ? 'No gallery images matched your search.' : 'No image gallery items are available right now.' }}
+            </p>
+          </div>
+
+          <div v-else class="grid gap-6 lg:grid-cols-[1.35fr_0.95fr]">
+            <div
+              v-if="featuredGalleryImage"
+              class="group relative overflow-hidden rounded-[28px] bg-gray-900 text-left shadow-xl"
+              @click="openGalleryImage(featuredGalleryImage)"
+            >
+              <img
+                :src="featuredGalleryImage.image"
+                :alt="featuredGalleryImage.name"
+                class="h-full min-h-[420px] w-full object-cover transition duration-700 group-hover:scale-105"
+                loading="lazy"
+                @error="handleGalleryImageError"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent"></div>
+              <div class="absolute left-4 top-4 z-10 flex gap-2 sm:left-6 sm:top-6">
+                <button
+                  type="button"
+                  class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur transition hover:bg-black/65"
+                  aria-label="Previous image"
+                  @click.stop="showPreviousGalleryImage"
+                >
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur transition hover:bg-black/65"
+                  aria-label="Next image"
+                  @click.stop="showNextGalleryImage"
+                >
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </button>
+              </div>
+              <div class="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+                <div class="mb-4 flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
+                  <span class="rounded-full bg-white/10 px-3 py-1 backdrop-blur">Featured Image</span>
+                  <span v-if="featuredGalleryImage.author">{{ featuredGalleryImage.author }}</span>
+                </div>
+                <h5 class="max-w-2xl text-2xl font-semibold text-white sm:text-3xl">
+                  {{ featuredGalleryImage.name }}
+                </h5>
+                <p class="mt-3 max-w-2xl text-sm leading-6 text-white/85">
+                  {{ featuredGalleryImage.description }}
+                </p>
+                <div class="mt-5 flex flex-wrap items-center gap-3">
+                  <span class="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs text-white/90 backdrop-blur">
+                    {{ featuredGalleryImage.date ? formatDate(featuredGalleryImage.date) : 'Recently added' }}
+                  </span>
+                  <span class="inline-flex items-center gap-2 text-sm font-medium text-white">
+                    Open preview
+                    <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
+              <button
+                v-for="doc in galleryCards"
+                :key="doc.id"
+                type="button"
+                class="group overflow-hidden rounded-[24px] border border-gray-200 bg-white text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                @click="selectFeaturedGalleryImage(doc.id)"
+              >
+                <div class="grid h-full sm:grid-cols-[180px_1fr] lg:grid-cols-[160px_1fr]">
+                  <div class="relative overflow-hidden bg-gray-100">
+                    <img
+                      :src="doc.image"
+                      :alt="doc.name"
+                      class="h-full min-h-[200px] w-full object-cover transition duration-500 group-hover:scale-105"
+                      loading="lazy"
+                      @error="handleGalleryImageError"
+                    />
+                  </div>
+                  <div class="flex flex-col justify-between p-5">
+                    <div>
+                      <p class="mb-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-700">
+                        {{ doc.author || 'NLGFC Archive' }}
+                      </p>
+                      <h5 class="text-lg font-semibold leading-snug text-gray-900">
+                        {{ doc.name }}
+                      </h5>
+                      <p class="mt-3 line-clamp-3 text-sm leading-6 text-gray-600">
+                        {{ doc.description }}
+                      </p>
+                    </div>
+                    <div class="mt-5 flex items-center justify-between gap-3 text-xs text-gray-500">
+                      <span>{{ doc.date ? formatDate(doc.date) : 'Recently added' }}</span>
+                      <span class="inline-flex items-center gap-1 font-medium text-emerald-700">
+                        View image
+                        <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div
+            v-if="shouldPaginateCurrentView && filteredDocuments.length > 0"
+            class="overflow-hidden rounded-lg border border-gray-200 bg-white"
+          >
+            <Pagination
+              v-model:currentPage="currentPage"
+              v-model:itemsPerPage="itemsPerPage"
+              :total-items="filteredDocuments.length"
+            />
+          </div>
+
+          <teleport to="body">
+            <div
+              v-if="selectedGalleryImage"
+              class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+              @click.self="closeGalleryImage"
+            >
+              <div class="relative max-h-[90vh] w-full max-w-6xl overflow-hidden rounded-[28px] bg-white shadow-2xl">
+                <button
+                  type="button"
+                  class="absolute right-4 top-4 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/70 text-white transition hover:bg-black"
+                  @click="closeGalleryImage"
+                >
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+
+                <div class="grid max-h-[90vh] overflow-y-auto lg:grid-cols-[1.45fr_0.85fr]">
+                  <div class="bg-gray-950">
+                    <img
+                      :src="selectedGalleryImage.image"
+                      :alt="selectedGalleryImage.name"
+                      class="h-full max-h-[70vh] w-full object-contain"
+                      @error="handleGalleryImageError"
+                    />
+                  </div>
+                  <div class="flex flex-col justify-between p-6 sm:p-8">
+                    <div>
+                      <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-700">
+                        {{ selectedGalleryImage.author || 'NLGFC Archive' }}
+                      </p>
+                      <h4 class="mt-3 text-2xl font-semibold text-gray-900">
+                        {{ selectedGalleryImage.name }}
+                      </h4>
+                      <p class="mt-4 text-sm leading-7 text-gray-600">
+                        {{ selectedGalleryImage.description }}
+                      </p>
+                    </div>
+
+                    <div class="mt-8 space-y-4">
+                      <p class="text-sm text-gray-500">
+                        {{ selectedGalleryImage.date ? formatDate(selectedGalleryImage.date) : 'Recently added' }}
+                      </p>
+                      <div class="flex flex-wrap gap-3">
+                        <a
+                          :href="selectedGalleryImage.viewLink"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="inline-flex items-center rounded-full bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
+                        >
+                          Open source
+                        </a>
+                        <a
+                          :href="selectedGalleryImage.downloadLink"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="inline-flex items-center rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-gray-400 hover:bg-gray-50"
+                        >
+                          Download
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </teleport>
         </div>
 
         <!-- Default Document Grid Layout -->
@@ -318,7 +563,7 @@
           </transition-group>
 
           <div
-            v-if="isApiDocumentSubgroupActive && shouldPaginateCurrentView && filteredDocuments.length > 0"
+            v-if="shouldPaginateCurrentView && filteredDocuments.length > 0"
             class="mt-6 overflow-hidden rounded-lg border border-gray-200 bg-white"
           >
             <Pagination
@@ -423,9 +668,7 @@ const resourceGroups = [
       {
         id: 'image-gallery',
         subgroup: 'Image Gallery',
-        items: [
-          { name: 'Community Event Photos', link: 'https://demo2.gov.mw/nlgfc-portal/public/?page=1', type: 'Gallery', description: 'Gallery showcasing community events, activities and projects.' }
-        ]
+        items: []
       },
       {
         id: 'video',
@@ -715,7 +958,7 @@ const documentItems = computed(() => {
 
 const { data: videosData, loading: videosLoading, error: videosError } = useApiData(
   'resource-center-videos',
-  '/api/videos?per_page=50',
+  '/api/videos?per_page=8',
   {
     default: () => ({
       data: [],
@@ -740,6 +983,135 @@ const videoItems = computed(() => {
       date: video.created_at || video.updated_at || '',
     }))
 })
+
+const { data: imageGalleryData, loading: imageGalleryLoading, error: imageGalleryError } = useApiData(
+  'resource-center-image-gallery',
+  '/api/image-galleries?per_page=50',
+  {
+    default: () => ({
+      data: [],
+    }),
+  }
+)
+
+const galleryImages = computed(() => {
+  if (Array.isArray(imageGalleryData.value)) return imageGalleryData.value
+  return Array.isArray(imageGalleryData.value?.data) ? imageGalleryData.value.data : []
+})
+
+const getResolvedApiUrl = (path) => {
+  if (!path) return ''
+  if (path.startsWith('http://') || path.startsWith('https://')) return path
+  return `${newsBaseUrl.value}${path.startsWith('/') ? path : `/${path}`}`
+}
+
+const fallbackGalleryImage = '/images/samples/default-news.jpg'
+
+const extractGoogleDriveFileId = (value) => {
+  if (!value || typeof value !== 'string') return null
+
+  try {
+    const parsedUrl = new URL(value)
+    const host = parsedUrl.hostname.toLowerCase()
+
+    if (!host.includes('google.com')) return null
+
+    const filePathMatch = parsedUrl.pathname.match(/\/file\/d\/([^/]+)/)
+    if (filePathMatch?.[1]) {
+      return filePathMatch[1]
+    }
+
+    return parsedUrl.searchParams.get('id')
+  } catch {
+    return null
+  }
+}
+
+const getRenderableGalleryImageUrl = (image) => {
+  const driveFileId = extractGoogleDriveFileId(
+    image?.image_link || image?.preview_url || image?.download_url || image?.view_endpoint
+  )
+
+  if (driveFileId) {
+    return `https://drive.google.com/thumbnail?id=${driveFileId}&sz=w2000`
+  }
+
+  return getResolvedApiUrl(image?.preview_url || image?.view_endpoint || image?.image_link) || fallbackGalleryImage
+}
+
+const imageGalleryItems = computed(() => {
+  return [...galleryImages.value]
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    .map((image) => ({
+      id: image.id,
+      name: image.title || 'Untitled image',
+      description: stripHtmlTags(image.description || '') || 'No description available.',
+      type: 'Image',
+      image: getRenderableGalleryImageUrl(image),
+      viewLink: getResolvedApiUrl(image.view_endpoint || image.preview_url || image.image_link),
+      downloadLink: getResolvedApiUrl(image.download_endpoint || image.download_url || image.image_link),
+      date: image.created_at || image.updated_at || '',
+      author: image.user?.name || 'NLGFC',
+    }))
+})
+
+const selectedGalleryImage = ref(null)
+const selectedFeaturedGalleryImageId = ref(null)
+
+const featuredGalleryImage = computed(() => {
+  if (!isImageGalleryActive.value || filteredDocuments.value.length === 0) return null
+
+  return (
+    filteredDocuments.value.find((image) => image.id === selectedFeaturedGalleryImageId.value) ||
+    filteredDocuments.value[0] ||
+    null
+  )
+})
+
+const galleryCards = computed(() => {
+  if (!isImageGalleryActive.value) return []
+  return paginatedDocuments.value.filter((image) => image.id !== featuredGalleryImage.value?.id)
+})
+
+const openGalleryImage = (image) => {
+  selectedGalleryImage.value = image
+}
+
+const closeGalleryImage = () => {
+  selectedGalleryImage.value = null
+}
+
+const handleGalleryImageError = (event) => {
+  event.target.src = fallbackGalleryImage
+}
+
+const syncGalleryPageToImage = (imageId) => {
+  const index = filteredDocuments.value.findIndex((image) => image.id === imageId)
+  if (index === -1) return
+
+  currentPage.value = Math.floor(index / itemsPerPage.value) + 1
+}
+
+const selectFeaturedGalleryImage = (imageId) => {
+  selectedFeaturedGalleryImageId.value = imageId
+  syncGalleryPageToImage(imageId)
+}
+
+const showPreviousGalleryImage = () => {
+  if (!featuredGalleryImage.value || filteredDocuments.value.length === 0) return
+
+  const currentIndex = filteredDocuments.value.findIndex((image) => image.id === featuredGalleryImage.value.id)
+  const previousIndex = currentIndex <= 0 ? filteredDocuments.value.length - 1 : currentIndex - 1
+  selectFeaturedGalleryImage(filteredDocuments.value[previousIndex].id)
+}
+
+const showNextGalleryImage = () => {
+  if (!featuredGalleryImage.value || filteredDocuments.value.length === 0) return
+
+  const currentIndex = filteredDocuments.value.findIndex((image) => image.id === featuredGalleryImage.value.id)
+  const nextIndex = currentIndex === filteredDocuments.value.length - 1 ? 0 : currentIndex + 1
+  selectFeaturedGalleryImage(filteredDocuments.value[nextIndex].id)
+}
 
 /**
  * Computed property for filtered documents based on search
@@ -842,6 +1214,9 @@ const displayedDocuments = computed(() => {
       if (group.id === 'knowledge-management' && group.subgroups[activeSubgroup.value]?.id === 'video') {
         return videoItems.value;
       }
+      if (group.id === 'knowledge-management' && group.subgroups[activeSubgroup.value]?.id === 'image-gallery') {
+        return imageGalleryItems.value;
+      }
       return group.subgroups[activeSubgroup.value].items || [];
     } 
     // Check if a main group with direct items (like News) is selected
@@ -867,6 +1242,12 @@ const isVideoActive = computed(() => {
   return group?.id === 'knowledge-management' && group.subgroups?.[activeSubgroup.value]?.id === 'video'
 })
 
+const isImageGalleryActive = computed(() => {
+  if (activeGroup.value === null || activeSubgroup.value === null) return false
+  const group = resourceGroups[activeGroup.value]
+  return group?.id === 'knowledge-management' && group.subgroups?.[activeSubgroup.value]?.id === 'image-gallery'
+})
+
 const currentDocumentsLoading = computed(() => {
   return isApiDocumentSubgroupActive.value && (
     documentsLoading.value || (!activeDocumentCategoryId.value && !documentCategoriesData.value?.length)
@@ -876,8 +1257,10 @@ const currentDocumentsLoading = computed(() => {
 const currentDocumentsError = computed(() => isApiDocumentSubgroupActive.value && documentsError.value)
 const currentVideosLoading = computed(() => isVideoActive.value && videosLoading.value)
 const currentVideosError = computed(() => isVideoActive.value && videosError.value)
+const currentGalleryLoading = computed(() => isImageGalleryActive.value && imageGalleryLoading.value)
+const currentGalleryError = computed(() => isImageGalleryActive.value && imageGalleryError.value)
 const shouldPaginateCurrentView = computed(() => {
-  return (isApiDocumentSubgroupActive.value || isVideoActive.value) && filteredDocuments.value.length > itemsPerPage.value
+  return activeGroup.value !== null && filteredDocuments.value.length > itemsPerPage.value
 })
 
 // Computed property to generate a title for the content pane
@@ -910,16 +1293,30 @@ const currentDisplayType = computed(() => {
 watch([activeGroup, activeSubgroup], () => {
   updateUrlHash();
   currentPage.value = 1;
-  itemsPerPage.value = 6;
+  itemsPerPage.value = isImageGalleryActive.value ? 5 : 6;
+  selectedFeaturedGalleryImageId.value = null
+  if (!isImageGalleryActive.value) {
+    closeGalleryImage()
+  }
 });
 
 watch(searchQuery, () => {
   currentPage.value = 1;
+  if (isImageGalleryActive.value) {
+    selectedFeaturedGalleryImageId.value = null
+  }
 })
 
 watch([filteredDocuments, itemsPerPage], () => {
   if (currentPage.value > totalPages.value) {
     currentPage.value = totalPages.value
+  }
+
+  if (isImageGalleryActive.value && filteredDocuments.value.length > 0) {
+    const hasSelectedImage = filteredDocuments.value.some((image) => image.id === selectedFeaturedGalleryImageId.value)
+    if (!hasSelectedImage) {
+      selectedFeaturedGalleryImageId.value = filteredDocuments.value[0].id
+    }
   }
 })
 
