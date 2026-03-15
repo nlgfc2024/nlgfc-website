@@ -6,7 +6,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['express-interest', 'download'])
+const emit = defineEmits(['express-interest', 'download', 'view-details'])
 
 const formatDate = (dateString) => {
   if (!dateString) {
@@ -116,12 +116,12 @@ const getDocumentIcon = (type) => {
           <div class="flex flex-wrap gap-2">
             <button
                 v-for="document in (notice.documents || [])"
-                :key="document.name"
+                :key="document.id || document.name || document.original_name"
                 @click="emit('download', document, notice.title)"
                 class="flex items-center space-x-2 px-3 py-2 text-sm text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors"
             >
-              <Icon :name="getDocumentIcon(document.type)" class="w-4 h-4" />
-              <span>{{ document.name }}</span>
+              <Icon :name="getDocumentIcon(document.type || document.document_type)" class="w-4 h-4" />
+              <span>{{ document.title || document.name || document.original_name }}</span>
               <Icon name="heroicons:arrow-down-tray" class="w-4 h-4" />
             </button>
           </div>
@@ -137,7 +137,7 @@ const getDocumentIcon = (type) => {
       </div>
 
       <!-- Action Button -->
-      <div class="lg:w-40">
+      <div class="lg:w-44 space-y-2">
         <button
             v-if="noticeStatus === 'active'"
             @click="emit('express-interest', notice)"
@@ -147,7 +147,16 @@ const getDocumentIcon = (type) => {
           <span>Express Interest</span>
         </button>
 
-        <span v-else class="w-full px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 rounded-lg text-center block">
+        <button
+            v-if="noticeStatus === 'active' && notice.fundingSource === 'world_bank'"
+            @click="emit('view-details', notice)"
+            class="w-full px-4 py-2 text-sm font-medium text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors flex items-center justify-center space-x-2"
+        >
+          <Icon name="heroicons:information-circle" class="w-4 h-4" />
+          <span>View Details</span>
+        </button>
+
+        <span v-if="noticeStatus !== 'active'" class="w-full px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 rounded-lg text-center block">
           Expired
         </span>
       </div>
