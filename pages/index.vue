@@ -31,47 +31,164 @@ const props = defineProps({
 })
 
 const activeTab = ref('procurements')
+const config = useRuntimeConfig()
 
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'short', day: 'numeric' }
   return new Date(dateString).toLocaleDateString(undefined, options)
 }
 
-// Projects
-const projects = [
- {
-  title: 'SSRLP',
-  description: 'Social Support for Resilient Livelihoods Project focuses on reducing poverty and enhancing resilience in vulnerable communities through targeted interventions and capacity building.',
-  imagePath: '/images/samples/SSRLP logo(1).jpg',
-  url: '/projects/currentProjects#ssrlp-overview'
-},
+const stripHtml = (value = '') =>
+  String(value).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 
-  {
-    title: 'GESD',
-    description: 'Governance to Enable Service Delivery Project aims to improve local government capacity and citizen service access through institutional strengthening and policy reforms.',
-    imagePath: '/images/samples/PBG logo.png',
-    url: '/projects/currentProjects#gesd-overview'
+const { data: missionPagePayload } = useAsyncData(
+  'home:mission-vision-core-values',
+  async () => {
+    try {
+      return await $fetch(`${config.public.apiBase}/api/pages/mission-vision-core-values`)
+    } catch {
+      return null
+    }
   },
-  {
-    title: 'RCRP 2',
-    description: 'The second phase of the Climate Resilience Project supports districts in disaster preparedness and mitigation through infrastructure development and community training.',
-     imagePath: '/images/samples/RCRP LOGO- Final.png',
-    url: '/projects/currentProjects#rcrp-overview'
-  },
-  {
-    title: 'RCRP 1',
-    description: 'The first phase of the Climate Resilience Project focuses on disaster preparedness and mitigation through infrastructure development and community training.',
-     imagePath: '/images/samples/RCRP LOGO- Final.png',
-    url: '/projects/currentProjects#rcrp-overview'
-  },
-  {
-    title: 'GESD',
-    description: 'Governance to Enable Service Delivery Project aims to improve local government capacity and citizen service access through institutional strengthening and policy reforms.',
-    imagePath: '/images/samples/PBG logo.png',
-    url: '/projects/currentProjects#gesd-overview'
+  { server: true, default: () => null }
+)
+
+const missionVisionData = computed(() => {
+  const blocks = Array.isArray(missionPagePayload.value?.blocks) ? missionPagePayload.value.blocks : []
+
+  const headingBlock = blocks.find((b) => String(b?.type || '').includes('IconHeadingBlock'))
+  const missionBlock = blocks.find((b) => String(b?.type || '').includes('ProjectContentBlock') && String(b?.data?.title || '').toLowerCase() === 'mission')
+  const visionBlock = blocks.find((b) => String(b?.type || '').includes('ProjectContentBlock') && String(b?.data?.title || '').toLowerCase() === 'vision')
+  const valuesBlock = blocks.find((b) => String(b?.type || '').includes('BulletListBlock') && String(b?.data?.title || '').toLowerCase().includes('core values'))
+
+  const values = Array.isArray(valuesBlock?.data?.items)
+    ? valuesBlock.data.items
+        .map((item) => String(item?.label || '').trim())
+        .filter(Boolean)
+    : []
+
+  return {
+    heading: String(headingBlock?.data?.title || 'Our Mandate'),
+    subheading: String(
+      headingBlock?.data?.subheading ||
+      'Empowering local governments through innovative fiscal decentralization, robust financial management, and sustainable development initiatives.'
+    ),
+    mission: stripHtml(missionBlock?.data?.body || ''),
+    vision: stripHtml(visionBlock?.data?.body || ''),
+    values,
   }
+})
 
-]
+const resolveMediaUrl = (value) => {
+  if (!value || typeof value !== 'string') return null
+  if (value.startsWith('http')) return value
+  return `${config.public.apiBase}/storage/${value.replace(/^\/+/, '')}`
+}
+
+const { data: homeProjectsResponse } = useAsyncData(
+  'home:current-projects',
+  () => $fetch(`${config.public.apiBase}/api/projects?project_status=current&is_menu_visible=1&per_page=200`),
+  { server: true, default: () => ({ data: [] }) }
+)
+
+const pickProgramRepresentative = (items = []) => {
+  if (!items.length) return null
+  const nonNews = items.filter((p) => !p?.is_news_landing)
+  const pool = nonNews.length ? nonNews : items
+  return [...pool].sort((a, b) => {
+    const mediaScoreA = (a?.logo ? 1 : 0) + (a?.bg_image ? 1 : 0)
+    const mediaScoreB = (b?.logo ? 1 : 0) + (b?.bg_image ? 1 : 0)
+    if (mediaScoreA !== mediaScoreB) return mediaScoreB - mediaScoreA
+
+    const aOverview = /overview/i.test(String(a?.menu_title || a?.name || '')) ? 1 : 0
+    const bOverview = /overview/i.test(String(b?.menu_title || b?.name || '')) ? 1 : 0
+    if (aOverview !== bOverview) return bOverview - aOverview
+
+    return Number(a?.menu_order || 9999) - Number(b?.menu_order || 9999)
+  })[0]
+}
+
+const buildProjectCardTitle = (project) => {
+  if (String(project?.slug || '').toLowerCase() === 'cdf') return 'CDF'
+  const pg = String(project?.program_group || '').trim()
+  if (pg !== '') return pg.toUpperCase()
+  return String(project?.menu_title || project?.name || '')
+}
+
+const buildProjectCardDescription = (project, title) => {
+  const raw = String(project?.description || '').trim()
+  const normalized = raw.toLowerCase()
+  const titleNormalized = String(title || '').trim().toLowerCase()
+  if (!raw || normalized === titleNormalized || normalized === `${titleNormalized} overview`) {
+    return `${title} project details and updates.`
+  }
+  return raw
+}
+
+const projects = computed(() => {
+  const raw = Array.isArray(homeProjectsResponse.value?.data)
+    ? homeProjectsResponse.value.data
+    : []
+
+  const currentProjects = raw.filter((p) => String(p?.status?.slug || '').toLowerCase() === 'current')
+  const donorCurrent = currentProjects.filter((p) => {
+    const funding = String(p?.funding_type?.name || '').toLowerCase()
+    return funding.includes('donor')
+  })
+
+  const donorsByProgram = donorCurrent.reduce((acc, project) => {
+    const key = String(project?.program_group || project?.name || '').trim().toUpperCase()
+    if (!key) return acc
+    if (!acc[key]) acc[key] = []
+    acc[key].push(project)
+    return acc
+  }, {})
+
+  const donorRepresentatives = Object.entries(donorsByProgram)
+    .map(([program, items]) => ({
+      program,
+      project: pickProgramRepresentative(items),
+    }))
+    .filter((entry) => Boolean(entry.project))
+    .sort((a, b) => {
+      const am = Number(a.project?.menu_order ?? 9999)
+      const bm = Number(b.project?.menu_order ?? 9999)
+      if (am !== bm) return am - bm
+      const ad = Number(a.project?.display_order ?? 9999)
+      const bd = Number(b.project?.display_order ?? 9999)
+      return ad - bd
+    })
+    .slice(0, 3)
+    .map((entry) => entry.project)
+
+  const picked = [...donorRepresentatives]
+
+  const cdf = currentProjects.find((p) => String(p?.slug || '').toLowerCase() === 'cdf')
+  if (cdf) picked.push(cdf)
+
+  const unique = Array.from(new Map(picked.map((p) => [p.id, p])).values())
+
+  return unique
+    .sort((a, b) => {
+      const aIsCdf = String(a?.slug || '').toLowerCase() === 'cdf'
+      const bIsCdf = String(b?.slug || '').toLowerCase() === 'cdf'
+      if (aIsCdf !== bIsCdf) return aIsCdf ? 1 : -1
+      const am = Number(a?.menu_order ?? 9999)
+      const bm = Number(b?.menu_order ?? 9999)
+      if (am !== bm) return am - bm
+      const ad = Number(a?.display_order ?? 9999)
+      const bd = Number(b?.display_order ?? 9999)
+      return ad - bd
+    })
+    .map((project) => ({
+      id: project.id,
+      title: buildProjectCardTitle(project),
+      description: buildProjectCardDescription(project, buildProjectCardTitle(project)),
+      imagePath: resolveMediaUrl(project.logo),
+      backgroundImage: resolveMediaUrl(project.bg_image),
+      url: `/projects/currentProjects#${project.slug}`,
+    }))
+})
 
 // Opportunity tabs
 const opportunityTabs = ref([
@@ -234,9 +351,9 @@ const publications = ref([
         <div class="container mx-auto px-6 max-w-7xl">
           
           <div class="bg-white p-10 rounded-xl shadow-md mb-16 max-w-5xl mx-auto border-t-4 border-emerald-700 transform hover:scale-[1.01] transition-transform duration-300">
-            <h3 class="text-4xl font-bold text-gray-900 mb-4 text-center">Our Mandate</h3>
+            <h3 class="text-4xl font-bold text-gray-900 mb-4 text-center">{{ missionVisionData.heading }}</h3>
             <p class="text-gray-600 text-lg text-center leading-relaxed max-w-3xl mx-auto">
-              Empowering local governments through innovative fiscal decentralization, robust financial management, and sustainable development initiatives.
+              {{ missionVisionData.subheading }}
             </p>
           </div>
           
@@ -250,7 +367,7 @@ const publications = ref([
               </div>
               <h3 class="text-2xl font-semibold text-gray-900 mb-3 text-center">Our Vision</h3>
               <p class="text-gray-700 text-center leading-relaxed">
-                Pioneering effective, responsive, and sustainable financing solutions to empower thriving local governments.
+                {{ missionVisionData.vision || 'Pioneering effective, responsive, and sustainable financing solutions to empower thriving local governments.' }}
               </p>
             </div>
             
@@ -262,7 +379,7 @@ const publications = ref([
               </div>
               <h3 class="text-2xl font-semibold text-gray-900 mb-3 text-center">Our Mission</h3>
               <p class="text-gray-700 text-center leading-relaxed">
-                Delivering efficient technical, financial, and economic management services to optimize resources and elevate service delivery for local governments.
+                {{ missionVisionData.mission || 'Delivering efficient technical, financial, and economic management services to optimize resources and elevate service delivery for local governments.' }}
               </p>
             </div>
             
@@ -274,41 +391,15 @@ const publications = ref([
               </div>
               <h3 class="text-2xl font-semibold text-gray-900 mb-3 text-center">Core Values</h3>
               <ul class="grid grid-cols-2 gap-4 text-gray-700 w-full">
-                <li class="flex items-center">
+                <li
+                  v-for="(value, valueIndex) in (missionVisionData.values.length ? missionVisionData.values : ['Integrity', 'Transparency', 'Accountability', 'Innovation', 'Teamwork', 'Professionalism'])"
+                  :key="`core-value-${valueIndex}`"
+                  class="flex items-center"
+                >
                   <svg class="w-6 h-6 text-emerald-700 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                   </svg>
-                  Integrity
-                </li>
-                <li class="flex items-center">
-                  <svg class="w-6 h-6 text-emerald-700 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                  </svg>
-                  Transparency
-                </li>
-                <li class="flex items-center">
-                  <svg class="w-6 h-6 text-emerald-700 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                  </svg>
-                  Accountability
-                </li>
-                <li class="flex items-center">
-                  <svg class="w-6 h-6 text-emerald-700 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                  </svg>
-                  Innovation
-                </li>
-                <li class="flex items-center">
-                  <svg class="w-6 h-6 text-emerald-700 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                  </svg>
-                  Teamwork
-                </li>
-                <li class="flex items-center">
-                  <svg class="w-6 h-6 text-emerald-700 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                  </svg>
-                  Professionalism
+                  {{ value }}
                 </li>
               </ul>
             </div>
@@ -327,14 +418,14 @@ const publications = ref([
             </p>
           </div>
 
-          <div class="flex flex-col sm:flex-row gap-6 px-4 sm:px-0">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4 sm:px-0">
             <div
               v-for="(project, index) in projects"
-              :key="index"
-              class="group relative overflow-hidden rounded-2xl shadow-xl h-80 sm:h-64 w-full sm:w-56"
+              :key="project.id || index"
+              class="group relative overflow-hidden rounded-2xl shadow-xl h-80 sm:h-64 w-full"
             >
               <img
-                :src="`https://picsum.photos/600/400?random=${index + 10}`"
+                :src="project.backgroundImage || `https://picsum.photos/600/400?random=${index + 10}`"
                 :alt="project.title"
                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -349,29 +440,21 @@ const publications = ref([
                     class="w-full h-full object-contain"
                     loading="lazy"
                   />
-                  <svg
+                  <span
                     v-else
-                    class="w-6 h-6 sm:w-5 sm:h-5 text-primary-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                    class="text-primary-600 text-xs font-semibold"
                   >
-                    <path
-                      :d="project.iconPath"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                    ></path>
-                  </svg>
+                    {{ String(project.title || '').slice(0, 3).toUpperCase() }}
+                  </span>
                 </div>
 
                 <h3 class="text-xl sm:text-lg font-bold mb-2 line-clamp-1">{{ project.title }}</h3>
                 <p class="text-white/90 mb-4 line-clamp-2 text-sm">{{ project.description }}</p>
-                <a
-                  :href="project.url"
+                <NuxtLink
+                  :to="project.url"
                   class="inline-flex items-center text-sm font-medium text-white group-hover:text-primary-300 transition"
                 >
-                  Learn more
+                  Read more
                   <svg
                     class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
                     fill="none"
@@ -385,7 +468,7 @@ const publications = ref([
                       d="M14 5l7 7m0 0l-7 7m7-7H3"
                     ></path>
                   </svg>
-                </a>
+                </NuxtLink>
               </div>
             </div>
           </div>
