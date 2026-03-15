@@ -11,6 +11,7 @@ const router = useRouter()
 const config = useRuntimeConfig()
 
 const jobsPortalBase = computed(() => config.public.jobsPortalBase || 'http://localhost:3001')
+const procurementPortalBase = computed(() => config.public.procurementPortalBase || 'http://localhost:3002')
 
 const JOB_SECTION = 'jobs'
 const PROCUREMENT_SECTION = 'procurement'
@@ -155,19 +156,23 @@ const mapVacancy = (vacancy) => {
 const mapProcurement = (notice) => {
   const expiryDate = notice.closing_date
   const backendStatus = (notice.status || '').toLowerCase()
-  const status = backendStatus === 'active' && !isExpired(expiryDate) ? 'active' : 'expired'
+  const isPublished = backendStatus === 'published' || backendStatus === 'active'
+  const status = isPublished && !isExpired(expiryDate) ? 'active' : 'expired'
 
   return {
     id: notice.id,
+    noticeId: notice.notice_id || null,
     title: notice.title,
-    type: notice.type || 'Notice',
-    department: 'Procurement',
+    type: notice.procurement_method || notice.type || 'Notice',
+    fundingSource: notice.funding_source || null,
+    department: notice.procuring_entity || 'Procurement',
     publishDate: notice.created_at,
-    expiryDate,
-    url: notice.url || null,
+    expiryDate: notice.submission_deadline || expiryDate,
+    url: notice.maneps_marketplace_link || notice.url || null,
     estimatedValue: notice.reference ? `Ref: ${notice.reference}` : 'Refer to notice details',
     description: notice.description || 'No procurement description provided yet.',
     documents: toArray(notice.documents),
+    procurementMethod: notice.procurement_method || notice.type || null,
     status,
   }
 }
@@ -346,14 +351,43 @@ const handleExpressInterest = (notice) => {
     return
   }
 
+  if (notice?.fundingSource === 'world_bank') {
+    handleViewNoticeDetails(notice)
+    return
+  }
+
   const target = typeof notice?.url === 'string' ? notice.url.trim() : ''
   if (target) {
     window.location.href = target
   }
 }
 
+const handleViewNoticeDetails = (notice) => {
+  if (!process.client) {
+    return
+  }
+
+  const noticeId = notice?.id
+  if (!noticeId) {
+    return
+  }
+
+  const redirectPath = encodeURIComponent(`/tenders?notice_id=${noticeId}&source=nlgfc-website`)
+  window.location.href = `${procurementPortalBase.value}/auth/login?redirect=${redirectPath}`
+}
+
 const handleDownloadDocument = (document) => {
-  if (document?.url && process.client) {
+  if (!process.client) {
+    return
+  }
+
+  const relativeDownload = typeof document?.download_url === 'string' ? document.download_url : ''
+  if (relativeDownload) {
+    window.open(`${config.public.apiBase}${relativeDownload}`, '_blank')
+    return
+  }
+
+  if (document?.url) {
     window.open(document.url, '_blank')
   }
 }
@@ -445,6 +479,7 @@ const retryCurrentSection = () => {
             :key="notice.id"
             :notice="notice"
             @express-interest="handleExpressInterest"
+            @view-details="handleViewNoticeDetails"
             @download="handleDownloadDocument"
           />
         </template>
