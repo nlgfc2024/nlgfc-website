@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div class="container mx-auto px-4 py-6 sm:py-8 lg:py-12">
-      <div class="flex flex-col gap-8 lg:flex-row">
+    <div class="mx-auto w-full max-w-7xl px-4 py-6 sm:py-8 lg:py-12">
+      <div class="mx-auto flex flex-col gap-8 lg:flex-row lg:items-start">
         <div class="order-2 lg:order-1 lg:w-2/3">
           <div v-if="postsLoading" class="rounded-lg bg-white p-6 shadow-lg sm:p-8">
             <div class="space-y-4 animate-pulse">
@@ -20,7 +20,7 @@
           </div>
 
           <div v-else-if="selectedArticle">
-            <article class="overflow-hidden rounded-lg bg-white shadow-lg">
+            <article class="overflow-visible rounded-lg bg-white shadow-lg">
               <div class="p-5 sm:p-6 lg:p-8">
                 <div class="mb-3 flex items-center justify-between">
                   <time class="text-sm text-gray-500">{{ formatDate(selectedArticle.date) }}</time>
@@ -66,36 +66,71 @@
                   </div>
                 </div>
 
-                <div class="mt-8 border-t border-gray-200 pt-6">
+                <div class="mt-8 overflow-visible border-t border-gray-200 pt-6">
                   <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p class="text-sm font-medium text-gray-700">Share this article</p>
                       <p class="text-xs text-gray-500">Send this news story to your audience.</p>
                     </div>
-                    <div class="flex flex-wrap gap-3">
-                      <a
-                        :href="shareLinks.facebook"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="inline-flex items-center rounded-full bg-[#1877F2] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
-                      >
-                        Facebook
-                      </a>
-                      <a
-                        :href="shareLinks.whatsapp"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="inline-flex items-center rounded-full bg-[#25D366] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
-                      >
-                        WhatsApp
-                      </a>
+                    <div class="relative overflow-visible">
                       <button
                         type="button"
-                        class="inline-flex items-center rounded-full bg-[#E4405F] px-4 py-2 text-sm font-medium text-white transition hover:opacity-90"
-                        @click="shareOnInstagram"
+                        class="inline-flex items-center gap-2 rounded-full bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-800"
+                        :aria-expanded="isShareMenuOpen"
+                        aria-haspopup="true"
+                        @click="toggleShareMenu"
                       >
-                        Instagram
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C9.886 12.511 11.35 12 12.934 12c2.414 0 4.551 1.186 5.866 3M5 19h14M8.684 13.342A3 3 0 115 10a3 3 0 013.684 3.342zm0 0l6.632-3.684m0 0a3 3 0 104.368-2.658 3 3 0 00-4.368 2.658zm0 0a3 3 0 104.368 2.658 3 3 0 00-4.368-2.658z"></path>
+                        </svg>
+                        Share
                       </button>
+
+                      <div
+                        v-if="isShareMenuOpen"
+                        class="absolute right-0 top-full z-30 mt-3 w-56 rounded-2xl border border-gray-200 bg-white shadow-xl"
+                      >
+                        <div class="border-b border-gray-100 px-4 py-3">
+                          <p class="text-sm font-semibold text-gray-900">Share this article</p>
+                          <p class="text-xs text-gray-500">Choose where to send it</p>
+                        </div>
+                        <div class="p-2">
+                          <a
+                            :href="shareLinks.facebook"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="flex items-center rounded-xl px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-50"
+                            @click="closeShareMenu"
+                          >
+                            Facebook
+                          </a>
+                          <a
+                            :href="shareLinks.whatsapp"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="flex items-center rounded-xl px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-50"
+                            @click="closeShareMenu"
+                          >
+                            WhatsApp
+                          </a>
+                          <a
+                            :href="shareLinks.x"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="flex items-center rounded-xl px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-50"
+                            @click="closeShareMenu"
+                          >
+                            X
+                          </a>
+                          <a
+                            :href="shareLinks.email"
+                            class="flex items-center rounded-xl px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-50"
+                            @click="closeShareMenu"
+                          >
+                            Email
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -207,6 +242,7 @@ const config = useRuntimeConfig()
 
 const selectedArticle = ref(null)
 const searchQuery = ref('')
+const isShareMenuOpen = ref(false)
 
 const { data: postsData, loading: postsLoading, error: postsError } = useApiData(
   'all-posts',
@@ -248,28 +284,32 @@ const shareLinks = computed(() => {
   const article = selectedArticle.value
   const articleUrl = getArticleUrl(article)
   const encodedUrl = encodeURIComponent(articleUrl)
-  const encodedText = encodeURIComponent(article ? `${article.title} - ${articleUrl}` : articleUrl)
+  const imageUrl = article?.image || ''
+  const shareMessage = article
+    ? `${article.title}\n${imageUrl ? `Image: ${imageUrl}\n` : ''}Read more: ${articleUrl}`
+    : articleUrl
+  const encodedText = encodeURIComponent(shareMessage)
+  const encodedTitle = encodeURIComponent(article?.title || 'NLGFC News Article')
+  const encodedQuote = encodeURIComponent(
+    article
+      ? `${article.title}${imageUrl ? ` | Image: ${imageUrl}` : ''}`
+      : articleUrl
+  )
 
   return {
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedQuote}`,
     whatsapp: `https://wa.me/?text=${encodedText}`,
-    instagram: 'https://www.instagram.com/',
+    x: `https://twitter.com/intent/tweet?text=${encodedText}`,
+    email: `mailto:?subject=${encodedTitle}&body=${encodedText}`,
   }
 })
 
-const shareOnInstagram = async () => {
-  const articleUrl = getArticleUrl(selectedArticle.value)
-  if (!articleUrl || !process.client) return
+const toggleShareMenu = () => {
+  isShareMenuOpen.value = !isShareMenuOpen.value
+}
 
-  try {
-    if (navigator?.clipboard?.writeText) {
-      await navigator.clipboard.writeText(articleUrl)
-    }
-  } catch (error) {
-    console.warn('Unable to copy article link for Instagram sharing.', error)
-  }
-
-  window.open(shareLinks.value.instagram, '_blank', 'noopener,noreferrer')
+const closeShareMenu = () => {
+  isShareMenuOpen.value = false
 }
 
 const getAuthorInitials = (name) => {
@@ -328,6 +368,7 @@ const formatDate = (dateString) => {
 
 const selectArticle = (article) => {
   selectedArticle.value = article
+  closeShareMenu()
 
   if (process.client) {
     window.location.hash = article.slug
@@ -339,6 +380,7 @@ const selectArticle = (article) => {
 
 const goBack = () => {
   selectedArticle.value = null
+  closeShareMenu()
 
   if (process.client) {
     history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
@@ -352,11 +394,15 @@ const handleHashChange = () => {
   const hash = window.location.hash.replace('#', '').trim()
   if (!hash) {
     selectedArticle.value = null
+    closeShareMenu()
     return
   }
 
   const article = newsArticles.value.find((item) => item.slug === hash || String(item.id) === hash)
   selectedArticle.value = article || null
+  if (!article) {
+    closeShareMenu()
+  }
 }
 
 watch(newsArticles, () => {
