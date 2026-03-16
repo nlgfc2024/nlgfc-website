@@ -33,9 +33,12 @@ const normalizeSection = (value) => {
 const activeSection = ref(PROCUREMENT_SECTION)
 const searchQuery = ref('')
 const selectedDepartment = ref('')
+const selectedFundingSource = ref('')
 const selectedStatus = ref('')
 const showJobModal = ref(false)
 const selectedJobDetails = ref(null)
+const showNoticeModal = ref(false)
+const selectedNoticeDetails = ref(null)
 const showFaqModal = ref(false)
 
 const currentPage = ref(1)
@@ -62,15 +65,61 @@ const normalizeListField = (value) => {
     .filter(Boolean)
 }
 
-const isExpired = (dateString) => {
+const parseDateValue = (dateString) => {
   if (!dateString) {
+    return null
+  }
+
+  const parsed = new Date(dateString)
+  if (Number.isNaN(parsed.getTime())) {
+    return null
+  }
+
+  return parsed
+}
+
+const isExpired = (dateString) => {
+  const date = parseDateValue(dateString)
+  if (!date) {
     return false
   }
-  const date = new Date(dateString)
-  if (Number.isNaN(date.getTime())) {
-    return false
-  }
+
   return date < new Date()
+}
+
+const getDaysUntilExpiry = (dateString) => {
+  const expiryDate = parseDateValue(dateString)
+  if (!expiryDate) {
+    return null
+  }
+
+  const diffTime = expiryDate.getTime() - Date.now()
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+}
+
+const isCloseToExpiry = (dateString) => {
+  const daysUntilExpiry = getDaysUntilExpiry(dateString)
+
+  return daysUntilExpiry !== null && daysUntilExpiry >= 0 && daysUntilExpiry <= 5
+}
+
+const sortByNewestPublishDate = (left, right) => {
+  const leftDate = parseDateValue(left.publishDate)
+  const rightDate = parseDateValue(right.publishDate)
+
+  if (leftDate && rightDate) {
+    return rightDate.getTime() - leftDate.getTime()
+  }
+
+  if (leftDate) {
+    return -1
+  }
+
+  if (rightDate) {
+    return 1
+  }
+
+  return 0
 }
 
 const formatSalary = (vacancy) => {
@@ -100,6 +149,26 @@ const normalizeEmploymentType = (employmentType) => {
     .join('-')
 }
 
+const formatFundingSourceLabel = (fundingSource) => {
+  if (fundingSource === 'government_of_malawi') {
+    return 'Govt of Malawi'
+  }
+
+  if (fundingSource === 'world_bank') {
+    return 'Donors (WB)'
+  }
+
+  if (!fundingSource) {
+    return 'Not specified'
+  }
+
+  return String(fundingSource)
+    .split(/[_-]/)
+    .filter(Boolean)
+    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join(' ')
+}
+
 const { data: vacanciesResponse, pending: vacanciesPending, error: vacanciesError, refresh: refreshVacancies } = await useAsyncData(
   'opportunities-vacancies',
   () =>
@@ -115,18 +184,29 @@ const { data: vacanciesResponse, pending: vacanciesPending, error: vacanciesErro
   }
 )
 
+const procurementRequestParams = computed(() => {
+  const params = {
+    per_page: 100,
+    status: 'active',
+  }
+
+  if (selectedFundingSource.value) {
+    params.funding_source = selectedFundingSource.value
+  }
+
+  return params
+})
+
 const { data: procurementResponse, pending: procurementPending, error: procurementError, refresh: refreshProcurement } = await useAsyncData(
   'opportunities-procurement',
   () =>
     $fetch(`${config.public.apiBase}/api/procurement-notices`, {
-      params: {
-        per_page: 100,
-        status: 'active',
-      },
+      params: procurementRequestParams.value,
     }),
   {
     lazy: true,
     default: () => ({ data: [] }),
+    watch: [selectedFundingSource],
   }
 )
 
@@ -154,7 +234,7 @@ const mapVacancy = (vacancy) => {
 }
 
 const mapProcurement = (notice) => {
-  const expiryDate = notice.closing_date
+  const expiryDate = notice.submission_deadline || notice.closing_date
   const backendStatus = (notice.status || '').toLowerCase()
   const isPublished = backendStatus === 'published' || backendStatus === 'active'
   const status = isPublished && !isExpired(expiryDate) ? 'active' : 'expired'
@@ -165,33 +245,41 @@ const mapProcurement = (notice) => {
     title: notice.title,
     type: notice.procurement_method || notice.type || 'Notice',
     fundingSource: notice.funding_source || null,
+    fundingSourceLabel: formatFundingSourceLabel(notice.funding_source),
     department: notice.procuring_entity || 'Procurement',
-    publishDate: notice.created_at,
-    expiryDate: notice.submission_deadline || expiryDate,
+    publishDate: notice.publish_date || notice.created_at,
+    expiryDate,
+    submissionDeadline: notice.submission_deadline || notice.closing_date || null,
+    closingDate: notice.closing_date || null,
     url: notice.maneps_marketplace_link || notice.url || null,
     estimatedValue: notice.reference ? `Ref: ${notice.reference}` : 'Refer to notice details',
     description: notice.description || 'No procurement description provided yet.',
     documents: toArray(notice.documents),
     procurementMethod: notice.procurement_method || notice.type || null,
+    reference: notice.reference || null,
+    category: notice.category || null,
+    contactInformation: notice.contact_information || null,
+    isSubmissionOpen: Boolean(notice.is_submission_open),
+    submissionDocumentRequirements: toArray(notice.submission_document_requirements),
+    requiredSubmissionDocumentTypes: toArray(notice.required_submission_document_types),
     status,
   }
 }
 
 const jobOpportunities = computed(() => {
   const raw = vacanciesResponse.value?.data || vacanciesResponse.value || []
-  return toArray(raw).map(mapVacancy)
+  return toArray(raw).map(mapVacancy).sort(sortByNewestPublishDate)
 })
 
 const procurementNotices = computed(() => {
   const raw = procurementResponse.value?.data || procurementResponse.value || []
-  return toArray(raw).map(mapProcurement)
+  return toArray(raw).map(mapProcurement).sort(sortByNewestPublishDate)
 })
 
-const departments = computed(() => {
-  const allDepartments = [
-    ...jobOpportunities.value.map((job) => job.department),
-    ...procurementNotices.value.map((notice) => notice.department),
-  ].filter(Boolean)
+const jobDepartments = computed(() => {
+  const allDepartments = jobOpportunities.value
+    .map((job) => job.department)
+    .filter(Boolean)
 
   return [...new Set(allDepartments)].sort()
 })
@@ -223,12 +311,12 @@ const filteredProcurement = computed(() => {
   if (searchQuery.value) {
     const search = searchQuery.value.toLowerCase()
     filtered = filtered.filter((notice) =>
-      `${notice.title} ${notice.description} ${notice.department}`.toLowerCase().includes(search)
+      `${notice.title} ${notice.description} ${notice.department} ${notice.fundingSourceLabel}`.toLowerCase().includes(search)
     )
   }
 
-  if (selectedDepartment.value) {
-    filtered = filtered.filter((notice) => notice.department === selectedDepartment.value)
+  if (selectedFundingSource.value) {
+    filtered = filtered.filter((notice) => notice.fundingSource === selectedFundingSource.value)
   }
 
   if (selectedStatus.value) {
@@ -329,7 +417,7 @@ watch([activeSection, currentPage, itemsPerPage], ([newSection]) => {
   })
 })
 
-watch([searchQuery, selectedDepartment, selectedStatus, activeSection], () => {
+watch([searchQuery, selectedDepartment, selectedFundingSource, selectedStatus, activeSection], () => {
   currentPage.value = 1
 })
 
@@ -352,7 +440,7 @@ const handleExpressInterest = (notice) => {
   }
 
   if (notice?.fundingSource === 'world_bank') {
-    handleViewNoticeDetails(notice)
+    redirectToProcurementPortal(notice)
     return
   }
 
@@ -362,18 +450,22 @@ const handleExpressInterest = (notice) => {
   }
 }
 
-const handleViewNoticeDetails = (notice) => {
+const redirectToProcurementPortal = (notice) => {
   if (!process.client) {
     return
   }
 
   const noticeId = notice?.id
-  if (!noticeId) {
-    return
-  }
-
-  const redirectPath = encodeURIComponent(`/tenders?notice_id=${noticeId}&source=nlgfc-website`)
+  const redirectTarget = noticeId
+    ? `/tenders?notice_id=${noticeId}&wizard=1&step=1&source=nlgfc-website`
+    : '/tenders?wizard=1&step=1&source=nlgfc-website'
+  const redirectPath = encodeURIComponent(redirectTarget)
   window.location.href = `${procurementPortalBase.value}/auth/login?redirect=${redirectPath}`
+}
+
+const handleViewNoticeDetails = (notice) => {
+  selectedNoticeDetails.value = notice
+  showNoticeModal.value = true
 }
 
 const handleDownloadDocument = (document) => {
@@ -397,8 +489,20 @@ const closeJobModal = () => {
   selectedJobDetails.value = null
 }
 
+const closeNoticeModal = () => {
+  showNoticeModal.value = false
+  selectedNoticeDetails.value = null
+}
+
 const closeFaqModal = () => {
   showFaqModal.value = false
+}
+
+const clearAllFilters = () => {
+  searchQuery.value = ''
+  selectedDepartment.value = ''
+  selectedFundingSource.value = ''
+  selectedStatus.value = ''
 }
 
 const retryCurrentSection = () => {
@@ -426,8 +530,9 @@ const retryCurrentSection = () => {
       <OpportunityFilters
         v-model:search-query="searchQuery"
         v-model:selected-department="selectedDepartment"
+        v-model:selected-funding-source="selectedFundingSource"
         v-model:selected-status="selectedStatus"
-        :departments="departments"
+        :departments="jobDepartments"
         :active-section="activeSection"
       />
 
@@ -450,9 +555,9 @@ const retryCurrentSection = () => {
             <span class="text-gray-600">
               {{ currentItems.filter(item => item.status === 'active').length }} Active
             </span>
-            <div class="w-2 h-2 bg-red-500 rounded-full" />
+            <div class="w-2 h-2 bg-amber-500 rounded-full" />
             <span class="text-gray-600">
-              {{ currentItems.filter(item => item.status === 'expired').length }} Expired
+              {{ currentItems.filter(item => isCloseToExpiry(item.expiryDate)).length }} Close to expiry
             </span>
           </div>
         </div>
@@ -496,7 +601,7 @@ const retryCurrentSection = () => {
             Try adjusting your search criteria or check back later for new opportunities.
           </p>
           <button
-            @click="searchQuery = ''; selectedDepartment = ''; selectedStatus = ''"
+            @click="clearAllFilters"
             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
           >
             Clear Filters
@@ -518,6 +623,13 @@ const retryCurrentSection = () => {
       :job="selectedJobDetails"
       @close="closeJobModal"
       @apply="handleApplyJob"
+    />
+
+    <ProcurementNoticeDetailsModal
+      v-if="showNoticeModal && selectedNoticeDetails"
+      :notice="selectedNoticeDetails"
+      @close="closeNoticeModal"
+      @download="handleDownloadDocument"
     />
 
     <OpportunitiesFaqGuidelines

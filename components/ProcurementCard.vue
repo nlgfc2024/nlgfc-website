@@ -8,6 +8,14 @@ const props = defineProps({
 
 const emit = defineEmits(['express-interest', 'download', 'view-details'])
 
+const cardRef = ref(null)
+const descriptionRef = ref(null)
+const isDescriptionExpanded = ref(false)
+const descriptionHasOverflow = ref(false)
+
+let cardVisibilityObserver
+let resizeHandler
+
 const formatDate = (dateString) => {
   if (!dateString) {
     return 'Not specified'
@@ -38,6 +46,11 @@ const noticeStatus = computed(() => {
   return isExpired(props.notice.expiryDate) ? 'expired' : 'active'
 })
 
+const isGovernmentFunded = computed(() => props.notice.fundingSource === 'government_of_malawi')
+const isWorldBankFunded = computed(() => props.notice.fundingSource === 'world_bank')
+const shouldClampDescription = computed(() => isWorldBankFunded.value || !isDescriptionExpanded.value)
+const showDescriptionToggle = computed(() => isGovernmentFunded.value && descriptionHasOverflow.value)
+
 const getDaysUntilExpiry = (dateString) => {
   if (!dateString) {
     return 0
@@ -66,10 +79,110 @@ const getTypeColor = (type) => {
 const getDocumentIcon = (type) => {
   return type === 'pdf' ? 'heroicons:document-text' : 'heroicons:document'
 }
+
+const updateDescriptionOverflow = () => {
+  if (!process.client || !descriptionRef.value || !isGovernmentFunded.value) {
+    descriptionHasOverflow.value = false
+    return
+  }
+
+  const element = descriptionRef.value
+  const width = element.getBoundingClientRect().width
+
+  if (!width) {
+    descriptionHasOverflow.value = false
+    return
+  }
+
+  const computedStyles = window.getComputedStyle(element)
+  const clone = element.cloneNode(true)
+  const lineHeight =
+    Number.parseFloat(computedStyles.lineHeight) ||
+    (Number.parseFloat(computedStyles.fontSize) * 1.5) ||
+    24
+
+  clone.classList.remove('clamped-description')
+  clone.style.position = 'fixed'
+  clone.style.top = '0'
+  clone.style.left = '0'
+  clone.style.width = `${width}px`
+  clone.style.visibility = 'hidden'
+  clone.style.pointerEvents = 'none'
+  clone.style.height = 'auto'
+  clone.style.maxHeight = 'none'
+  clone.style.overflow = 'visible'
+  clone.style.display = 'block'
+  clone.style.webkitLineClamp = 'unset'
+  clone.style.webkitBoxOrient = 'initial'
+
+  document.body.appendChild(clone)
+  const fullHeight = clone.scrollHeight
+  document.body.removeChild(clone)
+
+  descriptionHasOverflow.value = fullHeight > (lineHeight * 2) + 1
+}
+
+const toggleDescription = () => {
+  if (!showDescriptionToggle.value) {
+    return
+  }
+
+  isDescriptionExpanded.value = !isDescriptionExpanded.value
+}
+
+watch(
+  () => props.notice.description,
+  async () => {
+    isDescriptionExpanded.value = false
+    await nextTick()
+    updateDescriptionOverflow()
+  },
+  { immediate: true }
+)
+
+onMounted(async () => {
+  if (!process.client) {
+    return
+  }
+
+  await nextTick()
+  updateDescriptionOverflow()
+
+  resizeHandler = () => {
+    updateDescriptionOverflow()
+  }
+
+  window.addEventListener('resize', resizeHandler)
+
+  if (cardRef.value) {
+    cardVisibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) {
+          isDescriptionExpanded.value = false
+        }
+      },
+      {
+        threshold: 0.1,
+      }
+    )
+
+    cardVisibilityObserver.observe(cardRef.value)
+  }
+})
+
+onUnmounted(() => {
+  if (cardVisibilityObserver) {
+    cardVisibilityObserver.disconnect()
+  }
+
+  if (process.client && resizeHandler) {
+    window.removeEventListener('resize', resizeHandler)
+  }
+})
 </script>
 
 <template>
-  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+  <div ref="cardRef" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
     <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
       <div class="flex-1">
         <!-- Notice Header -->
@@ -106,9 +219,25 @@ const getDocumentIcon = (type) => {
         </div>
 
         <!-- Notice Description -->
-        <p class="text-gray-700 text-sm mb-4">
-          {{ notice.description }}
-        </p>
+        <div class="mb-4">
+          <p
+            ref="descriptionRef"
+            :class="[
+              'description-copy text-gray-700 text-sm',
+              { 'clamped-description': shouldClampDescription }
+            ]"
+          >
+            {{ notice.description }}
+          </p>
+
+          <button
+            v-if="showDescriptionToggle"
+            @click="toggleDescription"
+            class="mt-2 inline-flex items-center text-sm font-medium text-emerald-700 transition-colors hover:text-emerald-800"
+          >
+            {{ isDescriptionExpanded ? 'Show less' : 'Reveal more' }}
+          </button>
+        </div>
 
         <!-- Documents -->
         <div class="mb-4">
@@ -163,3 +292,16 @@ const getDocumentIcon = (type) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.description-copy {
+  white-space: pre-line;
+}
+
+.clamped-description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+</style>

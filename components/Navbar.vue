@@ -947,6 +947,10 @@ const { data: navProcurements } = await useAsyncData(
 
 const toArray = (value) => (Array.isArray(value) ? value : []);
 
+const getProcurementDeadline = (notice) => {
+  return notice?.submission_deadline || notice?.closing_date || notice?.expiry_date || null;
+};
+
 const activeJobsCount = computed(() => {
   const raw = navVacancies.value?.data || navVacancies.value || [];
   return toArray(raw).filter((vacancy) => {
@@ -960,7 +964,8 @@ const openTendersCount = computed(() => {
   const raw = navProcurements.value?.data || navProcurements.value || [];
   return toArray(raw).filter((notice) => {
     const status = String(notice?.status || '').toLowerCase();
-    return status === 'active' && !isExpired(notice?.closing_date);
+    const deadline = getProcurementDeadline(notice);
+    return ['active', 'published'].includes(status) && !isExpired(deadline);
   }).length;
 });
 

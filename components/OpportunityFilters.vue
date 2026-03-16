@@ -2,12 +2,13 @@
 const props = defineProps({
   searchQuery: String,
   selectedDepartment: String,
+  selectedFundingSource: String,
   selectedStatus: String,
   departments: Array,
   activeSection: String
 })
 
-const emit = defineEmits(['update:searchQuery', 'update:selectedDepartment', 'update:selectedStatus'])
+const emit = defineEmits(['update:searchQuery', 'update:selectedDepartment', 'update:selectedFundingSource', 'update:selectedStatus'])
 
 const statusOptions = [
   { value: '', label: 'All Status' },
@@ -15,20 +16,71 @@ const statusOptions = [
   { value: 'expired', label: 'Expired' }
 ]
 
+const fundingSourceOptions = [
+  { value: 'government_of_malawi', label: 'Govt of Malawi' },
+  { value: 'world_bank', label: 'Donors (WB)' }
+]
+
+const isJobsSection = computed(() => props.activeSection === 'jobs')
+
+const secondaryFilterValue = computed(() => {
+  return isJobsSection.value ? props.selectedDepartment : props.selectedFundingSource
+})
+
+const secondaryFilterLabel = computed(() => {
+  return isJobsSection.value ? 'Department' : 'Financing Source'
+})
+
+const secondaryFilterIcon = computed(() => {
+  return isJobsSection.value ? 'heroicons:building-office' : 'heroicons:banknotes'
+})
+
+const secondaryFilterOptions = computed(() => {
+  if (isJobsSection.value) {
+    return (props.departments || []).map((department) => ({
+      value: department,
+      label: department,
+    }))
+  }
+
+  return fundingSourceOptions
+})
+
+const secondaryFilterDefaultLabel = computed(() => {
+  return isJobsSection.value ? 'All Departments' : 'All Sources'
+})
+
+const selectedSecondaryFilterLabel = computed(() => {
+  if (isJobsSection.value) {
+    return props.selectedDepartment || ''
+  }
+
+  return fundingSourceOptions.find((option) => option.value === props.selectedFundingSource)?.label || props.selectedFundingSource || ''
+})
+
+const updateSecondaryFilter = (value) => {
+  if (isJobsSection.value) {
+    emit('update:selectedDepartment', value)
+    return
+  }
+
+  emit('update:selectedFundingSource', value)
+}
+
 const clearFilters = () => {
   emit('update:searchQuery', '')
-  emit('update:selectedDepartment', '')
   emit('update:selectedStatus', '')
+  updateSecondaryFilter('')
 }
 
 const hasActiveFilters = computed(() => {
-  return props.searchQuery || props.selectedDepartment || props.selectedStatus
+  return props.searchQuery || secondaryFilterValue.value || props.selectedStatus
 })
 
 const getPlaceholderText = computed(() => {
   return props.activeSection === 'jobs'
       ? 'Search jobs by title, department, or description...'
-      : 'Search procurement notices by title, department, or description...'
+      : 'Search procurement notices by title, financing source, or description...'
 })
 
 const getSectionIcon = computed(() => {
@@ -76,21 +128,21 @@ const getSectionIcon = computed(() => {
         </div>
       </div>
 
-      <!-- Department Filter -->
+      <!-- Department / Financing Source Filter -->
       <div class="lg:col-span-3">
         <label class="block text-sm font-medium text-gray-700 mb-2">
-          <Icon name="heroicons:building-office" class="w-4 h-4 inline mr-1" />
-          Department
+          <Icon :name="secondaryFilterIcon" class="w-4 h-4 inline mr-1" />
+          {{ secondaryFilterLabel }}
         </label>
         <div class="relative">
           <select
-              :value="selectedDepartment"
-              @change="emit('update:selectedDepartment', $event.target.value)"
+              :value="secondaryFilterValue"
+              @change="updateSecondaryFilter($event.target.value)"
               class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:border-gray-400 appearance-none bg-white"
           >
-            <option value="">All Departments</option>
-            <option v-for="dept in departments" :key="dept" :value="dept">
-              {{ dept }}
+            <option value="">{{ secondaryFilterDefaultLabel }}</option>
+            <option v-for="option in secondaryFilterOptions" :key="option.value || option.label" :value="option.value">
+              {{ option.label }}
             </option>
           </select>
           <Icon name="heroicons:chevron-down" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
@@ -142,9 +194,9 @@ const getSectionIcon = computed(() => {
               <Icon name="heroicons:x-mark" class="w-3 h-3" />
             </button>
           </span>
-          <span v-if="selectedDepartment" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-            {{ selectedDepartment }}
-            <button @click="emit('update:selectedDepartment', '')" class="ml-1 hover:text-green-600">
+          <span v-if="secondaryFilterValue" class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+            {{ secondaryFilterLabel }}: {{ selectedSecondaryFilterLabel }}
+            <button @click="updateSecondaryFilter('')" class="ml-1 hover:text-green-600">
               <Icon name="heroicons:x-mark" class="w-3 h-3" />
             </button>
           </span>
