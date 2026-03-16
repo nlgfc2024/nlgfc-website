@@ -42,14 +42,58 @@
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
           <nav class="tab-nav">
+            <!-- Profile -->
             <button
-              v-for="tab in tabs"
-              :key="tab.id"
-              :class="['tab-btn', { active: activeTab === tab.id }]"
-              @click="switchTab(tab.id)"
+              :class="['tab-btn', { active: activeTab === 'profile' }]"
+              @click="switchTab('profile'); sidebarProjectsOpen = false"
             >
-              <span class="tab-icon">{{ tab.icon }}</span>
-              {{ tab.title }}
+              <span class="tab-icon">🏛️</span> Profile
+            </button>
+
+            <!-- Projects with expandable sub-list -->
+            <button
+              :class="['tab-btn', { active: activeTab === 'projects' }]"
+              @click="switchTab('projects'); sidebarProjectsOpen = !sidebarProjectsOpen"
+            >
+              <span class="tab-icon">📋</span>
+              <span style="flex:1">Projects</span>
+              <svg
+                class="tab-expand-chevron"
+                :class="{ open: sidebarProjectsOpen }"
+                viewBox="0 0 20 20" fill="currentColor" width="14" height="14"
+              ><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/></svg>
+            </button>
+
+            <!-- Project sub-items -->
+            <transition name="sidebar-expand">
+              <div v-if="sidebarProjectsOpen && groupedProjectStats.length" class="tab-sub-list">
+                <button
+                  v-for="grp in groupedProjectStats"
+                  :key="grp.projectName"
+                  :class="['tab-sub-btn', { active: activeTab === 'projects' && selectedProject === grp.projectName }]"
+                  :title="'View statistics for ' + grp.projectName"
+                  @click="switchTab('projects'); toggleProject(grp.projectName)"
+                >
+                  <span class="tab-sub-dot"></span>
+                  <span class="tab-sub-name">{{ grp.projectName }}</span>
+                </button>
+              </div>
+            </transition>
+
+            <!-- Reports -->
+            <button
+              :class="['tab-btn', { active: activeTab === 'reports' }]"
+              @click="switchTab('reports'); sidebarProjectsOpen = false"
+            >
+              <span class="tab-icon">📄</span> Reports
+            </button>
+
+            <!-- News -->
+            <button
+              :class="['tab-btn', { active: activeTab === 'news' }]"
+              @click="switchTab('news'); sidebarProjectsOpen = false"
+            >
+              <span class="tab-icon">📰</span> News
             </button>
           </nav>
 
@@ -92,6 +136,15 @@
                 </div>
               </div>
 
+              <section class="content-section" v-if="district.profile.coreValues?.length">
+                <h2>Core Values</h2>
+                <ul class="core-values-list">
+                  <li v-for="(val, i) in district.profile.coreValues" :key="i" class="core-value-item">
+                    <span class="core-value-dot">✦</span> {{ val }}
+                  </li>
+                </ul>
+              </section>
+
               <section class="content-section" v-if="district.profile.strategicObjectives?.length">
                 <h2>Strategic Objectives</h2>
                 <ul class="styled-list numbered">
@@ -121,11 +174,11 @@
                     <p>{{ district.profile.jurisdiction }}</p>
                   </div>
                 </div>
-                <div class="stat-card" v-if="district.profile.population">
+                <div class="stat-card" v-if="district.population">
                   <div class="stat-icon">👥</div>
                   <div>
                     <h4>Population</h4>
-                    <p>{{ district.profile.population }}</p>
+                    <p>{{ district.population }}</p>
                   </div>
                 </div>
                 <div class="stat-card" v-if="district.profile.structure">
@@ -146,33 +199,145 @@
               <div v-if="statsPending" class="pstats-loading">
                 <span class="pstats-spinner"></span> Loading project statistics…
               </div>
-              <div v-else-if="projectStats.length" class="pstats-section">
-                <div class="pstats-header">
-                  <h3>Project Statistics</h3>
-                  <span class="item-count">{{ projectStats.length }} record{{ projectStats.length !== 1 ? 's' : '' }}</span>
+              <div v-else-if="groupedProjectStats.length" class="pstats-section">
+                <div class="pstats-section-header">
+                  <h3>Project Statistics<span v-if="selectedProject" class="pstats-section-proj-name"> — {{ selectedProject }}</span></h3>
+                  <span class="item-count">{{ groupedProjectStats.length }} project{{ groupedProjectStats.length !== 1 ? 's' : '' }}</span>
                 </div>
-                <div class="pstats-table-wrap">
-                  <table class="pstats-table">
-                    <thead>
-                      <tr>
-                        <th>Project</th>
-                        <th>Sub-projects</th>
-                        <th>Beneficiaries</th>
-                        <th>Budget (MWK)</th>
-                        <th>Funds Disbursed (MWK)</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="stat in projectStats" :key="stat.id">
-                        <td class="pstats-project-name">{{ stat.projectName }}</td>
-                        <td>{{ stat.totalProjects !== null ? Number(stat.totalProjects).toLocaleString() : '—' }}</td>
-                        <td>{{ stat.beneficiaries !== null ? Number(stat.beneficiaries).toLocaleString() : '—' }}</td>
-                        <td>{{ stat.budget !== null ? Number(stat.budget).toLocaleString() : '—' }}</td>
-                        <td>{{ stat.fundsDisbursed !== null ? Number(stat.fundsDisbursed).toLocaleString() : '—' }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+
+                <!-- Summary strip: overall totals, or selected-project totals when a project is active -->
+                <div class="pstats-summary">
+                  <div class="pstats-sum-card">
+                    <span class="pstats-sum-val">{{ displayedSummary.totalSubProjects.toLocaleString() }}</span>
+                    <span class="pstats-sum-label">{{ selectedProject ? 'Sub-projects' : 'Total Sub-projects' }}</span>
+                  </div>
+                  <div class="pstats-sum-card pstats-sum-card--green">
+                    <span class="pstats-sum-val">{{ displayedSummary.totalCompleted.toLocaleString() }}</span>
+                    <span class="pstats-sum-label">Completed</span>
+                  </div>
+                  <div class="pstats-sum-card pstats-sum-card--red">
+                    <span class="pstats-sum-val">{{ displayedSummary.totalNotCompleted.toLocaleString() }}</span>
+                    <span class="pstats-sum-label">Not Completed</span>
+                  </div>
+                  <div class="pstats-sum-card">
+                    <span class="pstats-sum-val">{{ displayedSummary.totalBeneficiaries.toLocaleString() }}</span>
+                    <span class="pstats-sum-label">Beneficiaries</span>
+                  </div>
+                  <div v-if="displayedSummary.totalFunds > 0" class="pstats-sum-card pstats-sum-card--blue">
+                    <span class="pstats-sum-val">MWK {{ displayedSummary.totalFunds.toLocaleString() }}</span>
+                    <span class="pstats-sum-label">Funds Disbursed</span>
+                  </div>
                 </div>
+
+                <!-- Detail panel shown when a project is selected from the sidebar -->
+                <transition name="fade-slide">
+                  <div v-if="selectedProjectData" class="pstats-detail-panel">
+
+                    <!-- Panel header -->
+                    <div class="pstats-detail-header">
+                      <div class="pstats-detail-title-row">
+                        <h3 class="pstats-detail-title">{{ selectedProjectData.projectName }}</h3>
+                        <button class="pstats-detail-close" @click="selectedProject = null" aria-label="Close">&#x2715;</button>
+                      </div>
+                      <!-- Project summary chips -->
+                      <div class="pstats-detail-chips">
+                        <div class="pstats-detail-chip">
+                          <span class="pstats-detail-chip-val">{{ selectedProjectData.totalSubProjects.toLocaleString() }}</span>
+                          <span class="pstats-detail-chip-lbl">Sub-projects</span>
+                        </div>
+                        <div class="pstats-detail-chip pstats-detail-chip--green">
+                          <span class="pstats-detail-chip-val">{{ selectedProjectData.totalCompleted.toLocaleString() }}</span>
+                          <span class="pstats-detail-chip-lbl">Completed</span>
+                        </div>
+                        <div class="pstats-detail-chip pstats-detail-chip--red">
+                          <span class="pstats-detail-chip-val">{{ selectedProjectData.totalNotCompleted.toLocaleString() }}</span>
+                          <span class="pstats-detail-chip-lbl">Not Completed</span>
+                        </div>
+                        <div class="pstats-detail-chip">
+                          <span class="pstats-detail-chip-val">{{ selectedProjectData.totalBeneficiaries.toLocaleString() }}</span>
+                          <span class="pstats-detail-chip-lbl">Beneficiaries</span>
+                        </div>
+                        <div v-if="selectedProjectData.totalFunds > 0" class="pstats-detail-chip pstats-detail-chip--blue">
+                          <span class="pstats-detail-chip-val">MWK {{ selectedProjectData.totalFunds.toLocaleString() }}</span>
+                          <span class="pstats-detail-chip-lbl">Funds Disbursed</span>
+                        </div>
+                        <div class="pstats-detail-chip pstats-detail-chip--pct"
+                          :class="{
+                            'pstats-detail-chip--pct-full': selectedProjectData.completionPct >= 100,
+                            'pstats-detail-chip--pct-high': selectedProjectData.completionPct >= 75 && selectedProjectData.completionPct < 100,
+                            'pstats-detail-chip--pct-mid':  selectedProjectData.completionPct >= 40 && selectedProjectData.completionPct < 75,
+                          }"
+                        >
+                          <span class="pstats-detail-chip-val">{{ selectedProjectData.completionPct.toFixed(1) }}%</span>
+                          <span class="pstats-detail-chip-lbl">Completion</span>
+                        </div>
+                      </div>
+                      <!-- Overall progress for selected project -->
+                      <div class="pstats-detail-progress-wrap">
+                        <div class="pstats-detail-progress-track">
+                          <div
+                            class="pstats-progress-fill"
+                            :style="{ width: Math.min(selectedProjectData.completionPct, 100) + '%' }"
+                            :class="{
+                              'pstats-progress-fill--full': selectedProjectData.completionPct >= 100,
+                              'pstats-progress-fill--high': selectedProjectData.completionPct >= 75 && selectedProjectData.completionPct < 100,
+                              'pstats-progress-fill--mid':  selectedProjectData.completionPct >= 40 && selectedProjectData.completionPct < 75,
+                            }"
+                          ></div>
+                        </div>
+                        <span class="pstats-detail-pct-label">{{ selectedProjectData.completionPct.toFixed(1) }}% overall completion</span>
+                      </div>
+                    </div>
+
+                    <!-- Ward-by-ward table -->
+                    <div class="pstats-ward-table-wrap">
+                      <table class="pstats-ward-table">
+                        <thead>
+                          <tr>
+                            <th>Ward</th>
+                            <th>Constituency</th>
+                            <th>Sub-projects</th>
+                            <th>Completed</th>
+                            <th>Not Completed</th>
+                            <th>Progress</th>
+                            <th>Beneficiaries</th>
+                            <th>Funds Disbursed (MWK)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="row in selectedProjectData.wards" :key="row.id">
+                            <td class="pstats-td-ward">{{ row.ward || '—' }}</td>
+                            <td>{{ row.constituency || '—' }}</td>
+                            <td>{{ row.totalProjects !== null ? row.totalProjects.toLocaleString() : '—' }}</td>
+                            <td class="pstats-td-done">{{ row.completedProjects !== null ? row.completedProjects.toLocaleString() : '—' }}</td>
+                            <td class="pstats-td-pending">{{ row.notCompleted !== null ? row.notCompleted.toLocaleString() : '—' }}</td>
+                            <td>
+                              <div class="pstats-mini-wrap">
+                                <div class="pstats-mini-track">
+                                  <div class="pstats-progress-fill pstats-mini-fill"
+                                    :style="{ width: Math.min(row.completionPercentage, 100) + '%' }"
+                                    :class="{
+                                      'pstats-progress-fill--full': row.completionPercentage >= 100,
+                                      'pstats-progress-fill--high': row.completionPercentage >= 75,
+                                      'pstats-progress-fill--mid':  row.completionPercentage >= 40,
+                                    }"
+                                  ></div>
+                                </div>
+                                <span class="pstats-mini-pct">{{ row.completionPercentage.toFixed(0) }}%</span>
+                              </div>
+                            </td>
+                            <td>{{ row.beneficiaries !== null ? Number(row.beneficiaries).toLocaleString() : '—' }}</td>
+                            <td>{{ row.fundsDisbursed > 0 ? Number(row.fundsDisbursed).toLocaleString() : '—' }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="pstats-acc-footer">
+                      {{ selectedProjectData.wards.length }} ward record{{ selectedProjectData.wards.length !== 1 ? 's' : '' }}
+                    </div>
+
+                  </div>
+                </transition>
               </div>
 
               <div v-if="district.projects?.length" class="projects-list">
@@ -432,14 +597,14 @@ const district = computed(() => {
           },
         }
       : null,
-    (profileData.majorAchievements || profileData.jurisdiction || profileData.population || profileData.structure)
+    (profileData.majorAchievements || profileData.jurisdiction || payload.population || profileData.structure)
       ? {
           type: 'stats_grid',
           data: {
             cards: [
               profileData.majorAchievements ? { icon: '🏆', title: 'Major Achievements', body: profileData.majorAchievements } : null,
               (profileData.jurisdiction || payload.jurisdiction) ? { icon: '📍', title: 'Jurisdiction', body: profileData.jurisdiction || payload.jurisdiction } : null,
-              (profileData.population || payload.population) ? { icon: '👥', title: 'Population', body: profileData.population || payload.population } : null,
+              payload.population ? { icon: '👥', title: 'Population', body: payload.population } : null,
               profileData.structure ? { icon: '🏛️', title: 'Council Structure', body: profileData.structure } : null,
             ].filter(Boolean),
           },
@@ -464,11 +629,11 @@ const district = computed(() => {
       mandate: toList(profileData.mandate),
       vision: profileData.vision || '',
       mission: profileData.mission || '',
+      coreValues: toList(profileData.coreValues),
       strategicObjectives: toList(profileData.strategicObjectives),
       keyFunctions: toList(profileData.keyFunctions),
       majorAchievements: profileData.majorAchievements || '',
       jurisdiction: profileData.jurisdiction || payload.jurisdiction || '',
-      population: profileData.population || payload.population || 'N/A',
       structure: profileData.structure || '',
     },
     projects: Array.isArray(payload.projects)
@@ -517,11 +682,58 @@ const projectStats = computed(() => {
     id: stat.id,
     projectName: stat.project?.name || 'Unknown Project',
     totalProjects: stat.total_projects ?? null,
+    completedProjects: stat.total_projects_completed ?? null,
+    notCompleted: (stat.total_projects != null && stat.total_projects_completed != null)
+      ? Math.max(0, stat.total_projects - stat.total_projects_completed)
+      : null,
+    completionPercentage: parseFloat(stat.completion_percentage) || 0,
     beneficiaries: stat.no_of_beneficiaries ?? null,
-    budget: stat.budget ?? null,
-    fundsDisbursed: stat.total_funds_disbursed ?? null,
+    fundsDisbursed: parseFloat(stat.total_funds_disbursed) || 0,
+    ward: stat.ward?.name || null,
+    constituency: stat.ward?.constituency?.name || null,
   }))
 })
+
+const groupedProjectStats = computed(() => {
+  const map = new Map()
+  for (const stat of projectStats.value) {
+    if (!map.has(stat.projectName)) map.set(stat.projectName, [])
+    map.get(stat.projectName).push(stat)
+  }
+  return Array.from(map.entries()).map(([projectName, wards]) => {
+    const total = wards.reduce((a, s) => a + (s.totalProjects || 0), 0)
+    const completed = wards.reduce((a, s) => a + (s.completedProjects || 0), 0)
+    return {
+      projectName,
+      wards,
+      totalSubProjects: total,
+      totalCompleted: completed,
+      totalNotCompleted: Math.max(0, total - completed),
+      totalBeneficiaries: wards.reduce((a, s) => a + (s.beneficiaries || 0), 0),
+      totalFunds: wards.reduce((a, s) => a + (s.fundsDisbursed || 0), 0),
+      completionPct: total > 0 ? (completed / total) * 100 : 0,
+    }
+  })
+})
+
+const overallSummary = computed(() => ({
+  totalSubProjects: groupedProjectStats.value.reduce((a, g) => a + g.totalSubProjects, 0),
+  totalCompleted:   groupedProjectStats.value.reduce((a, g) => a + g.totalCompleted, 0),
+  totalNotCompleted: groupedProjectStats.value.reduce((a, g) => a + g.totalNotCompleted, 0),
+  totalBeneficiaries: groupedProjectStats.value.reduce((a, g) => a + g.totalBeneficiaries, 0),
+  totalFunds: groupedProjectStats.value.reduce((a, g) => a + g.totalFunds, 0),
+}))
+
+const expandedProjects = ref({})
+const selectedProject = ref(null)
+const toggleProject = (name) => {
+  selectedProject.value = selectedProject.value === name ? null : name
+}
+const selectedProjectData = computed(() =>
+  groupedProjectStats.value.find(g => g.projectName === selectedProject.value) || null
+)
+// Summary strip: shows selected project stats when one is active, overall otherwise
+const displayedSummary = computed(() => selectedProjectData.value ?? overallSummary.value)
 
 const tabs = [
   { id: 'profile',  title: 'Profile',  icon: '🏛️' },
@@ -532,6 +744,7 @@ const tabs = [
 
 const activeTab = ref('profile')
 const isTransitioning = ref(false)
+const sidebarProjectsOpen = ref(false)
 
 const switchTab = (tabId) => {
   if (tabId === activeTab.value || isTransitioning.value) return
@@ -665,6 +878,70 @@ useHead({
   transition: all 0.15s;
 }
 
+.tab-expand-chevron {
+  flex-shrink: 0;
+  color: #9ca3af;
+  transition: transform 0.2s;
+}
+.tab-expand-chevron.open { transform: rotate(180deg); }
+
+/* Sub-item list */
+.tab-sub-list {
+  background: #f8fafc;
+  border-top: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f3f4f6;
+  overflow: hidden;
+}
+
+.tab-sub-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.55rem 1.2rem 0.55rem 2rem;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-size: 0.845rem;
+  cursor: pointer;
+  color: #4b5563;
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.tab-sub-btn:hover { background: #f0f4f8; color: #111827; }
+.tab-sub-btn.active {
+  background: #eef2f7;
+  color: #111827;
+  border-left-color: #111827;
+  font-weight: 600;
+}
+
+.tab-sub-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #9ca3af;
+  flex-shrink: 0;
+}
+
+.tab-sub-btn.active .tab-sub-dot { background: #111827; }
+
+.tab-sub-name { flex: 1; }
+
+/* Slide transition for sub-list */
+.sidebar-expand-enter-active,
+.sidebar-expand-leave-active {
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+  max-height: 300px;
+  opacity: 1;
+}
+.sidebar-expand-enter-from,
+.sidebar-expand-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+
 .tab-btn:hover { background: #f3f4f6; }
 .tab-btn.active {
   background: #eef2f7;
@@ -780,6 +1057,31 @@ useHead({
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   margin-bottom: 2rem;
+
+/* ── Core Values ── */
+.core-values-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+}
+
+.core-value-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.925rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.core-value-dot {
+  color: #2563eb;
+  font-size: 0.65rem;
+  flex-shrink: 0;
+}
 }
 
 @media (max-width: 600px) {
@@ -924,19 +1226,19 @@ useHead({
 
 .objectives li { color: #4b5563; font-size: 0.9rem; margin-bottom: 0.3rem; }
 
-/* ── Project Statistics Table ── */
+/* ── Project Statistics Cards ── */
 .pstats-section {
   margin-bottom: 2rem;
 }
 
-.pstats-header {
+.pstats-section-header {
   display: flex;
   align-items: baseline;
   gap: 0.6rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
-.pstats-header h3 {
+.pstats-section-header h3 {
   font-size: 1rem;
   font-weight: 600;
   color: #111827;
@@ -945,50 +1247,245 @@ useHead({
   letter-spacing: 0.04em;
 }
 
-.pstats-table-wrap {
-  overflow-x: auto;
-  border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
+.pstats-section-proj-name {
+  font-weight: 600;
+  color: #2563eb;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
-.pstats-table {
+/* Summary strip */
+.pstats-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.pstats-sum-card {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.625rem;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.pstats-sum-card--green { background: #f0fdf4; border-color: #bbf7d0; }
+.pstats-sum-card--blue  { background: #eff6ff; border-color: #bfdbfe; }
+
+.pstats-sum-val {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.pstats-sum-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+}
+
+/* ── Progress bar colours (shared by header + ward rows) ── */
+.pstats-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: #f59e0b;
+  transition: width 0.5s ease;
+}
+.pstats-progress-fill--mid  { background: #3b82f6; }
+.pstats-progress-fill--high { background: #10b981; }
+.pstats-progress-fill--full { background: #16a34a; }
+
+/* ── Summary strip extra colour ── */
+.pstats-sum-card--red { background: #fff7f7; border-color: #fecaca; }
+
+/* ── Detail panel (shown when project selected from sidebar) ── */
+.pstats-detail-panel {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: white;
+  margin-top: 0.25rem;
+}
+
+.pstats-detail-header {
+  background: #f8fafc;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1.1rem 1.25rem;
+}
+
+.pstats-detail-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.pstats-detail-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.pstats-detail-close {
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: #6b7280;
+  line-height: 1.4;
+  transition: background 0.15s;
+}
+.pstats-detail-close:hover { background: #f3f4f6; }
+
+.pstats-detail-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.pstats-detail-chip {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  min-width: 80px;
+}
+
+.pstats-detail-chip--green { background: #f0fdf4; border-color: #bbf7d0; }
+.pstats-detail-chip--red   { background: #fff7f7; border-color: #fecaca; }
+.pstats-detail-chip--blue  { background: #eff6ff; border-color: #bfdbfe; }
+
+/* Completion % chip — colour shifts with progress */
+.pstats-detail-chip--pct      { background: #f9fafb; border-color: #d1d5db; }
+.pstats-detail-chip--pct .pstats-detail-chip-val { color: #6b7280; }
+
+.pstats-detail-chip--pct-mid  { background: #eff6ff; border-color: #bfdbfe; }
+.pstats-detail-chip--pct-mid  .pstats-detail-chip-val { color: #2563eb; }
+
+.pstats-detail-chip--pct-high { background: #f0fdf4; border-color: #bbf7d0; }
+.pstats-detail-chip--pct-high .pstats-detail-chip-val { color: #16a34a; }
+
+.pstats-detail-chip--pct-full { background: #dcfce7; border-color: #86efac; }
+.pstats-detail-chip--pct-full .pstats-detail-chip-val { color: #15803d; }
+
+.pstats-detail-chip-val {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.pstats-detail-chip-lbl {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.pstats-detail-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pstats-detail-progress-track {
+  flex: 1;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.pstats-detail-pct-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.pstats-ward-table-wrap {
+  overflow-x: auto;
+}
+
+.pstats-ward-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.875rem;
-  background: white;
+  font-size: 0.825rem;
 }
 
-.pstats-table thead tr {
-  background: #111827;
+.pstats-ward-table thead tr {
+  background: #1e3a5f;
   color: white;
 }
 
-.pstats-table th {
-  padding: 0.7rem 1rem;
+.pstats-ward-table th {
+  padding: 0.6rem 0.9rem;
   text-align: left;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
-.pstats-table td {
-  padding: 0.65rem 1rem;
+.pstats-ward-table td {
+  padding: 0.55rem 0.9rem;
   color: #374151;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f0f0f0;
   white-space: nowrap;
 }
 
-.pstats-table tbody tr:last-child td { border-bottom: none; }
+.pstats-ward-table tbody tr:last-child td { border-bottom: none; }
+.pstats-ward-table tbody tr:hover { background: #f3f4f6; }
 
-.pstats-table tbody tr:hover { background: #f9fafb; }
+.pstats-td-ward { font-weight: 600; color: #111827 !important; white-space: normal !important; min-width: 120px; }
+.pstats-td-done    { color: #16a34a !important; font-weight: 600; }
+.pstats-td-pending { color: #dc2626 !important; font-weight: 600; }
 
-.pstats-project-name {
+/* Mini progress bar in table cells */
+.pstats-mini-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pstats-mini-track {
+  width: 60px;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.pstats-mini-fill { height: 100%; border-radius: 999px; }
+
+.pstats-mini-pct {
+  font-size: 0.72rem;
   font-weight: 600;
-  color: #111827 !important;
-  white-space: normal !important;
-  min-width: 140px;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.pstats-acc-footer {
+  padding: 0.5rem 1rem;
+  font-size: 0.78rem;
+  color: #6b7280;
+  background: #f3f4f6;
+  border-top: 1px solid #e5e7eb;
 }
 
 .pstats-loading {
