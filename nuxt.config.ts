@@ -15,7 +15,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      baseUrl: 'http://localhost:8000'
+      baseUrl: process.env.NUXT_PUBLIC_BASE_URL || 'http://localhost:8000',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || process.env.NUXT_PUBLIC_BASE_URL || 'http://localhost:8000'
     }
   },
   // Configuration for subdirectory deployment and app settings

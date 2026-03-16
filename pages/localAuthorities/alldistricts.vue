@@ -6,10 +6,19 @@ definePageMeta({
 })
 
 const config = useRuntimeConfig()
+const apiBaseUrl = String(config.public.apiBase || config.public.baseUrl || 'http://localhost:8000').replace(/\/+$/, '')
+
+const extractAuthoritiesRows = (payload) => {
+  if (Array.isArray(payload)) return payload
+  if (Array.isArray(payload?.data)) return payload.data
+  if (Array.isArray(payload?.data?.data)) return payload.data.data
+  if (Array.isArray(payload?.items)) return payload.items
+  return []
+}
 
 const { data: authoritiesData, pending: authoritiesPending, error: authoritiesError } = await useAsyncData(
   'local-authorities-list',
-  () => $fetch(`${config.public.apiBase}/api/local-authorities`),
+  () => $fetch(`${apiBaseUrl}/api/local-authorities`),
   { default: () => [] }
 )
 
@@ -43,7 +52,7 @@ const cleanDistrictLabel = (name) =>
 const stripHtml = (value) => String(value || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 
 const districts = computed(() => {
-  const rows = Array.isArray(authoritiesData.value) ? authoritiesData.value : []
+  const rows = extractAuthoritiesRows(authoritiesData.value)
 
   return rows.map((row) => {
     const cleanName = cleanDistrictLabel(row.name)
@@ -369,7 +378,7 @@ const exportDistrictInfoToPDF = async () => {
     isLoading.value = true
 
     const payload = await $fetch(
-      `${config.public.apiBase}/api/local-authorities/slug/${selectedDistrictDetails.value.pageSlug}`
+      `${apiBaseUrl}/api/local-authorities/slug/${selectedDistrictDetails.value.pageSlug}`
     )
 
     const districtData = toPdfShape(payload)
@@ -437,7 +446,8 @@ const handleMapMouseMove = (event) => {
 
 const handleDistrictClick = (districtName) => {
   const resolvedName = svgNameAliases[districtName] || districtName
-  selectedDistrict.value = resolvedName
+  const hasResolvedDistrict = districts.value.some((district) => district.name === resolvedName)
+  selectedDistrict.value = hasResolvedDistrict ? resolvedName : districtName
 
   if (process.client) {
     const event = new CustomEvent('district-selected', {
@@ -558,7 +568,7 @@ onMounted(() => {
                     </div>
                     
                     <!-- Default Content (shown when no district is selected) -->
-                    <div v-else-if="!selectedDistrict" key="default" class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
+                    <div v-else-if="!selectedDistrictDetails" key="default" class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md">
                         <div class="bg-[#111827] px-6 py-4">
                             <h3 class="text-xl font-bold text-white">Malawi Local Authorities</h3>
                             <p class="text-blue-100 text-sm">All Districts Information</p>
