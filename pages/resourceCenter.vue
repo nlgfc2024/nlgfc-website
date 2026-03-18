@@ -286,101 +286,34 @@
             </p>
           </div>
 
-          <div v-else class="grid gap-6 lg:grid-cols-[1.35fr_0.95fr]">
-            <div
-              v-if="featuredGalleryImage"
-              class="group relative overflow-hidden rounded-[28px] bg-gray-900 text-left shadow-xl"
-              @click="openGalleryImage(featuredGalleryImage)"
-            >
-              <img
-                :src="featuredGalleryImage.image"
-                :alt="featuredGalleryImage.name"
-                class="h-full min-h-[420px] w-full object-cover transition duration-700 group-hover:scale-105"
-                loading="lazy"
-                @error="handleGalleryImageError"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent"></div>
-              <div class="absolute left-4 top-4 z-10 flex gap-2 sm:left-6 sm:top-6">
-                <button
-                  type="button"
-                  class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur transition hover:bg-black/65"
-                  aria-label="Previous image"
-                  @click.stop="showPreviousGalleryImage"
-                >
-                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur transition hover:bg-black/65"
-                  aria-label="Next image"
-                  @click.stop="showNextGalleryImage"
-                >
-                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                  </svg>
-                </button>
-              </div>
-              <div class="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-                <div class="mb-4 flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-100">
-                  <span class="rounded-full bg-white/10 px-3 py-1 backdrop-blur">Featured Image</span>
-                  <span v-if="featuredGalleryImage.author">{{ featuredGalleryImage.author }}</span>
-                </div>
-                <h5 class="max-w-2xl text-2xl font-semibold text-white sm:text-3xl">
-                  {{ featuredGalleryImage.name }}
-                </h5>
-                <p class="mt-3 max-w-2xl text-sm leading-6 text-white/85">
-                  {{ featuredGalleryImage.description }}
-                </p>
-                <div class="mt-5 flex flex-wrap items-center gap-3">
-                  <span class="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-xs text-white/90 backdrop-blur">
-                    {{ featuredGalleryImage.date ? formatDate(featuredGalleryImage.date) : 'Recently added' }}
-                  </span>
-                  <span class="inline-flex items-center gap-2 text-sm font-medium text-white">
-                    Open preview
-                    <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
+          <div v-else class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               <button
-                v-for="doc in galleryCards"
+                v-for="doc in paginatedDocuments"
                 :key="doc.id"
                 type="button"
-                class="group overflow-hidden rounded-[24px] border border-gray-200 bg-white text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
-                @click="selectFeaturedGalleryImage(doc.id)"
+                class="group overflow-hidden rounded-[22px] border border-gray-200 bg-white text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                @click="openGalleryImage(doc)"
               >
-                <div class="grid h-full sm:grid-cols-[180px_1fr] lg:grid-cols-[160px_1fr]">
-                  <div class="relative overflow-hidden bg-gray-100">
+                <div class="flex h-full flex-col">
+                  <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
                     <img
                       :src="doc.image"
                       :alt="doc.name"
-                      class="h-full min-h-[200px] w-full object-cover transition duration-500 group-hover:scale-105"
+                      class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                       loading="lazy"
                       @error="handleGalleryImageError"
                     />
                   </div>
-                  <div class="flex flex-col justify-between p-5">
+                  <div class="flex flex-1 flex-col justify-between p-4">
                     <div>
-                      <p class="mb-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-700">
-                        {{ doc.author || 'NLGFC Archive' }}
-                      </p>
-                      <h5 class="text-lg font-semibold leading-snug text-gray-900">
+                      <h5 class="line-clamp-2 text-base font-semibold leading-snug text-gray-900">
                         {{ doc.name }}
                       </h5>
-                      <p class="mt-3 line-clamp-3 text-sm leading-6 text-gray-600">
-                        {{ doc.description }}
-                      </p>
                     </div>
-                    <div class="mt-5 flex items-center justify-between gap-3 text-xs text-gray-500">
+                    <div class="mt-3 flex items-center justify-between gap-3 text-xs text-gray-500">
                       <span>{{ doc.date ? formatDate(doc.date) : 'Recently added' }}</span>
                       <span class="inline-flex items-center gap-1 font-medium text-emerald-700">
-                        View image
+                        Preview
                         <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
@@ -390,7 +323,6 @@
                 </div>
               </button>
             </div>
-          </div>
 
           <div
             v-if="shouldPaginateCurrentView && filteredDocuments.length > 0"
@@ -412,11 +344,31 @@
               <div class="relative max-h-[90vh] w-full max-w-6xl overflow-hidden rounded-[28px] bg-white shadow-2xl">
                 <button
                   type="button"
+                  class="absolute left-4 top-1/2 z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/70 text-white transition hover:bg-black"
+                  aria-label="Previous image"
+                  @click="showPreviousGalleryImage"
+                >
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                  </svg>
+                </button>
+                <button
+                  type="button"
                   class="absolute right-4 top-4 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/70 text-white transition hover:bg-black"
                   @click="closeGalleryImage"
                 >
                   <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="absolute right-4 top-1/2 z-10 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/70 text-white transition hover:bg-black"
+                  aria-label="Next image"
+                  @click="showNextGalleryImage"
+                >
+                  <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                   </svg>
                 </button>
 
@@ -1056,22 +1008,6 @@ const imageGalleryItems = computed(() => {
 })
 
 const selectedGalleryImage = ref(null)
-const selectedFeaturedGalleryImageId = ref(null)
-
-const featuredGalleryImage = computed(() => {
-  if (!isImageGalleryActive.value || filteredDocuments.value.length === 0) return null
-
-  return (
-    filteredDocuments.value.find((image) => image.id === selectedFeaturedGalleryImageId.value) ||
-    filteredDocuments.value[0] ||
-    null
-  )
-})
-
-const galleryCards = computed(() => {
-  if (!isImageGalleryActive.value) return []
-  return paginatedDocuments.value.filter((image) => image.id !== featuredGalleryImage.value?.id)
-})
 
 const openGalleryImage = (image) => {
   selectedGalleryImage.value = image
@@ -1092,25 +1028,24 @@ const syncGalleryPageToImage = (imageId) => {
   currentPage.value = Math.floor(index / itemsPerPage.value) + 1
 }
 
-const selectFeaturedGalleryImage = (imageId) => {
-  selectedFeaturedGalleryImageId.value = imageId
-  syncGalleryPageToImage(imageId)
-}
-
 const showPreviousGalleryImage = () => {
-  if (!featuredGalleryImage.value || filteredDocuments.value.length === 0) return
+  if (!selectedGalleryImage.value || filteredDocuments.value.length === 0) return
 
-  const currentIndex = filteredDocuments.value.findIndex((image) => image.id === featuredGalleryImage.value.id)
+  const currentIndex = filteredDocuments.value.findIndex((image) => image.id === selectedGalleryImage.value.id)
   const previousIndex = currentIndex <= 0 ? filteredDocuments.value.length - 1 : currentIndex - 1
-  selectFeaturedGalleryImage(filteredDocuments.value[previousIndex].id)
+  const previousImage = filteredDocuments.value[previousIndex]
+  syncGalleryPageToImage(previousImage.id)
+  selectedGalleryImage.value = previousImage
 }
 
 const showNextGalleryImage = () => {
-  if (!featuredGalleryImage.value || filteredDocuments.value.length === 0) return
+  if (!selectedGalleryImage.value || filteredDocuments.value.length === 0) return
 
-  const currentIndex = filteredDocuments.value.findIndex((image) => image.id === featuredGalleryImage.value.id)
+  const currentIndex = filteredDocuments.value.findIndex((image) => image.id === selectedGalleryImage.value.id)
   const nextIndex = currentIndex === filteredDocuments.value.length - 1 ? 0 : currentIndex + 1
-  selectFeaturedGalleryImage(filteredDocuments.value[nextIndex].id)
+  const nextImage = filteredDocuments.value[nextIndex]
+  syncGalleryPageToImage(nextImage.id)
+  selectedGalleryImage.value = nextImage
 }
 
 /**
@@ -1293,8 +1228,7 @@ const currentDisplayType = computed(() => {
 watch([activeGroup, activeSubgroup], () => {
   updateUrlHash();
   currentPage.value = 1;
-  itemsPerPage.value = isImageGalleryActive.value ? 5 : 6;
-  selectedFeaturedGalleryImageId.value = null
+  itemsPerPage.value = isImageGalleryActive.value ? 8 : 6;
   if (!isImageGalleryActive.value) {
     closeGalleryImage()
   }
@@ -1302,8 +1236,11 @@ watch([activeGroup, activeSubgroup], () => {
 
 watch(searchQuery, () => {
   currentPage.value = 1;
-  if (isImageGalleryActive.value) {
-    selectedFeaturedGalleryImageId.value = null
+  if (!isImageGalleryActive.value) return
+
+  const hasSelectedImage = filteredDocuments.value.some((image) => image.id === selectedGalleryImage.value?.id)
+  if (!hasSelectedImage) {
+    closeGalleryImage()
   }
 })
 
@@ -1312,10 +1249,12 @@ watch([filteredDocuments, itemsPerPage], () => {
     currentPage.value = totalPages.value
   }
 
-  if (isImageGalleryActive.value && filteredDocuments.value.length > 0) {
-    const hasSelectedImage = filteredDocuments.value.some((image) => image.id === selectedFeaturedGalleryImageId.value)
-    if (!hasSelectedImage) {
-      selectedFeaturedGalleryImageId.value = filteredDocuments.value[0].id
+  if (isImageGalleryActive.value && selectedGalleryImage.value) {
+    const matchedImage = filteredDocuments.value.find((image) => image.id === selectedGalleryImage.value.id)
+    if (matchedImage) {
+      selectedGalleryImage.value = matchedImage
+    } else {
+      closeGalleryImage()
     }
   }
 })
