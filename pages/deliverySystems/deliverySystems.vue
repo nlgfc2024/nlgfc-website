@@ -7,11 +7,10 @@ import { usePageBlocks } from '~/composables/usePageBlocks'
 definePageMeta({ title: 'Delivery Systems' })
 
 const { data: pages, pending, error: PageError } = usePageBlocks([
-  'msr-header', 'msr-dashboard', 'msr-key-features','laifmis-header','laifmis-key-features',
-  'digital-payment-services-header','digital-picture','digital-payment-services-key-features','cs-epwp-header','cs-epwp-picture',
-  'cs-epwp-key-features','dgrm-header','dgrm-picture','dgrm-key-features','lapas-header','lapas-dashboard',
-  'lapas-key-features','comsip-header','comsip-key-features','pmis-header','pmis-dashboard','pmis-key-features',
-  'sctp-header','sctp-key-features'
+  'malawi-social-registry','local-authorities-integrated-financial-management-information-system',
+  'digital-payment-services','public-works-mis','digital-grievance-redress-mechanism-mis','local-authority-performance-assessment-system',
+'community-savings-and-investment-promotion-mis','project-monitoring-information-system',
+  'social-cash-transfer-program-mis'
 ])
 
 const route = useRoute()
@@ -154,41 +153,22 @@ function updateActiveTabFromHash(hash: string) {
   
 <!-- MSR Section -->
 <div v-if="item.id === 'msr'" class="prose max-w-none">
-  <BlocksRenderer :blocks="pages?.['msr-header']?.blocks || []" />
+  <BlocksRenderer :blocks="pages?.['malawi-social-registry']?.blocks || []" />
   
-<!-- MSR Dashboard-->
-<div class="mt-10">
-  <BlocksRenderer :blocks="pages?.['msr-dashboard']?.blocks || []" />
-</div>
-  <!-- Key Features Section -->
-  <BlocksRenderer :blocks="pages?.['msr-key-features']?.blocks || []" />
-  
+
 </div>
 
            <!-- LAIFMIS section -->
 <div v-else-if="item.id === 'laifmis'" class="prose max-w-none">
-  <BlocksRenderer :blocks="pages?.['laifmis-header']?.blocks || []" />
+  <BlocksRenderer :blocks="pages?.['local-authorities-integrated-financial-management-information-system']?.blocks || []" />
 
-
-
-            <!--LAIFMIS Key Features-->
-<BlocksRenderer :blocks="pages?.['laifmis-key-features']?.blocks || []" />  
 </div>
 
             
             <!--digital-payment-services section -->
 <div v-else-if="item.id === 'digital-payment-services'" class="prose max-w-none">
-  <BlocksRenderer :blocks="pages?.['digital-payment-services-header']?.blocks || []" />
+  <BlocksRenderer :blocks="pages?.['digital-payment-services']?.blocks || []" />
   
-
-<!-- digital PICTURE--> 
- <div class="flex justify-center mt-10"> 
-  <BlocksRenderer :blocks="pages?.['digital-picture']?.blocks || []" /> 
-</div>
-
-
-  <!-- Key Features Section -->
-  <BlocksRenderer :blocks="pages?.['digital-payment-services-key-features']?.blocks || []" />
 
   <!-- DIGITAL Service Providers Section -->
   <div class="mt-8">
@@ -235,77 +215,35 @@ function updateActiveTabFromHash(hash: string) {
 
         <!-- Public Works MIS -->
 <div v-else-if="item.id === 'publicworks'" class="prose max-w-none">
-    <BlocksRenderer :blocks="pages?.['cs-epwp-header']?.blocks || []" />
+    <BlocksRenderer :blocks="pages?.['public-works-mis']?.blocks || []" />
 
-<!-- Public Works Dashboard -->
-
-<div class="flex justify-center mt-10">
-  <BlocksRenderer :blocks="pages?.['cs-epwp-picture']?.blocks || []" />
-</div>
-
-
- <!-- Key Feature Section -->
-<BlocksRenderer :blocks="pages?.['cs-epwp-key-features']?.blocks || []" />
 </div>
 
           
            <!-- DGRM Section -->
 <div v-else-if="item.id === 'dgrm'" class="prose max-w-none">
-  <BlocksRenderer :blocks="pages?.['dgrm-header']?.blocks || []" />
-
-          <!-- DGRM PICTURE-->
-
-<div class="flex justify-center mt-10"> 
-  <BlocksRenderer :blocks="pages?.['dgrm-picture']?.blocks || []" /> 
-</div>
-
-  
-  <!-- Key Feature Section -->
-  <BlocksRenderer :blocks="pages?.['dgrm-key-features']?.blocks || []" />
-  
+  <BlocksRenderer :blocks="pages?.['digital-grievance-redress-mechanism-mis']?.blocks || []" />
 </div>
 
             <!-- SCTP MIS Section -->
 <div v-else-if="item.id === 'sctpmis'" class="prose max-w-none">
-  <BlocksRenderer :blocks="pages?.['sctp-header']?.blocks || []" />
-  
-
-
-  <!-- Key Features Section -->
-  <BlocksRenderer :blocks="pages?.['sctp-key-features']?.blocks || []" />
+  <BlocksRenderer :blocks="pages?.['social-cash-transfer-program-mis']?.blocks || []" />
+ 
 </div>
 
 <!-- LAPAS Section -->
 <div v-else-if="item.id === 'lapas'" class="prose max-w-none">
-  <BlocksRenderer :blocks="pages?.['lapas-header']?.blocks || []" />
-
-<!-- lapas dashboard--> 
-<div class="mt-10">
-  <BlocksRenderer :blocks="pages?.['lapas-dashboard']?.blocks || []" />
-</div>
-  <!-- Key Features Section -->
-  <BlocksRenderer :blocks="pages?.['lapas-key-features']?.blocks || []" />
+  <BlocksRenderer :blocks="pages?.['local-authority-performance-assessment-system']?.blocks || []" />
 </div>
 
 <!-- COMSIP section-->
 <div v-else-if="item.id === 'comsip'" class="prose max-w-none">
-  <BlocksRenderer :blocks="pages?.['comsip-header']?.blocks || []" />
-
-  <!-- Key Features Section -->
-  <BlocksRenderer :blocks="pages?.['comsip-key-features']?.blocks || []" />
+  <BlocksRenderer :blocks="pages?.['community-savings-and-investment-promotion-mis']?.blocks || []" />
 </div>
 
 <!-- PMIS Section -->
 <div v-else-if="item.id === 'pmis'" class="prose max-w-none">
-  <BlocksRenderer :blocks="pages?.['pmis-header']?.blocks || []" />
-
-  <!-- PMIS Dashboard -->
-<div class="mt-10">
-  <BlocksRenderer :blocks="pages?.['pmis-dashboard']?.blocks || []" />
-</div>
-
-  <!-- Key Features Section -->
-  <BlocksRenderer :blocks="pages?.['pmis-key-features']?.blocks || []" />
+  <BlocksRenderer :blocks="pages?.['project-monitoring-information-system']?.blocks || []" />
 </div>
 
           </div>
