@@ -12,9 +12,11 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/tailwindcss'
   ],
- runtimeConfig: {
+
+  runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://nlgfc_api.test',
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || process.env.NUXT_PUBLIC_BASE_URL || 'http://nlgfc_api.test',
+      baseUrl: process.env.NUXT_PUBLIC_BASE_URL || process.env.NUXT_PUBLIC_API_BASE || 'http://nlgfc_api.test',
       jobsPortalBase: process.env.NUXT_PUBLIC_JOBS_PORTAL_BASE || 'http://localhost:3001',
       procurementPortalBase: process.env.NUXT_PUBLIC_PROCUREMENT_PORTAL_BASE || 'http://localhost:3002',
     },

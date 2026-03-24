@@ -34,6 +34,10 @@ const headerHeight = ref(0);
 const navbarHeight = ref(0);
 const isHeaderVisible = ref(true);
 
+const handleActiveIdUpdate = (newId) => {
+  activeTab.value = newId;
+};
+
 const opportunitySections = [
   {
     id: 'procurement-notices',
@@ -61,10 +65,6 @@ const normalizeOpportunitySidebarId = (hashValue) => {
   }
 
   return 'procurement-notices';
-};
-
-const handleActiveIdUpdate = (newId) => {
-  activeTab.value = newId;
 };
 
 const sidebarProps = computed(() => {
@@ -161,7 +161,7 @@ const sidebarProps = computed(() => {
     }; } 
   }
 
-  if (route.path.includes('/projects/pastProjects#masaf_overview')) {
+  if (route.path.includes('/projects/pastProjects#masaf-overview')) {
     if (projectGroups.value.length > 0) {
       return {
         sidebarType: 'projects',
@@ -169,7 +169,7 @@ const sidebarProps = computed(() => {
         sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; }    
-  } else if (route.path.includes('/projects/pastProjects#psn')) {
+  } else if (route.path.includes('/projects/pastProjects#masaf-psn')) {
     if (projectGroups.value.length > 0) {
       return {
         sidebarType: 'projects',
@@ -177,7 +177,7 @@ const sidebarProps = computed(() => {
         sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; }    
-  } else if (route.path.includes('/projects/pastProjects#scb')) {
+  } else if (route.path.includes('/projects/pastProjects#masaf-scb')) {
     if (projectGroups.value.length > 0) {
       return {
         sidebarType: 'projects',
@@ -185,7 +185,7 @@ const sidebarProps = computed(() => {
         sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; }    
-  } else if (route.path.includes('/projects/pastProjects#pm')) {
+  } else if (route.path.includes('/projects/pastProjects#masaf-pm')) {
     if (projectGroups.value.length > 0) {
       return {
         sidebarType: 'projects',
@@ -195,7 +195,7 @@ const sidebarProps = computed(() => {
     }; }    
   }
 
-  if (route.path.includes('/projects/currentProjects#miera_overview')) {
+  if (route.path.includes('/projects/currentProjects#miera-overview')) {
     if (projectGroups.value.length > 0) {
       return {
         sidebarType: 'projects',
@@ -205,7 +205,7 @@ const sidebarProps = computed(() => {
     }; } 
   }
 
-  if (route.path.includes('/projects/currentProjects#ssrlp_news')) {
+  if (route.path.includes('/projects/currentProjects#ssrlp-news')) {
     if (projectGroups.value.length > 0) {
       return {
         sidebarType: 'projects',
@@ -215,7 +215,7 @@ const sidebarProps = computed(() => {
     }; } 
   }
 
-  if (route.path.includes('/upcomingProjects#gesd2')) {
+  if (route.path.includes('/projects/upcomingProjects#gesd-2')) {
     if (projectGroups.value.length > 0) {
       return {
         sidebarType: 'projects',
@@ -223,7 +223,7 @@ const sidebarProps = computed(() => {
         sidebarTitle: route.meta.title, 
         activeId: activeTab.value
     }; } 
-  } else if (route.path.includes('/upcomingProjects#inspire')) {
+  } else if (route.path.includes('/projects/upcomingProjects#inspire-o')) {
     if (projectGroups.value.length > 0) {
       return {
         sidebarType: 'projects',

@@ -1,13 +1,14 @@
-"<script setup>
+<script setup>
     import { useGeneralSidebar } from '~/composables/useGeneralSidebar';
     import BlocksRenderer from '~/components/BlocksRenderer.vue'
-    import { usePageBlocks } from '~/composables/usePageBlocks'
+  import { useApiDataArray } from '~/composables/useApiData'
 
     definePageMeta({
     title: 'About Us'
     })
 
     const route = useRoute()
+    const config = useRuntimeConfig()
     const activeTab = ref('mvc')
     const openSubMenu = ref(null)
     const imageError = ref(false)
@@ -17,78 +18,76 @@
     console.error("Organogram image failed to load");
     };
 
-    // Board of Directors
-    const board = {
-    chairperson: {
-        name: "Commissioner Richard Chapweteka",
-        position: "Board Chairperson",
-        image: "/images/board/CommissionerRichardChapwetekaBoardChairperson.png",
-        reportsTo: null,
-        subordinates: [
-        "member1",
-        "member2",
-        "member3",
-        "member4"
-        ]
-    },
-    member1: {
-        name: "Abel Mwambinga",
-        position: "Board Member",
-        image: "/images/board/Abel MwambingaBoardMember.png",
-        reportsTo: "chairperson"
-    },
-    member2: {
-        name: "Councilor Davie Maunde",
-        position: "Board Member",
-        image: "/images/board/CouncilorDavieMaundeBoardMember.png",
-        reportsTo: "chairperson"
-    },
-    member3: {
-        name: "Mary Mkwanda",
-        position: "Board Member",
-        image: "/images/board/MrsMaryMkwandaBoardMember.png",
-        reportsTo: "chairperson"
-    },
-    member4: {
-        name: "Lilian Khofi",
-        position: "Board Member",
-        image: "/images/board/Ms.LilianKhofiVice.png",
-        reportsTo: "chairperson"
-    }
+    const apiBaseUrl = computed(() => (config.public.baseUrl || 'http://localhost:8000').replace(/\/$/, ''))
+    const pagesApiBaseUrl = computed(() => (config.public.apiBase || config.public.baseUrl || 'http://localhost:8000').replace(/\/$/, ''))
+
+    const TAB_PAGE_SLUGS = {
+      mvc: 'mission-vision-core-values',
+      powers: 'powers-and-functions-of-nlgfc',
+      finance: 'directorate-of-finance-and-fiscal-decentralization',
+      corporate: 'directorate-of-corporate-and-strategic-services',
+      social: 'directorate-of-social-and-economic-dev-services',
+      planning: 'planning-monitoring-and-evaluation-division',
+      procurement: 'procurement-and-assets-disposal-division',
+      audit: 'internal-audit-and-risk-division'
     }
 
-    // Executive Management
-    const leadership = {
-    executiveDirector: {
-        name: "Kondwani Santhe (PhD)",
-        position: "Executive Director",
-        image: "/images/management/kondwani-santhe--ed.png",
-        reportsTo: null,
-        subordinates: [
-        "directorInfrastructure",
-        "directorFinance",
-        "directorCorporate"
-        ]
-    },
-    directorInfrastructure: {
-        name: "Paul Chipeta",
-        position: "Director of Social & Economic Development Services",
-        image: "/images/management/directorEconomicDevelopment.png",
-        reportsTo: "executiveDirector"
-    },
-    directorFinance: {
-        name: "Linda Kapanda",
-        position: "Director of Finance & Fiscal Decentralization",
-        image: "/images/management/financeDirector.png",
-        reportsTo: "executiveDirector"
-    },
-    directorCorporate: {
-        name: "Stanley Chuthi",
-        position: "Director of Administration & Corporate Services",
-        image: "/images/management/directorCorporateServices.png",
-        reportsTo: "executiveDirector"
+    const normalizeImageUrl = (imagePath) => {
+      if (!imagePath || typeof imagePath !== 'string') return ''
+      if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath
+      if (imagePath.startsWith('/images/')) return imagePath
+      if (imagePath.startsWith('/storage/')) return `${apiBaseUrl.value}${imagePath}`
+      return `${apiBaseUrl.value}/storage/${imagePath.replace(/^\/+/, '')}`
     }
-    }
+
+    const { data: boardMembers, loading: boardLoading, error: boardError, refresh: refreshBoard } = useApiDataArray(
+      'about-board-of-directors',
+      '/api/board-of-directors',
+      {
+        immediate: false,
+        lazy: true,
+        server: false
+      }
+    )
+
+    const { data: executiveMembers, loading: executiveLoading, error: executiveError, refresh: refreshExecutive } = useApiDataArray(
+      'about-executive-management',
+      '/api/executive-management',
+      {
+        immediate: false,
+        lazy: true,
+        server: false
+      }
+    )
+
+    const boardRequested = ref(false)
+    const executiveRequested = ref(false)
+    const pageBlocksByTab = reactive({})
+    const pageLoadingByTab = reactive({})
+    const pageErrorByTab = reactive({})
+    const pageLoadedByTab = reactive({})
+
+    const boardChairperson = computed(() => {
+      if (!Array.isArray(boardMembers.value) || !boardMembers.value.length) return null
+      return boardMembers.value.find((member) => /chair/i.test(member?.position || '')) || boardMembers.value[0]
+    })
+
+    const boardOtherMembers = computed(() => {
+      if (!Array.isArray(boardMembers.value) || !boardMembers.value.length) return []
+      if (!boardChairperson.value) return boardMembers.value
+      return boardMembers.value.filter((member) => member !== boardChairperson.value)
+    })
+
+    const executiveDirector = computed(() => {
+      if (!Array.isArray(executiveMembers.value) || !executiveMembers.value.length) return null
+      return executiveMembers.value.find((member) => /executive director/i.test(member?.position || '')) || executiveMembers.value[0]
+    })
+
+    const otherExecutiveDirectors = computed(() => {
+      if (!Array.isArray(executiveMembers.value) || !executiveMembers.value.length) return []
+      if (!executiveDirector.value) return executiveMembers.value
+      return executiveMembers.value.filter((member) => member !== executiveDirector.value)
+    })
 
     const menuItems = ref([
     { 
@@ -97,6 +96,7 @@
         { id: 'powers', title: 'Powers and Functions' },
         { id: 'board', title: 'Board of Directors' },
         { id: 'management', title: 'Executive Management' },
+        { id: 'organisational-structure', title: 'Organisational Structure' },
         // { id: 'structure', title: 'Organogram' },
         ]
     },
@@ -136,40 +136,129 @@
     }
     })
 
-    // Map the 'menuItems' data to the 'projectGroups' structure
-    const mappedProjectGroups = computed(() => {
-        const flattenedGroups = menuItems.value.flatMap(section => {
-            return section.items.map(item => {
-                if (item.subItems && item.subItems.length > 0) {
-                    // If the item has sub-items, map them as a group
-                    return {
-                        group: item.title,
-                        id: item.id,
-                        items: item.subItems
-                    };
-                } else {
-                    // If no sub-items, create a group with a single item
-                    return {
-                        group: item.title,
-                        id: item.id,
-                        items: [{ id: item.id, title: item.title }]
-                    };
-                }
-            });
-        });
-        return flattenedGroups;
+    // Flat items: normal sidebar links (no accordion)
+    const flatSectionIds = ['mvc', 'powers', 'board', 'management', 'organisational-structure'];
+    const sidebarSectionsData = computed(() => {
+        return menuItems.value.flatMap(section =>
+            section.items
+                .filter(item => flatSectionIds.includes(item.id))
+                .map(item => ({ id: item.id, name: item.title }))
+        );
+    });
+    // Groups with accordion (only Directorates and Divisions)
+    const accordionGroupsData = computed(() => {
+        return menuItems.value.flatMap(section =>
+            section.items
+                .filter(item => item.subItems && item.subItems.length > 0)
+                .map(item => ({
+                    group: item.title,
+                    id: item.id,
+                    items: item.subItems
+                }))
+        );
     });
 
 // Use the composable to share the data
 const { projectGroups } = useGeneralSidebar();
-projectGroups.value = mappedProjectGroups.value;
+
+// Combined for sidebar rendering:
+// - Top-level links as standalone sections (no dropdown)
+// - Directorates as a single accordion group
+const sidebarData = computed(() => [
+  ...sidebarSectionsData.value,
+  ...accordionGroupsData.value,
+]);
+
+watchEffect(() => {
+  projectGroups.value = sidebarData.value;
+});
 
 // Page-builder: Mission, Vision, Core Values content
 // const { data: mvcPage, pending: mvcPending, error: mvcError } = usePageBlocks('mission-vision-core-values')
     
 const { data: pages, pending, error: PageError } = usePageBlocks([
-  'mission-vision-core-values'
+  'powers-and-functions-of-nlgfc','procurement-and-assets-disposal-division',
+  'directorate-of-finance-and-fiscal-decentralization','directorate-of-corporate-and-strategic-services',
+  'planning-monitoring-and-evaluation-division',
+  'internal-audit-and-risk-division','directorate-of-social-and-economic-dev-services'
 ])
+
+const PagePending = pending
+
+const isTabPageSlug = (tabId) => Object.prototype.hasOwnProperty.call(TAB_PAGE_SLUGS, tabId)
+
+const getTabSlug = (tabId) => TAB_PAGE_SLUGS[tabId]
+
+const fetchTabPage = async (tabId, force = false) => {
+  if (!isTabPageSlug(tabId)) return
+
+  const slug = getTabSlug(tabId)
+  if (!slug) return
+
+  if (!force && pageLoadedByTab[tabId]) return
+  if (pageLoadingByTab[tabId]) return
+
+  pageLoadingByTab[tabId] = true
+  pageErrorByTab[tabId] = null
+
+  try {
+    const page = await $fetch(`${pagesApiBaseUrl.value}/api/pages/${slug}`)
+    pageBlocksByTab[tabId] = page?.blocks || []
+    pageLoadedByTab[tabId] = true
+  } catch (error) {
+    pageErrorByTab[tabId] = error
+  } finally {
+    pageLoadingByTab[tabId] = false
+  }
+}
+
+const getTabBlocks = (tabId) => {
+  if (Array.isArray(pageBlocksByTab[tabId])) return pageBlocksByTab[tabId]
+  const slug = getTabSlug(tabId)
+  return pages.value?.[slug]?.blocks || []
+}
+
+const isTabPageLoading = (tabId) => {
+  if (pageLoadingByTab[tabId]) return true
+
+  const slug = getTabSlug(tabId)
+  if (!slug) return false
+
+  return pending.value && !pages.value?.[slug]
+}
+
+const getTabPageError = (tabId) => {
+  if (pageErrorByTab[tabId]) return pageErrorByTab[tabId]
+
+  const slug = getTabSlug(tabId)
+  if (!slug) return null
+
+  return PageError.value && !pages.value?.[slug] ? PageError.value : null
+}
+
+const ensureLeadershipDataForTab = async (tabId) => {
+  if (tabId === 'board' && !boardRequested.value) {
+    boardRequested.value = true
+    await refreshBoard()
+  }
+
+  if (tabId === 'management' && !executiveRequested.value) {
+    executiveRequested.value = true
+    await refreshExecutive()
+  }
+}
+
+watch(
+  activeTab,
+  async (tabId) => {
+    await ensureLeadershipDataForTab(tabId)
+
+    if (isTabPageSlug(tabId)) {
+      await fetchTabPage(tabId)
+    }
+  },
+  { immediate: true }
+)
 
 
 function updateActiveTabFromHash(hash) {
@@ -200,6 +289,9 @@ function updateActiveTabFromHash(hash) {
 const zoom = ref(100);
 const imageLoaded = ref(false);
 
+/**
+ * Zoom in the organogram image by 25% if the zoom level is below 200%
+ */
 const zoomIn = () => {
   if (zoom.value < 200) zoom.value += 25;
 };
@@ -229,164 +321,40 @@ const downloadImage = () => {
         <div v-show="activeTab === 'mvc'" class="prose max-w-none">
             <div v-if="PagePending">Loading...</div>
             <div v-else-if="PageError">Failed to load content.</div>
-            <BlocksRenderer :blocks="pages?.['mission-vision-core-values']?.blocks || []" />
+            <!-- <BlocksRenderer :blocks="pages?.['mission-vision-core-values']?.blocks || []" /> -->
              
         </div>
+
        <div v-show="activeTab === 'powers'" class="prose max-w-none">
             <!-- Header Section -->
-            <div class="mb-10">
-                <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
-                    Powers and Functions of NLGFC
-                </h2>
-                <p class="text-lg text-gray-600">
-                    Constitutional mandates and operational responsibilities under Malawi law
-                </p>
-            </div>
-
-            <!-- Powers Section -->
-            <div class="mb-14">
-                <div class="flex items-center mb-6"> <!-- Changed to items-center -->
-                    <div class="bg-blue-100 p-3 rounded-lg mr-5">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-2xl font-semibold text-gray-800">Constitutional Powers</h3> <!-- Removed mb-4 -->
-                </div>
-                <p class="text-gray-700 mb-6 pl-16"> <!-- Added pl-16 for indentation -->
-                    The National Local Government Finance Committee (NLGFC) was established by the constitution of the Republic of Malawi (Section 149 of 1994) and it assumes other powers and functions as conferred on it by the Local Government Act (1998).
-                </p>
-
-                <div class="bg-blue-50/50 p-6 rounded-xl border border-blue-100">
-                    <ul class="space-y-4">
-                        <li class="flex items-start text-gray-700">
-                            <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>
-                                <span class="font-medium text-gray-800">Receive estimates and budgets:</span> Receive all estimates of revenue and all projected budgets of all local government authorities
-                            </span>
-                        </li>
-                        <li class="flex items-start text-gray-700">
-                            <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>
-                                <span class="font-medium text-gray-800">Supervise and audit accounts:</span> Supervise and audit accounts of local government authorities, in accordance with any Act of Parliament, Assembly, subject to the recommendations of the Auditor General
-                            </span>
-                        </li>
-                        <li class="flex items-start text-gray-700">
-                            <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>
-                                <span class="font-medium text-gray-800">Fund distribution:</span> Make recommendations relating to the distribution of funds allocated to local government authorities, and vary the amount payable from time to time and area to area according to, and with sole consideration of, economic, geographic and demographic variables
-                            </span>
-                        </li>
-                        <li class="flex items-start text-gray-700">
-                            <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>
-                                <span class="font-medium text-gray-800">Consolidated budget preparation:</span> Prepare a consolidated budget for all local government authorities and estimates after consultation with the Treasury, which shall be presented to the National Assembly by the Minister responsible for Local Government before the commencement of each financial year
-                            </span>
-                        </li>
-                        <li class="flex items-start text-gray-700">
-                            <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>
-                                <span class="font-medium text-gray-800">Supplementary funds:</span> Make application to that Minister for supplementary funds where necessary
-                            </span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Functions Section -->
-            <div>
-                <div class="flex items-start mb-6">
-                    <div class="bg-blue-100 p-3 rounded-lg mr-5">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-2xl font-semibold text-gray-800 mb-4">Operational Functions</h3>
-                        <p class="text-gray-700 mb-6">
-                            The NLGFC carries out its mandate through these core functions:
-                        </p>
-                    </div>
-                </div>
-
-                <div class="space-y-6">
-                    <!-- Function 1 -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-200 transition-colors">
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-medium text-gray-900 mb-2">Financial Governance</h4>
-                                <p class="text-gray-700">
-                                    Ensure transparency, accountability, reporting and good governance of public funds in Local Authorities as enshrined in:
-                                </p>
-                                <div class="mt-3 flex flex-wrap gap-2">
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800">Public Finance Management Act 2022</span>
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800">Public Audit Act 2017</span>
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800">Public Procurement and Disposal of Assets Act 2017</span>
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800">Compliance and Practices Act 2003</span>
-                                    <span class="text-xs font-medium px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800">Local Government Act 1998</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Function 2 -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:border-blue-200 transition-colors">
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-4 flex-shrink-0">
-                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="font-medium text-gray-900 mb-2">Resource Mobilization</h4>
-                                <p class="text-gray-700">
-                                    Mobilise financial resources for other recurrent transactions and development from government and development partners for allocation and disbursement to Local Authorities.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div v-if="PagePending">Loading...</div>
+            <div v-else-if="PageError">Failed to load content.</div>
+            <BlocksRenderer :blocks="pages?.['powers-and-functions-of-nlgfc']?.blocks || []" />
         </div>
         <!-- Board of Directors Content -->
         <div v-show="activeTab === 'board'" class="prose max-w-none">
-          
-          <div class="space-y-4">
+          <div v-if="boardLoading">Loading board members...</div>
+          <div v-else-if="boardError" class="space-y-3">
+            <p>Failed to load board members.</p>
+            <button
+              @click="refreshBoard"
+              class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            >
+              Try Again
+            </button>
+          </div>
+          <div v-else-if="!boardChairperson" class="text-gray-600">No board members available.</div>
+          <div v-else class="space-y-4">
                 <div class="board-page">
                    
                     <!-- Top Level - Board Chair -->
                     <div class="org-level top-level">
                     <div class="board-card">
                         <div class="board-image">
-                        <img :src="board.chairperson.image" :alt="board.chairperson.name">
+                        <img :src="normalizeImageUrl(boardChairperson.image)" :alt="boardChairperson.name">
                         </div>
-                        <h2>{{ board.chairperson.name }}</h2>
-                        <p class="position">{{ board.chairperson.position }}</p>
+                        <h2>{{ boardChairperson.name }}</h2>
+                        <p class="position">{{ boardChairperson.position }}</p>
                     </div>
                     </div>
                     
@@ -398,15 +366,15 @@ const downloadImage = () => {
                     <!-- Second Level - Board Members -->
                     <div class="org-level middle-level">
                     <div 
-                        v-for="(id, index) in board.chairperson.subordinates" 
-                        :key="index" 
+                      v-for="(member, index) in boardOtherMembers" 
+                      :key="member.id || index" 
                         class="board-card"
                     >
                         <div class="board-image">
-                        <img :src="board[id].image" :alt="board[id].name">
+                      <img :src="normalizeImageUrl(member.image)" :alt="member.name">
                         </div>
-                        <h3>{{ board[id].name }}</h3>
-                        <p class="position">{{ board[id].position }}</p>
+                      <h3>{{ member.name }}</h3>
+                      <p class="position">{{ member.position }}</p>
                     </div>
                     </div>
                 </div>
@@ -414,36 +382,47 @@ const downloadImage = () => {
         </div>
         <!-- Executive Management Content -->
         <div v-show="activeTab === 'management'" class="prose max-w-none">
-
-            <div class="space-y-4">
-                <div class="executive-page">
+            <div v-if="executiveLoading">Loading executive management...</div>
+            <div v-else-if="executiveError" class="space-y-3">
+              <p>Failed to load executive management.</p>
+              <button
+                @click="refreshExecutive"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
+            </div>
+            <div v-else-if="!executiveDirector" class="text-gray-600">No executive management records available.</div>
+            <div v-else class="space-y-4">
+              <div class="board-page">
                     
                     <!-- Top Level - Executive Director -->
                     <div class="org-level top-level">
-                        <div class="executive-card">
-                            <div class="executive-image">
-                            <img :src="leadership.executiveDirector.image" :alt="leadership.executiveDirector.name">
+                  <div class="board-card">
+                    <div class="board-image">
+                            <img :src="normalizeImageUrl(executiveDirector.image)" :alt="executiveDirector.name">
                             </div>
-                            <h2>{{ leadership.executiveDirector.name }}</h2>
-                            <p class="position">{{ leadership.executiveDirector.position }}</p>
+                            <h2>{{ executiveDirector.name }}</h2>
+                            <p class="position">{{ executiveDirector.position }}</p>
                         </div>
                     </div>
                     
-                    <!-- Connecting line -->
-                    <div class="connector">
+                <!-- Connecting lines -->
+                <div class="connector-container">
+                  <div class="connector-line"></div>
                     </div>
                     
                     <!-- Second Level - Directors -->
                     <div class="org-level middle-level">
                         <div 
-                            v-for="(id, index) in leadership.executiveDirector.subordinates" 
-                            :key="index" 
-                            class="executive-card">
-                            <div class="executive-image">
-                            <img :src="leadership[id].image" :alt="leadership[id].name">
+                        v-for="(member, index) in otherExecutiveDirectors" 
+                        :key="member.id || index" 
+                    class="board-card">
+                    <div class="board-image">
+                        <img :src="normalizeImageUrl(member.image)" :alt="member.name">
                             </div>
-                            <h3>{{ leadership[id].name }}</h3>
-                            <p class="position">{{ leadership[id].position }}</p>
+                        <h3>{{ member.name }}</h3>
+                        <p class="position">{{ member.position }}</p>
                         </div>
                     </div>
                 </div>
@@ -453,740 +432,90 @@ const downloadImage = () => {
         <!-- Finance Directorate Content -->
         <div v-show="activeTab === 'finance'" class="prose max-w-none">
             <!-- Header Section -->
-            <div class="mb-10">
-                <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
-                    Directorate of Finance and Fiscal Decentralization
-                </h2>
-                <p class="text-lg text-gray-600">
-                    The Directorate is headed by the Director Finance and Fiscal Decentralisation and its key functions include managing and accounting for local authorities (LAs) financial resources, monitoring and regulating finance utilization, promoting effective LAs budgeting and fiscal decentralization.
-                </p>
+          <div v-if="isTabPageLoading('finance')">Loading...</div>
+            <div v-else-if="getTabPageError('finance')" class="space-y-3">
+              <p>Failed to load content.</p>
+              <button
+                @click="fetchTabPage('finance', true)"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
             </div>
-
-            <!-- Key Functions Section -->
-            <div class="bg-gradient-to-br from-blue-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
-                <!-- Heading with inline icon -->
-                <div class="flex items-center mb-6">  <!-- Changed to items-center and increased mb -->
-                    <div class="bg-blue-100 p-2 rounded-lg mr-4">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800">Key Functions</h3>  <!-- Removed mb-4 -->
-                </div>
-
-                <!-- List with proper indentation -->
-                <ul class="space-y-3 pl-10">  <!-- Added pl-10 for indentation -->
-                    <li class="flex">
-                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Managing and accounting for local authorities (LAs) financial resources</span>
-                    </li>
-                    <li class="flex">
-                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Monitoring and regulating finance utilization</span>
-                    </li>
-                    <li class="flex">
-                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Promoting effective LAs budgeting and fiscal decentralization</span>
-                    </li>
-                    <li class="flex">
-                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Disbursing and accounting for LA financial resources</span>
-                    </li>
-                    <li class="flex">
-                        <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Monitoring LGA financial regulations, procedures, systems and controls</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Divisions Section -->
-            <div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-                    <svg class="w-6 h-6 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    Divisions
-                </h3>
-                
-                <div class="grid md:grid-cols-2 gap-6">
-                    <!-- Accounts Division -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-                        <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">Accounts and Disbursement Division</h4>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-gray-700">Manages LGA budget coordination, financial disbursement, and accounting.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Budgeting Division -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-                        <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">Budgeting and Fiscal Decentralization Division</h4>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-gray-700">Oversees LGA budgeting and promotes fiscal decentralization.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Financial Regulation Division -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow md:col-span-2">
-                        <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">Financial Regulation, Compliance and Reporting Division</h4>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-gray-700">Ensures compliance with financial standards, supports audits, and consolidates LGA reports.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <BlocksRenderer v-else :blocks="getTabBlocks('finance')" />
         </div>
+
+
+
+
+      
 
         <!-- Corporate Services Directorate Content -->
         <div v-show="activeTab === 'corporate'" class="prose max-w-none">
             <!-- Header Section -->
-            <div class="mb-10">
-                <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
-                    Directorate of Corporate and Strategic Services
-                </h2>
-                <p class="text-lg text-gray-600">
-                    The Directorate is headed by Directorate of Administration and Corporate Services. The directorate is responsible for providing corporate services and strategic institutional support.
-                </p>
+          <div v-if="isTabPageLoading('corporate')">Loading...</div>
+            <div v-else-if="getTabPageError('corporate')" class="space-y-3">
+              <p>Failed to load content.</p>
+              <button
+                @click="fetchTabPage('corporate', true)"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
             </div>
-
-            <!-- Divisions Section -->
-            <div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-                    <svg class="w-6 h-6 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    Divisions and Sections
-                </h3>
-                
-                <div class="grid md:grid-cols-2 gap-6">
-                    <!-- HR Division -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-                        <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">Human Resource and Administrative Division</h4>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-gray-700">Handles HR functions like recruitment, payroll, records, and office administration.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- ICT Division -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-                        <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">ICT Division</h4>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-gray-700">Manages IT infrastructure, Malawi Social Registry database, and supports digital systems like Nthandizi-MIS and LGA-IFMIS.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Knowledge Management Section -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-                        <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">Knowledge Management and Communication Section</h4>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-gray-700">Manages communication, public relations, documentation, and knowledge systems.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <BlocksRenderer v-else :blocks="getTabBlocks('corporate')" />
         </div>
         <!-- Social and Economic Development Services Directorate Content -->
         <div v-show="activeTab === 'social'" class="prose max-w-none">
             <!-- Header Section -->
-            <div class="mb-10">
-                <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
-                    Directorate of Social and Economic Development Services
-                </h2>
-                <p class="text-lg text-gray-600">
-                    Director of Social and Economic Services is the head of this directorate and its key function is to support local economic development and social transformation interventions in LAs in Malawi.
-                </p>
+          <div v-if="isTabPageLoading('social')">Loading...</div>
+            <div v-else-if="getTabPageError('social')" class="space-y-3">
+              <p>Failed to load content.</p>
+              <button
+                @click="fetchTabPage('social', true)"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
             </div>
-
-            <!-- Divisions Section -->
-            <div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-                    <svg class="w-6 h-6 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    Divisions
-                </h3>
-                
-                <div class="grid md:grid-cols-2 gap-6">
-                    <!-- Infrastructure Division -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-                        <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">Infrastructure and Community Development Division</h4>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-gray-700 mb-4">Monitors and supports infrastructure, enterprise, and community-driven development programs.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Capacity Development Division -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-                        <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">Capacity Development and Environment Division</h4>
-                        </div>
-                        <div class="p-6">
-                            <p class="text-gray-700 mb-4">Oversees capacity development in LGAs and manages environmental and social safeguards.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <BlocksRenderer v-else :blocks="getTabBlocks('social')" />
         </div>
+		
         <!-- Planning, Monitoring and Evaluation Division Content -->
         <div v-show="activeTab === 'planning'" class="prose max-w-none">
             <!-- Header Section -->
-            <div class="mb-10">
-                <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
-                    Planning, Monitoring and Evaluation Division
-                </h2>
-                <p class="text-lg text-gray-600">
-                    A standalone division headed by the Planning, Monitoring and Evaluation Manager that directly reports to the Executive Director.
-                </p>
+          <div v-if="isTabPageLoading('planning')">Loading...</div>
+            <div v-else-if="getTabPageError('planning')" class="space-y-3">
+              <p>Failed to load content.</p>
+              <button
+                @click="fetchTabPage('planning', true)"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
             </div>
-
-            <!-- Key Functions Section -->
-            <div class="bg-gradient-to-br from-blue-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
-                <!-- Heading with inline icon -->
-                <div class="flex items-center mb-6">
-                    <div class="bg-blue-100 p-2 rounded-lg mr-4">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800">Key Functions</h3>
-                </div>
-
-                <!-- List with proper indentation and alignment -->
-                <ul class="space-y-3 pl-10">
-                    <li class="flex items-start">
-                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Provide technical support for strategic planning, monitoring, and evaluation</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Lead institutional planning and policy review processes</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Manage organizational data systems and reporting</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Conduct research and analysis to inform decision-making</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Oversee monitoring and evaluation framework implementation</span>
-                    </li>
-                    <li class="flex items-start">
-                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Coordinate performance reporting across the organization</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Responsibilities Section -->
-            <div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-                    <svg class="w-6 h-6 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    Core Responsibilities
-                </h3>
-                
-                <div class="grid md:grid-cols-1 gap-6">
-                    <!-- Main Responsibility Card -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-                        <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">Technical Support & Organizational Leadership</h4>
-                        </div>
-                        <div class="p-6">
-                            <ul class="space-y-3 text-gray-700">
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>Provides technical support for strategic planning, monitoring, and evaluation across the organization</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>Leads institutional planning and policy review initiatives</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>Manages organizational data systems and research activities</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>Oversees monitoring and evaluation framework implementation</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-3 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>Coordinates performance reporting to executive leadership</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <BlocksRenderer v-else :blocks="getTabBlocks('planning')" />
         </div>
         <!-- Procurement and Assets Disposal Division Content -->
-        <div v-show="activeTab === 'procurement'" class="prose max-w-none">
-            <!-- Header Section -->
-            <div class="mb-10">
-                <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
-                    Procurement and Assets Disposal Division
-                </h2>
-                <p class="text-lg text-gray-600">
-                    A standalone division headed by the Procurement Manager that directly reports to the Executive Director.
-                </p>
+         <div v-show="activeTab === 'procurement'" class="prose max-w-none">
+          <div v-if="isTabPageLoading('procurement')">Loading...</div>
+            <div v-else-if="getTabPageError('procurement')" class="space-y-3">
+              <p>Failed to load content.</p>
+              <button
+                @click="fetchTabPage('procurement', true)"
+                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+              >
+                Try Again
+              </button>
             </div>
-
-            <!-- Key Functions Section -->
-            <div class="bg-gradient-to-br from-blue-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
-                <!-- Icon and heading inline alignment -->
-                <div class="flex items-center mb-6">  <!-- Changed to items-center and increased mb -->
-                    <div class="bg-blue-100 p-2 rounded-lg mr-4">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800">Key Functions</h3>  <!-- Removed mb-4 -->
-                </div>
-
-                <!-- List with proper indentation -->
-                <ul class="space-y-3 pl-10">  <!-- Added pl-10 for indentation -->
-                    <li class="flex">
-                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">  <!-- Adjusted mt -->
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Manage procurement of goods, works, and services</span>
-                    </li>
-                    <li class="flex">
-                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Oversee asset disposal processes</span>
-                    </li>
-                    <li class="flex">
-                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Handle procurement contract management</span>
-                    </li>
-                    <li class="flex">
-                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Provide procurement support to Local Authorities (LAs)</span>
-                    </li>
-                    <li class="flex">
-                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Ensure compliance with procurement regulations</span>
-                    </li>
-                    <li class="flex">
-                        <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                        </span>
-                        <span class="text-gray-700">Maintain procurement records and documentation</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Core Operations Section -->
-            <div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-                    <svg class="w-6 h-6 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    Core Operations
-                </h3>
-                
-                <div class="grid md:grid-cols-2 gap-6">
-                    <!-- Procurement Card -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-                        <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">Procurement Management</h4>
-                        </div>
-                        <div class="p-6">
-                            <ul class="space-y-2 text-gray-700">
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>End-to-end procurement processes for goods and services</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>Works procurement and contractor management</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>Tendering and bidding processes</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <!-- Assets Disposal Card -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-                        <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">Assets Management</h4>
-                        </div>
-                        <div class="p-6">
-                            <ul class="space-y-2 text-gray-700">
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>Asset disposal planning and execution</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>Inventory and asset register management</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>Asset valuation and condition assessment</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <!-- Support Services Card -->
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow md:col-span-2">
-                        <div class="bg-gray-700 px-6 py-4">
-                            <h4 class="font-semibold text-white">Support Services</h4>
-                        </div>
-                        <div class="p-6">
-                            <ul class="space-y-2 text-gray-700">
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>Procurement contract administration and management</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>Technical support to Local Authorities on procurement matters</span>
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </span>
-                                    <span>Capacity building for procurement staff</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <BlocksRenderer v-else :blocks="getTabBlocks('procurement')" />
         </div>
+
         <!-- Internal Audit and Risk Division Content -->
         <div v-show="activeTab === 'audit'" class="prose max-w-none">
-        <!-- Header Section -->
-        <div class="mb-10">
-        <h2 class="text-3xl font-bold text-gray-800 mb-3 pb-3 border-b-2 border-blue-100">
-            Internal Audit and Risk Division
-        </h2>
-        <p class="text-lg text-gray-600">
-            Provides internal audit and risk management services headed by the Internal Audit and Risk Manager.
-        </p>
-        </div>
-
-        <!-- Key Functions Section -->
-        <div class="bg-gradient-to-br from-blue-50 to-gray-50 p-8 rounded-xl shadow-sm border border-gray-100 mb-10">
-            <!-- Icon and heading inline alignment -->
-            <div class="flex items-center mb-6">
-                <div class="bg-blue-100 p-2 rounded-lg mr-4">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-800">Key Functions</h3>
-            </div>
-
-            <!-- List with proper indentation -->
-            <ul class="space-y-3 pl-10">
-                <li class="flex">
-                    <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </span>
-                    <span class="text-gray-700">Conduct comprehensive internal audits</span>
-                </li>
-                <li class="flex">
-                    <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </span>
-                    <span class="text-gray-700">Investigate fraud and financial irregularities</span>
-                </li>
-                <li class="flex">
-                    <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </span>
-                    <span class="text-gray-700">Evaluate resource utilization and efficiency</span>
-                </li>
-                <li class="flex">
-                    <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </span>
-                    <span class="text-gray-700">Assess organizational risks and controls</span>
-                </li>
-                <li class="flex">
-                    <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </span>
-                    <span class="text-gray-700">Coordinate external audit processes</span>
-                </li>
-                <li class="flex">
-                    <span class="flex-shrink-0 mt-0.5 mr-3 text-blue-500">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                    </span>
-                    <span class="text-gray-700">Support Local Authorities on audit and risk matters</span>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Core Responsibilities Section -->
-        <div>
-        <h3 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
-            <svg class="w-6 h-6 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-            </svg>
-            Core Responsibilities
-        </h3>
-
-        <div class="grid md:grid-cols-2 gap-6">
-            <!-- Audit Services Card -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-                <div class="bg-gray-700 px-6 py-4">
-                    <h4 class="font-semibold text-white">Audit Services</h4>
-                </div>
-                <div class="p-6">
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>Conduct financial and operational audits</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>Investigate suspected fraud cases</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>Evaluate compliance with policies and regulations</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Risk Management Card -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-                <div class="bg-gray-700 px-6 py-4">
-                    <h4 class="font-semibold text-white">Risk Management</h4>
-                </div>
-                <div class="p-6">
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>Identify and assess organizational risks</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>Develop risk mitigation strategies</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>Monitor control effectiveness</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Coordination & Support Card -->
-            <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow md:col-span-2">
-                <div class="bg-gray-700 px-6 py-4">
-                    <h4 class="font-semibold text-white">Coordination & Support</h4>
-                </div>
-                <div class="p-6">
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>Coordinate external audit processes for NLGFC</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>Provide audit and risk support to Local Authorities</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 mt-1 mr-2 text-blue-500">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <span>Facilitate audit follow-up and corrective actions</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        </div>
+            <div v-if="PagePending">Loading...</div>
+            <div v-else-if="PageError">Failed to load content.</div>
+            <BlocksRenderer :blocks="pages?.['internal-audit-and-risk-division']?.blocks || []" />
         </div>
         <!-- Organogram Section -->
         <div v-show="activeTab === 'structure' || activeTab === 'directorates'" class="prose max-w-none">
@@ -1261,6 +590,7 @@ const downloadImage = () => {
     </div>
   </div>
         </div>
+
 
       </main>
     </div>
@@ -1374,83 +704,9 @@ nav h3 {
   border-bottom: 2px solid #ddd;
 }
 
-/* Executive Management */
-.executive-page {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-  text-align: center;
-}
-
-.executive-page h1 {
-  color: #2c3e50;
-  margin-bottom: 2rem;
-}
-
-.executive-page .org-level {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap; /* Added for better responsiveness */
-}
-
-.executive-page .top-level {
-  margin-bottom: 1rem;
-}
-
-.executive-page .middle-level {
-  margin-top: 1rem;
-}
-
-.executive-page .executive-card {
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 1.5rem;
-  min-width: 250px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  min-height: 320px; /* Added for consistent height */
-}
-
-.executive-page .top-level .executive-card {
-  background: #f8f9fa;
-  border-top: 4px solid #e74c3c;
-}
-
-.executive-page .position {
-  color: #666;
-  font-style: italic;
-  margin-top: 0.5rem;
-}
-
-.executive-page .connector {
-  height: 40px;
-  width: 2px;
-  background: #ddd;
-  margin: 0 auto;
-}
-
-.executive-page .executive-image {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin: 0 auto 1rem;
-  border: 3px solid #f1f1f1;
-  background: #f8f8f8; /* Fallback background */
-}
-
-.executive-page .executive-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block; /* Remove extra space under image */
-}
-
 /* Responsive Styles */
 @media (max-width: 768px) {
-  .board-page .org-level,
-  .executive-page .org-level {
+  .board-page .org-level {
     gap: 1rem;
   }
   
@@ -1477,22 +733,15 @@ nav h3 {
   .board-page .connector-line {
     width: 60%;
   }
-
-  .executive-page .executive-card {
-    min-height: 300px;
-    min-width: 200px;
-  }
 }
 
 @media (max-width: 480px) {
-  .board-page .org-level,
-  .executive-page .org-level {
+  .board-page .org-level {
     flex-direction: column;
     align-items: center;
   }
   
-  .board-page .board-card,
-  .executive-page .executive-card {
+  .board-page .board-card {
     width: 100%;
     max-width: 250px;
   }
@@ -1502,10 +751,6 @@ nav h3 {
     width: 2px;
     border-bottom: none;
     border-left: 2px solid #ddd;
-  }
-  
-  .executive-page .connector {
-    height: 20px;
   }
 }
 </style>

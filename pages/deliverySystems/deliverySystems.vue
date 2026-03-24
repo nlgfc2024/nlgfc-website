@@ -8,9 +8,10 @@ definePageMeta({ title: 'Delivery Systems' })
 
 const { data: pages, pending, error: PageError } = usePageBlocks([
   'msr-header', 'msr-dashboard', 'msr-key-features','laifmis-header','laifmis-key-features',
-  'e-payment-header','e-payment-key-features','cs-epwp-header','cs-epwp-dashboard',
-  'cs-epwp-key-features','dgrm-header','dgrm-picture','dgrm-key-features','lapas-header','lapas-dashboard',
-  'lapas-key-features','comsip-header','comsip-key-features','pmis-header','pmis-dashboard','pmis-key-features'
+  'e-payment-header','e-payment-key-features','cs-epwp-header','cs-epwp-picture',
+  'cs-epwp-key-features','dgrm-header','dgrm-picture','dgrm-key-features','lapas-header','lapas-picture',
+  'lapas-key-features','comsip-header','comsip-key-features','pmis-header','pmis-dashboard','pmis-key-features',
+  'sctp-header','sctp-picture','sctp-key-features'
 ])
 
 const route = useRoute()
@@ -158,7 +159,6 @@ watch(() => route.hash, (newHash) => {
     updateActiveTabFromHash(newHash.replace('#', ''))
   }
 })
-
 function updateActiveTabFromHash(hash) {
   for (const group of projectGroups) {
     const match = group.items.find(item => item.id === hash)
@@ -167,6 +167,8 @@ function updateActiveTabFromHash(hash) {
       break
     }
   }
+
+
 }
 
 //provide('projectContent', projectContent);
@@ -189,11 +191,10 @@ function updateActiveTabFromHash(hash) {
 <div v-if="item.id === 'msr'" class="prose max-w-none">
   <BlocksRenderer :blocks="pages?.['msr-header']?.blocks || []" />
   
-<!-- MSR Dashboard -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <BlocksRenderer :blocks="pages?.['msr-dashboard']?.blocks || []" />
-  </div>
+  <!-- MSR Dashboard-->
 
+  <BlocksRenderer :blocks="pages?.['msr-dashboard']?.blocks || []" />
+  
   <!-- Key Features Section -->
   <BlocksRenderer :blocks="pages?.['msr-key-features']?.blocks || []" />
   
@@ -203,6 +204,8 @@ function updateActiveTabFromHash(hash) {
 <div v-else-if="item.id === 'laifmis'" class="prose max-w-none">
   <BlocksRenderer :blocks="pages?.['laifmis-header']?.blocks || []" />
 
+
+
             <!--LAIFMIS Key Features-->
 <BlocksRenderer :blocks="pages?.['laifmis-key-features']?.blocks || []" />  
 </div>
@@ -211,6 +214,7 @@ function updateActiveTabFromHash(hash) {
             <!-- E-Payment System section -->
 <div v-else-if="item.id === 'e-payments'" class="prose max-w-none">
   <BlocksRenderer :blocks="pages?.['e-payment-header']?.blocks || []" />
+  
 
   <!-- Key Features Section -->
   <BlocksRenderer :blocks="pages?.['e-payment-key-features']?.blocks || []" />
@@ -263,7 +267,11 @@ function updateActiveTabFromHash(hash) {
     <BlocksRenderer :blocks="pages?.['cs-epwp-header']?.blocks || []" />
 
 <!-- Public Works Dashboard -->
-<BlocksRenderer :blocks="pages?.['cs-epwp-dashboard']?.blocks || []" />
+
+<div class="flex justify-center mt-10">
+  <BlocksRenderer :blocks="pages?.['cs-epwp-picture']?.blocks || []" />
+</div>
+
 
  <!-- Key Feature Section -->
 <BlocksRenderer :blocks="pages?.['cs-epwp-key-features']?.blocks || []" />
@@ -276,9 +284,8 @@ function updateActiveTabFromHash(hash) {
 
           <!-- DGRM PICTURE-->
 
-
-<div class="flex justify-center mt-10">
-  <BlocksRenderer :blocks="pages?.['dgrm-picture']?.blocks || []" />
+<div class="flex justify-center mt-10"> 
+  <BlocksRenderer :blocks="pages?.['dgrm-picture']?.blocks || []" /> 
 </div>
 
   
@@ -289,529 +296,47 @@ function updateActiveTabFromHash(hash) {
 
             <!-- SCTP MIS Section -->
 <div v-else-if="item.id === 'sctpmis'" class="prose max-w-none">
-  <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
-    Social Cash Transfer Program
-  </h2>
-  <!-- Introduction -->
-  <div class="bg-blue-50 p-6 rounded-lg border border-blue-200 hover:shadow-md transition-shadow duration-300">
-    <p class="text-gray-700 leading-relaxed">
-      The Social Cash Transfer Programme (SCTP) system—sometimes referred to as Mtukula Pakhomo in Malawi—is a government-led social protection initiative designed to provide regular cash payments to ultra-poor and labor-constrained households. The program targets vulnerable groups such as the elderly, people with disabilities, child-headed households, and chronically ill individuals.
-    </p>
-  </div>
+  <BlocksRenderer :blocks="pages?.['sctp-header']?.blocks || []" />
   
-<!-- SCTP Dashboard -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-3">SCTP Dashboard</h3>
-    <div class="bg-white rounded border border-gray-300 overflow-hidden">
-      <iframe
-        src="http://lapa.nlgfc.gov.mw/data"
-        frameborder="0"
-        width="100%"
-        height="600"
-        allowtransparency
-        class="w-full"
-      ></iframe>
-    </div>
+  <!-- SCTP Picture -->
+  <div class="flex justify-center mt-10">
+    <BlocksRenderer :blocks="pages?.['sctp-picture']?.blocks || []" />
   </div>
 
   <!-- Key Features Section -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
-    
-    <!-- Features Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      
-      <!-- Eligibility Targeting -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Eligibility Targeting</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Comprehensive household assessment and profiling
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Vulnerability criteria evaluation and scoring
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Community-based targeting and verification
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Regular eligibility reviews and updates
-          </li>
-        </ul>
-      </div>
-
-      <!-- Payment Management -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Payment Management</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Automated payment calculation and scheduling
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Multiple payment delivery channels integration
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Payment reconciliation and tracking systems
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Beneficiary payment history and records
-          </li>
-        </ul>
-      </div>
-
-      <!-- Case and Grievance Management -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Case and Grievance Management</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Comprehensive complaint registration and tracking
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Case escalation and resolution workflows
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Multi-channel grievance submission options
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Response time monitoring and quality assurance
-          </li>
-        </ul>
-      </div>
-
-      <!-- Monitoring and Evaluation (M&E) -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Monitoring and Evaluation (M&E)</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Program performance indicators tracking
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Impact assessment and outcome measurement
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Data collection and analysis tools
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Regular evaluation reports and insights
-          </li>
-        </ul>
-      </div>
-
-      <!-- Audit and Security Controls -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Audit and Security Controls</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Comprehensive audit trails and logging
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Role-based access control and permissions
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Data encryption and privacy protection
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Fraud detection and prevention mechanisms
-          </li>
-        </ul>
-      </div>      
-
-<!-- Real-time Data Entry and Monitoring -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Real-time Data Entry and Monitoring</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Mobile data collection and field updates
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Live dashboard updates and notifications
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Data validation and quality control checks
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Offline capability with automatic synchronization
-          </li>
-        </ul>
-      </div>
-
-      <!-- Beneficiary Management -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Beneficiary Management</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Comprehensive beneficiary registration and profiling
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Household composition tracking and updates
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Graduation and exit pathway management
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Biometric identification and verification systems
-          </li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
+  <BlocksRenderer :blocks="pages?.['sctp-key-features']?.blocks || []" />
 </div>
-
 
 <!-- LAPAS Section -->
 <div v-else-if="item.id === 'lapas'" class="prose max-w-none">
-  <<BlocksRenderer :blocks="pages?.['lapas-header']?.blocks || []" />
+  <BlocksRenderer :blocks="pages?.['lapas-header']?.blocks || []" />
 
-  
-  <!-- LAPAS Dashboard -->
-  <<BlocksRenderer :blocks="pages?.['lapas-dashboard']?.blocks || []" />
-
-<!-- Key Features Section -->
-<<BlocksRenderer :blocks="pages?.['lapas-key-features']?.blocks || []" />
+<!-- lapas PICTURE--> 
+ <div class="flex justify-center mt-10"> 
+  <BlocksRenderer :blocks="pages?.['lapas-picture']?.blocks || []" /> 
 </div>
 
-            <!-- COMSIP section-->
+  <!-- Key Features Section -->
+  <BlocksRenderer :blocks="pages?.['lapas-key-features']?.blocks || []" />
+</div>
+
+<!-- COMSIP section-->
 <div v-else-if="item.id === 'comsip'" class="prose max-w-none">
-<BlocksRenderer :blocks="pages?.['comsip-header']?.blocks || []" />
-  
-<!-- Key Features Section -->
-<BlocksRenderer :blocks="pages?.['comsip-key-features']?.blocks || []" />
+  <BlocksRenderer :blocks="pages?.['comsip-header']?.blocks || []" />
+
+  <!-- Key Features Section -->
+  <BlocksRenderer :blocks="pages?.['comsip-key-features']?.blocks || []" />
 </div>
 
 <!-- PMIS Section -->
 <div v-else-if="item.id === 'pmis'" class="prose max-w-none">
-  <<BlocksRenderer :blocks="pages?.['pmis-header']?.blocks || []" />
+  <BlocksRenderer :blocks="pages?.['pmis-header']?.blocks || []" />
 
   <!-- PMIS Dashboard -->
-  <<BlocksRenderer :blocks="pages?.['pmis-dashboard']?.blocks || []" />
+    <BlocksRenderer :blocks="pages?.['pmis-dashboard']?.blocks || []" />
 
-    <!-- Key Features Section -->
-  <div class="bg-gray-50 p-6 rounded-lg border border-gray-200 mt-8">
-    <h3 class="text-lg font-semibold text-gray-900 mb-6">Key Features</h3>
-    
-    <!-- Features Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      
-      <!-- Project Registration and Setup -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Project Registration and Setup</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Comprehensive project profile creation and documentation
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Stakeholder identification and role assignment
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Project categorization and classification systems
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Initial baseline data capture and setup
-          </li>
-        </ul>
-      </div>
-
-      <!-- Audit Trail and Data Integrity -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Audit Trail and Data Integrity</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Complete activity logging and change tracking
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            User action history and accountability measures
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Data validation and quality assurance protocols
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Version control and document management
-          </li>
-        </ul>
-      </div>
-
-      <!-- Activity and Output Tracking -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Activity and Output Tracking</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Real-time activity progress monitoring and updates
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Deliverable and milestone tracking systems
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Output measurement and verification tools
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Timeline management and schedule optimization
-          </li>
-        </ul>
-      </div>
-
-      <!-- Performance Indicators Monitoring -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Performance Indicators Monitoring</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Key Performance Indicator (KPI) definition and tracking
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Results framework implementation and monitoring
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Impact assessment and outcome measurement
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Performance dashboards and visualization tools
-          </li>
-        </ul>
-      </div>
-
-      <!-- Budget and Expenditure Management -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Budget and Expenditure Management</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Comprehensive budget planning and allocation tools
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Real-time expenditure tracking and monitoring
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Financial variance analysis and reporting
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Cost-effectiveness analysis and optimization
-          </li>
-        </ul>
-      </div>      
-
-
-
-<!-- Reporting and Analytics -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Reporting and Analytics</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Automated report generation and distribution
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Interactive dashboards and data visualization
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Custom report templates and formats
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Data export capabilities and API access
-          </li>
-        </ul>
-      </div>
-
-      <!-- Collaboration and Communication -->
-      <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-        <div class="flex items-start mb-4">
-          <div class="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center mr-4">
-            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-            </svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-gray-900 text-lg">Collaboration and Communication</h4>
-          </div>
-        </div>
-        <ul class="space-y-3 text-sm text-gray-600">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Multi-stakeholder collaboration platforms
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Notification systems and alert mechanisms
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Document sharing and version control
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-blue-400 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-            Comment threads and feedback systems
-          </li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
+  <!-- Key Features Section -->
+  <BlocksRenderer :blocks="pages?.['pmis-key-features']?.blocks || []" />
 </div>
 
           </div>
@@ -835,8 +360,8 @@ function updateActiveTabFromHash(hash) {
 .animate-scroll {
   animation: scroll var(--scroll-duration, 20s) linear infinite;
   display: flex;
-  min-width: fit-content; /* Better for dynamic content */
-  will-change: transform; /* Optimize for animation */
+  min-width: fit-content;
+  will-change: transform;
 }
 
 .hover\:pause:hover,
@@ -852,13 +377,13 @@ function updateActiveTabFromHash(hash) {
     justify-content: center;
     min-width: auto;
     overflow-x: auto;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
   }
   
   .animate-scroll::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+    display: none;
   }
 }
 
-
 </style>
+

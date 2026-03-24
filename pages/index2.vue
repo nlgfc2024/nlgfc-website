@@ -681,20 +681,20 @@ const projects = [
   title: 'SSRLP',
   description: 'Social Support for Resilient Livelihoods Project focuses on reducing poverty and enhancing resilience in vulnerable communities through targeted interventions and capacity building.',
   imagePath: '/images/samples/SSRLP logo(1).jpg',
-  url: '/projects/currentProjects#ssrlp_overview'
+  url: '/projects/currentProjects#ssrlp-overview'
 },
 
   {
     title: 'GESD',
     description: 'Governance to Enable Service Delivery Project aims to improve local government capacity and citizen service access through institutional strengthening and policy reforms.',
     imagePath: '/images/samples/PBG logo.png',
-    url: '/projects/currentProjects#gesd_overview'
+    url: '/projects/currentProjects#gesd-overview'
   },
   {
     title: 'RCRP 2',
     description: 'The second phase of the Climate Resilience Project supports districts in disaster preparedness and mitigation through infrastructure development and community training.',
      imagePath: '/images/samples/RCRP LOGO- Final.png',
-    url: '/projects/currentProjects#rcrp_overview'
+    url: '/projects/currentProjects#rcrp-overview'
   }
 ]
 

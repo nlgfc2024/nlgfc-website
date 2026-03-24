@@ -33,3 +33,5 @@ logs
 !.env.example
 *.sqlite
 *.sqlite
+.DS_Store
+.DS_Store
