@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import OpportunitiesFaqGuidelines from '../../components/OpportunitiesFaqGuidelines.vue'
+import { createEmptyVacanciesCollection, fetchAllVacancies } from '~/composables/useVacancies'
 
 definePageMeta({
   title: 'Opportunities',
@@ -12,6 +13,7 @@ const config = useRuntimeConfig()
 
 const jobsPortalBase = computed(() => config.public.jobsPortalBase || 'http://localhost:3001')
 const procurementPortalBase = computed(() => config.public.procurementPortalBase || 'http://localhost:3002')
+const vacanciesApiBase = computed(() => String(config.public.apiBase || config.public.baseUrl || 'http://localhost:8000').replace(/\/+$/, ''))
 
 const JOB_SECTION = 'jobs'
 const PROCUREMENT_SECTION = 'procurement'
@@ -171,16 +173,10 @@ const formatFundingSourceLabel = (fundingSource) => {
 
 const { data: vacanciesResponse, pending: vacanciesPending, error: vacanciesError, refresh: refreshVacancies } = await useAsyncData(
   'opportunities-vacancies',
-  () =>
-    $fetch(`${config.public.apiBase}/api/vacancies`, {
-      params: {
-        per_page: 100,
-        include_expired: true,
-      },
-    }),
+  () => fetchAllVacancies(vacanciesApiBase.value),
   {
     lazy: true,
-    default: () => ({ data: [] }),
+    default: () => createEmptyVacanciesCollection(),
   }
 )
 

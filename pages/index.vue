@@ -1,4 +1,6 @@
 <script setup>
+import { createEmptyVacanciesCollection, fetchAllVacancies } from '~/composables/useVacancies'
+
 useHead({
   title: 'NLGFC - Home',
   meta: [
@@ -12,6 +14,7 @@ const { getExcerpt, stripHtmlTags } = useHtmlUtils();
 // Get runtime config for base URL
 const config = useRuntimeConfig();
 const apiBaseUrl = config.public.baseUrl || 'http://localhost:8000'
+const vacanciesApiBase = computed(() => String(config.public.apiBase || config.public.baseUrl || 'http://localhost:8000').replace(/\/+$/, ''))
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -211,21 +214,14 @@ const { data: procurementsResponse, pending: procurementsLoading, error: procure
 const { data: jobsResponse, pending: jobsLoading, error: jobsError, refresh: fetchJobs } = useAsyncData(
   'homepage-jobs-live',
   async () => {
-    return await fetchPaginatedEndpoint('/api/vacancies', jobsPage.value, opportunitiesPerPage)
+    return await fetchAllVacancies(vacanciesApiBase.value)
   },
   {
     immediate: false,
     lazy: true,
     dedupe: 'defer',
     deep: false,
-    default: () => ({
-      data: [],
-      current_page: 1,
-      last_page: 1,
-      total: 0,
-      per_page: opportunitiesPerPage
-    }),
-    watch: [jobsPage]
+    default: () => createEmptyVacanciesCollection()
   }
 )
 
@@ -249,7 +245,21 @@ const normalizePaginatedResponse = (response) => {
 }
 
 const procurementsPayload = computed(() => normalizePaginatedResponse(procurementsResponse.value))
-const jobsPayload = computed(() => normalizePaginatedResponse(jobsResponse.value))
+const allJobsPayload = computed(() => normalizePaginatedResponse(jobsResponse.value))
+const jobsPayload = computed(() => {
+  const items = Array.isArray(allJobsPayload.value.items) ? allJobsPayload.value.items : []
+  const total = items.length
+  const lastPage = Math.max(1, Math.ceil(total / opportunitiesPerPage))
+  const currentPage = Math.min(jobsPage.value, lastPage)
+  const start = (currentPage - 1) * opportunitiesPerPage
+
+  return {
+    items: items.slice(start, start + opportunitiesPerPage),
+    currentPage,
+    lastPage,
+    total
+  }
+})
 
 const procurementItems = computed(() => {
   if (!Array.isArray(procurementsPayload.value.items)) return []
@@ -268,7 +278,7 @@ const jobItems = computed(() => {
   return jobsPayload.value.items.map((vacancy) => ({
     id: vacancy.id,
     title: vacancy.title || 'Job Opportunity',
-    deadline: vacancy.expiry_date || vacancy.updated_at || vacancy.created_at || new Date().toISOString(),
+    deadline: vacancy.application_deadline || vacancy.expiry_date || vacancy.updated_at || vacancy.created_at || new Date().toISOString(),
     applyLink: vacancy.url || '/opportunities?section=jobs#job-opportunities'
   }))
 })

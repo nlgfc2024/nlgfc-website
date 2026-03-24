@@ -798,6 +798,7 @@
 <script setup>
 import { computed, ref, watch, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { createEmptyVacanciesCollection, fetchAllVacancies } from '~/composables/useVacancies';
 
 const isMenuOpen = ref(false);
 const activeMegaMenu = ref(null);
@@ -807,6 +808,7 @@ const searchQuery = ref('');
 const config = useRuntimeConfig();
 const jobsPortalUrl = computed(() => `${config.public.jobsPortalBase || 'http://localhost:3001'}/?source=nlgfc-website`);
 const procurementPortalUrl = computed(() => `${config.public.procurementPortalBase || 'http://localhost:3002'}/?source=nlgfc-website`);
+const vacanciesApiBase = computed(() => String(config.public.apiBase || config.public.baseUrl || 'http://localhost:8000').replace(/\/+$/, ''));
 
 const isExpired = (dateString) => {
   if (!dateString) {
@@ -823,15 +825,9 @@ const isExpired = (dateString) => {
 
 const { data: navVacancies } = await useAsyncData(
   'navbar-opportunities-jobs',
-  () =>
-    $fetch(`${config.public.apiBase}/api/vacancies`, {
-      params: {
-        per_page: 100,
-        include_expired: true,
-      },
-    }),
+  () => fetchAllVacancies(vacanciesApiBase.value),
   {
-    default: () => ({ data: [] }),
+    default: () => createEmptyVacanciesCollection(),
   }
 );
 
