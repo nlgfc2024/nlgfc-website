@@ -1,6 +1,8 @@
 import { ref } from 'vue'
 
 export const usePartners = () => {
+  const config = useRuntimeConfig()
+  const apiBase = String(config.public.apiBase || config.public.baseUrl || 'http://localhost:8000').replace(/\/+$/, '')
   const partners = ref([])
   const loading = ref(false)
   const error = ref(null)
@@ -10,7 +12,7 @@ export const usePartners = () => {
     error.value = null
     
     try {
-      const { data }: { data: any } = await $fetch('http://localhost:8000/api/partners')
+      const { data }: { data: any } = await $fetch(`${apiBase}/api/partners`)
       partners.value = data
     } catch (err: any) {
       error.value = err

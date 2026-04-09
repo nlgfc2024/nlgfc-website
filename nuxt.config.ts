@@ -16,7 +16,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseUrl: process.env.NUXT_PUBLIC_BASE_URL || 'http://localhost:8000',
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || process.env.NUXT_PUBLIC_BASE_URL || 'http://localhost:8000'
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || process.env.NUXT_PUBLIC_BASE_URL || 'http://localhost:8000',
+      jobsPortalBase: process.env.NUXT_PUBLIC_JOBS_PORTAL_BASE || 'http://localhost:3001'
     }
   },
   // Configuration for subdirectory deployment and app settings
