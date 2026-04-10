@@ -21,6 +21,7 @@ This file tracks production deployment-related changes and incidents.
 - Additional resolution:
   - Deployment workflow now force-deletes old PM2 app names before restart, then starts `node .output/server/index.mjs` with explicit `HOST=127.0.0.1`, `PORT=3000`.
   - Deployment workflow now forces `NITRO_PRESET=node-server` during build.
+  - Deployment workflow now installs devDependencies during build (`npm ci --include=dev`) and sets `NODE_ENV=production` only at PM2 runtime start.
   - Deployment workflow now clears orphan listeners on `:3000` before PM2 start and fails if PM2 script is not `.output/server/index.mjs`.
   - Smoke checks were expanded to include diagnostics (`pm2 show/logs`, socket list, nginx logs) on failure.
   - Homepage/API-heavy sections were switched to client-side data loading with shorter timeouts so SSR can return quickly and avoid nginx timeout windows.
