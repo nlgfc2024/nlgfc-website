@@ -11,7 +11,7 @@ const { getExcerpt, stripHtmlTags } = useHtmlUtils();
 
 // Get runtime config for base URL
 const config = useRuntimeConfig();
-const apiBaseUrl = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')
+const apiBaseUrl = useApiBase()
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -119,14 +119,12 @@ const { data: donorProjectsData, loading: projectsLoading, error: projectsError,
 const newsItems = computed(() => {
   if (!postsData.value || !Array.isArray(postsData.value)) return []
   
-  const baseUrl = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '');
-  
   return postsData.value.map((post) => ({
     id: post.id,
     title: post.title || '',
     content: getExcerpt(post.content, 150), // Strip HTML tags and get excerpt
     image: post.image 
-      ? `${baseUrl}/storage/${post.image}` 
+      ? `${apiBaseUrl}/storage/${post.image}` 
       : '/images/samples/default-news.jpg',
     date: post.created_at ? new Date(post.created_at).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -198,7 +196,7 @@ const missionVisionData = computed(() => {
 const resolveMediaUrl = (value) => {
   if (!value || typeof value !== 'string') return null
   if (value.startsWith('http')) return value
-  return `${config.public.apiBase}/storage/${value.replace(/^\/+/, '')}`
+  return `${apiBaseUrl}/storage/${value.replace(/^\/+/, '')}`
 }
 
 const { data: homeProjectsResponse } = useAsyncData(

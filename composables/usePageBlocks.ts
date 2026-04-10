@@ -17,14 +17,14 @@ export type PageMap = Record<string, PagePayload>
 export function usePageBlocks(slug: string): ReturnType<typeof useAsyncData<PagePayload>>
 export function usePageBlocks(slugs: string[]): ReturnType<typeof useAsyncData<PageMap>>
 export function usePageBlocks(slugOrSlugs: string | string[]) {
-  const config = useRuntimeConfig()
+  const apiBase = useApiBase()
   if (Array.isArray(slugOrSlugs)) {
     const slugs = slugOrSlugs
     return useAsyncData<PageMap>(
       `pages:${slugs.join(',')}`,
       async () => {
         const results = await Promise.allSettled(
-          slugs.map((s) => $fetch<PagePayload>(`${config.public.apiBase}/api/pages/${s}`))
+          slugs.map((s) => $fetch<PagePayload>(`${apiBase}/api/pages/${s}`))
         )
         const map: PageMap = {}
         for (const result of results) {
@@ -42,7 +42,7 @@ export function usePageBlocks(slugOrSlugs: string | string[]) {
   const slug = slugOrSlugs
   return useAsyncData<PagePayload>(
     `page:${slug}`,
-    () => $fetch(`${config.public.apiBase}/api/pages/${slug}`),
+    () => $fetch(`${apiBase}/api/pages/${slug}`),
     { server: true }
   )
 }

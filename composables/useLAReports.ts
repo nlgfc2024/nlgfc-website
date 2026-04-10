@@ -42,8 +42,7 @@ export const useLAReports = (options: UseLAReportsOptions = {}) => {
 };
 
 export const useLAReportDownloadUrl = () => {
-  const config = useRuntimeConfig();
-  const baseUrl = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '');
+  const baseUrl = useApiBase();
 
   return (reportId: number | string) => `${baseUrl}/api/la-reports/${reportId}/download`;
 };

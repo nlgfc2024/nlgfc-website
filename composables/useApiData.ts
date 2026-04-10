@@ -82,9 +82,8 @@ export function useApiData<T = any>(
     onResponse
   } = options;
 
-  // Get base URL from runtime config
-  const config = useRuntimeConfig();
-  const baseUrl = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '');
+  // Get base URL from runtime config (origin only, no app path)
+  const baseUrl = useApiBase();
   
   // Construct full URL if relative
   const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;

@@ -1,6 +1,5 @@
 export const useLatestPosts = () => {
-  const config = useRuntimeConfig()
-  const apiBase = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')
+  const apiBase = useApiBase()
   const posts = ref([])
   const loading = ref(false)
   const error = ref(null)
@@ -29,8 +28,7 @@ export const useLatestPosts = () => {
 }
 
 export const useAllPosts = () => {
-  const config = useRuntimeConfig()
-  const apiBase = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')
+  const apiBase = useApiBase()
   const posts = ref([])
   const loading = ref(false)
   const error = ref(null)

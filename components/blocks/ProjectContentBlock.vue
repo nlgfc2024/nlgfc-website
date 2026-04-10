@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const config = useRuntimeConfig()
+const apiBase = useApiBase()
 
 defineProps<{
   title?: string
@@ -27,7 +28,7 @@ const resolveLogoUrl = (value?: string) => {
   if (!value) return ''
   if (/^(https?:)?\/\//i.test(value) || value.startsWith('data:')) return value
 
-  const base = (config.public.apiBase as string | undefined)?.replace(/\/$/, '') || ''
+  const base = apiBase
   if (value.startsWith('/')) return base ? `${base}${value}` : value
 
   const normalized = value.replace(/^storage\//, '')

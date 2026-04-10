@@ -4,14 +4,14 @@ import { defineAsyncComponent, computed } from 'vue'
 declare function useRuntimeConfig(): { public: { apiBase?: string } }
 
 const config = useRuntimeConfig()
+const apiBase = useApiBase()
 
 function resolveStorageUrl(value?: string): string {
   if (!value) return ''
   if (/^(https?:)?\/\//i.test(value) || value.startsWith('data:')) return value
-  const base = (config.public.apiBase as string | undefined)?.replace(/\/$/, '') || ''
-  if (value.startsWith('/')) return base ? `${base}${value}` : value
+  if (value.startsWith('/')) return apiBase ? `${apiBase}${value}` : value
   const normalized = value.replace(/^storage\//, '')
-  return base ? `${base}/storage/${normalized}` : `/storage/${normalized}`
+  return apiBase ? `${apiBase}/storage/${normalized}` : `/storage/${normalized}`
 }
 
 type BlockItem = { id?: string; type?: string; data?: Record<string, any> }
@@ -120,12 +120,10 @@ function toMediaUrl(raw: any): string {
   if (!input) return ''
   if (/^(https?:)?\/\//i.test(input) || input.startsWith('data:')) return input
   if (input.startsWith('/storage/')) {
-    const base = String(config.public.apiBase || '').replace(/\/+$/, '')
-    return base ? `${base}${input}` : input
+    return apiBase ? `${apiBase}${input}` : input
   }
   if (input.startsWith('/')) return input
-  const base = String(config.public.apiBase || '').replace(/\/+$/, '')
-  return base ? `${base}/storage/${input.replace(/^\/+/, '')}` : `/storage/${input.replace(/^\/+/, '')}`
+  return apiBase ? `${apiBase}/storage/${input.replace(/^\/+/, '')}` : `/storage/${input.replace(/^\/+/, '')}`
 }
 
 /**

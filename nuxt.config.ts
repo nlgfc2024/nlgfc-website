@@ -16,7 +16,12 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseUrl: process.env.NUXT_PUBLIC_BASE_URL || '',
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || process.env.NUXT_PUBLIC_BASE_URL || '',
+      apiBase: (() => {
+        // Always strip any path (e.g. /nlgfc-website) from the API base so that
+        // client-side API calls hit the server root where the CMS/API lives.
+        const raw = process.env.NUXT_PUBLIC_API_BASE || process.env.NUXT_PUBLIC_BASE_URL || '';
+        try { return new URL(raw).origin; } catch { return raw; }
+      })(),
       jobsPortalBase: process.env.NUXT_PUBLIC_JOBS_PORTAL_BASE || 'http://localhost:3001'
     }
   },

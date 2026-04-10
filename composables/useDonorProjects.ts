@@ -19,13 +19,12 @@ export function useDonorProjects(options: DonorProjectsOptions = {}) {
     timeout = 10000,
   } = options
 
-  const config = useRuntimeConfig()
+  const baseUrl = useApiBase()
 
   const { data, pending, error, refresh } = useAsyncData(
     key,
     async () => {
       try {
-        const baseUrl = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')
         const fundingTypes = await $fetch(`${baseUrl}/api/funding-types`, { timeout, retry: 0 })
         const fundingTypesArray = Array.isArray(fundingTypes) ? fundingTypes : []
 

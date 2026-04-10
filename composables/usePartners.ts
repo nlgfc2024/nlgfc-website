@@ -1,8 +1,7 @@
 import { ref } from 'vue'
 
 export const usePartners = () => {
-  const config = useRuntimeConfig()
-  const apiBase = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')
+  const apiBase = useApiBase()
   const partners = ref([])
   const loading = ref(false)
   const error = ref(null)
