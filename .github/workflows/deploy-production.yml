@@ -191,12 +191,31 @@ jobs:
           npm run build
 
           if [ -n "${PM2_APP_NAME:-}" ] && command -v pm2 >/dev/null 2>&1; then
+            export NODE_ENV=production
+            export HOST=127.0.0.1
+            export PORT=3000
+
+            # Ensure we never keep an old "nuxt preview"/wrong PM2 command around.
             if pm2 describe "$PM2_APP_NAME" >/dev/null 2>&1; then
-              pm2 restart "$PM2_APP_NAME" --update-env
-            else
-              pm2 start .output/server/index.mjs --name "$PM2_APP_NAME" --update-env
-              pm2 save || true
+              pm2 delete "$PM2_APP_NAME" || true
             fi
+
+            # Stop known legacy process names if they exist.
+            pm2 delete frontendclear || true
+
+            pm2 start .output/server/index.mjs \
+              --name "$PM2_APP_NAME" \
+              --cwd "$DEPLOY_PATH" \
+              --update-env
+            pm2 save || true
+
+            # Quick readiness check for upstream health.
+            for i in 1 2 3 4 5 6 7 8 9 10; do
+              if curl -sS -o /dev/null --max-time 5 "http://127.0.0.1:3000/nlgfc-website/"; then
+                break
+              fi
+              sleep 2
+            done
           elif [ -n "${SYSTEMD_SERVICE_NAME:-}" ]; then
             sudo systemctl restart "$SYSTEMD_SERVICE_NAME"
           else
@@ -245,11 +264,15 @@ jobs:
             if command -v pm2 >/dev/null 2>&1; then
               pm2 status || true
               if [ -n "${PM2_APP_NAME:-}" ]; then
+                pm2 show "$PM2_APP_NAME" || true
+              fi
+              if [ -n "${PM2_APP_NAME:-}" ]; then
                 pm2 logs "$PM2_APP_NAME" --nostream --lines 200 || true
               else
                 pm2 logs --nostream --lines 200 || true
               fi
             fi
+            ss -ltnp | grep -E ':3000|:8080' || true
             tail -n 200 /var/log/nginx/error.log || true
             tail -n 200 /var/log/nginx/access.log || true
             exit 1
