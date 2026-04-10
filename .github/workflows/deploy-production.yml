@@ -103,6 +103,17 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -p "$PORT" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
 
+      - name: Verify SSH authentication
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          set -euo pipefail
+          PORT="${DEPLOY_PORT:-22}"
+          SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o IdentitiesOnly=yes -o PreferredAuthentications=publickey"
+          ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" "echo 'SSH auth OK'"
+
       - name: Sync repository to server
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
@@ -112,6 +123,7 @@ jobs:
         run: |
           set -euo pipefail
           PORT="${DEPLOY_PORT:-22}"
+          SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o IdentitiesOnly=yes -o PreferredAuthentications=publickey"
           rsync -az --delete \
             --exclude ".git/" \
             --exclude ".github/" \
@@ -124,7 +136,7 @@ jobs:
             --exclude ".data/" \
             --exclude "build-smoke.log" \
             --exclude "*.log" \
-            -e "ssh -p ${PORT}" \
+            -e "ssh ${SSH_OPTS}" \
             ./ "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}/"
 
       - name: Install, build, and restart app on server
@@ -138,8 +150,9 @@ jobs:
         run: |
           set -euo pipefail
           PORT="${DEPLOY_PORT:-22}"
+          SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o IdentitiesOnly=yes -o PreferredAuthentications=publickey"
 
-          ssh -p "$PORT" "${DEPLOY_USER}@${DEPLOY_HOST}" \
+          ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" \
             "DEPLOY_PATH='${DEPLOY_PATH}' PM2_APP_NAME='${PM2_APP_NAME}' SYSTEMD_SERVICE_NAME='${SYSTEMD_SERVICE_NAME}' bash -s" << 'EOF'
           set -euo pipefail
 
