@@ -68,3 +68,16 @@ If deploy fails with SSH permission errors, the private key in GitHub does not m
 
 The deploy workflow now includes an explicit `Verify SSH authentication` step so key issues fail early with a clearer error.
 
+### Fingerprint match check (recommended)
+
+Use this to confirm the GitHub secret key and server key are the same pair:
+
+1. Locally, get public key from your private key:
+- `ssh-keygen -y -f /path/to/private_key > /tmp/deploy_key.pub`
+- `ssh-keygen -lf /tmp/deploy_key.pub`
+
+2. On server, list fingerprints in `authorized_keys`:
+- `ssh-keygen -lf ~/.ssh/authorized_keys`
+
+At least one fingerprint must match exactly. If none matches, GitHub is using a different private key than the one installed on the server.
+

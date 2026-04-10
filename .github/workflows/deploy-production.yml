@@ -89,8 +89,7 @@ jobs:
           fi
 
       - name: Start ssh-agent and add key
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
+        uses: webfactory/ssh-agent@v0.9.0        with:
           ssh-private-key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
 
       - name: Add deploy host to known_hosts
@@ -111,8 +110,17 @@ jobs:
         run: |
           set -euo pipefail
           PORT="${DEPLOY_PORT:-22}"
-          SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o IdentitiesOnly=yes -o PreferredAuthentications=publickey"
-          ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" "echo 'SSH auth OK'"
+          SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no"
+
+          echo "Loaded SSH key fingerprints:"
+          ssh-add -l || true
+
+          if ! ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" "echo 'SSH auth OK'"; then
+            echo "::group::SSH verbose diagnostics"
+            ssh -vvv ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" "exit 1" || true
+            echo "::endgroup::"
+            exit 1
+          fi
 
       - name: Sync repository to server
         env:
@@ -123,7 +131,7 @@ jobs:
         run: |
           set -euo pipefail
           PORT="${DEPLOY_PORT:-22}"
-          SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o IdentitiesOnly=yes -o PreferredAuthentications=publickey"
+          SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no"
           rsync -az --delete \
             --exclude ".git/" \
             --exclude ".github/" \
@@ -150,7 +158,7 @@ jobs:
         run: |
           set -euo pipefail
           PORT="${DEPLOY_PORT:-22}"
-          SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o IdentitiesOnly=yes -o PreferredAuthentications=publickey"
+          SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no"
 
           ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" \
             "DEPLOY_PATH='${DEPLOY_PATH}' PM2_APP_NAME='${PM2_APP_NAME}' SYSTEMD_SERVICE_NAME='${SYSTEMD_SERVICE_NAME}' bash -s" << 'EOF'
