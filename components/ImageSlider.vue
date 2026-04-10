@@ -5,10 +5,10 @@ const { getExcerpt } = useHtmlUtils()
 // Fetch latest posts from API
 const { data: postsData, pending: loading, error, refresh: fetchPosts } = useAsyncData(
   'latest-posts-slider',
-  () => $fetch(`${(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')}/api/posts/latest/3`, { timeout: 15000, retry: 0 }),
+  () => $fetch(`${(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')}/api/posts/latest/3`, { timeout: 10000, retry: 0 }),
   {
-    server: true,
-    lazy: false,
+    server: false,
+    lazy: true,
     immediate: true,
   }
 )

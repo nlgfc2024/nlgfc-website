@@ -11,3 +11,14 @@ This file tracks production deployment-related changes and incidents.
   - Added request timeout/fallback behavior for critical SSR/API fetch paths.
   - Updated deployment workflow to pass Nuxt public runtime env vars to server build/restart step.
 - Detailed notes: see [2026-04-10-504-timeout-fix.md](./incidents/2026-04-10-504-timeout-fix.md)
+
+## 2026-04-10 - Follow-up: PM2 Port Contention + Slow SSR (>60s)
+
+- New evidence from smoke checks:
+  - `node-local` returned `200` but took ~`104s` on `/nlgfc-website/`.
+  - nginx route returned `504` around `60s` on `/nlgfc-website/`.
+  - PM2 logs showed repeated `EADDRINUSE` on `127.0.0.1:3000` and legacy `nuxt preview` behavior.
+- Additional resolution:
+  - Deployment workflow now force-deletes old PM2 app names before restart, then starts `node .output/server/index.mjs` with explicit `HOST=127.0.0.1`, `PORT=3000`.
+  - Smoke checks were expanded to include diagnostics (`pm2 show/logs`, socket list, nginx logs) on failure.
+  - Homepage/API-heavy sections were switched to client-side data loading with shorter timeouts so SSR can return quickly and avoid nginx timeout windows.

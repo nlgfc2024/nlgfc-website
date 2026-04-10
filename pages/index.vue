@@ -20,7 +20,7 @@ const fetchPaginatedEndpoint = async (
   page,
   perPage,
   extraQuery = {},
-  retries = 3
+  retries = 1
 ) => {
   let lastError
 
@@ -32,7 +32,8 @@ const fetchPaginatedEndpoint = async (
           page,
           ...extraQuery
         },
-        timeout: 20000
+        timeout: 10000,
+        retry: 0
       })
     } catch (error) {
       lastError = error
@@ -64,7 +65,11 @@ const props = defineProps({
 // Fetch partners using standard API composable
 const { data: partners, loading, error, refresh: fetchPartners } = useApiDataArray(
   'partners',
-  '/api/partners'
+  '/api/partners',
+  {
+    server: false,
+    lazy: true,
+  }
 );
 
 // Fetch latest posts using standard API composable
@@ -72,6 +77,8 @@ const { data: postsData, loading: postsLoading, error: postsError, refresh: fetc
   'latest-posts',
   '/api/posts/latest/3',
   {
+    server: false,
+    lazy: true,
     default: () => [],
     transform: (response) => Array.isArray(response) ? response : response?.data || []
   }
@@ -86,6 +93,7 @@ const { data: documentsResponse, pending: publicationsLoading, error: publicatio
     return await fetchPaginatedEndpoint('/api/documents', publicationsPage.value, publicationsPerPage)
   },
   {
+    server: false,
     lazy: true,
     dedupe: 'defer',
     deep: false,
@@ -102,7 +110,9 @@ const { data: documentsResponse, pending: publicationsLoading, error: publicatio
 
 const { data: donorProjectsData, loading: projectsLoading, error: projectsError, refresh: fetchProjects } = useDonorProjects({
   key: 'homepage-donor-projects',
-  perPage: 100
+  perPage: 100,
+  server: false,
+  lazy: true,
 })
 
 // Transform API data to match component structure
@@ -148,12 +158,15 @@ const { data: missionPagePayload } = useAsyncData(
   'home:mission-vision-core-values',
   async () => {
     try {
-      return await $fetch(`${config.public.apiBase}/api/pages/mission-vision-core-values`)
+      return await $fetch(`${apiBaseUrl}/api/pages/mission-vision-core-values`, {
+        timeout: 10000,
+        retry: 0,
+      })
     } catch {
       return null
     }
   },
-  { server: true, default: () => null }
+  { server: false, lazy: true, default: () => null }
 )
 
 const missionVisionData = computed(() => {
@@ -190,8 +203,17 @@ const resolveMediaUrl = (value) => {
 
 const { data: homeProjectsResponse } = useAsyncData(
   'home:current-projects',
-  () => $fetch(`${config.public.apiBase}/api/projects?project_status=current&is_menu_visible=1&per_page=200`),
-  { server: true, default: () => ({ data: [] }) }
+  async () => {
+    try {
+      return await $fetch(`${apiBaseUrl}/api/projects?project_status=current&is_menu_visible=1&per_page=200`, {
+        timeout: 10000,
+        retry: 0,
+      })
+    } catch {
+      return { data: [] }
+    }
+  },
+  { server: false, lazy: true, default: () => ({ data: [] }) }
 )
 
 const pickProgramRepresentative = (items = []) => {
@@ -311,6 +333,7 @@ const { data: procurementsResponse, pending: procurementsLoading, error: procure
     return await fetchPaginatedEndpoint('/api/procurement-notices', procurementPage.value, opportunitiesPerPage)
   },
   {
+    server: false,
     lazy: true,
     dedupe: 'defer',
     deep: false,
@@ -331,6 +354,7 @@ const { data: jobsResponse, pending: jobsLoading, error: jobsError, refresh: fet
     return await fetchPaginatedEndpoint('/api/vacancies', jobsPage.value, opportunitiesPerPage)
   },
   {
+    server: false,
     immediate: false,
     lazy: true,
     dedupe: 'defer',
