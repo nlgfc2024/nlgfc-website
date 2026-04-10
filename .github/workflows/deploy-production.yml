@@ -264,6 +264,7 @@ jobs:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           PM2_APP_NAME: ${{ secrets.PM2_APP_NAME }}
         run: |
           set -euo pipefail
@@ -271,7 +272,7 @@ jobs:
           SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no"
 
           ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" \
-            "PM2_APP_NAME='${PM2_APP_NAME}' bash -s" << 'EOF'
+            "PM2_APP_NAME='${PM2_APP_NAME}' DEPLOY_PATH='${DEPLOY_PATH}' bash -s" << 'EOF'
           set -euo pipefail
 
           check_url () {
@@ -295,28 +296,62 @@ jobs:
             pm2 describe "$PM2_APP_NAME" || true
           fi
 
+          # Always dump nginx config for /nlgfc-website so we can diagnose asset routing.
+          echo "--- nginx config summary ---"
+          sudo nginx -T 2>/dev/null | grep -B 2 -A 15 'nlgfc-website\|proxy_pass' | head -80 || true
+          echo "--- .output/public layout ---"
+          find "${DEPLOY_PATH:-.}/.output/public" -maxdepth 2 -type d 2>/dev/null || true
+          ls "${DEPLOY_PATH:-.}/.output/public/_nuxt/" 2>/dev/null | head -5 || echo "_nuxt/ not at .output/public/_nuxt/"
+
           check_url "node-local" "http://127.0.0.1:3000/nlgfc-website/" 30 || failed=1
           check_url "public-home" "http://127.0.0.1:8080/nlgfc-website/" 70 || failed=1
           check_url "public-contact" "http://127.0.0.1:8080/nlgfc-website/contact" 70 || failed=1
 
+          # Verify JS bundles are served (critical for client-side hydration).
+          echo "--- JS bundle smoke check ---"
+          homepage_html="$(curl -sS --max-time 30 "http://127.0.0.1:3000/nlgfc-website/" || true)"
+          js_path="$(echo "$homepage_html" | grep -oP 'src="/nlgfc-website/_nuxt/[^"]+\.js"' | head -1 | sed 's/src="//;s/"//')"
+          if [ -n "$js_path" ]; then
+            echo "Found JS bundle: $js_path"
+            check_url "node-js-bundle" "http://127.0.0.1:3000${js_path}" 15 || failed=1
+            check_url "nginx-js-bundle" "http://127.0.0.1:8080${js_path}" 15 || failed=1
+          else
+            echo "WARNING: Could not extract JS bundle path from homepage HTML"
+          fi
+
           if [ "$failed" -ne 0 ]; then
-            echo "Smoke check failed. Collecting diagnostics..."
+            echo "============================================"
+            echo "Smoke check FAILED. Collecting diagnostics..."
+            echo "============================================"
+
+            echo "--- PM2 status ---"
             if command -v pm2 >/dev/null 2>&1; then
               pm2 status || true
               if [ -n "${PM2_APP_NAME:-}" ]; then
                 pm2 show "$PM2_APP_NAME" || true
-              fi
-              if [ -n "${PM2_APP_NAME:-}" ]; then
                 pm2 logs "$PM2_APP_NAME" --nostream --lines 200 || true
-            else
-              pm2 logs --nostream --lines 200 || true
+              else
+                pm2 logs --nostream --lines 200 || true
+              fi
             fi
-            fi
+
+            echo "--- nginx config (nlgfc-website) ---"
+            sudo nginx -T 2>/dev/null | grep -A 30 'nlgfc-website\|proxy_pass\|location' | head -100 || true
+
+            echo "--- .output directory listing ---"
+            ls -la "${DEPLOY_PATH:-.}/.output/public/" 2>/dev/null | head -20 || true
+            ls -la "${DEPLOY_PATH:-.}/.output/public/nlgfc-website/" 2>/dev/null | head -20 || true
+            ls -la "${DEPLOY_PATH:-.}/.output/public/_nuxt/" 2>/dev/null | head -20 || true
+
+            echo "--- Listening ports ---"
             ss -ltnp | grep -E ':3000|:8080' || true
             lsof -nP -iTCP:3000 -sTCP:LISTEN || true
             lsof -nP -iTCP:8080 -sTCP:LISTEN || true
-            tail -n 200 /var/log/nginx/error.log || true
-            tail -n 200 /var/log/nginx/access.log || true
+
+            echo "--- nginx error log (last 100) ---"
+            tail -n 100 /var/log/nginx/error.log || true
+            echo "--- nginx access log (last 50) ---"
+            tail -n 50 /var/log/nginx/access.log || true
             exit 1
           fi
           EOF
