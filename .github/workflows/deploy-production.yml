@@ -259,6 +259,63 @@ jobs:
           fi
           EOF
 
+      - name: Fix nginx location for Nuxt static assets
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          set -euo pipefail
+          PORT="${DEPLOY_PORT:-22}"
+          SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no"
+
+          ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" 'bash -s' << 'NGINX_FIX'
+          set -euo pipefail
+
+          # The Nuxt app is proxied via  location /nlgfc-website/ { proxy_pass ... }
+          # but nginx regex locations (e.g. location ~ \.(js|css)$) can intercept
+          # _nuxt/* static asset requests and route them to the Laravel backend,
+          # causing 404s.  Using ^~ on the prefix location prevents this.
+
+          NGINX_CONF=""
+          for f in /etc/nginx/sites-enabled/* /etc/nginx/conf.d/*.conf; do
+            if [ -f "$f" ] && grep -q 'nlgfc-website' "$f" 2>/dev/null; then
+              NGINX_CONF="$f"
+              break
+            fi
+          done
+
+          if [ -z "$NGINX_CONF" ]; then
+            echo "WARNING: Could not find nginx config containing 'nlgfc-website'"
+            exit 0
+          fi
+
+          echo "Found nginx config: $NGINX_CONF"
+
+          # Check if ^~ is already present
+          if grep -qP 'location\s+\^~\s+/nlgfc-website/' "$NGINX_CONF"; then
+            echo "nginx config already uses ^~ for /nlgfc-website/ — no change needed."
+            exit 0
+          fi
+
+          # Check if the simple prefix location exists
+          if grep -qP 'location\s+/nlgfc-website/' "$NGINX_CONF"; then
+            echo "Upgrading 'location /nlgfc-website/' to 'location ^~ /nlgfc-website/' ..."
+            sudo sed -i 's|location\s\+/nlgfc-website/|location ^~ /nlgfc-website/|' "$NGINX_CONF"
+
+            echo "Testing nginx config..."
+            sudo nginx -t
+
+            echo "Reloading nginx..."
+            sudo systemctl reload nginx
+            echo "nginx reloaded successfully."
+          else
+            echo "WARNING: Could not find 'location /nlgfc-website/' in $NGINX_CONF"
+            echo "Current config:"
+            grep -n 'location\|proxy_pass' "$NGINX_CONF" | head -30
+          fi
+          NGINX_FIX
+
       - name: Post-deploy smoke checks
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
