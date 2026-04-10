@@ -272,12 +272,9 @@ jobs:
           ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" 'bash -s' << 'NGINX_FIX'
           set -euo pipefail
 
-          echo "=== Diagnosing nginx config for nlgfc-website ==="
-
-          # Dump full nginx config for diagnostics
-          echo "--- Full nginx config (nlgfc-website related) ---"
-          sudo nginx -T 2>/dev/null | grep -B 5 -A 20 'nlgfc-website' | head -120 || echo "Could not dump nginx config"
-          echo "---"
+          echo "=== Full nginx config dump (first 400 lines) ==="
+          sudo nginx -T 2>/dev/null | head -400
+          echo "=== End config dump ==="
 
           # Find which config file contains nlgfc-website
           NGINX_CONF=""
@@ -290,45 +287,89 @@ jobs:
 
           if [ -z "$NGINX_CONF" ]; then
             echo "WARNING: Could not find nginx config containing 'nlgfc-website'"
-            echo "Listing all nginx configs:"
             ls -la /etc/nginx/sites-enabled/ 2>/dev/null || true
             ls -la /etc/nginx/conf.d/ 2>/dev/null || true
             exit 0
           fi
 
           echo "Found nginx config: $NGINX_CONF"
-          echo "--- Relevant lines ---"
-          grep -n 'location\|proxy_pass\|try_files' "$NGINX_CONF" | head -40
-          echo "---"
+          echo "--- Full config file ---"
+          cat "$NGINX_CONF"
+          echo "--- End config file ---"
 
-          # Check if ^~ is already present (portable grep without -P)
-          if grep -q 'location.*\^~.*/nlgfc-website/' "$NGINX_CONF"; then
-            echo "nginx config already uses ^~ for /nlgfc-website/ — no change needed."
-            exit 0
-          fi
+          # Write Python fix script (heredoc avoids $var expansion issues)
+          cat > /tmp/fix_nginx.py << 'PYEOF'
+import re, sys
 
-          # Check if the simple prefix location exists (portable grep)
-          if grep -q 'location.*/nlgfc-website/' "$NGINX_CONF"; then
-            echo "Upgrading location to use ^~ for /nlgfc-website/ ..."
-            # Use portable sed - match 'location' followed by spaces and /nlgfc-website/
-            # Handle both 'location /nlgfc-website/' and 'location  /nlgfc-website/'
-            sudo sed -i -E 's|location([[:space:]]+)/nlgfc-website/|location ^~ /nlgfc-website/|' "$NGINX_CONF"
+conf_path = sys.argv[1]
+with open(conf_path) as f:
+    content = f.read()
 
-            echo "--- After fix ---"
-            grep -n 'location' "$NGINX_CONF" | head -20
-            echo "---"
+modified = False
 
-            echo "Testing nginx config..."
-            sudo nginx -t
+# 1. Add dedicated _nuxt proxy block before the /nlgfc-website/ location
+#    This ensures _nuxt assets bypass any try_files / nested static-file
+#    regex that routes .js/.css to PHP/Laravel.
+if not re.search(r'location.*nlgfc-website/_nuxt', content):
+    new_block = (
+        '\n'
+        '    # Proxy Nuxt static assets directly to Node.js SSR server\n'
+        '    location ^~ /nlgfc-website/_nuxt/ {\n'
+        '        proxy_pass http://127.0.0.1:3000;\n'
+        '        proxy_http_version 1.1;\n'
+        '        proxy_set_header Host $host;\n'
+        '        proxy_set_header X-Real-IP $remote_addr;\n'
+        '        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n'
+        '        proxy_set_header X-Forwarded-Proto $scheme;\n'
+        '    }\n'
+    )
+    # Insert before the existing /nlgfc-website/ location line
+    content, n = re.subn(
+        r'(\s*location\s+(?:\^~\s+)?/nlgfc-website/)',
+        new_block + r'\1',
+        content,
+        count=1,
+    )
+    if n > 0:
+        modified = True
+        print('Added dedicated _nuxt proxy location block')
+    else:
+        print('WARNING: Could not find location /nlgfc-website/ to insert before')
 
-            echo "Reloading nginx..."
-            sudo systemctl reload nginx
-            echo "nginx reloaded successfully."
-          else
-            echo "WARNING: Could not find 'location /nlgfc-website/' in $NGINX_CONF"
-            echo "Full config content:"
-            cat "$NGINX_CONF"
-          fi
+# 2. Ensure ^~ on the main /nlgfc-website/ location too (belt-and-suspenders)
+if not re.search(r'location\s+\^~\s+/nlgfc-website/', content):
+    content, n = re.subn(
+        r'location(\s+)/nlgfc-website/',
+        r'location ^~ /nlgfc-website/',
+        content,
+        count=1,
+    )
+    if n > 0:
+        modified = True
+        print('Added ^~ to main /nlgfc-website/ location')
+
+if modified:
+    with open(conf_path, 'w') as f:
+        f.write(content)
+    print('Config updated successfully')
+else:
+    print('No changes needed')
+PYEOF
+
+          sudo python3 /tmp/fix_nginx.py "$NGINX_CONF"
+
+          echo "=== Updated config ==="
+          cat "$NGINX_CONF"
+          echo "=== End updated config ==="
+
+          echo "Testing nginx config..."
+          sudo nginx -t
+
+          echo "Reloading nginx..."
+          sudo systemctl reload nginx
+          echo "nginx reloaded successfully."
+
+          rm -f /tmp/fix_nginx.py
           NGINX_FIX
 
       - name: Post-deploy smoke checks
