@@ -260,6 +260,7 @@ jobs:
           EOF
 
       - name: Fix nginx location for Nuxt static assets
+        continue-on-error: true
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
@@ -270,13 +271,10 @@ jobs:
           SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no"
 
           ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" 'bash -s' << 'NGINX_FIX'
-          set -euo pipefail
-
-          echo "=== Full nginx config dump (first 400 lines) ==="
-          sudo nginx -T 2>/dev/null | head -400
+          echo "=== Full nginx config dump ==="
+          sudo nginx -T 2>&1 || true
           echo "=== End config dump ==="
 
-          # Find which config file contains nlgfc-website
           NGINX_CONF=""
           for f in /etc/nginx/sites-enabled/* /etc/nginx/conf.d/*.conf /etc/nginx/nginx.conf; do
             if [ -f "$f" ] && grep -q 'nlgfc-website' "$f" 2>/dev/null; then
@@ -293,80 +291,62 @@ jobs:
           fi
 
           echo "Found nginx config: $NGINX_CONF"
-          echo "--- Full config file ---"
-          cat "$NGINX_CONF"
+          echo "--- Config file contents ---"
+          sudo cat "$NGINX_CONF"
           echo "--- End config file ---"
 
-          # Write Python fix script (heredoc avoids $var expansion issues)
-          cat > /tmp/fix_nginx.py << 'PYEOF'
-          import re, sys
+          if grep -q 'nlgfc-website/_nuxt' "$NGINX_CONF" 2>/dev/null; then
+            echo "INFO: _nuxt proxy block already exists, skipping"
+            exit 0
+          fi
 
-          conf_path = sys.argv[1]
+          sudo cp "$NGINX_CONF" "${NGINX_CONF}.bak"
+          echo "Backup created: ${NGINX_CONF}.bak"
+
+          sudo python3 -c "
+          import re, sys
+          conf_path = '${NGINX_CONF}'
           with open(conf_path) as f:
               content = f.read()
-
-          modified = False
-
-          # 1. Add dedicated _nuxt proxy block before the /nlgfc-website/ location
-          if not re.search(r'location.*nlgfc-website/_nuxt', content):
-              new_block = (
-                  '\n'
-                  '    # Proxy Nuxt static assets directly to Node.js SSR server\n'
-                  '    location ^~ /nlgfc-website/_nuxt/ {\n'
-                  '        proxy_pass http://127.0.0.1:3000;\n'
-                  '        proxy_http_version 1.1;\n'
-                  '        proxy_set_header Host $host;\n'
-                  '        proxy_set_header X-Real-IP $remote_addr;\n'
-                  '        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n'
-                  '        proxy_set_header X-Forwarded-Proto $scheme;\n'
-                  '    }\n'
-              )
-              content, n = re.subn(
-                  r'(\s*location\s+(?:\^~\s+)?/nlgfc-website/)',
-                  new_block + r'\1',
-                  content,
-                  count=1,
-              )
-              if n > 0:
-                  modified = True
-                  print('Added dedicated _nuxt proxy location block')
-              else:
-                  print('WARNING: Could not find location /nlgfc-website/ to insert before')
-
-          # 2. Ensure ^~ on the main /nlgfc-website/ location too
-          if not re.search(r'location\s+\^~\s+/nlgfc-website/', content):
-              content, n = re.subn(
-                  r'location(\s+)/nlgfc-website/',
-                  r'location ^~ /nlgfc-website/',
-                  content,
-                  count=1,
-              )
-              if n > 0:
-                  modified = True
-                  print('Added ^~ to main /nlgfc-website/ location')
-
-          if modified:
-              with open(conf_path, 'w') as f:
-                  f.write(content)
-              print('Config updated successfully')
+          new_block = '''
+              # Proxy Nuxt static assets directly to Node.js SSR server
+              location ^~ /nlgfc-website/_nuxt/ {
+                  proxy_pass http://127.0.0.1:3000;
+                  proxy_http_version 1.1;
+                  proxy_set_header Host \$host;
+                  proxy_set_header X-Real-IP \$remote_addr;
+                  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto \$scheme;
+              }
+          '''
+          pat = r'(\s*location\s+(?:\^~\s+)?/nlgfc-website/)'
+          content, n = re.subn(pat, new_block + r'\1', content, count=1)
+          if n > 0:
+              print('Inserted _nuxt proxy block')
           else:
-              print('No changes needed')
-          PYEOF
-
-          sudo python3 /tmp/fix_nginx.py "$NGINX_CONF"
+              print('WARNING: Could not find location /nlgfc-website/')
+              sys.exit(1)
+          if not re.search(r'location\s+\^~\s+/nlgfc-website/', content):
+              content = re.sub(r'location(\s+)/nlgfc-website/', r'location ^~ /nlgfc-website/', content, count=1)
+              print('Added ^~ modifier')
+          with open(conf_path, 'w') as f:
+              f.write(content)
+          print('Config written successfully')
+          "
 
           echo "=== Updated config ==="
-          cat "$NGINX_CONF"
+          sudo cat "$NGINX_CONF"
           echo "=== End updated config ==="
 
-          echo "Testing nginx config..."
-          sudo nginx -t
-
-          echo "Reloading nginx..."
-          sudo systemctl reload nginx
-          echo "nginx reloaded successfully."
-
-          rm -f /tmp/fix_nginx.py
+          if sudo nginx -t 2>&1; then
+            sudo systemctl reload nginx
+            echo "nginx reloaded successfully"
+          else
+            echo "ERROR: nginx config invalid, restoring backup"
+            sudo cp "${NGINX_CONF}.bak" "$NGINX_CONF"
+            sudo nginx -t 2>&1 || true
+            exit 1
+          fi
           NGINX_FIX
 
       - name: Post-deploy smoke checks
