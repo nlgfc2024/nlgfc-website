@@ -69,7 +69,7 @@ async function onSubmit(event) {
   isSubmitting.value = true
 
   try {
-    const baseUrl = config.public.baseUrl || 'http://localhost:8000'
+    const baseUrl = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')
     
     const response = await $fetch(`${baseUrl}/api/contact/submit`, {
       method: 'POST',

@@ -5,7 +5,7 @@ const { getExcerpt } = useHtmlUtils()
 // Fetch latest posts from API
 const { data: postsData, pending: loading, error, refresh: fetchPosts } = useAsyncData(
   'latest-posts-slider',
-  () => $fetch(`${config.public.baseUrl || 'http://localhost:8000'}/api/posts/latest/3`),
+  () => $fetch(`${(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')}/api/posts/latest/3`, { timeout: 15000, retry: 0 }),
   {
     server: true,
     lazy: false,
@@ -25,7 +25,8 @@ const newsItems = computed(() => {
   const toStorageUrl = (path) => {
     if (!path || typeof path !== 'string') return '/images/samples/default-news.jpg'
     if (path.startsWith('http://') || path.startsWith('https://')) return path
-    return `${config.public.baseUrl || 'http://localhost:8000'}/storage/${path}`
+    const mediaBase = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')
+    return `${mediaBase}/storage/${path}`
   }
 
   return postsArray.map((post) => ({

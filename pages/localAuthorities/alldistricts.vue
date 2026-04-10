@@ -6,7 +6,7 @@ definePageMeta({
 })
 
 const config = useRuntimeConfig()
-const apiBaseUrl = String(config.public.apiBase || config.public.baseUrl || 'http://localhost:8000').replace(/\/+$/, '')
+const apiBaseUrl = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')
 
 const extractAuthoritiesRows = (payload) => {
   if (Array.isArray(payload)) return payload

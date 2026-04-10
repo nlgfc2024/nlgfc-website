@@ -156,13 +156,16 @@ jobs:
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           PM2_APP_NAME: ${{ secrets.PM2_APP_NAME }}
           SYSTEMD_SERVICE_NAME: ${{ secrets.SYSTEMD_SERVICE_NAME }}
+          NUXT_PUBLIC_BASE_URL: ${{ secrets.NUXT_PUBLIC_BASE_URL }}
+          NUXT_PUBLIC_API_BASE: ${{ secrets.NUXT_PUBLIC_API_BASE }}
+          NUXT_PUBLIC_JOBS_PORTAL_BASE: ${{ secrets.NUXT_PUBLIC_JOBS_PORTAL_BASE }}
         run: |
           set -euo pipefail
           PORT="${DEPLOY_PORT:-22}"
           SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no"
 
           ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" \
-            "DEPLOY_PATH='${DEPLOY_PATH}' PM2_APP_NAME='${PM2_APP_NAME}' SYSTEMD_SERVICE_NAME='${SYSTEMD_SERVICE_NAME}' bash -s" << 'EOF'
+            "DEPLOY_PATH='${DEPLOY_PATH}' PM2_APP_NAME='${PM2_APP_NAME}' SYSTEMD_SERVICE_NAME='${SYSTEMD_SERVICE_NAME}' NUXT_PUBLIC_BASE_URL='${NUXT_PUBLIC_BASE_URL}' NUXT_PUBLIC_API_BASE='${NUXT_PUBLIC_API_BASE}' NUXT_PUBLIC_JOBS_PORTAL_BASE='${NUXT_PUBLIC_JOBS_PORTAL_BASE}' bash -s" << 'EOF'
           set -euo pipefail
 
           if [ -f "$HOME/.nvm/nvm.sh" ]; then
@@ -171,6 +174,19 @@ jobs:
           fi
 
           cd "$DEPLOY_PATH"
+
+          if [ -n "${NUXT_PUBLIC_BASE_URL:-}" ]; then
+            export NUXT_PUBLIC_BASE_URL
+          fi
+
+          if [ -n "${NUXT_PUBLIC_API_BASE:-}" ]; then
+            export NUXT_PUBLIC_API_BASE
+          fi
+
+          if [ -n "${NUXT_PUBLIC_JOBS_PORTAL_BASE:-}" ]; then
+            export NUXT_PUBLIC_JOBS_PORTAL_BASE
+          fi
+
           npm ci
           npm run build
 

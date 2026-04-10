@@ -258,7 +258,7 @@ const apiPosts = computed(() => {
   return Array.isArray(postsData.value?.data) ? postsData.value.data : []
 })
 
-const baseUrl = computed(() => config.public.baseUrl || 'http://localhost:8000')
+const baseUrl = computed(() => String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, ''))
 
 const getPostImage = (imagePath) => {
   if (!imagePath) return '/images/samples/default-news.jpg'

@@ -806,6 +806,20 @@ const showSearch = ref(false);
 const searchQuery = ref('');
 const config = useRuntimeConfig();
 const jobsPortalUrl = computed(() => `${config.public.jobsPortalBase || 'http://localhost:3001'}/?source=nlgfc-website`);
+const apiBase = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')
+
+const fetchWithFallback = async (endpoint, fallback = { data: [] }, options = {}) => {
+  try {
+    return await $fetch(`${apiBase}${endpoint}`, {
+      timeout: 12000,
+      retry: 0,
+      ...options,
+    })
+  } catch (error) {
+    console.error(`[navbar] Failed to load ${endpoint}:`, error)
+    return fallback
+  }
+}
 
 const isExpired = (dateString) => {
   if (!dateString) {
@@ -820,31 +834,31 @@ const isExpired = (dateString) => {
   return date < new Date();
 };
 
-const { data: navVacancies } = await useAsyncData(
+const { data: navVacancies } = useAsyncData(
   'navbar-opportunities-jobs',
-  () =>
-    $fetch(`${config.public.apiBase}/api/vacancies`, {
-      params: {
-        per_page: 100,
-        include_expired: true,
-      },
-    }),
+  () => fetchWithFallback('/api/vacancies', { data: [] }, {
+    params: {
+      per_page: 100,
+      include_expired: true,
+    },
+  }),
   {
     default: () => ({ data: [] }),
+    lazy: true,
   }
 );
 
-const { data: navProcurements } = await useAsyncData(
+const { data: navProcurements } = useAsyncData(
   'navbar-opportunities-procurement',
-  () =>
-    $fetch(`${config.public.apiBase}/api/procurement-notices`, {
-      params: {
-        per_page: 100,
-        status: 'active',
-      },
-    }),
+  () => fetchWithFallback('/api/procurement-notices', { data: [] }, {
+    params: {
+      per_page: 100,
+      status: 'active',
+    },
+  }),
   {
     default: () => ({ data: [] }),
+    lazy: true,
   }
 );
 
@@ -873,20 +887,20 @@ const router = useRouter();
 
 const { data: currentMenuResponse } = useAsyncData(
   'navbar:projects:current',
-  () => $fetch(`${config.public.apiBase}/api/projects/menu?project_status=current`),
-  { server: true, default: () => ({ data: [] }) }
+  () => fetchWithFallback('/api/projects/menu?project_status=current', { data: [] }),
+  { server: true, lazy: true, default: () => ({ data: [] }) }
 )
 
 const { data: pastMenuResponse } = useAsyncData(
   'navbar:projects:past',
-  () => $fetch(`${config.public.apiBase}/api/projects/menu?project_status=past`),
-  { server: true, default: () => ({ data: [] }) }
+  () => fetchWithFallback('/api/projects/menu?project_status=past', { data: [] }),
+  { server: true, lazy: true, default: () => ({ data: [] }) }
 )
 
 const { data: upcomingMenuResponse } = useAsyncData(
   'navbar:projects:upcoming',
-  () => $fetch(`${config.public.apiBase}/api/projects/menu?project_status=upcoming`),
-  { server: true, default: () => ({ data: [] }) }
+  () => fetchWithFallback('/api/projects/menu?project_status=upcoming', { data: [] }),
+  { server: true, lazy: true, default: () => ({ data: [] }) }
 )
 
 const toStatusPath = (status) => {

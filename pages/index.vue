@@ -11,7 +11,7 @@ const { getExcerpt, stripHtmlTags } = useHtmlUtils();
 
 // Get runtime config for base URL
 const config = useRuntimeConfig();
-const apiBaseUrl = config.public.baseUrl || 'http://localhost:8000'
+const apiBaseUrl = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -109,7 +109,7 @@ const { data: donorProjectsData, loading: projectsLoading, error: projectsError,
 const newsItems = computed(() => {
   if (!postsData.value || !Array.isArray(postsData.value)) return []
   
-  const baseUrl = config.public.baseUrl || 'http://localhost:8000';
+  const baseUrl = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '');
   
   return postsData.value.map((post) => ({
     id: post.id,

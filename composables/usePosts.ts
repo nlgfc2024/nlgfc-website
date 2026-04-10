@@ -1,6 +1,6 @@
 export const useLatestPosts = () => {
   const config = useRuntimeConfig()
-  const apiBase = String(config.public.apiBase || config.public.baseUrl || 'http://localhost:8000').replace(/\/+$/, '')
+  const apiBase = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')
   const posts = ref([])
   const loading = ref(false)
   const error = ref(null)
@@ -10,7 +10,7 @@ export const useLatestPosts = () => {
     error.value = null
     
     try {
-      const { data }: { data: any } = await $fetch(`${apiBase}/api/posts/latest/${count}`)
+      const { data }: { data: any } = await $fetch(`${apiBase}/api/posts/latest/${count}`, { timeout: 15000, retry: 0 })
       posts.value = data
     } catch (err: any) {
       error.value = err
@@ -30,7 +30,7 @@ export const useLatestPosts = () => {
 
 export const useAllPosts = () => {
   const config = useRuntimeConfig()
-  const apiBase = String(config.public.apiBase || config.public.baseUrl || 'http://localhost:8000').replace(/\/+$/, '')
+  const apiBase = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')
   const posts = ref([])
   const loading = ref(false)
   const error = ref(null)
@@ -40,7 +40,7 @@ export const useAllPosts = () => {
     error.value = null
     
     try {
-      const { data }: { data: any } = await $fetch(`${apiBase}/api/posts`)
+      const { data }: { data: any } = await $fetch(`${apiBase}/api/posts`, { timeout: 15000, retry: 0 })
       posts.value = data
     } catch (err: any) {
       error.value = err

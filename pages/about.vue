@@ -18,8 +18,8 @@
     console.error("Organogram image failed to load");
     };
 
-    const apiBaseUrl = computed(() => (config.public.baseUrl || 'http://localhost:8000').replace(/\/$/, ''))
-    const pagesApiBaseUrl = computed(() => (config.public.apiBase || config.public.baseUrl || 'http://localhost:8000').replace(/\/$/, ''))
+    const apiBaseUrl = computed(() => (config.public.apiBase || config.public.baseUrl || '').replace(/\/$/, ''))
+    const pagesApiBaseUrl = computed(() => (config.public.apiBase || config.public.baseUrl || '').replace(/\/$/, ''))
 
     const TAB_PAGE_SLUGS = {
       mvc: 'mission-vision-core-values',

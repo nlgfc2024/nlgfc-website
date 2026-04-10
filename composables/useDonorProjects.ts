@@ -16,8 +16,8 @@ export function useDonorProjects(options: DonorProjectsOptions = {}) {
   const { data, pending, error, refresh } = useAsyncData(
     key,
     async () => {
-      const baseUrl = config.public.baseUrl || 'http://localhost:8000'
-      const fundingTypes = await $fetch(`${baseUrl}/api/funding-types`)
+      const baseUrl = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '')
+      const fundingTypes = await $fetch(`${baseUrl}/api/funding-types`, { timeout: 15000, retry: 0 })
       const fundingTypesArray = Array.isArray(fundingTypes) ? fundingTypes : []
 
       const donorFundingType = fundingTypesArray.find((type) => {
@@ -35,7 +35,8 @@ export function useDonorProjects(options: DonorProjectsOptions = {}) {
       }
 
       const response: any = await $fetch(
-        `${baseUrl}/api/projects?per_page=${perPage}&funding_type_id=${donorFundingType.id}`
+        `${baseUrl}/api/projects?per_page=${perPage}&funding_type_id=${donorFundingType.id}`,
+        { timeout: 15000, retry: 0 }
       )
 
       const projects = Array.isArray(response) ? response : response?.data || []

@@ -595,7 +595,7 @@ const newsPosts = computed(() => {
   return Array.isArray(newsData.value?.data) ? newsData.value.data : []
 })
 
-const newsBaseUrl = computed(() => config.public.baseUrl || 'http://localhost:8000')
+const newsBaseUrl = computed(() => String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, ''))
 
 const newsItems = computed(() => {
   return [...newsPosts.value]

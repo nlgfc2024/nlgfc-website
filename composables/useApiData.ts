@@ -84,7 +84,7 @@ export function useApiData<T = any>(
 
   // Get base URL from runtime config
   const config = useRuntimeConfig();
-  const baseUrl = config.public.baseUrl || 'http://localhost:8000';
+  const baseUrl = String(config.public.apiBase || config.public.baseUrl || '').replace(/\/+$/, '');
   
   // Construct full URL if relative
   const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
@@ -92,7 +92,7 @@ export function useApiData<T = any>(
   // Use useAsyncData for better SSR support and caching
   const { data, pending, error, refresh } = useAsyncData<T>(
     key,
-    () => $fetch(fullUrl),
+    () => $fetch(fullUrl, { timeout: 15000, retry: 0 }),
     {
       server,
       lazy,
