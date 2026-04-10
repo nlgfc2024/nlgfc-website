@@ -299,62 +299,59 @@ jobs:
 
           # Write Python fix script (heredoc avoids $var expansion issues)
           cat > /tmp/fix_nginx.py << 'PYEOF'
-import re, sys
+          import re, sys
 
-conf_path = sys.argv[1]
-with open(conf_path) as f:
-    content = f.read()
+          conf_path = sys.argv[1]
+          with open(conf_path) as f:
+              content = f.read()
 
-modified = False
+          modified = False
 
-# 1. Add dedicated _nuxt proxy block before the /nlgfc-website/ location
-#    This ensures _nuxt assets bypass any try_files / nested static-file
-#    regex that routes .js/.css to PHP/Laravel.
-if not re.search(r'location.*nlgfc-website/_nuxt', content):
-    new_block = (
-        '\n'
-        '    # Proxy Nuxt static assets directly to Node.js SSR server\n'
-        '    location ^~ /nlgfc-website/_nuxt/ {\n'
-        '        proxy_pass http://127.0.0.1:3000;\n'
-        '        proxy_http_version 1.1;\n'
-        '        proxy_set_header Host $host;\n'
-        '        proxy_set_header X-Real-IP $remote_addr;\n'
-        '        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n'
-        '        proxy_set_header X-Forwarded-Proto $scheme;\n'
-        '    }\n'
-    )
-    # Insert before the existing /nlgfc-website/ location line
-    content, n = re.subn(
-        r'(\s*location\s+(?:\^~\s+)?/nlgfc-website/)',
-        new_block + r'\1',
-        content,
-        count=1,
-    )
-    if n > 0:
-        modified = True
-        print('Added dedicated _nuxt proxy location block')
-    else:
-        print('WARNING: Could not find location /nlgfc-website/ to insert before')
+          # 1. Add dedicated _nuxt proxy block before the /nlgfc-website/ location
+          if not re.search(r'location.*nlgfc-website/_nuxt', content):
+              new_block = (
+                  '\n'
+                  '    # Proxy Nuxt static assets directly to Node.js SSR server\n'
+                  '    location ^~ /nlgfc-website/_nuxt/ {\n'
+                  '        proxy_pass http://127.0.0.1:3000;\n'
+                  '        proxy_http_version 1.1;\n'
+                  '        proxy_set_header Host $host;\n'
+                  '        proxy_set_header X-Real-IP $remote_addr;\n'
+                  '        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n'
+                  '        proxy_set_header X-Forwarded-Proto $scheme;\n'
+                  '    }\n'
+              )
+              content, n = re.subn(
+                  r'(\s*location\s+(?:\^~\s+)?/nlgfc-website/)',
+                  new_block + r'\1',
+                  content,
+                  count=1,
+              )
+              if n > 0:
+                  modified = True
+                  print('Added dedicated _nuxt proxy location block')
+              else:
+                  print('WARNING: Could not find location /nlgfc-website/ to insert before')
 
-# 2. Ensure ^~ on the main /nlgfc-website/ location too (belt-and-suspenders)
-if not re.search(r'location\s+\^~\s+/nlgfc-website/', content):
-    content, n = re.subn(
-        r'location(\s+)/nlgfc-website/',
-        r'location ^~ /nlgfc-website/',
-        content,
-        count=1,
-    )
-    if n > 0:
-        modified = True
-        print('Added ^~ to main /nlgfc-website/ location')
+          # 2. Ensure ^~ on the main /nlgfc-website/ location too
+          if not re.search(r'location\s+\^~\s+/nlgfc-website/', content):
+              content, n = re.subn(
+                  r'location(\s+)/nlgfc-website/',
+                  r'location ^~ /nlgfc-website/',
+                  content,
+                  count=1,
+              )
+              if n > 0:
+                  modified = True
+                  print('Added ^~ to main /nlgfc-website/ location')
 
-if modified:
-    with open(conf_path, 'w') as f:
-        f.write(content)
-    print('Config updated successfully')
-else:
-    print('No changes needed')
-PYEOF
+          if modified:
+              with open(conf_path, 'w') as f:
+                  f.write(content)
+              print('Config updated successfully')
+          else:
+              print('No changes needed')
+          PYEOF
 
           sudo python3 /tmp/fix_nginx.py "$NGINX_CONF"
 
