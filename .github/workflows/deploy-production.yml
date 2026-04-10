@@ -52,7 +52,10 @@ jobs:
         run: npm ci
 
       - name: Build Nuxt app
-        run: npm run build
+        run: |
+          set -euo pipefail
+          export NITRO_PRESET=node-server
+          npm run build
 
   deploy:
     name: Deploy to VPS
@@ -187,13 +190,17 @@ jobs:
             export NUXT_PUBLIC_JOBS_PORTAL_BASE
           fi
 
+          export NODE_ENV=production
+          export NITRO_PRESET=node-server
+
           npm ci
           npm run build
 
           if [ -n "${PM2_APP_NAME:-}" ] && command -v pm2 >/dev/null 2>&1; then
-            export NODE_ENV=production
             export HOST=127.0.0.1
             export PORT=3000
+            export NITRO_HOST=127.0.0.1
+            export NITRO_PORT=3000
 
             # Ensure we never keep an old "nuxt preview"/wrong PM2 command around.
             if pm2 describe "$PM2_APP_NAME" >/dev/null 2>&1; then
@@ -203,10 +210,38 @@ jobs:
             # Stop known legacy process names if they exist.
             pm2 delete frontendclear || true
 
-            pm2 start .output/server/index.mjs \
+            # Kill any orphan listener left on port 3000 (e.g. detached `serve` process).
+            stale_pids=""
+            if command -v lsof >/dev/null 2>&1; then
+              stale_pids="$(lsof -tiTCP:3000 -sTCP:LISTEN || true)"
+            elif command -v fuser >/dev/null 2>&1; then
+              stale_pids="$(fuser -n tcp 3000 2>/dev/null || true)"
+            fi
+
+            if [ -n "${stale_pids// /}" ]; then
+              echo "Stopping stale listeners on :3000 -> ${stale_pids}"
+              kill ${stale_pids} || true
+              sleep 2
+              for pid in ${stale_pids}; do
+                if kill -0 "${pid}" >/dev/null 2>&1; then
+                  kill -9 "${pid}" || true
+                fi
+              done
+            fi
+
+            pm2 start "$DEPLOY_PATH/.output/server/index.mjs" \
               --name "$PM2_APP_NAME" \
               --cwd "$DEPLOY_PATH" \
+              --interpreter "$(command -v node)" \
               --update-env
+
+            # Fail fast if PM2 script is not the expected server entrypoint.
+            pm2 describe "$PM2_APP_NAME"
+            if ! pm2 describe "$PM2_APP_NAME" | grep -q ".output/server/index.mjs"; then
+              echo "PM2 is not running expected script .output/server/index.mjs"
+              exit 1
+            fi
+
             pm2 save || true
 
             # Quick readiness check for upstream health.
@@ -255,6 +290,10 @@ jobs:
 
           failed=0
 
+          if command -v pm2 >/dev/null 2>&1 && [ -n "${PM2_APP_NAME:-}" ]; then
+            pm2 describe "$PM2_APP_NAME" || true
+          fi
+
           check_url "node-local" "http://127.0.0.1:3000/nlgfc-website/" 30 || failed=1
           check_url "public-home" "http://127.0.0.1:8080/nlgfc-website/" 70 || failed=1
           check_url "public-contact" "http://127.0.0.1:8080/nlgfc-website/contact" 70 || failed=1
@@ -268,11 +307,13 @@ jobs:
               fi
               if [ -n "${PM2_APP_NAME:-}" ]; then
                 pm2 logs "$PM2_APP_NAME" --nostream --lines 200 || true
-              else
-                pm2 logs --nostream --lines 200 || true
-              fi
+            else
+              pm2 logs --nostream --lines 200 || true
+            fi
             fi
             ss -ltnp | grep -E ':3000|:8080' || true
+            lsof -nP -iTCP:3000 -sTCP:LISTEN || true
+            lsof -nP -iTCP:8080 -sTCP:LISTEN || true
             tail -n 200 /var/log/nginx/error.log || true
             tail -n 200 /var/log/nginx/access.log || true
             exit 1
