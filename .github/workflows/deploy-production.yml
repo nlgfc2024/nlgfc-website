@@ -203,3 +203,55 @@ jobs:
             echo "No PM2_APP_NAME or SYSTEMD_SERVICE_NAME configured. Build completed, restart skipped."
           fi
           EOF
+
+      - name: Post-deploy smoke checks
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          PM2_APP_NAME: ${{ secrets.PM2_APP_NAME }}
+        run: |
+          set -euo pipefail
+          PORT="${DEPLOY_PORT:-22}"
+          SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no"
+
+          ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" \
+            "PM2_APP_NAME='${PM2_APP_NAME}' bash -s" << 'EOF'
+          set -euo pipefail
+
+          check_url () {
+            local label="$1"
+            local url="$2"
+            local max_time="${3:-30}"
+            local result
+            result="$(curl -sS -o /dev/null -w "%{http_code} %{time_total}" --max-time "$max_time" "$url" || echo "000 0")"
+            echo "$label -> $result ($url)"
+            local code
+            code="$(echo "$result" | awk '{print $1}')"
+            if [ "$code" != "200" ]; then
+              return 1
+            fi
+            return 0
+          }
+
+          failed=0
+
+          check_url "node-local" "http://127.0.0.1:3000/nlgfc-website/" 30 || failed=1
+          check_url "public-home" "http://127.0.0.1:8080/nlgfc-website/" 70 || failed=1
+          check_url "public-contact" "http://127.0.0.1:8080/nlgfc-website/contact" 70 || failed=1
+
+          if [ "$failed" -ne 0 ]; then
+            echo "Smoke check failed. Collecting diagnostics..."
+            if command -v pm2 >/dev/null 2>&1; then
+              pm2 status || true
+              if [ -n "${PM2_APP_NAME:-}" ]; then
+                pm2 logs "$PM2_APP_NAME" --nostream --lines 200 || true
+              else
+                pm2 logs --nostream --lines 200 || true
+              fi
+            fi
+            tail -n 200 /var/log/nginx/error.log || true
+            tail -n 200 /var/log/nginx/access.log || true
+            exit 1
+          fi
+          EOF

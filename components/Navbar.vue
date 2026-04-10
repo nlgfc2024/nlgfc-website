@@ -844,6 +844,7 @@ const { data: navVacancies } = useAsyncData(
   }),
   {
     default: () => ({ data: [] }),
+    server: false,
     lazy: true,
   }
 );
@@ -858,6 +859,7 @@ const { data: navProcurements } = useAsyncData(
   }),
   {
     default: () => ({ data: [] }),
+    server: false,
     lazy: true,
   }
 );
@@ -888,19 +890,19 @@ const router = useRouter();
 const { data: currentMenuResponse } = useAsyncData(
   'navbar:projects:current',
   () => fetchWithFallback('/api/projects/menu?project_status=current', { data: [] }),
-  { server: true, lazy: true, default: () => ({ data: [] }) }
+  { server: false, lazy: true, default: () => ({ data: [] }) }
 )
 
 const { data: pastMenuResponse } = useAsyncData(
   'navbar:projects:past',
   () => fetchWithFallback('/api/projects/menu?project_status=past', { data: [] }),
-  { server: true, lazy: true, default: () => ({ data: [] }) }
+  { server: false, lazy: true, default: () => ({ data: [] }) }
 )
 
 const { data: upcomingMenuResponse } = useAsyncData(
   'navbar:projects:upcoming',
   () => fetchWithFallback('/api/projects/menu?project_status=upcoming', { data: [] }),
-  { server: true, lazy: true, default: () => ({ data: [] }) }
+  { server: false, lazy: true, default: () => ({ data: [] }) }
 )
 
 const toStatusPath = (status) => {
