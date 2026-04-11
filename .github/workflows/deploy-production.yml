@@ -203,33 +203,29 @@ jobs:
             export NITRO_HOST=127.0.0.1
             export NITRO_PORT=3000
 
-            # Ensure we never keep an old "nuxt preview"/wrong PM2 command around.
-            if pm2 describe "$PM2_APP_NAME" >/dev/null 2>&1; then
-              pm2 delete "$PM2_APP_NAME" || true
+            # ── Stop everything on port 3000 ──────────────────────────
+            # 1. Delete ALL PM2 processes (not just by name) to prevent
+            #    PM2 from auto-restarting old processes.
+            pm2 kill || true
+
+            # 2. Force-kill anything still listening on port 3000.
+            if command -v fuser >/dev/null 2>&1; then
+              fuser -k 3000/tcp 2>/dev/null || true
             fi
-
-            # Stop known legacy process names if they exist.
-            pm2 delete frontend || true
-            pm2 delete frontendclear || true
-
-            # Kill any orphan listener left on port 3000 (e.g. detached `serve` process).
-            stale_pids=""
             if command -v lsof >/dev/null 2>&1; then
-              stale_pids="$(lsof -tiTCP:3000 -sTCP:LISTEN || true)"
-            elif command -v fuser >/dev/null 2>&1; then
-              stale_pids="$(fuser -n tcp 3000 2>/dev/null || true)"
+              lsof -tiTCP:3000 -sTCP:LISTEN 2>/dev/null | xargs -r kill -9 || true
             fi
+            sleep 2
 
-            if [ -n "${stale_pids// /}" ]; then
-              echo "Stopping stale listeners on :3000 -> ${stale_pids}"
-              kill ${stale_pids} || true
-              sleep 2
-              for pid in ${stale_pids}; do
-                if kill -0 "${pid}" >/dev/null 2>&1; then
-                  kill -9 "${pid}" || true
-                fi
-              done
+            # 3. Verify port 3000 is free.
+            if command -v lsof >/dev/null 2>&1; then
+              if lsof -tiTCP:3000 -sTCP:LISTEN >/dev/null 2>&1; then
+                echo "FATAL: port 3000 still in use after cleanup!"
+                lsof -iTCP:3000 -sTCP:LISTEN
+                exit 1
+              fi
             fi
+            echo "Port 3000 is free."
 
             pm2 start "$DEPLOY_PATH/.output/server/index.mjs" \
               --name "$PM2_APP_NAME" \
@@ -381,8 +377,8 @@ jobs:
             echo "--- nginx access log (last 50) ---"
             tail -n 50 /var/log/nginx/access.log || true
             echo "============================================"
-            echo "WARNING: Smoke check detected issues above."
-            echo "Deploy continued — check logs for details."
+            echo "FATAL: Smoke check detected issues above."
             echo "============================================"
+            exit 1
           fi
           EOF
