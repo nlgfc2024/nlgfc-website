@@ -26,6 +26,10 @@ export default defineNuxtConfig({
     }
   },
   // Configuration for subdirectory deployment and app settings
+  experimental: {
+    appManifest: false
+  },
+
   app: {
     baseURL: '/nlgfc-website/',
     buildAssetsDir: '/_nuxt/',

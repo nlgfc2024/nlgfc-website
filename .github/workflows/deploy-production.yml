@@ -275,52 +275,7 @@ jobs:
             NGINX_CONF='/etc/nginx/sites-available/nlgfc'
             if [ ! -f \"\$NGINX_CONF\" ]; then echo 'WARNING: nginx config not found'; exit 0; fi
             sudo cp \"\$NGINX_CONF\" \"\${NGINX_CONF}.bak\"
-            echo 'aW1wb3J0IHJlLCBzeXMKY29uZiA9ICIvZXRjL25naW54L3NpdGVzLWF2YWlsYWJsZS9ubGdmYyIKd2l0aCBvcGVuKGNvbmYpIGFzIGY6CiAgICB0eHQgPSBmLnJlYWQoKQppZiAibG9jYXRpb24gXn4gL25sZ2ZjLXdlYnNpdGUvIHsiIGluIHR4dDoKICAgIHByaW50KCJefiAvbmxnZmMtd2Vic2l0ZS8gYmxvY2sgYWxyZWFkeSBwcmVzZW50IikKICAgIHN5cy5leGl0KDApCnR4dCA9IHJlLnN1YihyIlxuXHMqI1teXG5dKk51eHQgc3RhdGljIGFzc2V0c1teXG5dKlxuXHMqbG9jYXRpb25ccytcXn5ccysvbmxnZmMtd2Vic2l0ZS9fbnV4dC9ccypce1tefV0qXH1cbiIsICJcbiIsIHR4dCwgZmxhZ3M9cmUuRE9UQUxMKQpibGsgID0gIlxuICAgICMgQUxMIE51eHQgYXBwIHRyYWZmaWMgLSBwcm94eSB0byBOb2RlLmpzXG4iCmJsayArPSAiICAgIGxvY2F0aW9uIF5+IC9ubGdmYy13ZWJzaXRlLyB7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9wYXNzIGh0dHA6Ly8xMjcuMC4wLjE6MzAwMDtcbiIKYmxrICs9ICIgICAgICAgIHByb3h5X2h0dHBfdmVyc2lvbiAxLjE7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIFVwZ3JhZGUgJGh0dHBfdXBncmFkZTtcbiIKYmxrICs9ICcgICAgICAgIHByb3h5X3NldF9oZWFkZXIgQ29ubmVjdGlvbiAidXBncmFkZSI7XG4nCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIEhvc3QgJGhvc3Q7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIFgtUmVhbC1JUCAkcmVtb3RlX2FkZHI7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIFgtRm9yd2FyZGVkLUZvciAkcHJveHlfYWRkX3hfZm9yd2FyZGVkX2ZvcjtcbiIKYmxrICs9ICIgICAgICAgIHByb3h5X3NldF9oZWFkZXIgWC1Gb3J3YXJkZWQtUHJvdG8gJHNjaGVtZTtcbiIKYmxrICs9ICIgICAgfVxuXG4iCnRndCA9ICIgICAgbG9jYXRpb24gfioiCmlmIHRndCBpbiB0eHQ6CiAgICB0eHQgPSB0eHQucmVwbGFjZSh0Z3QsIGJsayArIHRndCwgMSkKICAgIHByaW50KCJJbnNlcnRlZCBefiAvbmxnZmMtd2Vic2l0ZS8gcHJveHkgYmxvY2siKQplbHNlOgogICAgcHJpbnQoIldBUk5JTkc6IHN0YXRpYyBmaWxlcyByZWdleCBub3QgZm91bmQiKTsgc3lzLmV4aXQoMSkKZm9yIGQgaW4gWyJpbWFnZXMiLCJwaG90byIsImRvY3VtZW50cyIsImRvd25sb2FkcyIsInRodW1ibmFpbHMiLCJ2aWRlbyIsIm5ld3MiXToKICAgIG1hcmtlciA9ICJsb2NhdGlvbiBefiAvIiArIGQgKyAiLyIKICAgIGlmIG1hcmtlciBpbiB0eHQ6CiAgICAgICAgY29udGludWUKICAgIHJ3ICA9ICJcbiAgICBsb2NhdGlvbiBefiAvIiArIGQgKyAiLyB7XG4iCiAgICBydyArPSAiICAgICAgICByZXdyaXRlIF4oLiopJCAvbmxnZmMtd2Vic2l0ZSQxIGxhc3Q7XG4iCiAgICBydyArPSAiICAgIH1cbiIKICAgIHR4dCA9IHR4dC5yZXBsYWNlKHRndCwgcncgKyAiXG4iICsgdGd0LCAxKQogICAgcHJpbnQoIkFkZGVkIHJld3JpdGUgZm9yIC8iICsgZCArICIvIikKd2l0aCBvcGVuKGNvbmYsICJ3IikgYXMgZjoKICAgIGYud3JpdGUodHh0KQpwcmludCgiQ29uZmlnIHdyaXR0ZW4iKQ==' | base64 -d | sudo python3 -
-            if sudo nginx -t 2>&1; then
-              sudo systemctl reload nginx
-              echo 'nginx reloaded successfully'
-            else
-              echo 'ERROR: nginx config invalid, restoring backup'
-              sudo cp \"\${NGINX_CONF}.bak\" \"\$NGINX_CONF\"
-              sudo nginx -t 2>&1 || true
-              exit 1
-            fi
-          "
-
-      - name: Post-deploy smoke checks
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
-          PM2_APP_NAME: ${{ secrets.PM2_APP_NAME }}
-        run: |
-          set -euo pipefail
-          PORT="${DEPLOY_PORT:-22}"
-          SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no"
-
-          ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" \
-            "PM2_APP_NAME='${PM2_APP_NAME}' DEPLOY_PATH='${DEPLOY_PATH}' bash -s" << 'EOF'
-          set -euo pipefail
-
-          check_url () {
-            local label="$1"
-            local url="$2"
-            local max_time="${3:-30}"
-            local result
-            result="$(curl -sS -o /dev/null -w "%{http_code} %{time_total}" --max-time "$max_time" "$url" || echo "000 0")"
-            echo "$label -> $result ($url)"
-            local code
-            code="$(echo "$result" | awk '{print $1}')"
-            if [ "$code" != "200" ]; then
-              return 1
-            fi
-            return 0
-          }
-
-          failed=0
-
-          if command -v pm2 >/dev/null 2>&1 && [ -n "${PM2_APP_NAME:-}" ]; then
+            echo 'aW1wb3J0IHJlLCBzeXMKY29uZiA9ICIvZXRjL25naW54L3NpdGVzLWF2YWlsYWJsZS9ubGdmYyIKd2l0aCBvcGVuKGNvbmYpIGFzIGY6CiAgICB0eHQgPSBmLnJlYWQoKQppZiAibG9jYXRpb24gXn4gL25sZ2ZjLXdlYnNpdGUvIHsiIGluIHR4dDoKICAgIHByaW50KCJefiAvbmxnZmMtd2Vic2l0ZS8gYmxvY2sgYWxyZWFkeSBwcmVzZW50IikKICAgIHN5cy5leGl0KDApCnR4dCA9IHJlLnN1YihyIlxuXHMqI1teXG5dKk51eHQgc3RhdGljIGFzc2V0c1teXG5dKlxuXHMqbG9jYXRpb25ccytcXn5ccysvbmxnZmMtd2Vic2l0ZS9fbnV4dC9ccypce1tefV0qXH1cbiIsICJcbiIsIHR4dCwgZmxhZ3M9cmUuRE9UQUxMKQpibGsgID0gIlxuICAgICMgQUxMIE51eHQgYXBwIHRyYWZmaWMgLSBwcm94eSB0byBOb2RlLmpzXG4iCmJsayArPSAiICAgIGxvY2F0aW9uIF5+IC9ubGdmYy13ZWJzaXRlLyB7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9wYXNzIGh0dHA6Ly8xMjcuMC4wLjE6MzAwMDtcbiIKYmxrICs9ICIgICAgICAgIHByb3h5X2h0dHBfdmVyc2lvbiAxLjE7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIFVwZ3JhZGUgJGh0dHBfdXBncmFkZTtcbiIKYmxrICs9ICcgICAgICAgIHByb3h5X3NldF9oZWFkZXIgQ29ubmVjdGlvbiAidXBncmFkZSI7XG4nCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIEhvc3QgJGhvc3Q7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIFgtUmVhbC1JUCAkcmVtb3RlX2FkZHI7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIFgtRm9yd2FyZGVkLUZvciAkcHJveHlfYWRkX3hfZm9yd2FyZGVkX2ZvcjtcbiIKYmxrICs9ICIgICAgICAgIHByb3h5X3NldF9oZWFkZXIgWC1Gb3J3YXJkZWQtUHJvdG8gJHNjaGVtZTtcbiIKYmxrICs9ICIgICAgfVxuXG4iCnRndCA9ICIgICAgbG9jYXRpb24gfioiCmlmIHRndCBpbiB0eHQ6CiAgICB0eHQgPSB0eHQucmVwbGFjZSh0Z3QsIGJsayArIHRndCwgMSkKICAgIHByaW50KCJJbnNlcnRlZCBefiAvbmxnZmMtd2Vic2l0ZS8gcHJveHkgYmxvY2siKQplbHNlOgogICAgcHJpbnQoIldBUk5JTkc6IHN0YXRpYyBmaWxlcyByZWdleCBub3QgZm91bmQiKTsgc3lzLmV4aXQoMSkKZm9yIGQgaW4gWyJpbWFnZXMiLCJwaG90byIsImRvY3VtZW50cyIsImRvd25sb2FkcyIsInRodW1ibmFpbHMiLCJ2aWRlbyIsIm5ld3MiXToKICAgIG1hcmtlciA9ICJsb2NhdGlvbiBefiAvIiArIGQgKyAiLyIKICAgIGlmIG1hcmtlciBpbiB0eHQ6CiAgICAgICAgY29udGludWUKICAgIHJ3ICA9ICJcbiAgICBsb2NhdGlvbiBefiAvIiArIGQgKyAiLyB7XG4iCiAgICBydyArPSAiICAgICAgICByZXdyaXRlIF4oLiopJCAvbmxnZmMtd2Vic2l0ZSQxIGxhc3Q7XG4iCiAgICBydyArPSAiICAgIH1cbiIKICAgIHR4dCA9IHR4dC5yZXBsYWNlKHRndCwgcncgKyAiXG4iICsgdGd0LCAxKQogICAgcHJpbnQoIkFkZGVkIHJld3JpdGUgZm9yIC8iICsgZCArICIvIikKd2l0aCBvcGVuKGNvbmYsICJ3IikgYXMgZjoKICAgIGYud3JpdGUodHh0KQpwcmludCgiQ29uZmlnIHdyaXR0ZW4iKQ==/dev/null 2>&1 && [ -n "${PM2_APP_NAME:-}" ]; then
             pm2 describe "$PM2_APP_NAME" || true
           fi
 
