@@ -206,29 +206,38 @@ jobs:
             # ── Stop frontend on port 3000 ──────────────────────────
             # Only delete the specific PM2 app — NOT pm2 kill which
             # would destroy jobs-portal (:3001) and procurement-portal (:3002).
+            echo "--- PM2 status before cleanup ---"
+            pm2 list || true
+
             if pm2 describe "$PM2_APP_NAME" >/dev/null 2>&1; then
               pm2 delete "$PM2_APP_NAME" || true
             fi
             # Also delete known legacy process names.
-            pm2 delete frontend 2>/dev/null || true
-            pm2 delete frontendclear 2>/dev/null || true
+            for legacy_name in frontend frontendclear nlgfc-frontend nlgfc-website; do
+              pm2 delete "$legacy_name" 2>/dev/null || true
+            done
 
             # 2. Force-kill anything still listening on port 3000.
+            #    Use multiple methods — fuser/lsof may not be installed.
             if command -v fuser >/dev/null 2>&1; then
               fuser -k 3000/tcp 2>/dev/null || true
             fi
             if command -v lsof >/dev/null 2>&1; then
               lsof -tiTCP:3000 -sTCP:LISTEN 2>/dev/null | xargs -r kill -9 || true
             fi
-            sleep 2
+            # Fallback: use ss (always available on modern Linux) to find PID.
+            SS_PID="$(ss -tlnp 'sport = :3000' 2>/dev/null | grep -oP 'pid=\K[0-9]+' | head -1 || true)"
+            if [ -n "$SS_PID" ]; then
+              echo "Killing PID $SS_PID on port 3000 (found via ss)"
+              kill -9 "$SS_PID" 2>/dev/null || true
+            fi
+            sleep 3
 
             # 3. Verify port 3000 is free.
-            if command -v lsof >/dev/null 2>&1; then
-              if lsof -tiTCP:3000 -sTCP:LISTEN >/dev/null 2>&1; then
-                echo "FATAL: port 3000 still in use after cleanup!"
-                lsof -iTCP:3000 -sTCP:LISTEN
-                exit 1
-              fi
+            if ss -tlnp 'sport = :3000' 2>/dev/null | grep -q LISTEN; then
+              echo "FATAL: port 3000 still in use after cleanup!"
+              ss -tlnp 'sport = :3000'
+              exit 1
             fi
             echo "Port 3000 is free."
 
@@ -236,7 +245,9 @@ jobs:
               --name "$PM2_APP_NAME" \
               --cwd "$DEPLOY_PATH" \
               --interpreter "$(command -v node)" \
-              --update-env
+              --update-env \
+              --restart-delay 5000 \
+              --max-restarts 3
 
             # Fail fast if PM2 script is not the expected server entrypoint.
             pm2 describe "$PM2_APP_NAME"
@@ -247,13 +258,25 @@ jobs:
 
             pm2 save || true
 
-            # Quick readiness check for upstream health.
-            for i in 1 2 3 4 5 6 7 8 9 10; do
-              if curl -sS -o /dev/null --max-time 5 "http://127.0.0.1:3000/nlgfc-website/"; then
+            # Wait for the app to be ready (up to ~30 seconds).
+            sleep 3
+            echo "--- PM2 status after start ---"
+            pm2 list || true
+            pm2 logs "$PM2_APP_NAME" --nostream --lines 10 || true
+
+            READY=0
+            for i in $(seq 1 15); do
+              if curl -sS -o /dev/null --max-time 5 "http://127.0.0.1:3000/nlgfc-website/" 2>/dev/null; then
+                READY=1
+                echo "App responding on port 3000 after ~$((i*2)) seconds"
                 break
               fi
               sleep 2
             done
+            if [ "$READY" -ne 1 ]; then
+              echo "WARNING: App not responding on port 3000 after readiness check"
+              pm2 logs "$PM2_APP_NAME" --nostream --lines 30 || true
+            fi
           elif [ -n "${SYSTEMD_SERVICE_NAME:-}" ]; then
             sudo systemctl restart "$SYSTEMD_SERVICE_NAME"
           else
