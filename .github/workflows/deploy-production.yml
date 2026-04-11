@@ -192,54 +192,77 @@ jobs:
 
           export NITRO_PRESET=node-server
 
+          # ════════════════════════════════════════════════════════════
+          # 1. STOP OLD SERVER *BEFORE* BUILD
+          #    The build replaces .output/ files. If the old process is
+          #    still running it will serve stale HTML pointing to deleted
+          #    JS bundles → 500 errors. Stop it first.
+          # ════════════════════════════════════════════════════════════
+          if [ -n "${PM2_APP_NAME:-}" ] && command -v pm2 >/dev/null 2>&1; then
+            echo "--- PM2 status before cleanup ---"
+            pm2 list || true
+
+            # Delete by PM2 name (current + legacy names).
+            pm2 delete "$PM2_APP_NAME" 2>/dev/null || true
+            for legacy_name in frontend frontendclear nlgfc-frontend nlgfc-website; do
+              pm2 delete "$legacy_name" 2>/dev/null || true
+            done
+          fi
+
+          # Kill by command pattern — catches orphaned/rogue node processes
+          # running the Nuxt server, even if PM2 lost track of them.
+          sudo pkill -9 -f ".output/server/index.mjs" 2>/dev/null || true
+
+          # Kill by port using every available tool.
+          if command -v fuser >/dev/null 2>&1; then
+            sudo fuser -k 3000/tcp 2>/dev/null || true
+          fi
+          if command -v lsof >/dev/null 2>&1; then
+            sudo lsof -tiTCP:3000 -sTCP:LISTEN 2>/dev/null | xargs -r sudo kill -9 2>/dev/null || true
+          fi
+          SS_PID="$(sudo ss -tlnp 'sport = :3000' 2>/dev/null | grep -oP 'pid=\K[0-9]+' | head -1 || true)"
+          if [ -n "$SS_PID" ]; then
+            echo "Killing PID $SS_PID on port 3000 (found via ss)"
+            sudo kill -9 "$SS_PID" 2>/dev/null || true
+          fi
+
+          # Nuclear fallback: find PID via /proc/net/tcp (always works).
+          PORT_HEX="0BB8"
+          for inode in $(sudo awk "/:${PORT_HEX} / && / 0A /{print \$10}" /proc/net/tcp /proc/net/tcp6 2>/dev/null | sort -u); do
+            PROC_PID="$(sudo find /proc/[0-9]*/fd -lname "socket:\[${inode}\]" 2>/dev/null | head -1 | cut -d/ -f3 || true)"
+            if [ -n "$PROC_PID" ]; then
+              echo "Killing PID $PROC_PID found via /proc/net for port 3000 (inode $inode)"
+              sudo kill -9 "$PROC_PID" 2>/dev/null || true
+            fi
+          done
+
+          sleep 3
+
+          # Verify port 3000 is free.
+          if sudo ss -tln 'sport = :3000' 2>/dev/null | grep -q LISTEN; then
+            echo "WARNING: port 3000 still in use after all cleanup attempts!"
+            sudo ss -tlnp 'sport = :3000' || true
+            echo "Continuing anyway — pm2 start will fail fast if port is truly taken."
+          else
+            echo "Port 3000 is free."
+          fi
+
+          # ════════════════════════════════════════════════════════════
+          # 2. BUILD
+          # ════════════════════════════════════════════════════════════
           unset NODE_ENV || true
           npm ci --include=dev
           npm run build
 
+          # ════════════════════════════════════════════════════════════
+          # 3. START NEW SERVER
+          # ════════════════════════════════════════════════════════════
           if [ -n "${PM2_APP_NAME:-}" ] && command -v pm2 >/dev/null 2>&1; then
             export NODE_ENV=production
             export HOST=127.0.0.1
             export PORT=3000
             export NITRO_HOST=127.0.0.1
             export NITRO_PORT=3000
-
-            # ── Stop frontend on port 3000 ──────────────────────────
-            # Only delete the specific PM2 app — NOT pm2 kill which
-            # would destroy jobs-portal (:3001) and procurement-portal (:3002).
-            echo "--- PM2 status before cleanup ---"
-            pm2 list || true
-
-            if pm2 describe "$PM2_APP_NAME" >/dev/null 2>&1; then
-              pm2 delete "$PM2_APP_NAME" || true
-            fi
-            # Also delete known legacy process names.
-            for legacy_name in frontend frontendclear nlgfc-frontend nlgfc-website; do
-              pm2 delete "$legacy_name" 2>/dev/null || true
-            done
-
-            # 2. Force-kill anything still listening on port 3000.
-            #    Use sudo — the process may be owned by another user.
-            if command -v fuser >/dev/null 2>&1; then
-              sudo fuser -k 3000/tcp 2>/dev/null || true
-            fi
-            if command -v lsof >/dev/null 2>&1; then
-              sudo lsof -tiTCP:3000 -sTCP:LISTEN 2>/dev/null | xargs -r sudo kill -9 || true
-            fi
-            # Fallback: use sudo ss (always available on modern Linux) to find PID.
-            SS_PID="$(sudo ss -tlnp 'sport = :3000' 2>/dev/null | grep -oP 'pid=\K[0-9]+' | head -1 || true)"
-            if [ -n "$SS_PID" ]; then
-              echo "Killing PID $SS_PID on port 3000 (found via ss)"
-              sudo kill -9 "$SS_PID" 2>/dev/null || true
-            fi
-            sleep 3
-
-            # 3. Verify port 3000 is free.
-            if sudo ss -tlnp 'sport = :3000' 2>/dev/null | grep -q LISTEN; then
-              echo "FATAL: port 3000 still in use after cleanup!"
-              sudo ss -tlnp 'sport = :3000'
-              exit 1
-            fi
-            echo "Port 3000 is free."
 
             pm2 start "$DEPLOY_PATH/.output/server/index.mjs" \
               --name "$PM2_APP_NAME" \
