@@ -13,7 +13,7 @@ on:
 
 concurrency:
   group: production-deploy
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
   contents: read
@@ -203,10 +203,15 @@ jobs:
             export NITRO_HOST=127.0.0.1
             export NITRO_PORT=3000
 
-            # ── Stop everything on port 3000 ──────────────────────────
-            # 1. Delete ALL PM2 processes (not just by name) to prevent
-            #    PM2 from auto-restarting old processes.
-            pm2 kill || true
+            # ── Stop frontend on port 3000 ──────────────────────────
+            # Only delete the specific PM2 app — NOT pm2 kill which
+            # would destroy jobs-portal (:3001) and procurement-portal (:3002).
+            if pm2 describe "$PM2_APP_NAME" >/dev/null 2>&1; then
+              pm2 delete "$PM2_APP_NAME" || true
+            fi
+            # Also delete known legacy process names.
+            pm2 delete frontend 2>/dev/null || true
+            pm2 delete frontendclear 2>/dev/null || true
 
             # 2. Force-kill anything still listening on port 3000.
             if command -v fuser >/dev/null 2>&1; then
