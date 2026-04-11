@@ -12,6 +12,14 @@ export function useApiBase(): string {
   try {
     return new URL(raw).origin
   } catch {
+    // During SSR, derive from the incoming request so $fetch has an absolute URL
+    if (import.meta.server) {
+      try {
+        return useRequestURL().origin
+      } catch {
+        // no request context available
+      }
+    }
     return raw.replace(/\/+$/, '')
   }
 }

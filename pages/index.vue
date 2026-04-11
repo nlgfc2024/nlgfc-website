@@ -67,7 +67,7 @@ const { data: partners, loading, error, refresh: fetchPartners } = useApiDataArr
   'partners',
   '/api/partners',
   {
-    server: false,
+    server: true,
     lazy: true,
   }
 );
@@ -77,7 +77,7 @@ const { data: postsData, loading: postsLoading, error: postsError, refresh: fetc
   'latest-posts',
   '/api/posts/latest/3',
   {
-    server: false,
+    server: true,
     lazy: true,
     default: () => [],
     transform: (response) => Array.isArray(response) ? response : response?.data || []
@@ -93,7 +93,7 @@ const { data: documentsResponse, pending: publicationsLoading, error: publicatio
     return await fetchPaginatedEndpoint('/api/documents', publicationsPage.value, publicationsPerPage)
   },
   {
-    server: false,
+    server: true,
     lazy: true,
     dedupe: 'defer',
     deep: false,
@@ -111,7 +111,7 @@ const { data: documentsResponse, pending: publicationsLoading, error: publicatio
 const { data: donorProjectsData, loading: projectsLoading, error: projectsError, refresh: fetchProjects } = useDonorProjects({
   key: 'homepage-donor-projects',
   perPage: 100,
-  server: false,
+  server: true,
   lazy: true,
 })
 
@@ -164,7 +164,7 @@ const { data: missionPagePayload } = useAsyncData(
       return null
     }
   },
-  { server: false, lazy: true, default: () => null }
+  { server: true, lazy: true, default: () => null }
 )
 
 const missionVisionData = computed(() => {
@@ -211,7 +211,7 @@ const { data: homeProjectsResponse } = useAsyncData(
       return { data: [] }
     }
   },
-  { server: false, lazy: true, default: () => ({ data: [] }) }
+  { server: true, lazy: true, default: () => ({ data: [] }) }
 )
 
 const pickProgramRepresentative = (items = []) => {
@@ -331,7 +331,7 @@ const { data: procurementsResponse, pending: procurementsLoading, error: procure
     return await fetchPaginatedEndpoint('/api/procurement-notices', procurementPage.value, opportunitiesPerPage)
   },
   {
-    server: false,
+    server: true,
     lazy: true,
     dedupe: 'defer',
     deep: false,
@@ -352,7 +352,7 @@ const { data: jobsResponse, pending: jobsLoading, error: jobsError, refresh: fet
     return await fetchPaginatedEndpoint('/api/vacancies', jobsPage.value, opportunitiesPerPage)
   },
   {
-    server: false,
+    server: true,
     immediate: false,
     lazy: true,
     dedupe: 'defer',
