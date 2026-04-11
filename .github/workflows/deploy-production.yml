@@ -266,82 +266,26 @@ jobs:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
           set -euo pipefail
           PORT="${DEPLOY_PORT:-22}"
           SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no"
 
-          ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" "DEPLOY_PATH='${DEPLOY_PATH}' bash -s" << 'NGINX_FIX'
-          # The nginx config is at /etc/nginx/sites-available/nlgfc
-          # It has a regex block that catches .js/.css and routes to Laravel:
-          #   location ~* \.(js|css|png|...)$ { try_files ... /index.php; }
-          # We need a ^~ prefix block for /nlgfc-website/_nuxt/ BEFORE that regex
-          # so Nuxt's JS/CSS bundles bypass Laravel and reach the Node.js server.
-          NGINX_CONF="/etc/nginx/sites-available/nlgfc"
-          if [ ! -f "$NGINX_CONF" ]; then
-            echo "WARNING: $NGINX_CONF not found, skipping nginx fix"
-            exit 0
-          fi
-
-          echo "Found nginx config: $NGINX_CONF"
-          sudo cp "$NGINX_CONF" "${NGINX_CONF}.bak"
-
-          sudo python3 -c "
-import sys
-
-conf_path = '/etc/nginx/sites-available/nlgfc'
-with open(conf_path) as f:
-    content = f.read()
-
-marker = 'nlgfc-website/_nuxt'
-if marker in content:
-    print('_nuxt proxy block already exists, skipping')
-    sys.exit(0)
-
-# Insert ^~ /nlgfc-website/_nuxt/ block BEFORE the static files regex
-new_block = '''
-    # Nuxt static assets - proxy to Node.js (bypass static file regex)
-    location ^~ /nlgfc-website/_nuxt/ {
-        proxy_pass http://127.0.0.1:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection \"upgrade\";
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-    }
-
-'''
-
-target = '    location ~*'
-if target in content:
-    content = content.replace(target, new_block + target, 1)
-    print('Inserted _nuxt proxy block before static files regex')
-else:
-    print('WARNING: Could not find static files regex location block')
-    sys.exit(1)
-
-with open(conf_path, 'w') as f:
-    f.write(content)
-print('Config written successfully')
-"
-
-          echo "=== Updated config ==="
-          sudo cat "$NGINX_CONF"
-          echo "=== End updated config ==="
-
-          if sudo nginx -t 2>&1; then
-            sudo systemctl reload nginx
-            echo "nginx reloaded successfully"
-          else
-            echo "ERROR: nginx config invalid, restoring backup"
-            sudo cp "${NGINX_CONF}.bak" "$NGINX_CONF"
-            sudo nginx -t 2>&1 || true
-            exit 1
-          fi
-          NGINX_FIX
+          ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" "
+            NGINX_CONF='/etc/nginx/sites-available/nlgfc'
+            if [ ! -f \"\$NGINX_CONF\" ]; then echo 'WARNING: nginx config not found'; exit 0; fi
+            sudo cp \"\$NGINX_CONF\" \"\${NGINX_CONF}.bak\"
+            echo 'aW1wb3J0IHJlLCBzeXMKY29uZiA9ICIvZXRjL25naW54L3NpdGVzLWF2YWlsYWJsZS9ubGdmYyIKd2l0aCBvcGVuKGNvbmYpIGFzIGY6CiAgICB0eHQgPSBmLnJlYWQoKQppZiAibG9jYXRpb24gXn4gL25sZ2ZjLXdlYnNpdGUvIHsiIGluIHR4dDoKICAgIHByaW50KCJefiAvbmxnZmMtd2Vic2l0ZS8gYmxvY2sgYWxyZWFkeSBwcmVzZW50IikKICAgIHN5cy5leGl0KDApCnR4dCA9IHJlLnN1YihyIlxuXHMqI1teXG5dKk51eHQgc3RhdGljIGFzc2V0c1teXG5dKlxuXHMqbG9jYXRpb25ccytcXn5ccysvbmxnZmMtd2Vic2l0ZS9fbnV4dC9ccypce1tefV0qXH1cbiIsICJcbiIsIHR4dCwgZmxhZ3M9cmUuRE9UQUxMKQpibGsgID0gIlxuICAgICMgQUxMIE51eHQgYXBwIHRyYWZmaWMgLSBwcm94eSB0byBOb2RlLmpzXG4iCmJsayArPSAiICAgIGxvY2F0aW9uIF5+IC9ubGdmYy13ZWJzaXRlLyB7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9wYXNzIGh0dHA6Ly8xMjcuMC4wLjE6MzAwMDtcbiIKYmxrICs9ICIgICAgICAgIHByb3h5X2h0dHBfdmVyc2lvbiAxLjE7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIFVwZ3JhZGUgJGh0dHBfdXBncmFkZTtcbiIKYmxrICs9ICcgICAgICAgIHByb3h5X3NldF9oZWFkZXIgQ29ubmVjdGlvbiAidXBncmFkZSI7XG4nCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIEhvc3QgJGhvc3Q7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIFgtUmVhbC1JUCAkcmVtb3RlX2FkZHI7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIFgtRm9yd2FyZGVkLUZvciAkcHJveHlfYWRkX3hfZm9yd2FyZGVkX2ZvcjtcbiIKYmxrICs9ICIgICAgICAgIHByb3h5X3NldF9oZWFkZXIgWC1Gb3J3YXJkZWQtUHJvdG8gJHNjaGVtZTtcbiIKYmxrICs9ICIgICAgfVxuXG4iCnRndCA9ICIgICAgbG9jYXRpb24gfioiCmlmIHRndCBpbiB0eHQ6CiAgICB0eHQgPSB0eHQucmVwbGFjZSh0Z3QsIGJsayArIHRndCwgMSkKICAgIHByaW50KCJJbnNlcnRlZCBefiAvbmxnZmMtd2Vic2l0ZS8gcHJveHkgYmxvY2siKQplbHNlOgogICAgcHJpbnQoIldBUk5JTkc6IHN0YXRpYyBmaWxlcyByZWdleCBub3QgZm91bmQiKTsgc3lzLmV4aXQoMSkKZm9yIGQgaW4gWyJpbWFnZXMiLCJwaG90byIsImRvY3VtZW50cyIsImRvd25sb2FkcyIsInRodW1ibmFpbHMiLCJ2aWRlbyIsIm5ld3MiXToKICAgIG1hcmtlciA9ICJsb2NhdGlvbiBefiAvIiArIGQgKyAiLyIKICAgIGlmIG1hcmtlciBpbiB0eHQ6CiAgICAgICAgY29udGludWUKICAgIHJ3ICA9ICJcbiAgICBsb2NhdGlvbiBefiAvIiArIGQgKyAiLyB7XG4iCiAgICBydyArPSAiICAgICAgICByZXdyaXRlIF4oLiopJCAvbmxnZmMtd2Vic2l0ZSQxIGxhc3Q7XG4iCiAgICBydyArPSAiICAgIH1cbiIKICAgIHR4dCA9IHR4dC5yZXBsYWNlKHRndCwgcncgKyAiXG4iICsgdGd0LCAxKQogICAgcHJpbnQoIkFkZGVkIHJld3JpdGUgZm9yIC8iICsgZCArICIvIikKd2l0aCBvcGVuKGNvbmYsICJ3IikgYXMgZjoKICAgIGYud3JpdGUodHh0KQpwcmludCgiQ29uZmlnIHdyaXR0ZW4iKQ==' | base64 -d | sudo python3 -
+            if sudo nginx -t 2>&1; then
+              sudo systemctl reload nginx
+              echo 'nginx reloaded successfully'
+            else
+              echo 'ERROR: nginx config invalid, restoring backup'
+              sudo cp \"\${NGINX_CONF}.bak\" \"\$NGINX_CONF\"
+              sudo nginx -t 2>&1 || true
+              exit 1
+            fi
+          "
 
       - name: Post-deploy smoke checks
         env:
