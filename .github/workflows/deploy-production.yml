@@ -218,25 +218,25 @@ jobs:
             done
 
             # 2. Force-kill anything still listening on port 3000.
-            #    Use multiple methods — fuser/lsof may not be installed.
+            #    Use sudo — the process may be owned by another user.
             if command -v fuser >/dev/null 2>&1; then
-              fuser -k 3000/tcp 2>/dev/null || true
+              sudo fuser -k 3000/tcp 2>/dev/null || true
             fi
             if command -v lsof >/dev/null 2>&1; then
-              lsof -tiTCP:3000 -sTCP:LISTEN 2>/dev/null | xargs -r kill -9 || true
+              sudo lsof -tiTCP:3000 -sTCP:LISTEN 2>/dev/null | xargs -r sudo kill -9 || true
             fi
-            # Fallback: use ss (always available on modern Linux) to find PID.
-            SS_PID="$(ss -tlnp 'sport = :3000' 2>/dev/null | grep -oP 'pid=\K[0-9]+' | head -1 || true)"
+            # Fallback: use sudo ss (always available on modern Linux) to find PID.
+            SS_PID="$(sudo ss -tlnp 'sport = :3000' 2>/dev/null | grep -oP 'pid=\K[0-9]+' | head -1 || true)"
             if [ -n "$SS_PID" ]; then
               echo "Killing PID $SS_PID on port 3000 (found via ss)"
-              kill -9 "$SS_PID" 2>/dev/null || true
+              sudo kill -9 "$SS_PID" 2>/dev/null || true
             fi
             sleep 3
 
             # 3. Verify port 3000 is free.
-            if ss -tlnp 'sport = :3000' 2>/dev/null | grep -q LISTEN; then
+            if sudo ss -tlnp 'sport = :3000' 2>/dev/null | grep -q LISTEN; then
               echo "FATAL: port 3000 still in use after cleanup!"
-              ss -tlnp 'sport = :3000'
+              sudo ss -tlnp 'sport = :3000'
               exit 1
             fi
             echo "Port 3000 is free."
