@@ -209,6 +209,7 @@ jobs:
             fi
 
             # Stop known legacy process names if they exist.
+            pm2 delete frontend || true
             pm2 delete frontendclear || true
 
             # Kill any orphan listener left on port 3000 (e.g. detached `serve` process).
@@ -272,28 +273,14 @@ jobs:
           SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no"
 
           ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" "DEPLOY_PATH='${DEPLOY_PATH}' bash -s" << 'NGINX_FIX'
-          echo "=== Dumping nginx config for diagnostics ==="
-          sudo nginx -T 2>&1 > /tmp/nginx-full-config.txt || true
-          # Save to a JSON-accessible location for remote debugging
-          if [ -d "${DEPLOY_PATH:-.}/.output/public" ]; then
-            sudo cp /tmp/nginx-full-config.txt "${DEPLOY_PATH:-.}/.output/public/nginx-diag.json" 2>/dev/null || true
-            chmod 644 "${DEPLOY_PATH:-.}/.output/public/nginx-diag.json" 2>/dev/null || true
-          fi
-          cat /tmp/nginx-full-config.txt || true
-          echo "=== End config dump ==="
-
-          NGINX_CONF=""
-          for f in /etc/nginx/sites-enabled/* /etc/nginx/conf.d/*.conf /etc/nginx/nginx.conf; do
-            if [ -f "$f" ] && grep -q 'nlgfc-website' "$f" 2>/dev/null; then
-              NGINX_CONF="$f"
-              break
-            fi
-          done
-
-          if [ -z "$NGINX_CONF" ]; then
-            echo "WARNING: Could not find nginx config containing 'nlgfc-website'"
-            ls -la /etc/nginx/sites-enabled/ 2>/dev/null || true
-            ls -la /etc/nginx/conf.d/ 2>/dev/null || true
+          # The nginx config is at /etc/nginx/sites-available/nlgfc
+          # It has a regex block that catches .js/.css and routes to Laravel:
+          #   location ~* \.(js|css|png|...)$ { try_files ... /index.php; }
+          # We need a ^~ prefix block for /nlgfc-website/_nuxt/ BEFORE that regex
+          # so Nuxt's JS/CSS bundles bypass Laravel and reach the Node.js server.
+          NGINX_CONF="/etc/nginx/sites-available/nlgfc"
+          if [ ! -f "$NGINX_CONF" ]; then
+            echo "WARNING: $NGINX_CONF not found, skipping nginx fix"
             exit 0
           fi
 
@@ -301,21 +288,45 @@ jobs:
           sudo cp "$NGINX_CONF" "${NGINX_CONF}.bak"
 
           sudo python3 -c "
-          import re, sys
-          conf_path = '${NGINX_CONF}'
-          with open(conf_path) as f:
-              content = f.read()
-          content = re.sub(r'\\n\\s*#\\s*Proxy Nuxt static assets[^\\n]*\\n\\s*location\\s+\\^~\\s+/nlgfc-website/_nuxt/\\s*\\{[^}]*\\}\\n', '\\n', content)
-          NL = chr(10)
-          new_block = NL + '    # Proxy Nuxt static assets directly to Node.js SSR server' + NL + '    location ^~ /nlgfc-website/_nuxt/ {' + NL + '        proxy_pass http://127.0.0.1:3000;' + NL + '        proxy_http_version 1.1;' + NL + '        proxy_set_header Host \$host;' + NL + '        proxy_set_header X-Real-IP \$remote_addr;' + NL + '        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;' + NL + '        proxy_set_header X-Forwarded-Proto \$scheme;' + NL + '    }' + NL
-          pat = r'(\\s*location\\s+(?:\\^~\\s+)?/nlgfc-website/(?!_nuxt))'
-          content, n = re.subn(pat, new_block + r'\\1', content)
-          print(f'Inserted _nuxt proxy block before {n} location(s)')
-          content = re.sub(r'location(\\s+)/nlgfc-website/', r'location ^~ /nlgfc-website/', content)
-          with open(conf_path, 'w') as f:
-              f.write(content)
-          print('Config written successfully')
-          "
+import sys
+
+conf_path = '/etc/nginx/sites-available/nlgfc'
+with open(conf_path) as f:
+    content = f.read()
+
+marker = 'nlgfc-website/_nuxt'
+if marker in content:
+    print('_nuxt proxy block already exists, skipping')
+    sys.exit(0)
+
+# Insert ^~ /nlgfc-website/_nuxt/ block BEFORE the static files regex
+new_block = '''
+    # Nuxt static assets - proxy to Node.js (bypass static file regex)
+    location ^~ /nlgfc-website/_nuxt/ {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection \"upgrade\";
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+
+'''
+
+target = '    location ~*'
+if target in content:
+    content = content.replace(target, new_block + target, 1)
+    print('Inserted _nuxt proxy block before static files regex')
+else:
+    print('WARNING: Could not find static files regex location block')
+    sys.exit(1)
+
+with open(conf_path, 'w') as f:
+    f.write(content)
+print('Config written successfully')
+"
 
           echo "=== Updated config ==="
           sudo cat "$NGINX_CONF"
