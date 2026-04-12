@@ -6,11 +6,19 @@ const { getExcerpt } = useHtmlUtils()
 // Fetch latest posts from API
 const { data: postsData, pending: loading, error, refresh: fetchPosts } = useAsyncData(
   'latest-posts-slider',
-  () => $fetch(`${apiBase}/api/posts/latest/3`, { timeout: 10000, retry: 0 }),
+  async () => {
+    try {
+      return await $fetch(`${apiBase}/api/posts/latest/3`, { timeout: 10000, retry: 0 })
+    } catch (err) {
+      console.error('[ImageSlider] Failed to fetch posts:', err)
+      return []
+    }
+  },
   {
     server: false,
     lazy: true,
     immediate: true,
+    default: () => [],
   }
 )
 

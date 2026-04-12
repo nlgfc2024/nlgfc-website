@@ -50,17 +50,7 @@ const fetchPaginatedEndpoint = async (
   throw lastError
 }
 
-const props = defineProps({
-  partnerLogos: {
-    type: Array,
-    required: true,
-    validator: (logos) => logos.every(logo => logo.src && logo.alt)
-  },
-  scrollDuration: {
-    type: Number,
-    default: 20
-  }
-})
+const scrollDuration = 20
 
 // Fetch partners using standard API composable
 const { data: partners, loading, error, refresh: fetchPartners } = useApiDataArray(
@@ -90,7 +80,11 @@ const publicationsPerPage = 5
 const { data: documentsResponse, pending: publicationsLoading, error: publicationsError, refresh: fetchPublications } = useAsyncData(
   'homepage-documents-live',
   async () => {
-    return await fetchPaginatedEndpoint('/api/documents', publicationsPage.value, publicationsPerPage)
+    try {
+      return await fetchPaginatedEndpoint('/api/documents', publicationsPage.value, publicationsPerPage)
+    } catch {
+      return { data: [], current_page: 1, last_page: 1, total: 0, per_page: publicationsPerPage }
+    }
   },
   {
     server: false,
@@ -328,7 +322,11 @@ const opportunityTabs = ref([
 const { data: procurementsResponse, pending: procurementsLoading, error: procurementsError, refresh: fetchProcurements } = useAsyncData(
   'homepage-procurements-live',
   async () => {
-    return await fetchPaginatedEndpoint('/api/procurement-notices', procurementPage.value, opportunitiesPerPage)
+    try {
+      return await fetchPaginatedEndpoint('/api/procurement-notices', procurementPage.value, opportunitiesPerPage)
+    } catch {
+      return { data: [], current_page: 1, last_page: 1, total: 0, per_page: opportunitiesPerPage }
+    }
   },
   {
     server: false,
@@ -349,7 +347,11 @@ const { data: procurementsResponse, pending: procurementsLoading, error: procure
 const { data: jobsResponse, pending: jobsLoading, error: jobsError, refresh: fetchJobs } = useAsyncData(
   'homepage-jobs-live',
   async () => {
-    return await fetchPaginatedEndpoint('/api/vacancies', jobsPage.value, opportunitiesPerPage)
+    try {
+      return await fetchPaginatedEndpoint('/api/vacancies', jobsPage.value, opportunitiesPerPage)
+    } catch {
+      return { data: [], current_page: 1, last_page: 1, total: 0, per_page: opportunitiesPerPage }
+    }
   },
   {
     server: false,

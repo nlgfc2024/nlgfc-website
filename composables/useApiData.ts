@@ -88,25 +88,37 @@ export function useApiData<T = any>(
   // Construct full URL if relative
   const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`;
 
+  // Build $fetch interceptors
+  const fetchOptions: Record<string, any> = {
+    timeout: 15000,
+    retry: 0,
+    onResponseError: onResponseError || (({ response }: { response: any }) => {
+      console.error(`[${key}] API Error:`, response?._data || response);
+    }),
+  };
+
+  if (process.dev && onResponse) {
+    fetchOptions.onResponse = onResponse;
+  }
+
   // Use useAsyncData for better SSR support and caching
   const { data, pending, error, refresh } = useAsyncData<T>(
     key,
-    () => $fetch(fullUrl, { timeout: 15000, retry: 0 }),
+    async () => {
+      try {
+        return await $fetch(fullUrl, fetchOptions);
+      } catch (err) {
+        console.error(`[${key}] Fetch failed:`, err);
+        if (defaultValue) return defaultValue();
+        throw err;
+      }
+    },
     {
       server,
       lazy,
       immediate,
       default: defaultValue,
       transform: transform || ((response: any) => response),
-      onResponseError: onResponseError || (({ response }) => {
-        console.error(`[${key}] API Error:`, response?._data || response);
-      }),
-      onResponse: onResponse || (({ response }) => {
-        // Optional: Log successful responses in development
-        if (process.dev) {
-          console.log(`[${key}] API Success:`, response);
-        }
-      })
     }
   );
 
