@@ -193,70 +193,107 @@ jobs:
           export NITRO_PRESET=node-server
 
           # ════════════════════════════════════════════════════════════
-          # 1. STOP OLD SERVER *BEFORE* BUILD
-          #    The build replaces .output/ files. If the old process is
-          #    still running it will serve stale HTML pointing to deleted
-          #    JS bundles → 500 errors. Stop it first.
+          # 1. STOP OLD SERVER
+          #
+          # CRITICAL: All kill commands run WITHOUT sudo because:
+          #   - The Nuxt process runs as the deploy user (nlgfc_admin)
+          #   - sudo requires a password, which fails silently in
+          #     batch SSH mode (-o BatchMode=yes), leaving orphaned
+          #     processes alive on port 3000.
+          #   - A user can always kill their own processes without sudo.
           # ════════════════════════════════════════════════════════════
-          if [ -n "${PM2_APP_NAME:-}" ] && command -v pm2 >/dev/null 2>&1; then
+          echo "=== Step 1: Stopping old server ==="
+
+          if command -v pm2 >/dev/null 2>&1; then
             echo "--- PM2 status before cleanup ---"
             pm2 list || true
 
-            # Delete by PM2 name (current + legacy names).
-            pm2 delete "$PM2_APP_NAME" 2>/dev/null || true
-            for legacy_name in frontend frontendclear nlgfc-frontend nlgfc-website; do
-              pm2 delete "$legacy_name" 2>/dev/null || true
+            # Delete by PM2 name — covers current + legacy + accidental names.
+            for name in "${PM2_APP_NAME:-frontend}" frontend index frontendclear nlgfc-frontend nlgfc-website; do
+              pm2 delete "$name" 2>/dev/null || true
             done
           fi
 
-          # Kill by command pattern — catches orphaned/rogue node processes
-          # running the Nuxt server, even if PM2 lost track of them.
-          sudo pkill -9 -f ".output/server/index.mjs" 2>/dev/null || true
+          # Kill by FULL command path — catches orphaned node processes
+          # that PM2 lost track of. No sudo needed (same user).
+          pkill -f "$DEPLOY_PATH/.output/server/index.mjs" 2>/dev/null || true
+          # Also match shorter pattern for manual starts.
+          pkill -f "\.output/server/index\.mjs" 2>/dev/null || true
+          sleep 2
 
-          # Kill by port using every available tool.
+          # Force-kill (SIGKILL) any survivors.
+          pkill -9 -f "$DEPLOY_PATH/.output/server/index.mjs" 2>/dev/null || true
+          pkill -9 -f "\.output/server/index\.mjs" 2>/dev/null || true
+
+          # Kill by port — no sudo needed for own processes.
           if command -v fuser >/dev/null 2>&1; then
-            sudo fuser -k 3000/tcp 2>/dev/null || true
-          fi
-          if command -v lsof >/dev/null 2>&1; then
-            sudo lsof -tiTCP:3000 -sTCP:LISTEN 2>/dev/null | xargs -r sudo kill -9 2>/dev/null || true
-          fi
-          SS_PID="$(sudo ss -tlnp 'sport = :3000' 2>/dev/null | grep -oP 'pid=\K[0-9]+' | head -1 || true)"
-          if [ -n "$SS_PID" ]; then
-            echo "Killing PID $SS_PID on port 3000 (found via ss)"
-            sudo kill -9 "$SS_PID" 2>/dev/null || true
+            fuser -k 3000/tcp 2>/dev/null || true
+            sleep 1
+            fuser -k -9 3000/tcp 2>/dev/null || true
           fi
 
-          # Nuclear fallback: find PID via /proc/net/tcp (always works).
-          PORT_HEX="0BB8"
-          for inode in $(sudo awk "/:${PORT_HEX} / && / 0A /{print \$10}" /proc/net/tcp /proc/net/tcp6 2>/dev/null | sort -u); do
-            PROC_PID="$(sudo find /proc/[0-9]*/fd -lname "socket:\[${inode}\]" 2>/dev/null | head -1 | cut -d/ -f3 || true)"
-            if [ -n "$PROC_PID" ]; then
-              echo "Killing PID $PROC_PID found via /proc/net for port 3000 (inode $inode)"
-              sudo kill -9 "$PROC_PID" 2>/dev/null || true
+          sleep 2
+
+          # Verify port 3000 is free (retry loop with escalation).
+          for attempt in 1 2 3; do
+            if ! ss -tln 'sport = :3000' 2>/dev/null | grep -q LISTEN; then
+              echo "Port 3000 is free (attempt $attempt)"
+              break
             fi
+            echo "Port 3000 still occupied (attempt $attempt), escalating..."
+
+            # Try to find and kill the PID directly.
+            PORT_PID="$(ss -tlnp 'sport = :3000' 2>/dev/null | grep -oP 'pid=\K[0-9]+' | head -1 || true)"
+            if [ -n "$PORT_PID" ]; then
+              echo "Killing PID $PORT_PID on port 3000"
+              kill -9 "$PORT_PID" 2>/dev/null || true
+            fi
+
+            # Last resort: try sudo (may fail in batch SSH, that's OK).
+            fuser -k -9 3000/tcp 2>/dev/null || true
+            sudo fuser -k -9 3000/tcp 2>/dev/null || true
+            sleep 3
           done
 
-          sleep 3
-
-          # Verify port 3000 is free.
-          if sudo ss -tln 'sport = :3000' 2>/dev/null | grep -q LISTEN; then
-            echo "WARNING: port 3000 still in use after all cleanup attempts!"
-            sudo ss -tlnp 'sport = :3000' || true
-            echo "Continuing anyway — pm2 start will fail fast if port is truly taken."
-          else
-            echo "Port 3000 is free."
+          # Final check — FAIL if port is still occupied.
+          if ss -tln 'sport = :3000' 2>/dev/null | grep -q LISTEN; then
+            echo "FATAL: Cannot free port 3000 after all cleanup attempts!"
+            echo "Port is held by a process this user cannot kill."
+            ss -tlnp 'sport = :3000' 2>/dev/null || true
+            exit 1
           fi
 
           # ════════════════════════════════════════════════════════════
-          # 2. BUILD
+          # 2. CLEAN + BUILD
+          #
+          # CRITICAL: Remove .output/ and .nuxt/ BEFORE building.
+          # Without this, stale files from previous builds remain
+          # and the new server bundle may reference old chunk names
+          # that no longer exist (or vice versa).
           # ════════════════════════════════════════════════════════════
+          echo "=== Step 2: Clean build ==="
+          rm -rf .output .nuxt
+
           unset NODE_ENV || true
           npm ci --include=dev
           npm run build
 
+          # Verify build produced expected output.
+          if [ ! -f ".output/server/index.mjs" ]; then
+            echo "FATAL: Build failed — .output/server/index.mjs not found"
+            exit 1
+          fi
+          if [ ! -d ".output/public/_nuxt" ]; then
+            echo "FATAL: Build failed — .output/public/_nuxt/ not found"
+            exit 1
+          fi
+          echo "Build produced $(ls .output/public/_nuxt/*.js 2>/dev/null | wc -l) JS chunks"
+
           # ════════════════════════════════════════════════════════════
           # 3. START NEW SERVER
           # ════════════════════════════════════════════════════════════
+          echo "=== Step 3: Starting new server ==="
+
           if [ -n "${PM2_APP_NAME:-}" ] && command -v pm2 >/dev/null 2>&1; then
             export NODE_ENV=production
             export HOST=127.0.0.1
@@ -272,21 +309,10 @@ jobs:
               --restart-delay 5000 \
               --max-restarts 3
 
-            # Fail fast if PM2 script is not the expected server entrypoint.
-            pm2 describe "$PM2_APP_NAME"
-            if ! pm2 describe "$PM2_APP_NAME" | grep -q ".output/server/index.mjs"; then
-              echo "PM2 is not running expected script .output/server/index.mjs"
-              exit 1
-            fi
-
             pm2 save || true
 
             # Wait for the app to be ready (up to ~30 seconds).
-            sleep 3
-            echo "--- PM2 status after start ---"
-            pm2 list || true
-            pm2 logs "$PM2_APP_NAME" --nostream --lines 10 || true
-
+            echo "--- Waiting for app to respond ---"
             READY=0
             for i in $(seq 1 15); do
               if curl -sS -o /dev/null --max-time 5 "http://127.0.0.1:3000/nlgfc-website/" 2>/dev/null; then
@@ -296,10 +322,40 @@ jobs:
               fi
               sleep 2
             done
+
             if [ "$READY" -ne 1 ]; then
-              echo "WARNING: App not responding on port 3000 after readiness check"
+              echo "FATAL: App not responding on port 3000 after 30 seconds"
               pm2 logs "$PM2_APP_NAME" --nostream --lines 30 || true
+              exit 1
             fi
+
+            # ════════════════════════════════════════════════════════════
+            # 4. VERIFY BUILD CONSISTENCY
+            #    Ensure the HTML served by Node references JS files that
+            #    actually exist on disk. If they don't match, the server
+            #    is running a stale build from memory.
+            # ════════════════════════════════════════════════════════════
+            echo "=== Step 4: Verifying build consistency ==="
+            JS_FROM_HTML="$(curl -sS --max-time 10 "http://127.0.0.1:3000/nlgfc-website/" \
+              | grep -oP '/_nuxt/[A-Za-z0-9_-]+\.js' | head -1 || true)"
+            if [ -n "$JS_FROM_HTML" ]; then
+              JS_FILE=".output/public${JS_FROM_HTML}"
+              if [ -f "$JS_FILE" ]; then
+                echo "PASS: HTML references $JS_FROM_HTML — file exists on disk"
+              else
+                echo "FATAL: HTML references $JS_FROM_HTML but file does NOT exist!"
+                echo "The server is running a stale build. Dumping diagnostics:"
+                echo "HTML references:"
+                curl -sS --max-time 10 "http://127.0.0.1:3000/nlgfc-website/" \
+                  | grep -oP '/_nuxt/[A-Za-z0-9_-]+\.js' | head -5 || true
+                echo "Files on disk:"
+                ls .output/public/_nuxt/*.js 2>/dev/null | head -5 || true
+                exit 1
+              fi
+            fi
+
+            echo "--- PM2 final status ---"
+            pm2 list || true
           elif [ -n "${SYSTEMD_SERVICE_NAME:-}" ]; then
             sudo systemctl restart "$SYSTEMD_SERVICE_NAME"
           else
@@ -307,32 +363,8 @@ jobs:
           fi
           EOF
 
-      - name: Fix nginx location for Nuxt static assets
-        continue-on-error: true
-        env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-        run: |
-          set -euo pipefail
-          PORT="${DEPLOY_PORT:-22}"
-          SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no"
-
-          ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" "
-            NGINX_CONF='/etc/nginx/sites-available/nlgfc'
-            if [ ! -f \"\$NGINX_CONF\" ]; then echo 'WARNING: nginx config not found'; exit 0; fi
-            sudo cp \"\$NGINX_CONF\" \"\${NGINX_CONF}.bak\"
-            echo 'aW1wb3J0IHJlLCBzeXMKY29uZiA9ICIvZXRjL25naW54L3NpdGVzLWF2YWlsYWJsZS9ubGdmYyIKd2l0aCBvcGVuKGNvbmYpIGFzIGY6CiAgICB0eHQgPSBmLnJlYWQoKQppZiAibG9jYXRpb24gXn4gL25sZ2ZjLXdlYnNpdGUvIHsiIGluIHR4dDoKICAgIHByaW50KCJefiAvbmxnZmMtd2Vic2l0ZS8gYmxvY2sgYWxyZWFkeSBwcmVzZW50IikKICAgIHN5cy5leGl0KDApCnR4dCA9IHJlLnN1YihyIlxuXHMqI1teXG5dKk51eHQgc3RhdGljIGFzc2V0c1teXG5dKlxuXHMqbG9jYXRpb25ccytcXn5ccysvbmxnZmMtd2Vic2l0ZS9fbnV4dC9ccypce1tefV0qXH1cbiIsICJcbiIsIHR4dCwgZmxhZ3M9cmUuRE9UQUxMKQpibGsgID0gIlxuICAgICMgQUxMIE51eHQgYXBwIHRyYWZmaWMgLSBwcm94eSB0byBOb2RlLmpzXG4iCmJsayArPSAiICAgIGxvY2F0aW9uIF5+IC9ubGdmYy13ZWJzaXRlLyB7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9wYXNzIGh0dHA6Ly8xMjcuMC4wLjE6MzAwMDtcbiIKYmxrICs9ICIgICAgICAgIHByb3h5X2h0dHBfdmVyc2lvbiAxLjE7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIFVwZ3JhZGUgJGh0dHBfdXBncmFkZTtcbiIKYmxrICs9ICcgICAgICAgIHByb3h5X3NldF9oZWFkZXIgQ29ubmVjdGlvbiAidXBncmFkZSI7XG4nCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIEhvc3QgJGhvc3Q7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIFgtUmVhbC1JUCAkcmVtb3RlX2FkZHI7XG4iCmJsayArPSAiICAgICAgICBwcm94eV9zZXRfaGVhZGVyIFgtRm9yd2FyZGVkLUZvciAkcHJveHlfYWRkX3hfZm9yd2FyZGVkX2ZvcjtcbiIKYmxrICs9ICIgICAgICAgIHByb3h5X3NldF9oZWFkZXIgWC1Gb3J3YXJkZWQtUHJvdG8gJHNjaGVtZTtcbiIKYmxrICs9ICIgICAgfVxuXG4iCnRndCA9ICIgICAgbG9jYXRpb24gfioiCmlmIHRndCBpbiB0eHQ6CiAgICB0eHQgPSB0eHQucmVwbGFjZSh0Z3QsIGJsayArIHRndCwgMSkKICAgIHByaW50KCJJbnNlcnRlZCBefiAvbmxnZmMtd2Vic2l0ZS8gcHJveHkgYmxvY2siKQplbHNlOgogICAgcHJpbnQoIldBUk5JTkc6IHN0YXRpYyBmaWxlcyByZWdleCBub3QgZm91bmQiKTsgc3lzLmV4aXQoMSkKZm9yIGQgaW4gWyJpbWFnZXMiLCJwaG90byIsImRvY3VtZW50cyIsImRvd25sb2FkcyIsInRodW1ibmFpbHMiLCJ2aWRlbyIsIm5ld3MiXToKICAgIG1hcmtlciA9ICJsb2NhdGlvbiBefiAvIiArIGQgKyAiLyIKICAgIGlmIG1hcmtlciBpbiB0eHQ6CiAgICAgICAgY29udGludWUKICAgIHJ3ICA9ICJcbiAgICBsb2NhdGlvbiBefiAvIiArIGQgKyAiLyB7XG4iCiAgICBydyArPSAiICAgICAgICByZXdyaXRlIF4oLiopJCAvbmxnZmMtd2Vic2l0ZSQxIGxhc3Q7XG4iCiAgICBydyArPSAiICAgIH1cbiIKICAgIHR4dCA9IHR4dC5yZXBsYWNlKHRndCwgcncgKyAiXG4iICsgdGd0LCAxKQogICAgcHJpbnQoIkFkZGVkIHJld3JpdGUgZm9yIC8iICsgZCArICIvIikKd2l0aCBvcGVuKGNvbmYsICJ3IikgYXMgZjoKICAgIGYud3JpdGUodHh0KQpwcmludCgiQ29uZmlnIHdyaXR0ZW4iKQ==' | base64 -d | sudo python3 -
-            if sudo nginx -t 2>&1; then
-              sudo systemctl reload nginx
-              echo 'nginx reloaded successfully'
-            else
-              echo 'ERROR: nginx config invalid, restoring backup'
-              sudo cp \"\${NGINX_CONF}.bak\" \"\$NGINX_CONF\"
-              sudo nginx -t 2>&1 || true
-              exit 1
-            fi
-          "
+      # NOTE: The nginx patcher step was removed. The nginx ^~ /nlgfc-website/
+      # proxy block is already configured and running it every deploy was fragile.
 
       - name: Post-deploy smoke checks
         env:
