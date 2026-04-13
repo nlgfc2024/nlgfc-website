@@ -553,8 +553,10 @@
 
     <!-- Mobile menu -->
     <div v-show="isMenuOpen" class="lg:hidden bg-white shadow-xl">
-      <div class="container mx-auto px-4 py-3">
+      <div class="container mx-auto px-4 py-3 max-h-[calc(100vh-5rem)] overflow-y-auto">
         <div class="flex flex-col space-y-4">
+          <NuxtLink to="/" class="text-gray-800 font-medium py-2">Home</NuxtLink>
+
           <!-- Search Bar -->
           <div class="relative">
             <input 
@@ -656,23 +658,33 @@
                   </ul>
                 </div>
 
-                <!-- Delivery Systems -->
-                <div>
-                  <h3 class="font-semibold text-blue-800 border-b pb-2">Delivery Systems</h3>
-                  <ul class="pl-2 mt-2 space-y-1">
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700">MSR</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700">E-Payments</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700">Public Works MIS</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700">GRM</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700">SCTP MIS</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700">LAPA MIS</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700">CIMIS</a></li>
-                    <li><a href="#" class="text-gray-700 hover:text-blue-700">PMIS</a></li>
-                  </ul>
-                </div>
               </div>
             </div>
 
+          </div>
+
+          <!-- Delivery Systems Accordion -->
+          <div>
+            <button @click="toggleAccordion('mobile-delivery')" class="flex items-center justify-between w-full text-gray-800 font-medium py-2">
+              Delivery Systems
+              <svg class="w-5 h-5 transform transition" :class="{ 'rotate-180': activeAccordion === 'mobile-delivery' }" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+              </svg>
+            </button>
+
+            <div v-show="activeAccordion === 'mobile-delivery'" class="pl-4 space-y-3">
+              <ul class="pl-2 space-y-2">
+                <li><NuxtLink to="/deliverySystems/deliverySystems#laifmis" class="text-gray-700 hover:text-blue-700 transition">Local Authorities Integrated Financial MIS</NuxtLink></li>
+                <li><NuxtLink to="/deliverySystems/deliverySystems#comsip" class="text-gray-700 hover:text-blue-700 transition">COMSIP Integrated Management Information System</NuxtLink></li>
+                <li><NuxtLink to="/deliverySystems/deliverySystems#dgrm" class="text-gray-700 hover:text-blue-700 transition">Digital Grievance Redress Mechanism MIS</NuxtLink></li>
+                <li><NuxtLink to="/deliverySystems/deliverySystems#digital-payment-services" class="text-gray-700 hover:text-blue-700 transition">Digital Payment Services</NuxtLink></li>
+                <li><NuxtLink to="/deliverySystems/deliverySystems#lapas" class="text-gray-700 hover:text-blue-700 transition">Local Authority Perfomance Assesment MIS</NuxtLink></li>
+                <li><NuxtLink to="/deliverySystems/deliverySystems#msr" class="text-gray-700 hover:text-blue-700 transition">Malawi Social Registry MIS</NuxtLink></li>
+                <li><NuxtLink to="/deliverySystems/deliverySystems#pmis" class="text-gray-700 hover:text-blue-700 transition">Projects Monitoring Information System</NuxtLink></li>
+                <li><NuxtLink to="/deliverySystems/deliverySystems#publicworks" class="text-gray-700 hover:text-blue-700 transition">Public Works MIS</NuxtLink></li>
+                <li><NuxtLink to="/deliverySystems/deliverySystems#sctpmis" class="text-gray-700 hover:text-blue-700 transition">Social Cash Transfer Programme MIS</NuxtLink></li>
+              </ul>
+            </div>
           </div>
 
           <!-- Local Councils Accordion -->

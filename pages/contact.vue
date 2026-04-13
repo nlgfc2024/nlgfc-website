@@ -14,11 +14,16 @@ const tabs = [
   { id: 'ati', title: 'Access to Information' }
 ]
 
-// Load contact data from API
-const { data: contactData } = await $fetch('/api/contact')
-const contact = contactData?.contact || {}
-const officers = contactData?.officers || []
-const ati = contactData?.ati || {}
+// Load contact data from API — wrapped in useAsyncData so a failure
+// does not crash the entire page and block usePageBlocks below.
+const { data: contactRaw, error: contactError } = await useAsyncData(
+  'contact-info',
+  () => $fetch('/api/contact'),
+  { server: false, lazy: true, default: () => null }
+)
+const contact  = computed(() => contactRaw.value?.data?.contact  ?? contactRaw.value?.contact  ?? {})
+const officers = computed(() => contactRaw.value?.data?.officers ?? contactRaw.value?.officers ?? [])
+const ati      = computed(() => contactRaw.value?.data?.ati      ?? contactRaw.value?.ati      ?? {})
 
 // Set active tab from route hash if present
 onMounted(() => {

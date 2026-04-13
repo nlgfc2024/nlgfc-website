@@ -2,17 +2,18 @@
 import BlocksRenderer from '~/components/BlocksRenderer.vue'
 
 const route = useRoute()
-const config = useRuntimeConfig()
 
 const slug = computed(() => String(route.params.slug || '').trim())
 
+const apiBase = useApiBase()
+
 const { data: pagePayload } = useAsyncData(
-  () => `generic-page:${slug.value}`,
+  `generic-page:${slug.value}`,
   async () => {
     if (!slug.value) return null
-    return await $fetch(`${config.public.apiBase}/api/pages/${slug.value}`)
+    return await $fetch(`${apiBase}/api/pages/${slug.value}`)
   },
-  { watch: [slug], server: true }
+  { watch: [slug], server: false, lazy: true }
 )
 </script>
 

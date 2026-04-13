@@ -177,6 +177,7 @@ watchEffect(() => {
 // const { data: mvcPage, pending: mvcPending, error: mvcError } = usePageBlocks('mission-vision-core-values')
     
 const { data: pages, pending, error: PageError } = usePageBlocks([
+  'mission-vision-core-values',
   'powers-and-functions-of-nlgfc','procurement-and-assets-disposal-division',
   'directorate-of-finance-and-fiscal-decentralization','directorate-of-corporate-and-strategic-services',
   'planning-monitoring-and-evaluation-division',
@@ -321,7 +322,7 @@ const downloadImage = () => {
         <div v-show="activeTab === 'mvc'" class="prose max-w-none">
             <div v-if="PagePending">Loading...</div>
             <div v-else-if="PageError">Failed to load content.</div>
-            <!-- <BlocksRenderer :blocks="pages?.['mission-vision-core-values']?.blocks || []" /> -->
+            <BlocksRenderer v-else :blocks="pages?.['mission-vision-core-values']?.blocks || []" />
              
         </div>
 

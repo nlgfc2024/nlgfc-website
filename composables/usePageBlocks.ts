@@ -27,15 +27,22 @@ export function usePageBlocks(slugOrSlugs: string | string[]) {
           slugs.map((s) => $fetch<PagePayload>(`${apiBase}/api/pages/${s}`))
         )
         const map: PageMap = {}
-        for (const result of results) {
-          if (result.status !== 'fulfilled') continue
+        for (let i = 0; i < results.length; i++) {
+          const result = results[i]
+          if (result.status !== 'fulfilled') {
+            console.warn(`[usePageBlocks] Failed to load page "${slugs[i]}":`, (result as PromiseRejectedResult).reason?.message || result)
+            continue
+          }
           const p = result.value
-          if (!p?.slug) continue
+          if (!p?.slug) {
+            console.warn(`[usePageBlocks] Page "${slugs[i]}" returned no slug – skipping`)
+            continue
+          }
           map[p.slug] = p
         }
         return map
       },
-      { server: true }
+      { server: false, lazy: true, default: () => ({} as PageMap) }
     )
   }
 
@@ -43,6 +50,6 @@ export function usePageBlocks(slugOrSlugs: string | string[]) {
   return useAsyncData<PagePayload>(
     `page:${slug}`,
     () => $fetch(`${apiBase}/api/pages/${slug}`),
-    { server: true }
+    { server: false, lazy: true }
   )
 }

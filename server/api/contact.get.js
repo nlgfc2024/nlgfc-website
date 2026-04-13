@@ -1,19 +1,33 @@
-import pkg from 'pg'
-const { Pool } = pkg
+let _pool = null
+let _poolInitialized = false
 
-// PostgreSQL connection configuration (shared with CMS)
-const pool = new Pool({
-  user: process.env.POSTGRES_USER || 'nlgfc_user',
-  host: process.env.POSTGRES_HOST || 'localhost',
-  database: process.env.POSTGRES_DB || 'nlgfc_content',
-  password: process.env.POSTGRES_PASSWORD || 'nlgfc_password',
-  port: process.env.POSTGRES_PORT || 5432,
-})
+function getPool() {
+  if (_poolInitialized) return _pool
+  _poolInitialized = true
+  try {
+    // Use require() instead of top-level await to avoid ES target issues
+    const { Pool } = require('pg')
+    _pool = new Pool({
+      user: process.env.POSTGRES_USER || 'nlgfc_user',
+      host: process.env.POSTGRES_HOST || 'localhost',
+      database: process.env.POSTGRES_DB || 'nlgfc_content',
+      password: process.env.POSTGRES_PASSWORD || 'nlgfc_password',
+      port: process.env.POSTGRES_PORT || 5432,
+    })
+  } catch {
+    // pg not installed – handler will return fallback data
+    _pool = null
+  }
+  return _pool
+}
 
 export default defineEventHandler(async (event) => {
   let client
   
   try {
+    const pool = getPool()
+    if (!pool) throw new Error('pg pool not available – using fallback data')
+
     // Connect to PostgreSQL
     client = await pool.connect()
 
