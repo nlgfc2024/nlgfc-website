@@ -204,6 +204,14 @@ jobs:
           # ════════════════════════════════════════════════════════════
           echo "=== Step 1: Stopping old server ==="
 
+          # Stop systemd service FIRST — it runs as www-data and
+          # respawns instantly if you only kill the process.
+          if [ -n "${SYSTEMD_SERVICE_NAME:-}" ]; then
+            echo "Stopping systemd service: $SYSTEMD_SERVICE_NAME"
+            sudo systemctl stop "$SYSTEMD_SERVICE_NAME" 2>/dev/null || true
+            sleep 2
+          fi
+
           if command -v pm2 >/dev/null 2>&1; then
             echo "--- PM2 status before cleanup ---"
             pm2 list || true
@@ -294,7 +302,31 @@ jobs:
           # ════════════════════════════════════════════════════════════
           echo "=== Step 3: Starting new server ==="
 
-          if [ -n "${PM2_APP_NAME:-}" ] && command -v pm2 >/dev/null 2>&1; then
+          # Decide startup method: systemd takes priority over PM2
+          # because systemd runs as www-data and owns port 3000.
+          if [ -n "${SYSTEMD_SERVICE_NAME:-}" ]; then
+            echo "Starting via systemd: $SYSTEMD_SERVICE_NAME"
+            sudo systemctl start "$SYSTEMD_SERVICE_NAME"
+
+            # Wait for the app to be ready (up to ~30 seconds).
+            echo "--- Waiting for app to respond ---"
+            READY=0
+            for i in $(seq 1 15); do
+              if curl -sS -o /dev/null --max-time 5 "http://127.0.0.1:3000/nlgfc-website/" 2>/dev/null; then
+                READY=1
+                echo "App responding on port 3000 after ~$((i*2)) seconds"
+                break
+              fi
+              sleep 2
+            done
+
+            if [ "$READY" -ne 1 ]; then
+              echo "FATAL: App not responding on port 3000 after 30 seconds"
+              sudo journalctl -u "$SYSTEMD_SERVICE_NAME" --no-pager -n 30 || true
+              exit 1
+            fi
+
+          elif [ -n "${PM2_APP_NAME:-}" ] && command -v pm2 >/dev/null 2>&1; then
             export NODE_ENV=production
             export HOST=127.0.0.1
             export PORT=3000
@@ -329,37 +361,35 @@ jobs:
               exit 1
             fi
 
-            # ════════════════════════════════════════════════════════════
-            # 4. VERIFY BUILD CONSISTENCY
-            #    Ensure the HTML served by Node references JS files that
-            #    actually exist on disk. If they don't match, the server
-            #    is running a stale build from memory.
-            # ════════════════════════════════════════════════════════════
-            echo "=== Step 4: Verifying build consistency ==="
-            JS_FROM_HTML="$(curl -sS --max-time 10 "http://127.0.0.1:3000/nlgfc-website/" \
-              | grep -oP '/_nuxt/[A-Za-z0-9_-]+\.js' | head -1 || true)"
-            if [ -n "$JS_FROM_HTML" ]; then
-              JS_FILE=".output/public${JS_FROM_HTML}"
-              if [ -f "$JS_FILE" ]; then
-                echo "PASS: HTML references $JS_FROM_HTML — file exists on disk"
-              else
-                echo "FATAL: HTML references $JS_FROM_HTML but file does NOT exist!"
-                echo "The server is running a stale build. Dumping diagnostics:"
-                echo "HTML references:"
-                curl -sS --max-time 10 "http://127.0.0.1:3000/nlgfc-website/" \
-                  | grep -oP '/_nuxt/[A-Za-z0-9_-]+\.js' | head -5 || true
-                echo "Files on disk:"
-                ls .output/public/_nuxt/*.js 2>/dev/null | head -5 || true
-                exit 1
-              fi
-            fi
-
             echo "--- PM2 final status ---"
             pm2 list || true
-          elif [ -n "${SYSTEMD_SERVICE_NAME:-}" ]; then
-            sudo systemctl restart "$SYSTEMD_SERVICE_NAME"
           else
-            echo "No PM2_APP_NAME or SYSTEMD_SERVICE_NAME configured. Build completed, restart skipped."
+            echo "No SYSTEMD_SERVICE_NAME or PM2_APP_NAME configured. Build completed, restart skipped."
+          fi
+
+          # ════════════════════════════════════════════════════════════
+          # 4. VERIFY BUILD CONSISTENCY
+          #    Ensure the HTML served by Node references JS files that
+          #    actually exist on disk. If they don't match, the server
+          #    is running a stale build from memory.
+          # ════════════════════════════════════════════════════════════
+          echo "=== Step 4: Verifying build consistency ==="
+          JS_FROM_HTML="$(curl -sS --max-time 10 "http://127.0.0.1:3000/nlgfc-website/" \
+            | grep -oP '/_nuxt/[A-Za-z0-9_-]+\.js' | head -1 || true)"
+          if [ -n "$JS_FROM_HTML" ]; then
+            JS_FILE=".output/public${JS_FROM_HTML}"
+            if [ -f "$JS_FILE" ]; then
+              echo "PASS: HTML references $JS_FROM_HTML — file exists on disk"
+            else
+              echo "FATAL: HTML references $JS_FROM_HTML but file does NOT exist!"
+              echo "The server is running a stale build. Dumping diagnostics:"
+              echo "HTML references:"
+              curl -sS --max-time 10 "http://127.0.0.1:3000/nlgfc-website/" \
+                | grep -oP '/_nuxt/[A-Za-z0-9_-]+\.js' | head -5 || true
+              echo "Files on disk:"
+              ls .output/public/_nuxt/*.js 2>/dev/null | head -5 || true
+              exit 1
+            fi
           fi
           EOF
 
@@ -373,13 +403,14 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           PM2_APP_NAME: ${{ secrets.PM2_APP_NAME }}
+          SYSTEMD_SERVICE_NAME: ${{ secrets.SYSTEMD_SERVICE_NAME }}
         run: |
           set -euo pipefail
           PORT="${DEPLOY_PORT:-22}"
           SSH_OPTS="-p ${PORT} -o BatchMode=yes -o StrictHostKeyChecking=yes -o PreferredAuthentications=publickey -o PasswordAuthentication=no -o KbdInteractiveAuthentication=no"
 
           ssh ${SSH_OPTS} "${DEPLOY_USER}@${DEPLOY_HOST}" \
-            "PM2_APP_NAME='${PM2_APP_NAME}' DEPLOY_PATH='${DEPLOY_PATH}' bash -s" << 'EOF'
+            "PM2_APP_NAME='${PM2_APP_NAME}' SYSTEMD_SERVICE_NAME='${SYSTEMD_SERVICE_NAME}' DEPLOY_PATH='${DEPLOY_PATH}' bash -s" << 'EOF'
           set -euo pipefail
 
           check_url () {
@@ -399,6 +430,11 @@ jobs:
 
           failed=0
 
+          # Show service status (systemd or PM2)
+          if [ -n "${SYSTEMD_SERVICE_NAME:-}" ]; then
+            echo "--- systemd service status ---"
+            sudo systemctl status "$SYSTEMD_SERVICE_NAME" --no-pager || true
+          fi
           if command -v pm2 >/dev/null 2>&1 && [ -n "${PM2_APP_NAME:-}" ]; then
             pm2 describe "$PM2_APP_NAME" || true
           fi
@@ -440,6 +476,12 @@ jobs:
               else
                 pm2 logs --nostream --lines 200 || true
               fi
+            fi
+
+            echo "--- systemd service logs ---"
+            if [ -n "${SYSTEMD_SERVICE_NAME:-}" ]; then
+              sudo systemctl status "$SYSTEMD_SERVICE_NAME" --no-pager || true
+              sudo journalctl -u "$SYSTEMD_SERVICE_NAME" --no-pager -n 50 || true
             fi
 
             echo "--- nginx config (nlgfc-website) ---"
